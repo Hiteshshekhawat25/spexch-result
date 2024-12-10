@@ -1,6 +1,6 @@
 import { useState } from "react"; // Removed useRef import
 import { useDispatch, useSelector } from "react-redux";
-import { loginStart, loginSuccess, loginFailure } from "../Store/loginSlice";
+import { loginStart, loginSuccess, loginFailure } from "../Store/Slice/loginSlice";
 import { FaUser, FaLock } from "react-icons/fa";
 import { loginUser } from "../Utils/LoginApi";
 import { useNavigate } from "react-router-dom";

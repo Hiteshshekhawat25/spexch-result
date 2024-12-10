@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
 
- /* static data */
+  /* static data */
   const menuItems = [
     { name: "Dashboard", link: "#" },
     {
@@ -33,7 +33,7 @@ const MenuHeader = () => {
   ];
 
   return (
-    <div className="bg-LightGreen text-white px-6 ">
+    <div className="bg-LightGreen text-white px-6">
       <ul className="flex space-x px-8">
         {menuItems.map((item, index) => (
           <li key={index} className="relative group border-l border-r border-customGray">
@@ -52,7 +52,10 @@ const MenuHeader = () => {
               <ul className="absolute left-0 top-full hidden bg-NavyBlue group-hover:block shadow-lg z-10">
                 {item.subMenu.map((subItem, subIndex) => (
                   <li key={subIndex}>
-                    <a href="#" className="block px-2 py-1 hover:bg-NavyBlue">
+                    <a
+                      href="#"
+                      className="block px-2 py-1 hover:bg-LightGreen"
+                    >
                       {subItem}
                     </a>
                   </li>

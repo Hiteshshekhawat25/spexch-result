@@ -1,6 +1,8 @@
 // src/utils/api.js
 
-import { BASE_URL } from "../Constant/Api";  // Ensure BASE_URL is imported correctly
+import { BASE_URL } from "../Constant/Api";
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 // Function to perform the login API call
 export const loginUser = async (username, password) => {
@@ -35,32 +37,59 @@ export const loginUser = async (username, password) => {
   }
 };
 
-export const saveClientApi = async (clientData) => {
+// Ensure you have this dependency for toast notifications
+
+//  export const saveClientApi = async (endpoint, body, token) => {
+//   try {
+//     // Send the request using axios
+//     const res = await axios.post(endpoint, body, {
+//       headers: {
+//         'Content-Type': 'application/json',
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+
+//     // Ensure response data is available and check for success
+//     if (res.data && res.data.success === false) {
+//       toast.error(res.data.message || 'Something went wrong.', {
+//         autoClose: 2000,
+//       });
+//       return { success: false, message: res.data.message || 'Unknown error' }; // Return a custom error response
+//     }
+
+//     return res; // Return the successful response
+//   } catch (error) {
+//     console.error('API call error:', error);
+//     toast.error('Something went wrong. Please try again later.', {
+//       autoClose: 2000,
+//     });
+//     // Provide a custom error response
+//     return { success: false, message: error.message || 'An error occurred' };
+//   }
+// };
+
+export const saveClientApi = async (endpoint, body, token) => {
+  console.log("body",body);
   try {
-    const response = await fetch(`${BASE_URL}admin/v1/user/create-user`, {
-      method: 'POST',
+    const res = await axios.post(endpoint, body, {
       headers: {
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(clientData),
     });
+console.log("Res",res);
 
-    if (!response.ok) {
-      // Handle non-JSON errors (e.g., network errors or unexpected responses)
-      let errorMessage = 'Something went wrong. Please try again later.';
-      try {
-        const errorData = await response.json();
-        errorMessage = errorData.message || errorMessage;
-      } catch (jsonError) {
-        console.error("Non-JSON error response:", jsonError);
-      }
-      throw new Error(errorMessage);
+    if (res.data.success === false) {
+      toast.error(res.data.message, {
+        autoClose: 2000,
+      });
+
+
+      return res;
+
     }
-
-    return await response.json(); // Return the parsed response data
+    return res;
 
   } catch (error) {
-    console.error("API call error:", error.message || error);
-    throw error; // Rethrow for the caller to handle
+    console.log(error);
   }
 };

@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
-import { openDialog } from "../../Store/AddClient"; // Import Redux actions
-import AddClientForm from "./AddClientForm";
+import { openDialog } from "../../Store/Slice/AddClientButtonSlice"; // Import Redux actions
+import AddClientForm from "../../components/Forms/AddClientForm";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { RiResetLeftLine } from "react-icons/ri";
 import { useEffect } from "react";
