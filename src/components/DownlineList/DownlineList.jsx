@@ -12,7 +12,7 @@ import {
   setLoading,
   setError,
   setDownlineData,
-} from "../../Store/downlineSlice";
+} from "../../Store/Slice/downlineSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useSelector } from "react-redux";

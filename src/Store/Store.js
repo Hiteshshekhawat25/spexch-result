@@ -3,9 +3,9 @@ import loginReducer from './Slice/loginSlice';
 import clientReducer from './Slice/AddClientButtonSlice';
 import addClientReducer from './Slice/addClientSlice';
 import masterReducer from './Slice/masterSlice';
-import superAdminFormReducer from "./SuperAdminFormSlice";
-import downlineReducer from './downlineSlice';
-import createMatchReducer from './createMatchSlice';
+import superAdminFormReducer from "./Slice/SuperAdminFormSlice";
+import downlineReducer from './Slice/downlineSlice';
+import createMatchReducer from './Slice/createMatchSlice';
 
 
 export const store = configureStore({

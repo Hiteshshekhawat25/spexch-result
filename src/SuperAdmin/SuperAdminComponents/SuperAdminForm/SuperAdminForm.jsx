@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateField, resetForm } from "../../../Store/SuperAdminFormSlice";
+import { updateField, resetForm } from "../../../Store/Slice/SuperAdminFormSlice";
 import { globalsettingsPostAPIAuth } from "../../SuperAdminServices"
 
 const SuperAdminForm = () => {
