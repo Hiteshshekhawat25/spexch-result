@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL } from "../Constant/Api";
+import { BASE_URL } from "../../Constant/Api";
 
 const deleteSlice = createSlice({
   name: "delete",

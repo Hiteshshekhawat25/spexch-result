@@ -6,6 +6,7 @@ import masterReducer from './Slice/masterSlice';
 import superAdminFormReducer from "./Slice/SuperAdminFormSlice";
 import downlineReducer from './Slice/downlineSlice';
 import createMatchReducer from './Slice/createMatchSlice';
+import deleteReducer from './Slice/deleteSlice';
 
 
 export const store = configureStore({
@@ -16,6 +17,7 @@ export const store = configureStore({
     master: masterReducer,
     downline: downlineReducer,
     createMatch: createMatchReducer,  
+    superAdminForm: superAdminFormReducer,
     delete: deleteReducer,
   },
 });
