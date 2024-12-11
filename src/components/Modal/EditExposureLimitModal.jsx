@@ -1,21 +1,21 @@
 import React, { useState } from "react";
 import { IoClose } from "react-icons/io5"; // Importing the close icon
 
-const CreditEditReferenceModal = ({ username, currentCreditRef, onSubmit, onCancel }) => {
-  const [newCreditRef, setNewCreditRef] = useState(currentCreditRef);
+const EditExposureLimitModal = ({ username, currentExposureLimit, onSubmit, onCancel }) => {
+  const [newExposureLimit, setNewExposureLimit] = useState(currentExposureLimit);
   const [password, setPassword] = useState("");
 
   const handleIncrease = () => {
-    setNewCreditRef((prev) => prev + 1);
+    setNewExposureLimit((prev) => prev + 1);
   };
 
   const handleDecrease = () => {
-    setNewCreditRef((prev) => (prev > 0 ? prev - 1 : 0)); // Ensure it doesn't go below 0
+    setNewExposureLimit((prev) => (prev > 0 ? prev - 1 : 0)); // Ensure it doesn't go below 0
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit(newCreditRef, password); // Pass newCreditRef and password to the onSubmit function
+    onSubmit(newExposureLimit, password); // Pass newExposureLimit and password to the onSubmit function
   };
 
   return (
@@ -23,31 +23,30 @@ const CreditEditReferenceModal = ({ username, currentCreditRef, onSubmit, onCanc
       <div className="bg-white rounded-lg w-[500px] mt-0">
         {/* Header */}
         <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-2">
-          <span>Edit Credit Reference - {username}</span>
+          <span>Edit Exposure Limit - {username}</span>
           <IoClose
-  onClick={onCancel} // Close the modal
-  className="cursor-pointer text-white text-2xl"
-/>
-
+            onClick={onCancel} // Close the modal
+            className="cursor-pointer text-white text-2xl"
+          />
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4 p-5">
-          {/* Current Credit Reference */}
+          {/* Current Exposure Limit */}
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">Current</label>
-            <p className="w-2/3 text-black font-medium">{currentCreditRef}</p> {/* Display as text */}
+            <p className="w-2/3 text-black font-medium">{currentExposureLimit}</p> {/* Display as text */}
           </div>
 
-          {/* New Credit Reference */}
+          {/* New Exposure Limit */}
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">New</label>
             <div className="w-2/3 flex items-center space-x-2">
               <input
                 type="number"
-                value={newCreditRef}
-                onChange={(e) => setNewCreditRef(Number(e.target.value))}
-                placeholder="New Credit Reference"
+                value={newExposureLimit}
+                onChange={(e) => setNewExposureLimit(Number(e.target.value))}
+                placeholder="New Exposure Limit"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
               <div className="flex flex-col space-y-1">
@@ -106,5 +105,4 @@ const CreditEditReferenceModal = ({ username, currentCreditRef, onSubmit, onCanc
   );
 };
 
-export default CreditEditReferenceModal;
-
+export default EditExposureLimitModal;

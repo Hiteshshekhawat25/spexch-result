@@ -4,6 +4,7 @@ import AddClientForm from "./AddClientForm";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { RiResetLeftLine } from "react-icons/ri";
 import { useEffect } from "react";
+import React from "react"; 
 
 const AddClient = () => {
   const dispatch = useDispatch();
