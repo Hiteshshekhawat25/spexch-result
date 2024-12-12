@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdClose } from "react-icons/md";
-import { deleteUser, resetDeleteState } from "../../Store/deleteSlice";
+import { deleteUser, resetDeleteState } from "../../Store/Slice/deleteSlice";
 
 const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
   const dispatch = useDispatch();
