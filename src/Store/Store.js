@@ -8,6 +8,7 @@ import downlineReducer from './Slice/downlineSlice';
 import createMatchReducer from './Slice/createMatchSlice';
 import deleteReducer from './Slice/deleteSlice';
 import createManualMatchReducer from './Slice/createManualMatchSlice';
+import allMatchReducer from './Slice/allMatchSlice';
 
 
 export const store = configureStore({
@@ -21,6 +22,7 @@ export const store = configureStore({
     createManualMatch: createManualMatchReducer,
     superAdminForm: superAdminFormReducer,
     delete: deleteReducer,
+    allMatch: allMatchReducer,
   },
 });
 

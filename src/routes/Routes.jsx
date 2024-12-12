@@ -10,6 +10,7 @@ import DownlineList from "../components/DownlineList/DownlineList";
 import CreateNewMatch from "../components/Matches/CreateNewMatch";
 import CreateManualMatch from "../components/Matches/CreateManualMatch";
 import SuperAdminForm from "../SuperAdmin/SuperAdminComponents/SuperAdminForm/SuperAdminForm";
+import AllMatches from "../components/Matches/AllMatches";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -54,6 +55,16 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <CreateManualMatch /> {/* Render CreateManualMatch component */}
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={ROUTES_CONST.allmatches}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <AllMatches /> {/* Render GlobalSettings component */}
             </LayoutHeader>
           </ProtectedRoutes>
         }

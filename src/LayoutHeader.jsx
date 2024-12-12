@@ -9,7 +9,7 @@ const LayoutHeader = ({ children }) => {
     <div>
       <TopHeader />
       <MenuHeader />
-      <div className="p-6">
+      <div className="p-1">
         </div>
         <div>{children}</div> {/* Dynamic content */}
       </div>

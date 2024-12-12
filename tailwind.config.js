@@ -14,7 +14,8 @@ export default {
         white: '#FFFFFF',
         LightGreen: '#4d7c0f',
         darkGreen: '#365314',
-        NavyBlue:'#1b186e'
+        NavyBlue:'#1b186e',
+        lightblue:'#38bdf8',
       },
     },
   },

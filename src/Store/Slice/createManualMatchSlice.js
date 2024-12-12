@@ -6,47 +6,35 @@ const initialState = {
   match: '',
   marketType: '',
   marketID: '',
-  eventID: '',
+  eventId:'',
   team1: '',
   team2: '',
-  team1SelectionID: '',
-  team2SelectionID: '',
-  runners: '',
-  dateTime: '',
-  delays: {
-    odds: '',
-    session: '',
-    book: '',
-  },
-  stakes: {
-    oddsMin: '',
-    oddsMax: '',
-    sessionMin: '',
-    sessionMax: '',
-    bookMin: '',
-    bookMax: '',
-  },
-  profits: {
-    oddsMax: '',
-    sessionMax: '',
-    bookMax: '',
-  },
-  messages: {
-    odds: '',
-    bookmaker: '',
-    session: '',
-    toss: '',
-  },
-  scoreId: '',
-  tvUrl: '',
-  statuses: {
-    match: 'active',
-    session: 'active',
-    bookmaker: 'active',
-    toss: 'active',
-    odds: 'active',
-  },
+
+  team1Selectionid:'',
+  team2Selectionid:'',
+
+  runners:'',
+  datetime:'',
+  
+  // Delays
+  oddsDelay: '',
+   oddsMinStake: '',
+  oddsMaxStake: '',
+  oddsMaxProfit: '',
+
+
+  sessionDelay: '',
+  sessionMinStake: '',
+  sessionMaxStake: '',
+  sessionMaxProfit: '',
+
+  bookDelay: '',
+  bookMinStake: '',
+  bookMaxStake: '',  
+  bookMaxProfit: '',
+  
 };
+
 
 const createManualMatchSlice = createSlice({
   name: 'createManualMatch',

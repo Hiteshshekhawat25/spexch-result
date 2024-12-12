@@ -6,6 +6,7 @@ export const ROUTES_CONST = {
     globalsettings:"/globalsettings",
     createnewmatch:"/createnewmatch",
     createmanualmatch:"/createmanualmatch",
+    allmatches:"/allmatches",
 
   };
   
