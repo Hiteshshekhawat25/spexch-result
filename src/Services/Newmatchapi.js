@@ -4,6 +4,7 @@ import { BASE_URL } from "../Constant/Api";
 // POST with Authorization for Create New Match
 export const createNewMatchAPIAuth = async (url, params) => {
   const token = localStorage.getItem("authToken");
+  console.log("token",token)
 
   try {
     const response = await axios.post(`${BASE_URL}/${url}`, params, {
@@ -12,8 +13,11 @@ export const createNewMatchAPIAuth = async (url, params) => {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
+      
     });
     return response;
+    
+   
   } catch (error) {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
@@ -24,6 +28,7 @@ export const createNewMatchAPIAuth = async (url, params) => {
     console.error("API error:", error.response?.data || error.message);
     throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }
+   
 };
 
 // GET with Authorization for Create New Match

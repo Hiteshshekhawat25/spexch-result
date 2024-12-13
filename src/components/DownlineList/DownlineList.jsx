@@ -362,7 +362,7 @@ const DownlineList = () => {
                   />
                 </div>
               </td>
-              <td className="px-4 py-3 text-sm"></td>
+              <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
               <td className="px-4 py-3 text-sm"></td>
               <td className="px-4 py-3 text-sm">{item.status}</td>
               <td className="px-4 py-3 text-sm">
@@ -438,7 +438,7 @@ const DownlineList = () => {
           isOpen={isModalOpen}
           onCancel={handleModalClose} // This will be triggered when the cancel button or cross icon is clicked
           username={selectedUser.username}
-          currentCreditRef={selectedUser.creditRef}
+          currentCreditRef={selectedUser.creditReference}
         />
       )}
 

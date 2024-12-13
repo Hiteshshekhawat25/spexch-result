@@ -9,6 +9,7 @@ import createMatchReducer from './Slice/createMatchSlice';
 import deleteReducer from './Slice/deleteSlice';
 import createManualMatchReducer from './Slice/createManualMatchSlice';
 import allMatchReducer from './Slice/allMatchSlice';
+import balanceReducer from './Slice/balanceSlice';
 
 
 export const store = configureStore({
@@ -23,6 +24,7 @@ export const store = configureStore({
     superAdminForm: superAdminFormReducer,
     delete: deleteReducer,
     allMatch: allMatchReducer,
+    balance: balanceReducer,
   },
 });
 

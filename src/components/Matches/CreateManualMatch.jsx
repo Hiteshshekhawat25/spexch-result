@@ -4,7 +4,9 @@ import {
   updateField,
   resetForm,
 } from "../../Store/Slice/createManualMatchSlice";
-import { createNewMatchAPIAuth, getCreateNewMatchAPIAuth } from "../../Services/Newmatchapi"; // Use your actual API service here
+import { createNewMatchAPIAuth, getCreateNewMatchAPIAuth } from "../../Services/Newmatchapi"; 
+import { toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 const CreateManualMatch = () => {
   const [sportsOptions, setSportsOptions] = useState([]);
@@ -38,10 +40,10 @@ const CreateManualMatch = () => {
         formState
       );
       if (response.status === 200) {
-        alert("Form submitted successfully!");
+        toast.success("Form submitted successfully!");
         dispatch(resetForm());
       } else {
-        alert("Failed to submit the form. Please try again.");
+        toast.error("Failed to submit the form. Please try again.");
       }
     } catch (error) {
       console.error("Error submitting form:", error);
