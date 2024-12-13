@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdClose } from "react-icons/md";
-import { deleteUser, resetDeleteState } from "../../Store/deleteSlice";
+import { deleteUser, resetDeleteState } from "../../Store/Slice/deleteSlice";
 
 const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
     dispatch(deleteUser(userId));
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (success) {
       onConfirm(); // Callback to parent to refresh data
       dispatch(resetDeleteState()); // Reset state after successful deletion
@@ -19,7 +19,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
     }
   }, [success, dispatch, onConfirm, onClose]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (error) {
       // Clear the error message after 5 seconds to avoid permanent display
       const timer = setTimeout(() => dispatch(resetDeleteState()), 5000);

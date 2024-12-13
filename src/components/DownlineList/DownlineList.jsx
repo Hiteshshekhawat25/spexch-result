@@ -17,6 +17,9 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../Constant/Api";
+import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import { fetchRoles } from "../../Utils/LoginApi";
+import CreditReferenceTransactionModel from "../Modal/CreditReferenceTransactionModel";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -28,10 +31,13 @@ const DownlineList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State for opening the modal
   const [selectedUser, setSelectedUser] = useState(null); // State for storing selected user data
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [creditReferenceTransactionList,setCreditReferenceTransactionList] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [isExposureModalOpen, setIsExposureModalOpen] = useState(false);
   const [selectedExposureUser, setSelectedExposureUser] = useState(null);
   const [totalUsers, setTotalUsers] = useState(0);
+  const [token, setToken] = useState(null);
+  const [role, setRole] = useState(null);
 
   const handlePageChange = (direction) => {
     if (totalPages > 0) {
@@ -46,8 +52,6 @@ const DownlineList = () => {
       }
     }
   };
-
-  // UseEffect to fetch data when `currentPage` or `entriesToShow` changes
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -59,29 +63,17 @@ const DownlineList = () => {
           return;
         }
 
-        // API call to fetch data for the current page
-        const response = await fetch(
-          `${BASE_URL}/admin/v1/user/get-user?page=${currentPage}&limit=${entriesToShow}`,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
+        // Fetch data using the new API service
+        const result = await fetchDownlineData(
+          token,
+          currentPage,
+          entriesToShow
         );
 
-        const result = await response.json();
-        console.log("API Response:", result);
-        console.log("Current Page:", currentPage);
-        console.log("Entries to Show:", entriesToShow);
-
-        if (!response.ok) {
-          throw new Error(result.message || "Failed to fetch data");
+        if (result && result.data) {
+          setData(result.data);
+          setTotalUsers(result.pagination?.totalUsers || 0);
         }
-
-        // Update data and totalUsers
-        setData(result.data || []);
-        setTotalUsers(result.pagination?.totalUsers || 0);
       } catch (err) {
         console.error("Error fetching data:", err.message);
       } finally {
@@ -90,7 +82,34 @@ const DownlineList = () => {
     };
 
     fetchData();
-  }, [dispatch, currentPage, entriesToShow]); // Fetch data when currentPage or entriesToShow changes
+  }, [dispatch, currentPage, entriesToShow]);
+
+  useEffect(() => {
+    if (token) {
+      const fetchUserRoles = async () => {
+        try {
+          const rolesArray = await fetchRoles(token); // Fetch roles
+          console.log("rolesArray", rolesArray);
+
+          if (Array.isArray(rolesArray)) {
+            // Map roles to an array of { role_name, role_id }
+            const rolesData = rolesArray.map((role) => ({
+              role_name: role.role_name,
+              role_id: role._id,
+            }));
+            console.log("rolesData", rolesData);
+
+            setRole(rolesData);
+          } else {
+            setError("Roles data is not an array.");
+          }
+        } catch (error) {
+          setError(error.message || "Failed to fetch roles.");
+        }
+      };
+      fetchUserRoles();
+    }
+  }, [token]);
 
   console.log(data.length);
   const filteredData = data.filter((item) =>
@@ -208,10 +227,19 @@ const DownlineList = () => {
         : { key, direction: "ascending" }
     );
   };
+  const handleSubmitFunction = (newCreditRef, password) => {
+    // Handle the submission logic here, such as updating the state or making an API call
+    console.log("New Credit Ref:", newCreditRef, "Password:", password);
+  };
 
   const handleEditClick = (user) => {
     setSelectedUser(user); // Set the selected user
     setIsModalOpen(true); // Open the modal
+  };
+  const handleListView = (user) => {
+    setCreditReferenceTransactionList(user);
+    setIsModalOpen(true);
+    console.log("user", user);
   };
 
   const handleModalClose = () => {
@@ -348,7 +376,10 @@ const DownlineList = () => {
                     className="text-blue cursor-pointer"
                     onClick={() => handleEditClick(item)} // Trigger modal on click
                   />
-                  <FaEye className="text-blue cursor-pointer" />
+                  <FaEye
+                    className="text-blue cursor-pointer"
+                    onClick={() => handleListView(item)}
+                  />
                 </div>
               </td>
               <td className="px-4 py-3 text-sm">{item.partnership}%</td>
@@ -362,7 +393,7 @@ const DownlineList = () => {
                   />
                 </div>
               </td>
-              <td className="px-4 py-3 text-sm"></td>
+              <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
               <td className="px-4 py-3 text-sm"></td>
               <td className="px-4 py-3 text-sm">{item.status}</td>
               <td className="px-4 py-3 text-sm">
@@ -434,12 +465,32 @@ const DownlineList = () => {
       </div>
 
       {isModalOpen && selectedUser && (
-        <CreditEditReferenceModal
-          isOpen={isModalOpen}
-          onCancel={handleModalClose} // This will be triggered when the cancel button or cross icon is clicked
-          username={selectedUser.username}
-          currentCreditRef={selectedUser.creditRef}
-        />
+        <>
+          {console.log("userId", selectedUser?._id)} {/* Log userId */}
+          <CreditEditReferenceModal
+            isOpen={isModalOpen}
+            onCancel={handleModalClose}
+            username={selectedUser.username}
+            currentCreditRef={selectedUser.creditReference}
+            onSubmit={handleSubmitFunction}
+            user={selectedUser}
+            userId={selectedUser?._id}
+            currentPage={currentPage}
+            entriesToShow={entriesToShow}
+          />
+        </>
+      )}
+      {console.log("creditReferenceTransactionList", creditReferenceTransactionList?._id)} {/* Log userId */}
+      {isModalOpen && creditReferenceTransactionList && (
+        <>
+      <CreditReferenceTransactionModel
+      username={creditReferenceTransactionList.username}
+        isOpen={isDeleteModalOpen}
+        onClose={handleDeleteModalClose}
+        // onConfirm={handleDeleteConfirm}
+        userId={creditReferenceTransactionList?._id}
+      />
+      </>
       )}
 
       <DeleteConfirmationModal
@@ -450,17 +501,25 @@ const DownlineList = () => {
       />
 
       {isExposureModalOpen && selectedExposureUser && (
-        <EditExposureLimitModal
-          username={selectedExposureUser.username}
-          currentExposureLimit={selectedExposureUser.exposureLimit}
-          onSubmit={(newExposureLimit, password) => {
-            console.log(
-              `Updated exposure limit for ${selectedExposureUser.username}: ${newExposureLimit} (Password: ${password})`
-            );
-            handleExposureModalClose(); // Close the modal after submission
-          }}
-          onCancel={handleExposureModalClose} // Close modal without changes
-        />
+        <>
+          {console.log("idddd", selectedExposureUser)}
+          <EditExposureLimitModal
+            username={selectedExposureUser.username}
+            currentExposureLimit={selectedExposureUser.exposureLimit}
+            onSubmit={(newExposureLimit, password) => {
+              console.log(
+                `Updated exposure limit for ${selectedExposureUser.username}: ${newExposureLimit} (Password: ${password})`
+              );
+              handleExposureModalClose(); // Close the modal after submission
+            }}
+            onCancel={handleExposureModalClose}
+            // onSubmit={handleSubmitFunction}
+            user={selectedExposureUser}
+            userId={selectedExposureUser?._id}
+            currentPage={currentPage}
+            entriesToShow={entriesToShow}
+          />
+        </>
       )}
     </div>
   );
