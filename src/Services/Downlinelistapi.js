@@ -48,8 +48,7 @@ export const deleteData = async (url) => {
     console.error("API error:", error.response?.data || error.message);
     throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }
-};import axios from "axios";
-import { BASE_URL } from "../Constant/Api";
+};
 
 // POST with Authorization for Create New Match
 export const createNewMatchAPIAuth = async (url, params) => {
