@@ -10,7 +10,8 @@ import deleteReducer from './Slice/deleteSlice';
 import createManualMatchReducer from './Slice/createManualMatchSlice';
 import allMatchReducer from './Slice/allMatchSlice';
 import balanceReducer from './Slice/balanceSlice';
-
+import updateCreditReference from './Slice/creditReferenceslice'
+import creditReferenceReducer from './Slice/creditTransactionSlice'
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +26,8 @@ export const store = configureStore({
     delete: deleteReducer,
     allMatch: allMatchReducer,
     balance: balanceReducer,
+    credit: updateCreditReference,
+    creditReference: creditReferenceReducer,
   },
 });
 

@@ -1,15 +1,34 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+// Example async thunk to save master data (replace with your actual logic)
+export const saveMaster = createAsyncThunk(
+  'master/saveMaster', 
+  async (formData, { rejectWithValue }) => {
+    try {
+      // Assuming you make an API call to save the data
+      const response = await fetch('/api/saveMaster', { // Replace with your actual API endpoint
+        method: 'POST',
+        body: JSON.stringify(formData),
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Failed to save master');
+      return await response.json(); // Return the response data if success
+    } catch (error) {
+      return rejectWithValue(error.message); // Handle the error if API call fails
+    }
+  }
+);
 
 const initialState = {
-  user: null, // Current logged-in user information
-  roles: [], // List of roles in the system
-  settings: {}, // Global application settings
-  isLoading: false, // Global loading state
-  error: null, // Global error state
+  user: null,
+  roles: [],
+  settings: {},
+  isLoading: false,
+  error: null,
 };
 
 const masterSlice = createSlice({
-  name: 'master', // Slice name
+  name: 'master',
   initialState,
   reducers: {
     setUser: (state, action) => {
@@ -30,6 +49,21 @@ const masterSlice = createSlice({
     clearError: (state) => {
       state.error = null;
     },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(saveMaster.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(saveMaster.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // You can handle the response data here
+        // state.user = action.payload; // Example: Save response data
+      })
+      .addCase(saveMaster.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 

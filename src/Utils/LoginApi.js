@@ -37,46 +37,16 @@ export const loginUser = async (username, password) => {
   }
 };
 
-// Ensure you have this dependency for toast notifications
-
-//  export const saveClientApi = async (endpoint, body, token) => {
-//   try {
-//     // Send the request using axios
-//     const res = await axios.post(endpoint, body, {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-
-//     // Ensure response data is available and check for success
-//     if (res.data && res.data.success === false) {
-//       toast.error(res.data.message || 'Something went wrong.', {
-//         autoClose: 2000,
-//       });
-//       return { success: false, message: res.data.message || 'Unknown error' }; // Return a custom error response
-//     }
-
-//     return res; // Return the successful response
-//   } catch (error) {
-//     console.error('API call error:', error);
-//     toast.error('Something went wrong. Please try again later.', {
-//       autoClose: 2000,
-//     });
-//     // Provide a custom error response
-//     return { success: false, message: error.message || 'An error occurred' };
-//   }
-// };
-
-export const saveClientApi = async (endpoint, body, token) => {
-  console.log("body",body);
+export const saveClientApi = async (endpoint, body, token, role) => {
+  console.log("body", body);
   try {
     const res = await axios.post(endpoint, body, {
       headers: {
         Authorization: `Bearer ${token}`,
+        role: role,
       },
     });
-console.log("Res",res);
+    // console.log("Res", res);
 
     if (res.data.success === false) {
       toast.error(res.data.message, {
@@ -91,5 +61,20 @@ console.log("Res",res);
 
   } catch (error) {
     console.log(error);
+  }
+};
+
+// APi for fetching roles
+export const fetchRoles = async (token) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/admin/v1/user/get-role`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    // Return the roles data if the request is successful
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching roles:", error);
+    throw new Error(error.message || "Failed to fetch roles.");
   }
 };

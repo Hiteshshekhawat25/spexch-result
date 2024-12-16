@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import React from "react"; 
+import React from "react";
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -11,20 +11,29 @@ const MenuHeader = () => {
     {
       name: "Downline List",
       link: "#",
-      subMenu: ["Downline List", "Master Downline List"],
+      subMenu: [
+        { name: "Downline List", link: "/downline-list" },
+        { name: "Master DownLine List", link: "/master-downline-list" },
+      ],
     },
     { name: "My Account", link: "#" },
     {
       name: "My Report",
       link: "#",
-      subMenu: ["Daily Report", "Monthly Report"],
+      subMenu: [
+        { name: "Daily Report", link: "/daily-report" },
+        { name: "Monthly Report", link: "/monthly-report" },
+      ],
     },
     { name: "BetList", link: "#" },
     { name: "Market Analysis", link: "#" },
     {
       name: "Banking",
       link: "#",
-      subMenu: ["Deposit", "Withdraw"],
+      subMenu: [
+        { name: "Deposit", link: "/deposit" },
+        { name: "Withdraw", link: "/withdraw" },
+      ],
     },
     { name: "Commission", link: "#" },
     { name: "Password History", link: "#" },
@@ -53,12 +62,12 @@ const MenuHeader = () => {
               <ul className="absolute left-0 top-full hidden bg-NavyBlue group-hover:block shadow-lg z-10">
                 {item.subMenu.map((subItem, subIndex) => (
                   <li key={subIndex}>
-                    <a
-                      href="#"
-                      className="block px-2 py-1 hover:bg-LightGreen"
+                    <Link
+                      to={subItem.link}
+                      className="block px-2 py-1 hover:bg-LightGreen hover:border-t-2 border-NavyBlue"
                     >
-                      {subItem}
-                    </a>
+                      {subItem.name}
+                    </Link>
                   </li>
                 ))}
               </ul>
