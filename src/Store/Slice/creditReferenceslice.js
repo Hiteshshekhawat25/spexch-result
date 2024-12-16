@@ -3,7 +3,6 @@ import axios from 'axios';
 import { BASE_URL } from '../../Constant/Api';
 
 // Thunk to update credit reference
-// Thunk to update credit reference
 export const updateCreditReference = createAsyncThunk(
   'credit/updateCreditReference',
   async ({ username, newCreditRef, password, userId }, { rejectWithValue }) => {
