@@ -20,6 +20,10 @@ import { BASE_URL } from "../../Constant/Api";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import { fetchRoles } from "../../Utils/LoginApi";
 import CreditReferenceTransactionModel from "../Modal/CreditReferenceTransactionModel";
+import DepositModal from "../Modal/DepositModal";
+import SportsSettingsModal from "../Modal/SportsSettings";
+import AccountStatus from "../Modal/AccountStatus";
+import { toast } from "react-toastify";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -31,13 +35,20 @@ const DownlineList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State for opening the modal
   const [selectedUser, setSelectedUser] = useState(null); // State for storing selected user data
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [creditReferenceTransactionList,setCreditReferenceTransactionList] = useState(false);
+  const [creditReferenceTransactionList, setCreditReferenceTransactionList] =
+    useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [isExposureModalOpen, setIsExposureModalOpen] = useState(false);
   const [selectedExposureUser, setSelectedExposureUser] = useState(null);
   const [totalUsers, setTotalUsers] = useState(0);
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
+  const [depositModal, setDepositModal] = useState(false);
+  const [settingsModal, setSettingsModal] = useState(false);
+  const [accountStatus, setAccountStatus] = useState(false);
+  const [roles, setRoles] = useState([]);
+
+  console.log("selected User",selectedUser);
 
   const handlePageChange = (direction) => {
     if (totalPages > 0) {
@@ -111,12 +122,26 @@ const DownlineList = () => {
     }
   }, [token]);
 
-  console.log(data.length);
+
   const filteredData = data.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   console.log("filtereddata", filteredData);
+
+  useEffect(() => {
+    if (token) {
+      const fetchRolesData = async () => {
+        try {
+          const rolesArray = await fetchRoles(token);
+          setRoles(rolesArray || []);
+        } catch {
+          toast.error("Failed to fetch roles.");
+        }
+      };
+      fetchRolesData();
+    }
+  }, [token]);
 
   // Sorting logic
   // const sortedData = React.useMemo(() => {
@@ -228,7 +253,6 @@ const DownlineList = () => {
     );
   };
   const handleSubmitFunction = (newCreditRef, password) => {
-    // Handle the submission logic here, such as updating the state or making an API call
     console.log("New Credit Ref:", newCreditRef, "Password:", password);
   };
 
@@ -239,7 +263,6 @@ const DownlineList = () => {
   const handleListView = (user) => {
     setCreditReferenceTransactionList(user);
     setIsModalOpen(true);
-    console.log("user", user);
   };
 
   const handleModalClose = () => {
@@ -264,6 +287,9 @@ const DownlineList = () => {
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
     setUserToDelete(null);
+    setDepositModal(false);
+    setSettingsModal(false);
+    setAccountStatus(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -282,6 +308,21 @@ const DownlineList = () => {
   const handleExposureModalClose = () => {
     setIsExposureModalOpen(false); // Close the modal
     setSelectedExposureUser(null); // Clear selected user data
+  };
+
+  const handleIconClick = (user) => {
+    // setIsModalOpen((prevState) => !prevState);
+    setDepositModal(true);
+    setSelectedUser(user);
+  };
+
+  const handleOpenSettings = (user) => {
+    setSettingsModal(true);
+    setSelectedUser(user);
+  };
+  const statushandlechange = (user) => {
+    setAccountStatus(true);
+    setSelectedUser(user);
   };
 
   return (
@@ -312,7 +353,6 @@ const DownlineList = () => {
           />
         </div>
       </div>
-
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead className="border border-gray-300">
           <tr className="bg-gray-300">
@@ -398,7 +438,10 @@ const DownlineList = () => {
               <td className="px-4 py-3 text-sm">{item.status}</td>
               <td className="px-4 py-3 text-sm">
                 <div className="flex space-x-2">
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                  <div
+                    onClick={() => handleIconClick(item)}
+                    className="flex items-center justify-center w-12 h-12 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                  >
                     <AiFillDollarCircle className="text-darkgray" />
                   </div>
                   <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
@@ -407,10 +450,16 @@ const DownlineList = () => {
                   <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
                     <MdSettings className="text-darkgray" />
                   </div>
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                  <div
+                    onClick={() => statushandlechange(item)}
+                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                  >
                     <FaUserAlt className="text-darkgray" />
                   </div>
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                  <div
+                    onClick={() => handleOpenSettings(item)}
+                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                  >
                     <BsBuildingFillLock className="text-darkgray" />
                   </div>
                   <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
@@ -425,7 +474,6 @@ const DownlineList = () => {
           ))}
         </tbody>
       </table>
-
       <div className="flex justify-between items-center mt-4">
         <div className="text-sm text-gray-600">
           Showing {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
@@ -463,7 +511,6 @@ const DownlineList = () => {
           </button>
         </div>
       </div>
-
       {isModalOpen && selectedUser && (
         <>
           {console.log("userId", selectedUser?._id)} {/* Log userId */}
@@ -480,26 +527,51 @@ const DownlineList = () => {
           />
         </>
       )}
-      {console.log("creditReferenceTransactionList", creditReferenceTransactionList?._id)} {/* Log userId */}
+      {console.log(
+        "creditReferenceTransactionList",
+        creditReferenceTransactionList?._id
+      )}{" "}
+      {/* Log userId */}
       {isModalOpen && creditReferenceTransactionList && (
         <>
-      <CreditReferenceTransactionModel
-      username={creditReferenceTransactionList.username}
-        isOpen={isDeleteModalOpen}
-        onClose={handleDeleteModalClose}
-        // onConfirm={handleDeleteConfirm}
-        userId={creditReferenceTransactionList?._id}
-      />
-      </>
-      )}
-
+          <CreditReferenceTransactionModel
+            username={creditReferenceTransactionList.username}
+            isOpen={isDeleteModalOpen}
+            onClose={handleDeleteModalClose}
+            // onConfirm={handleDeleteConfirm}
+            userId={creditReferenceTransactionList?._id}
+          />
+        </>
+      )}q
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteModalClose}
         onConfirm={handleDeleteConfirm}
         userId={userToDelete?._id}
       />
-
+      {selectedUser && <>
+      <DepositModal
+        isOpen={depositModal}
+        onClose={handleDeleteModalClose}
+        // onConfirm={handleDeleteConfirm}
+        userId={selectedUser?._id}
+      />
+      </>}
+      <SportsSettingsModal
+        isOpen={settingsModal}
+        onClose={handleDeleteModalClose}
+        // onConfirm={handleDeleteConfirm}
+        // userId={userToDelete?._id}
+      />
+      {/* {selectedUser && <> */}
+      <AccountStatus
+        isOpen={accountStatus}
+        onClose={handleDeleteModalClose}
+        // onConfirm={handleDeleteConfirm}
+        userId={selectedUser?._id}
+        
+      />
+      {/* </>} */}
       {isExposureModalOpen && selectedExposureUser && (
         <>
           {console.log("idddd", selectedExposureUser)}

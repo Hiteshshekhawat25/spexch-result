@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchRoles, saveClientApi } from "../../Utils/LoginApi";
 import { BASE_URL } from "../../Constant/Api";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 export const AddMasterForm = ({ closeModal }) => {
   const [formData, setFormData] = useState({
     username: "",
     name: "",
-    role: " ",
+    role: "",
     commission: 10,
     openingBalance: 0,
     creditReference: "",
@@ -20,6 +20,7 @@ export const AddMasterForm = ({ closeModal }) => {
       matka: 0,
       casino: 0,
       binary: 0,
+      sportbook: 0,
       bookmaker: 0,
     },
     agentRollingCommission: {
@@ -27,46 +28,20 @@ export const AddMasterForm = ({ closeModal }) => {
       matka: 0,
       casino: 0,
       binary: 0,
-      sportsbook: 0,
+      sportbook: 0,
       bookmaker: 0,
     },
     masterPassword: "",
+    rollingCommissionChecked: false,
+    agentRollingCommissionChecked: false,
   });
+  const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState(null);
   const [successMessage, setSuccessMessage] = useState("");
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
-  const [userRoleId, setUserRoleId] = useState(null); // Store the role ID for "user"
 
-  // // Handle input changes
-  // const handleChange = (e) => {
-  //   const { name, value, type, checked } = e.target;
-
-  //   if (type === "checkbox") {
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [name]: checked,
-  //     }));
-  //   } else if (
-  //     name.includes("rollingDetails") ||
-  //     name.includes("agentRollingDetails")
-  //   ) {
-  //     const [field, key] = name.split(".");
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [field]: {
-  //         ...prevData[field],
-  //         [key]: value,
-  //       },
-  //     }));
-  //   } else {
-  //     setFormData((prevData) => ({
-  //       ...prevData,
-  //       [name]: value,
-  //     }));
-  //   }
-  // };
+  // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -76,8 +51,8 @@ export const AddMasterForm = ({ closeModal }) => {
         [name]: checked,
       }));
     } else if (
-      name.includes("rollingDetails") ||
-      name.includes("agentRollingDetails")
+      name.includes("rollingCommission") ||
+      name.includes("agentRollingCommission")
     ) {
       const [field, key] = name.split(".");
       setFormData((prevData) => ({
@@ -95,132 +70,121 @@ export const AddMasterForm = ({ closeModal }) => {
     }
   };
 
-  // Fetch token from localStorage and validate
+  // Validation
+  const validate = () => {
+    const newErrors = {};
+
+    if (!formData.username.trim()) newErrors.username = "Username is required.";
+    if (!formData.name.trim()) newErrors.name = "Name is required.";
+    if (!formData.role) newErrors.role = "Role selection is required.";
+    if (formData.commission < 0 || formData.commission > 100)
+      newErrors.commission = "Commission must be between 0 and 100.";
+    if (formData.partnership < 0 || formData.partnership > 100)
+      newErrors.partnership = "Partnership must be between 0 and 100.";
+    if (!formData.password.trim()) newErrors.password = "Password is required.";
+    if (formData.password !== formData.confirmPassword)
+      newErrors.confirmPassword = "Passwords do not match.";
+    if (!formData.masterPassword.trim())
+      newErrors.masterPassword = "Master Password is required.";
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  // Fetch token from localStorage
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
     if (storedToken) {
-      try {
-        const parsedToken = JSON.parse(storedToken)?.donation?.accessToken;
-        setToken(parsedToken || storedToken); // Use parsed or raw token
-      } catch {
-        setToken(storedToken); // Fall back to raw token
-      }
-    } else {
-      setError("Token is missing. Please login again.");
+      setToken(storedToken);
     }
   }, []);
 
-  // Fetch roles and extract user role ID
+  // Fetch roles
   useEffect(() => {
     if (token) {
-      const fetchUserRoles = async () => {
+      const fetchRolesData = async () => {
         try {
-          const rolesArray = await fetchRoles(token); // Fetch roles
-          console.log("rolesArray", rolesArray);
-
-          if (Array.isArray(rolesArray)) {
-            // Map roles to an array of { role_name, role_id }
-            const rolesData = rolesArray.map((role) => ({
-              role_name: role.role_name,
-              role_id: role._id,
-            }));
-            console.log("rolesData", rolesData);
-
-            setRole(rolesData);
-          } else {
-            setError("Roles data is not an array.");
-          }
-        } catch (error) {
-          setError(error.message || "Failed to fetch roles.");
+          const rolesArray = await fetchRoles(token);
+          setRole(rolesArray || []);
+        } catch {
+          toast.error("Failed to fetch roles.");
         }
       };
-      fetchUserRoles();
+      fetchRolesData();
     }
   }, [token]);
 
+  //  to select the role
   const handleRoleSelection = (roleId) => {
+    console.log("role id", roleId);
     setFormData((prevData) => ({
       ...prevData,
-      role: roleId, // Set role_id in formData directly
+      role: roleId, // Pass role_id here
     }));
   };
 
-  // Handle form submission for both user and master creation
   const handleSubmit = async (e) => {
-    console.log("formData", formData);
     e.preventDefault();
 
-    if (!token) {
-      setError("Token is missing. Please login again.");
-      return;
-    }
-
-    // if (!userRoleId) {
-    //   setError("User role ID is not available. Please try again later.");
-    //   return;
-    // }
+    if (!validate()) return;
 
     setIsSubmitting(true);
-    setError(null);
     setSuccessMessage("");
 
-    // Prepare form data
     const {
       confirmPassword,
-      rollingCommission,
-      agentRollingCommission,
+      rollingCommissionChecked,
+      agentRollingCommissionChecked,
       ...submitData
     } = formData;
-    console.log("formDate", formData);
-
-    // Validate password match
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
-      setIsSubmitting(false);
-      return;
-    }
-
-    // If rollingCommission is not checked, remove the rollingDetails fields
-    if (!rollingCommission) {
-      delete submitData.rollingDetails;
-    }
-
-    // If agentRollingCommission is not checked, remove the agentRollingDetails fields
-    if (!agentRollingCommission) {
-      delete submitData.agentRollingDetails;
-    }
-
-    // Add role ID to form data
-    const dataWithRole = { ...submitData }; // role_id is already part of submitData
-
-    console.log("datawithrole", dataWithRole);
 
     try {
       const response = await saveClientApi(
         `${BASE_URL}/admin/v1/user/create-user`,
-        dataWithRole,
+        submitData,
         token
-        // userRoleId
       );
 
       if (response.data.success) {
-        setSuccessMessage(
-          response.data.message || "Master saved successfully!"
-        );
-        toast.success("Master saved successfully", { autoClose: 2000 });
-        closeModal(); // Close the modal on success
+        setFormData({
+          username: "",
+          name: "",
+          role: "",
+          commission: 10,
+          openingBalance: 0,
+          creditReference: "",
+          mobileNumber: "",
+          partnership: 0,
+          password: "",
+          confirmPassword: "",
+          rollingCommission: {
+            fancy: 0,
+            matka: 0,
+            casino: 0,
+            binary: 0,
+            bookmaker: 0,
+          },
+          agentRollingCommission: {
+            fancy: 0,
+            matka: 0,
+            casino: 0,
+            binary: 0,
+            sportsbook: 0,
+            bookmaker: 0,
+          },
+          masterPassword: "",
+        });
+        toast.success(response?.data?.message || "Master created Successfully");
+        setTimeout(() => {
+          closeModal();
+        }, 2000);
       } else {
-        setError(response.data.message || "Failed to save master.");
-        toast.error(
-          response.data.message || "Error occurred while saving the master",
-          { autoClose: 2000 }
-        );
+        toast.error(response.data.message || "Failed to save master.");
       }
     } catch (error) {
-      setError(error.message || "An error occurred while saving the master.");
-      toast.error("Error occurred while saving the master", {
-        autoClose: 2000,
-      });
+      toast.error(
+        error.message || "An error occurred while saving the master."
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -228,10 +192,11 @@ export const AddMasterForm = ({ closeModal }) => {
 
   return (
     <div className="max-w-xl mx-auto bg-white p-6 rounded shadow-lg">
-      <h2 className="text-2xl font-semibold mb-4">Add Client</h2>
+      <h2 className="text-2xl font-semibold mb-4">Add Master</h2>
       <form onSubmit={handleSubmit}>
         <table className="w-full">
           <tbody>
+            {/* Username */}
             <tr>
               <td className="text-left py-2 font-semibold">Username</td>
               <td>
@@ -243,9 +208,13 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.username && (
+                  <div className="text-red-500 text-sm">{errors.username}</div>
+                )}
               </td>
             </tr>
 
+            {/* Name */}
             <tr>
               <td className="text-left py-2 font-semibold">Name</td>
               <td>
@@ -257,13 +226,17 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.username && (
+                  <div className="text-red-500 text-sm">{errors.username}</div>
+                )}
               </td>
             </tr>
 
+            {/* Account Type */}
             <tr>
               <td className="text-left py-2 font-semibold">Account Type</td>
               <td>
-                <select
+                {/* <select
                   name="role"
                   value={formData.role || ""}
                   onChange={(e) => {
@@ -271,7 +244,7 @@ export const AddMasterForm = ({ closeModal }) => {
                     handleRoleSelection(e.target.value);
                   }}
                   className="w-full p-2 border rounded"
-                >
+                >c{console.log(formData)}
                   <option value="" disabled>
                     Select Role
                   </option>
@@ -280,10 +253,37 @@ export const AddMasterForm = ({ closeModal }) => {
                       {role_name}
                     </option>
                   ))}
+                </select> */}
+                <select
+                  name="role"
+                  value={formData.role || ""}
+                  onChange={(e) => {
+                    handleChange(e);
+                    handleRoleSelection(e.target.value); // Pass the selected role_id
+                  }}
+                  className="w-full p-2 border rounded"
+                >
+                  <option value="" disabled>
+                    Select Role
+                  </option>
+                  {console.log("roles",role)}
+                  {role?.map(({ _id, role_name }, index) => (
+                    <option key={index} value={_id}>
+                      {" "}
+                      {/* Pass role_id as value */}
+                      {role_name}
+                      {console.log(_id)}
+                    </option>
+                  ))}
                 </select>
+
+                {errors.role && (
+                  <div className="text-red-500 text-sm">{errors.role}</div>
+                )}
               </td>
             </tr>
 
+            {/* Commission */}
             <tr>
               <td className="text-left py-2 font-semibold">Commission (%)</td>
               <td>
@@ -295,9 +295,15 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.commission && (
+                  <div className="text-red-500 text-sm">
+                    {errors.commission}
+                  </div>
+                )}
               </td>
             </tr>
 
+            {/* Opening Balance */}
             <tr>
               <td className="text-left py-2 font-semibold">Opening Balance</td>
               <td>
@@ -309,9 +315,15 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.openingBalance && (
+                  <div className="text-red-500 text-sm">
+                    {errors.openingBalance}
+                  </div>
+                )}
               </td>
             </tr>
 
+            {/* Credit Reference */}
             <tr>
               <td className="text-left py-2 font-semibold">Credit Reference</td>
               <td>
@@ -323,9 +335,15 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.creditReference && (
+                  <div className="text-red-500 text-sm">
+                    {errors.creditReference}
+                  </div>
+                )}
               </td>
             </tr>
 
+            {/* Mobile Number */}
             <tr>
               <td className="text-left py-2 font-semibold">Mobile Number</td>
               <td>
@@ -337,9 +355,15 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.mobileNumber && (
+                  <div className="text-red-500 text-sm">
+                    {errors.mobileNumber}
+                  </div>
+                )}
               </td>
             </tr>
 
+            {/* Partnership */}
             <tr>
               <td className="text-left py-2 font-semibold">Partnership</td>
               <td>
@@ -351,9 +375,15 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.partnership && (
+                  <div className="text-red-500 text-sm">
+                    {errors.partnership}
+                  </div>
+                )}
               </td>
             </tr>
 
+            {/* Password */}
             <tr>
               <td className="text-left py-2 font-semibold">Password</td>
               <td>
@@ -365,9 +395,13 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.password && (
+                  <div className="text-red-500 text-sm">{errors.password}</div>
+                )}
               </td>
             </tr>
 
+            {/* Confirm Password */}
             <tr>
               <td className="text-left py-2 font-semibold">Confirm Password</td>
               <td>
@@ -379,137 +413,187 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
+                {errors.confirmPassword && (
+                  <div className="text-red-500 text-sm">
+                    {errors.confirmPassword}
+                  </div>
+                )}
               </td>
             </tr>
+
+            {/* Rolling Commission Checkbox */}
+            <tr>
+              <td colSpan="2" className="py-2">
+                <label className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    name="rollingCommissionChecked"
+                    checked={formData.rollingCommissionChecked}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Rolling Commission
+                </label>
+              </td>
+            </tr>
+
+            {/* Rolling Commission Fields */}
             {formData.rollingCommissionChecked && (
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <label className="w-1/3">Fancy</label>
-                  <input
-                    type="number"
-                    name="rollingCommission.fancy"
-                    value={formData.rollingCommission.fancy || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Matka</label>
-                  <input
-                    type="number"
-                    name="rollingCommission.matka"
-                    value={formData.rollingCommission.matka || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Casino</label>
-                  <input
-                    type="number"
-                    name="rollingCommission.casino"
-                    value={formData.rollingCommission.casino || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Binary</label>
-                  <input
-                    type="number"
-                    name="rollingCommission.binary"
-                    value={formData.rollingCommission.binary || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Sportsbook</label>
-                  <input
-                    type="number"
-                    name="rollingCommission.sportsbook"
-                    value={formData.rollingCommission.sportsbook || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Bookmaker</label>
-                  <input
-                    type="number"
-                    name="rollingCommission.bookmaker"
-                    value={formData.rollingCommission.bookmaker || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-              </div>
-            )}
-            {formData.agentRollingCommission && (
-              <div className="space-y-4">
-                <div className="flex justify-between">
-                  <label className="w-1/3">Fancy</label>
-                  <input
-                    type="number"
-                    name="agentRollingCommission.fancy"
-                    value={formData.agentRollingCommission.fancy || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Matka</label>
-                  <input
-                    type="number"
-                    name="agentRollingCommission.matka"
-                    value={formData.agentRollingCommission.matka || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Casino</label>
-                  <input
-                    type="number"
-                    name="agentRollingCommission.casino"
-                    value={formData.agentRollingCommission.casino || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Binary</label>
-                  <input
-                    type="number"
-                    name="agentRollingCommission.binary"
-                    value={formData.agentRollingCommission.binary || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Sportsbook</label>
-                  <input
-                    type="number"
-                    name="agentRollingCommission.sportsbook"
-                    value={formData.agentRollingCommission.sportsbook || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-                <div className="flex justify-between">
-                  <label className="w-1/3">Bookmaker</label>
-                  <input
-                    type="number"
-                    name="agentRollingCommission.bookmaker"
-                    value={formData.agentRollingCommission.bookmaker || 0}
-                    onChange={handleChange}
-                    className="w-2/3 border p-2"
-                  />
-                </div>
-              </div>
+              <tr>
+                <td colSpan="2">
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Fancy</label>
+                      <input
+                        type="number"
+                        name="rollingCommission.fancy"
+                        value={formData.rollingCommission.fancy || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Matka</label>
+                      <input
+                        type="number"
+                        name="rollingCommission.matka"
+                        value={formData.rollingCommission.matka || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Casino</label>
+                      <input
+                        type="number"
+                        name="rollingCommission.casino"
+                        value={formData.rollingCommission.casino || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Binary</label>
+                      <input
+                        type="number"
+                        name="rollingCommission.binary"
+                        value={formData.rollingCommission.binary || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">sportbook</label>
+                      <input
+                        type="number"
+                        name="rollingCommission.sportbook"
+                        value={formData.rollingCommission.sportbook || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Bookmaker</label>
+                      <input
+                        type="number"
+                        name="rollingCommission.bookmaker"
+                        value={formData.rollingCommission.bookmaker || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
             )}
 
+            {/* Agent Rolling Commission Checkbox */}
+            <tr>
+              <td colSpan="2" className="py-2">
+                <label className="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    name="agentRollingCommissionChecked"
+                    checked={formData.agentRollingCommissionChecked}
+                    onChange={handleChange}
+                    className="mr-2"
+                  />
+                  Agent Rolling Commission
+                </label>
+              </td>
+            </tr>
+
+            {/* Agent Rolling Commission Fields */}
+            {formData.agentRollingCommissionChecked && (
+              <tr>
+                <td colSpan="2">
+                  <div className="space-y-4">
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Fancy</label>
+                      <input
+                        type="number"
+                        name="agentRollingCommission.fancy"
+                        value={formData.agentRollingCommission.fancy || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Matka</label>
+                      <input
+                        type="number"
+                        name="agentRollingCommission.matka"
+                        value={formData.agentRollingCommission.matka || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Casino</label>
+                      <input
+                        type="number"
+                        name="agentRollingCommission.casino"
+                        value={formData.agentRollingCommission.casino || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Binary</label>
+                      <input
+                        type="number"
+                        name="agentRollingCommission.binary"
+                        value={formData.agentRollingCommission.binary || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Sportbook</label>
+                      <input
+                        type="number"
+                        name="agentRollingCommission.sportbook"
+                        value={formData.agentRollingCommission.sportbook || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                    <div className="flex justify-between">
+                      <label className="w-1/3">Bookmaker</label>
+                      <input
+                        type="number"
+                        name="agentRollingCommission.bookmaker"
+                        value={formData.agentRollingCommission.bookmaker || 0}
+                        onChange={handleChange}
+                        className="w-2/3 border p-2"
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            )}
+
+            {/* Master Password */}
             <tr>
               <td className="text-left py-2 font-semibold">Master Password</td>
               <td>
@@ -521,37 +605,24 @@ export const AddMasterForm = ({ closeModal }) => {
                   required
                   className="w-full p-2 border rounded"
                 />
-              </td>
-            </tr>
-
-            <tr>
-              <td colSpan="2" className="py-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`w-full py-2 px-4 text-white ${
-                    isSubmitting ? "bg-NavyBlue" : "bg-NavyBlue"
-                  } rounded`}
-                >
-                  {isSubmitting ? "Submitting..." : "Submit"}
-                </button>
+                {errors.masterPassword && (
+                  <div className="text-red-500 text-sm">
+                    {errors.masterPassword}
+                  </div>
+                )}
               </td>
             </tr>
           </tbody>
         </table>
+        <button
+          type="submit"
+          className="w-full py-2 bg-NavyBlue text-white rounded mt-4"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Submitting..." : "Submit"}
+        </button>
       </form>
-
-      {error && (
-        <div className="text-red-500 mt-2">
-          <strong>{error}</strong>
-        </div>
-      )}
-
-      {successMessage && (
-        <div className="text-green-500 mt-2">
-          <strong>{successMessage}</strong>
-        </div>
-      )}
+      <ToastContainer autoClose={2000} draggable={true} />
     </div>
   );
 };

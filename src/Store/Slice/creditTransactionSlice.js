@@ -25,6 +25,7 @@ export const fetchCreditReference = createAsyncThunk(
                     },
                 }
             );
+            console.log("response",response);
 
             if (response.status === 200) {
                 return response.data;
