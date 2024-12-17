@@ -11,7 +11,7 @@ const LayoutHeader = ({ children }) => {
       <MenuHeader />
       <div className="p-1">
         </div>
-        <div>{children}</div> {/* Dynamic content */}
+        <div>{children}</div> 
       </div>
   );
 };

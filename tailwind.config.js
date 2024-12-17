@@ -17,6 +17,7 @@ module.exports = {
         darkGreen: '#365314',
         NavyBlue: '#1b186e',
         lightblue: '#38bdf8',
+        cream:'#fffbeb',
         success: '#4CAF50', // Custom success color
         error: '#F44336', // Custom error color
         info: '#2196F3', // Custom info color

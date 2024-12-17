@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
         <div className="mb-6">
           <BalanceHeader />
         </div>
-        <div>{children}</div> {/* Dynamic content */}
+        <div>{children}</div> 
       </div>
     </div>
   );

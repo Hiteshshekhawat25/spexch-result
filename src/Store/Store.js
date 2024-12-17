@@ -12,6 +12,8 @@ import allMatchReducer from './Slice/allMatchSlice';
 import balanceReducer from './Slice/balanceSlice';
 import updateCreditReference from './Slice/creditReferenceslice'
 import creditReferenceReducer from './Slice/creditTransactionSlice'
+import editStakeReducer from './Slice/editStakeSlice'
+import scoreReducer from './Slice/scoreSlice'
 
 export const store = configureStore({
   reducer: {
@@ -28,6 +30,8 @@ export const store = configureStore({
     balance: balanceReducer,
     credit: updateCreditReference,
     creditReference: creditReferenceReducer,
+    editStake: editStakeReducer, 
+    score: scoreReducer,
   },
 });
 
