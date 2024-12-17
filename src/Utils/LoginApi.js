@@ -68,7 +68,7 @@ export const saveClientApi = async (endpoint, body, token, role) => {
 // APi for fetching roles
 export const fetchRoles = async (token) => {
   try {
-    const response = await axios.get(`${BASE_URL}/admin/v1/user/get-role`, {
+    const response = await axios.get(`${BASE_URL}/user/get-role`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
