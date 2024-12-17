@@ -1,13 +1,16 @@
+import React from "react";
+import { BrowserRouter } from "react-router-dom"; // Provides routing context
+import RoutesComp from "./routes/Routes"; // Import your RoutesComp
+import { ToastContainer } from "react-toastify";
 
-import React from "react"; // Add this at the top
-import { BrowserRouter } from "react-router-dom";
-import RoutesComp from "./routes/Routes";
-
-export default function App() {
+const App = () => {
   return (
     <BrowserRouter>
       <RoutesComp />
+      <ToastContainer /> {/* Render the routes */}
     </BrowserRouter>
   );
-}
+};
+
+export default App;
 

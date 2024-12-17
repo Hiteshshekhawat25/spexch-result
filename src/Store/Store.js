@@ -7,6 +7,9 @@ import superAdminFormReducer from "./Slice/SuperAdminFormSlice";
 import downlineReducer from './Slice/downlineSlice';
 import createMatchReducer from './Slice/createMatchSlice';
 import deleteReducer from './Slice/deleteSlice';
+import createManualMatchReducer from './Slice/createManualMatchSlice';
+import allMatchReducer from './Slice/allMatchSlice';
+import balanceReducer from './Slice/balanceSlice';
 import updateCreditReference from './Slice/creditReferenceslice'
 import creditReferenceReducer from './Slice/creditTransactionSlice'
 
@@ -18,8 +21,11 @@ export const store = configureStore({
     master: masterReducer,
     downline: downlineReducer,
     createMatch: createMatchReducer,  
+    createManualMatch: createManualMatchReducer,
     superAdminForm: superAdminFormReducer,
     delete: deleteReducer,
+    allMatch: allMatchReducer,
+    balance: balanceReducer,
     credit: updateCreditReference,
     creditReference: creditReferenceReducer,
   },

@@ -37,8 +37,11 @@ const superAdminFormSlice = createSlice({
       state[name] = value;
     },
     resetForm: () => initialState,
+    setFormData: (state, action) => {
+      return { ...state, ...action.payload }; // Update state with provided data
+    },
   },
 });
 
-export const { updateField, resetForm } = superAdminFormSlice.actions;
+export const { updateField, resetForm ,setFormData} = superAdminFormSlice.actions;
 export default superAdminFormSlice.reducer;

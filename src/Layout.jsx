@@ -5,7 +5,7 @@ import MenuHeader from "./components/Header/MenuHeader";
 import TopHeader from "./components/Header/TopHeader";
 import React from "react";
 
-const Layout = () => {
+const Layout = ({ children }) => {
   return (
     <div>
       <TopHeader />
@@ -15,12 +15,11 @@ const Layout = () => {
         <div className="mb-6">
           <BalanceHeader />
         </div>
-        <div>
-          <DownlineList />
-        </div>
+        <div>{children}</div> {/* Dynamic content */}
       </div>
     </div>
   );
 };
 
 export default Layout;
+

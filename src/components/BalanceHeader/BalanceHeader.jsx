@@ -1,33 +1,28 @@
-import { useEffect, useState } from "react";
-import React from "react"; 
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setBalanceData } from "../../Store/Slice/balanceSlice"; // Adjust path as needed
+import { getBalanceData } from "../../Services/Downlinelistapi"; // Adjust path as needed
 
 const BalanceHeader = () => {
-  const [balanceData, setBalanceData] = useState({
-    totalBalance: "IRP 0",
-    totalExposure: "IRP 0",
-    availableBalance: "IRP 0",
-    balance: "IRP 0",
-    uplinePL: "IRP 0",
-    totalavailbalance: "IRP 0",
-    availableBalanceUpdated: "IRP 0",
-  });
+  const dispatch = useDispatch();
+  const balanceData = useSelector((state) => state.balance);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = {
-        totalBalance: "IRP 50,000",
-        totalExposure: "IRP 10,000",
-        availableBalance: "IRP 40,000",
-        balance: "IRP 60,000",
-        uplinePL: "IRP 5,000",
-        totalavailbalance: "IRP 100,000",
-        availableBalanceUpdated: "IRP 90,000",
-      };
-      setBalanceData(data);
+      try {
+        const response = await getBalanceData("admin/v1/user/user-data-summary"); 
+        if (response.data?.success) {
+          dispatch(setBalanceData(response.data.data));
+        } else {
+          console.error("Failed to fetch balance data: ", response.data?.message);
+        }
+      } catch (error) {
+        console.error("Failed to fetch balance data:", error.message);
+      }
     };
 
     fetchData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="bg-white shadow-md rounded-md p-2 w-full mx-[5px] border border-gray-300">
@@ -78,3 +73,5 @@ const BalanceHeader = () => {
 };
 
 export default BalanceHeader;
+
+

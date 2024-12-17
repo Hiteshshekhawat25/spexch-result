@@ -2,7 +2,7 @@
 
 import { BASE_URL } from "../Constant/Api";
 import axios from 'axios';
-import { toast } from 'react-toastify';
+// import { toast } from 'react-toastify';
 
 // Function to perform the login API call
 export const loginUser = async (username, password) => {
