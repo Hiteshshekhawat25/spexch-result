@@ -140,7 +140,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
     try {
       const response = await saveClientApi(
-        `${BASE_URL}/admin/v1/user/create-user`,
+        `${BASE_URL}/user/create-user`,
         submitData,
         token
       );

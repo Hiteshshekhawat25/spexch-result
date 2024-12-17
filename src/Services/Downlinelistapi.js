@@ -133,7 +133,7 @@ export const putUpdateMatchAPIAuth = async (url, params) => {
 export const fetchDownlineData = async (token, currentPage, entriesToShow) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/admin/v1/user/get-user`,
+      `${BASE_URL}/user/get-user`,
       {
         params: { page: currentPage, limit: entriesToShow },
         headers: {
@@ -156,7 +156,7 @@ export const updateUserStatus = async (userId, newStatus, password) => {
 
   try {
     const response = await axios.put(
-      `${BASE_URL}/admin/v1/user/update-user-status`,
+      `${BASE_URL}/user/update-user-status`,
       {
         userId,
         newStatus,
@@ -182,8 +182,8 @@ export const updateUserStatus = async (userId, newStatus, password) => {
 export const performTransaction = async (transactionType, data, token) => {
   const apiUrl =
     transactionType === "deposit"
-      ? `${BASE_URL}/admin/v1/user/deposit-amount`
-      : `${BASE_URL}/admin/v1/user/withdraw-amount`;
+      ? `${BASE_URL}/user/deposit-amount`
+      : `${BASE_URL}/user/withdraw-amount`;
 
   try {
     const response = await axios.post(apiUrl, data, {
@@ -204,7 +204,7 @@ export const performTransaction = async (transactionType, data, token) => {
 export const getGamesList = async (token) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/admin/v1/games/getgames`,
+      `${BASE_URL}/games/getgames`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -222,7 +222,7 @@ export const getGamesList = async (token) => {
 export const updateGameStatus = async (token, userId, gameId, active) => {
   try {
     const response = await axios.put(
-      `${BASE_URL}/admin/v1/user/user-game-status`,
+      `${BASE_URL}/user/user-game-status`,
       {
         userId,
         gameId,
@@ -246,7 +246,7 @@ export const updateGameStatus = async (token, userId, gameId, active) => {
 export const getGameActionStatus = async (token, userId) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}admin/v1/user/user-game-status${userId}`,
+      `${BASE_URL}/user/user-game-status${userId}`,
       // {
       //   userId,
       //   gameId,

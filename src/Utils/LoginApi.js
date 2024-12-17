@@ -1,5 +1,6 @@
 // src/utils/api.js
 
+import { toast } from "react-toastify";
 import { BASE_URL } from "../Constant/Api";
 import axios from 'axios';
 // import { toast } from 'react-toastify';
@@ -8,7 +9,7 @@ import axios from 'axios';
 export const loginUser = async (username, password) => {
   try {
     // Ensure the URL is correctly interpolated
-    const response = await fetch(`${BASE_URL}/admin/v1/user/login`, {
+    const response = await fetch(`${BASE_URL}/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -186,16 +186,14 @@ const DownlineList = () => {
       console.log('222',token)
       try {
         const response = await axios.get(
-          `${BASE_URL}/admin/v1/user/get-user?page=1&limit=28&role=${roleId}`,
+          `${BASE_URL}/user/get-user?page=1&limit=28&role=${roleId}`,
           {
             headers: {
-              Authorization: `Bearer ${token}`, // Add the token to the headers
+              Authorization: `Bearer ${token}`,
             },
             
           }
         );
-        console.log("12",token);
-        console.log("Fetched Master", response.data);
         setData(response.data); // Update data with the fetched users by role
       } catch (error) {
         console.error("Error fetching users by role:", error);

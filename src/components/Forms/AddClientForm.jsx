@@ -58,7 +58,7 @@ export const AddClientForm = ({ closeModal }) => {
       const fetchRoles = async () => {
         try {
           const response = await axios.get(
-            `${BASE_URL}/admin/v1/user/get-role`,
+            `${BASE_URL}/user/get-role`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
@@ -159,7 +159,7 @@ export const AddClientForm = ({ closeModal }) => {
 
     try {
       const response = await saveClientApi(
-        `${BASE_URL}/admin/v1/user/create-user`,
+        `${BASE_URL}/user/create-user`,
         dataWithAccountType,
         token
       );

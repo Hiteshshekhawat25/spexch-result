@@ -13,7 +13,7 @@ export const getUserData = async () => {
   }
 
   try {
-    const response = await axios.get(`${BASE_URL}/admin/v1/user/get-user/${userId}`, {
+    const response = await axios.get(`${BASE_URL}/user/get-user/${userId}`, {
       headers: {
         Authorization: `Bearer ${token}`, 
       },
