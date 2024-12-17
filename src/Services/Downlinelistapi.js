@@ -199,3 +199,70 @@ export const performTransaction = async (transactionType, data, token) => {
     throw error.response?.data?.message || "An error occurred while processing the transaction.";
   }
 };
+
+//api to get sports list 
+export const getGamesList = async (token) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/admin/v1/games/getgames`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data; // Return the data from the response
+  } catch (error) {
+    throw new Error(error.response ? error.response.data.message : "Failed to fetch data");
+  }
+};
+
+// api to update game status 
+export const updateGameStatus = async (token, userId, gameId, active) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/admin/v1/user/user-game-status`,
+      {
+        userId,
+        gameId,
+        active,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data; // Return the data from the response
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : "Failed to update game status"
+    );
+  }
+};
+
+export const getGameActionStatus = async (token, userId) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}admin/v1/user/user-game-status${userId}`,
+      // {
+      //   userId,
+      //   gameId,
+      //   active,
+      // },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data; // Return the data from the response
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : "Failed to update game status"
+    );
+  }
+};

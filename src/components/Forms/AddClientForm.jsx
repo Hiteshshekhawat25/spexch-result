@@ -423,10 +423,10 @@ export const AddClientForm = ({ closeModal }) => {
         >
           {isSubmitting ? "Submitting..." : "Submit"}
         </button>
-        {error && <div className="text-red-500 mt-4">{error}</div>}
+        {/* {error && <div className="text-red-500 mt-4">{error}</div>}
         {successMessage && (
           <div className="text-green-500 mt-4">{successMessage}</div>
-        )}
+        )} */}
       </form>
       <ToastContainer autoClose={2000} draggable={true} />
     </div>

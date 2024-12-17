@@ -78,3 +78,21 @@ export const fetchRoles = async (token) => {
     throw new Error(error.message || "Failed to fetch roles.");
   }
 };
+
+//get user details by id
+export const fetchUserDetails = async (token, userId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/admin/v1/user/get-user/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(response.data.data)
+
+    // Return the user details if the request is successful
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    throw new Error(error.message || "Failed to fetch user details.");
+  }
+};
+
+//get api to update game Action

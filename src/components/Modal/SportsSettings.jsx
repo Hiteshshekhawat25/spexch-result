@@ -1,19 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchSportsList, updateGameStatusThunk } from "../../Store/Slice/sportsSettingSlice";
+import { selectSportsList, selectLoading, selectError } from "../../Store/Selectors/SportsSelector";
+import { toast } from "react-toastify";
 
-const SportsSettingsModal = ({ isOpen, onClose }) => {
-  const [sportsList, setSportsList] = useState([
-    { id: 1, name: "Soccer", isChecked: false },
-    { id: 2, name: "Tennis", isChecked: false },
-    { id: 3, name: "Casino", isChecked: false },
-    { id: 4, name: "Cricket", isChecked: false },
-  ]);
+const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
+  const dispatch = useDispatch();
 
-  const handleCheckboxChange = (id) => {
-    setSportsList(
-      sportsList.map((sport) =>
-        sport.id === id ? { ...sport, isChecked: !sport.isChecked } : sport
-      )
-    );
+  // Selectors
+  const sportsList = useSelector(selectSportsList);
+  const loading = useSelector(selectLoading);
+  const error = useSelector(selectError);
+
+  const token = localStorage.getItem("authToken");
+
+  // Fetch data when modal opens
+  useEffect(() => {
+    if (isOpen) {
+      dispatch(fetchSportsList(token));
+    }
+  }, [isOpen, dispatch, token]);
+
+  // Handle checkbox state changes
+  const handleCheckboxChange = (gameId, isChecked) => {
+    dispatch(updateGameStatusThunk({ token, userId, gameId, isChecked: !isChecked }))
+      .unwrap()
+      .then((response) => {
+        toast.success(response.message || "Game status updated successfully");
+      })
+      .catch((error) => {
+        toast.error(error || "Error updating game status");
+      });
   };
 
   return (
@@ -28,39 +45,37 @@ const SportsSettingsModal = ({ isOpen, onClose }) => {
               ✕
             </button>
             <h2 className="text-xl font-semibold text-center mb-4">Sports Settings</h2>
-            <table className="min-w-full table-auto">
-              <thead className="bg-gray-100">
-                <tr>
-                  <th className="px-4 py-2 text-left">Sr.No.</th>
-                  <th className="px-4 py-2 text-left">Sport Name</th>
-                  <th className="px-4 py-2 text-left">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {sportsList.map((sport) => (
-                  <tr key={sport.id} className="border-b">
-                    <td className="px-4 py-2 text-center">{sport.id}</td>
-                    <td className="px-4 py-2">{sport.name}</td>
-                    <td className="px-4 py-2 text-center">
-                      <input
-                        type="checkbox"
-                        checked={sport.isChecked}
-                        onChange={() => handleCheckboxChange(sport.id)}
-                        className="form-checkbox h-5 w-5 text-blue-600"
-                      />
-                    </td>
+
+            {loading && <p className="text-center text-gray-500">Loading...</p>}
+            {error && <p className="text-center text-red-500">{error}</p>}
+
+            {!loading && !error && (
+              <table className="min-w-full table-auto border border-gray-400">
+                <thead className="bg-gray-100">
+                  <tr>
+                    <th className="px-4 py-2 text-left">Sr.No.</th>
+                    <th className="px-4 py-2 text-left">Sport Name</th>
+                    <th className="px-4 py-2 text-center">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-            <div className="flex justify-center mt-4">
-              <button
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600"
-                onClick={onClose}
-              >
-                Save Changes
-              </button>
-            </div>
+                </thead>
+                <tbody>
+                  {sportsList.map((sport, index) => (
+                    <tr key={sport.gameId} className="border-b">
+                      <td className="px-4 py-2 text-center">{index + 1}</td>
+                      <td className="px-4 py-2">{sport.name}</td>
+                      <td className="px-4 py-2 text-center">
+                        <input
+                          type="checkbox"
+                          checked={sport.isChecked}
+                          onChange={() => handleCheckboxChange(sport.gameId, sport.isChecked)}
+                          className="form-checkbox h-5 w-5 text-blue-600"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
       )}

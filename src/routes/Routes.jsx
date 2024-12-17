@@ -11,6 +11,7 @@ import CreateNewMatch from "../components/Matches/CreateNewMatch";
 import CreateManualMatch from "../components/Matches/CreateManualMatch";
 import SuperAdminForm from "../SuperAdmin/SuperAdminComponents/SuperAdminForm/SuperAdminForm";
 import AllMatches from "../components/Matches/AllMatches";
+import { AddMasterForm } from "../components/Forms/AddMasterForm";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -24,7 +25,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <Layout>
-              <DownlineList /> {/* Render specific component */}
+              <DownlineList />
             </Layout>
           </ProtectedRoutes>
         }
@@ -34,7 +35,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <Layout>
-              <h1>Master Downline List</h1> {/* Replace with actual component */}
+              <DownlineList />
             </Layout>
           </ProtectedRoutes>
         }
@@ -44,7 +45,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <CreateNewMatch /> {/* Render CreateNewMatch component */}
+              <CreateNewMatch />
             </LayoutHeader>
           </ProtectedRoutes>
         }

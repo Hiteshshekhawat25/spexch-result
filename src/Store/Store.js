@@ -12,10 +12,13 @@ import allMatchReducer from './Slice/allMatchSlice';
 import balanceReducer from './Slice/balanceSlice';
 import updateCreditReference from './Slice/creditReferenceslice'
 import creditReferenceReducer from './Slice/creditTransactionSlice'
+import sportsReducer from './Slice/sportsSettingSlice'
+import authLoginReducer  from './Slice/authLoginSlice'
 
 export const store = configureStore({
   reducer: {
-    login: loginReducer,
+    // login: loginReducer,
+    login: authLoginReducer,
     client: clientReducer, 
     // addClient: addClientReducer,
     master: masterReducer,
@@ -28,6 +31,7 @@ export const store = configureStore({
     balance: balanceReducer,
     credit: updateCreditReference,
     creditReference: creditReferenceReducer,
+    sports: sportsReducer
   },
 });
 

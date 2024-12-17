@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { performTransaction } from "../../Services/DownlineListApi";
+import { toast } from "react-toastify";
 
 const DepositModal = ({ isOpen, onClose,userId }) => {
   const [amount, setAmount] = useState("");
@@ -10,7 +11,7 @@ const DepositModal = ({ isOpen, onClose,userId }) => {
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
 
-  const token = localStorage.getItem("authToken");;
+  const token = localStorage.getItem("authToken");
 
   if (!isOpen) return null;
 
@@ -32,9 +33,9 @@ const DepositModal = ({ isOpen, onClose,userId }) => {
     try {
       const response = await performTransaction(transactionType, requestData, token);
       if (response.success) {
-        setSuccessMessage("Transaction successful!");
+        toast.success(response.message || "Transaction Successful");
       } else {
-        setError(response.message || "Transaction failed.");
+        toast.error(response.message || "Transaction Failed");
       }
     } catch (err) {
       setError(err);
@@ -141,8 +142,8 @@ const DepositModal = ({ isOpen, onClose,userId }) => {
         </form>
 
         {/* Success and Error Messages */}
-        {successMessage && <div className="text-green-500 mt-4">{successMessage}</div>}
-        {error && <div className="text-red-500 mt-4">{error}</div>}
+        {/* {successMessage && <div className="text-green-500 mt-4">{successMessage}</div>}
+        {error && <div className="text-red-500 mt-4">{error}</div>} */}
       </div>
     </div>
   );

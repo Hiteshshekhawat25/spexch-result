@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FaSortUp, FaSortDown, FaEdit, FaEye } from "react-icons/fa";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { RiArrowUpDownFill } from "react-icons/ri";
@@ -24,6 +24,7 @@ import DepositModal from "../Modal/DepositModal";
 import SportsSettingsModal from "../Modal/SportsSettings";
 import AccountStatus from "../Modal/AccountStatus";
 import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -47,8 +48,10 @@ const DownlineList = () => {
   const [settingsModal, setSettingsModal] = useState(false);
   const [accountStatus, setAccountStatus] = useState(false);
   const [roles, setRoles] = useState([]);
+  const location = useLocation();
+  const [roleId,setRoleId] = useState("");
 
-  console.log("selected User",selectedUser);
+
 
   const handlePageChange = (direction) => {
     if (totalPages > 0) {
@@ -74,7 +77,6 @@ const DownlineList = () => {
           return;
         }
 
-        // Fetch data using the new API service
         const result = await fetchDownlineData(
           token,
           currentPage,
@@ -103,13 +105,10 @@ const DownlineList = () => {
           console.log("rolesArray", rolesArray);
 
           if (Array.isArray(rolesArray)) {
-            // Map roles to an array of { role_name, role_id }
             const rolesData = rolesArray.map((role) => ({
               role_name: role.role_name,
               role_id: role._id,
             }));
-            console.log("rolesData", rolesData);
-
             setRole(rolesData);
           } else {
             setError("Roles data is not an array.");
@@ -122,12 +121,12 @@ const DownlineList = () => {
     }
   }, [token]);
 
+  const filteredData = Array.isArray(data) ? data.filter(item => item.username.toLowerCase().includes(searchTerm.toLowerCase())) : [];
 
-  const filteredData = data.filter((item) =>
-    item.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
 
-  console.log("filtereddata", filteredData);
+  // const filteredData = data.filter((item) =>
+  //   item.username.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
   useEffect(() => {
     if (token) {
@@ -143,51 +142,79 @@ const DownlineList = () => {
     }
   }, [token]);
 
-  // Sorting logic
-  // const sortedData = React.useMemo(() => {
-  //   if (!sortConfig.key) return filteredData;
-  //   const sorted = [...filteredData].sort((a, b) => {
-  //     const aValue = a[sortConfig.key];
-  //     const bValue = b[sortConfig.key];
-  //     // Custom sorting for username (case-insensitive)
-  //     if (sortConfig.key === "username") {
-  //       return sortConfig.direction === "ascending"
-  //         ? aValue.toLowerCase().localeCompare(bValue.toLowerCase())
-  //         : bValue.toLowerCase().localeCompare(aValue.toLowerCase());
-  //     }
-  //     // Custom sorting for creditRef (handle numbers within strings)
-  //     if (sortConfig.key === "creditRef") {
-  //       const extractNumber = (val) => parseInt(val.replace(/\D/g, ""), 10) || 0;
-  //       const numA = extractNumber(aValue);
-  //       const numB = extractNumber(bValue);
-  //       if (numA !== numB) {
-  //         return sortConfig.direction === "ascending" ? numA - numB : numB - numA;
-  //       }
-  //       return sortConfig.direction === "ascending"
-  //         ? aValue.localeCompare(bValue)
-  //         : bValue.localeCompare(aValue);
-  //     }
-  //     // Default sorting for numbers or strings
-  //     if (typeof aValue === "number") {
-  //       return sortConfig.direction === "ascending"
-  //         ? aValue - bValue
-  //         : bValue - aValue;
-  //     }
-  //     return sortConfig.direction === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   });
-  //   return sorted;
-  // }, [filteredData, sortConfig]);
+  useEffect(() => { console.log("location",location.pathname)
+    if (location.pathname == '/master-downline-list') {
+      console.log("inside",location.pathname)
+     
+      const fetchUserRoles = async () => {
+        try {
+          const token = localStorage.getItem("authToken");
+          console.log("1",token);
+          if (token) {
+            const rolesArray = await fetchRoles(token); 
+            console.log("rolesArray", rolesArray);
+  
+            if (Array.isArray(rolesArray)) {
+              const rolesData = rolesArray.map((role) => ({
+                role_name: role.role_name,
+                role_id: role._id,
+              }));
+              console.log("master role data", rolesData);
+  
+              setRoles(rolesData);
+              if (rolesData.length > 0) {
+                setRoleId(rolesData[0].role_id); // Set default role_id
+                console.log("roleIDdddddd",rolesData[0].role_id);
+              }
+            } else {
+              setError("Roles data is not an array.");
+            }
+          }
+        } catch (error) {
+          setError(error.message || "Failed to fetch roles.");
+        }
+      };
+  
+      fetchUserRoles();
+    }
+  }, [token, location.pathname]);
+  
+  useEffect(() => {
+  if (roleId ) {
+    const fetchUserByRole = async () => {
+      const token = localStorage.getItem("authToken");
+      console.log('222',token)
+      try {
+        const response = await axios.get(
+          `${BASE_URL}/admin/v1/user/get-user?page=1&limit=28&role=${roleId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Add the token to the headers
+            },
+            
+          }
+        );
+        console.log("12",token);
+        console.log("Fetched Master", response.data);
+        setData(response.data); // Update data with the fetched users by role
+      } catch (error) {
+        console.error("Error fetching users by role:", error);
+      }
+    };
 
-  const sortedData = React.useMemo(() => {
+    fetchUserByRole();
+  }
+}, [roleId, token]); // Also depend on token so the effect re-runs when it changes
+
+ 
+
+  const sortedData = useMemo(() => {
     if (!sortConfig.key) return filteredData;
 
     return [...filteredData].sort((a, b) => {
       const aValue = a[sortConfig.key] || ""; // Default to an empty string if undefined
       const bValue = b[sortConfig.key] || ""; // Default to an empty string if undefined
 
-      // Handle numeric sorting for partnership, balance, and exposure values
       if (
         ["partnership", "balance", "exposureLimit"].includes(sortConfig.key)
       ) {
@@ -210,31 +237,7 @@ const DownlineList = () => {
     });
   }, [filteredData, sortConfig]);
 
-  console.log("sorteddata", sortedData);
-
-  // Paginate data
-
-  // const paginatedData = sortedData.slice(
-  //   ((currentPage - 1) * entriesToShow),
-  //   currentPage * entriesToShow
-  // );
-
-  // console.log("paginatedData",paginatedData)
-
-  //   const startIndex = (currentPage - 1) * entriesToShow; // Start index for the current page
-  // const endIndex = currentPage * entriesToShow; // End index for the current page (exclusive)
-
-  // console.log('Start Index:', startIndex);
-  // console.log('End Index:', endIndex);
-  // console.log('Sorted Data Length:', sortedData.length);
-
-  // Ensure the endIndex does not exceed the length of the sortedData
-  // const paginatedData = sortedData.slice(startIndex, endIndex);
   const paginatedData = sortedData;
-
-  console.log("Paginated Data:", paginatedData);
-
-  // const totalPages = Math.ceil(filteredData.length / entriesToShow);
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
   // Event handlers
@@ -271,7 +274,7 @@ const DownlineList = () => {
   };
 
   const handleDeleteClick = (user) => {
-    setUserToDelete(user); // Directly calling the delete action (you wanted to avoid this)
+    setUserToDelete(user);
     setIsDeleteModalOpen(true); // Open the delete confirmation modal
   };
 
@@ -317,6 +320,7 @@ const DownlineList = () => {
   };
 
   const handleOpenSettings = (user) => {
+    console.log("user",user);
     setSettingsModal(true);
     setSelectedUser(user);
   };
@@ -440,7 +444,7 @@ const DownlineList = () => {
                 <div className="flex space-x-2">
                   <div
                     onClick={() => handleIconClick(item)}
-                    className="flex items-center justify-center w-12 h-12 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
                   >
                     <AiFillDollarCircle className="text-darkgray" />
                   </div>
@@ -557,12 +561,13 @@ const DownlineList = () => {
         userId={selectedUser?._id}
       />
       </>}
+      {selectedUser && <>
       <SportsSettingsModal
         isOpen={settingsModal}
         onClose={handleDeleteModalClose}
         // onConfirm={handleDeleteConfirm}
-        // userId={userToDelete?._id}
-      />
+        userId={selectedUser?._id}
+      /></>}
       {/* {selectedUser && <> */}
       <AccountStatus
         isOpen={accountStatus}

@@ -7,7 +7,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <RoutesComp />
-      <ToastContainer /> {/* Render the routes */}
+      <ToastContainer /> 
     </BrowserRouter>
   );
 };

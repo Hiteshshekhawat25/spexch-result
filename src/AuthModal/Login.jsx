@@ -9,11 +9,14 @@ import { FaUser, FaLock } from "react-icons/fa";
 import { loginUser } from "../Utils/LoginApi";
 import { useNavigate } from "react-router-dom";
 import React from "react";
+import { getUserData } from "../Services/UserInfoApi";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error } = useSelector((state) => state.login);
+  const [userid, setUserId] = useState("");
 
   const [formData, setFormData] = useState({
     username: "",
@@ -33,21 +36,29 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(loginStart());
-
+  
     try {
       const data = await loginUser(formData.username, formData.password);
-
-      // Saving the token in localStorage
-      localStorage.setItem("authToken", data.data.token);
-
+      console.log("username", data?.data?.userId);
+      const { userId, token } = data?.data || {};
+  
+      console.log("username", userId);
+  
+      // Save token and userId
+      localStorage.setItem("authToken", token);
+      localStorage.setItem("userId", userId);
+  
+      // Save full user data
+      const userData = await getUserData();
+      localStorage.setItem("userData", JSON.stringify(userData));
+  
       dispatch(loginSuccess(data));
-
-      setMessage("Login successful! Redirecting...");
-      setTimeout(() => navigate("/dashboard"), 1500); // Redirect after
+  
+      toast.success("Login successful!");
+      setTimeout(() => navigate("/dashboard"), 1500);
     } catch (error) {
       dispatch(loginFailure(error.message));
-
-      setMessage("Invalid username or password!"); // Show error message
+      setMessage("Invalid username or password!");
     }
   };
 

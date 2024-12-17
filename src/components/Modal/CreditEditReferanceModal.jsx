@@ -70,13 +70,13 @@ const CreditEditReferenceModal = ({
 
       // After the data is fetched, you can refresh the page or update state to reflect new data
       // Option 1: Force a page reload
-      // window.location.reload();
+      window.location.reload();
 
       // Option 2: Alternatively, if you're managing the downline data in your state, you can call a setState here to update the UI
       // setDownlineData(newData);  // Replace `setDownlineData` with your actual state update logic
 
       // Close the modal after update and API call
-      // onCancel(); // Call the onCancel function to close the modal
+      onCancel(); // Call the onCancel function to close the modal
     } catch (error) {
       console.error("Error fetching downline data:", error);
       setError("Failed to fetch the downline data.");
