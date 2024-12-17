@@ -542,7 +542,7 @@ const DownlineList = () => {
             userId={creditReferenceTransactionList?._id}
           />
         </>
-      )}q
+      )}
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteModalClose}
