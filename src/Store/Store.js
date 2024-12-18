@@ -16,6 +16,7 @@ import editStakeReducer from './Slice/editStakeSlice'
 import scoreReducer from './Slice/scoreSlice'
 import sportsReducer from './Slice/sportsSettingSlice'
 import authLoginReducer  from './Slice/authLoginSlice'
+import editMatchReducer from './Slice/editMatchSlice'
 
 export const store = configureStore({
   reducer: {
@@ -34,6 +35,7 @@ export const store = configureStore({
     credit: updateCreditReference,
     creditReference: creditReferenceReducer,
     editStake: editStakeReducer, 
+    editMatch: editMatchReducer,
     score: scoreReducer,
     sports: sportsReducer
   },

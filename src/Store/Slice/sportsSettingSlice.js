@@ -92,7 +92,7 @@ export const updateGameStatusThunk = createAsyncThunk(
   async ({ token, userId, gameId, isChecked }, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        `${BASE_URL}/admin/v1/user/user-game-status`,
+        `${BASE_URL}/user/user-game-status`,
         { userId, gameId, active: isChecked },
         {
           headers: {

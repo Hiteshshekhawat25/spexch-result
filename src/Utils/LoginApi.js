@@ -83,7 +83,7 @@ export const fetchRoles = async (token) => {
 //get user details by id
 export const fetchUserDetails = async (token, userId) => {
   try {
-    const response = await axios.get(`${BASE_URL}/admin/v1/user/get-user/${userId}`, {
+    const response = await axios.get(`${BASE_URL}/user/get-user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log(response.data.data)

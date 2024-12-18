@@ -17,7 +17,7 @@ const CreateNewMatch = () => {
     // Fetch sports options
     const fetchSports = async () => {
       try {
-        const response = await getCreateNewMatchAPIAuth("admin/v1/games/getgames");
+        const response = await getCreateNewMatchAPIAuth("games/getgames");
         if (response.status === 200) {
           setSportsOptions(response.data.data || []); // Adjust based on API response
         }
@@ -34,7 +34,7 @@ const CreateNewMatch = () => {
       const fetchLeagues = async () => {
         try {
           console.log("Fetching leagues for sport:", formState.sport); // Debug log
-          const response = await getCreateNewMatchAPIAuth(`admin/v1/series/getseries/${String(formState.sport)}`);
+          const response = await getCreateNewMatchAPIAuth(`series/getseries/${String(formState.sport)}`);
           console.log("Leagues response:", response); // Debug log
           if (response.status === 200) {
             setLeagueOptions(response.data.data || []);
@@ -55,7 +55,7 @@ const CreateNewMatch = () => {
       const fetchMatches = async () => {
         try {
           console.log("Fetching matches for league:", formState.league); // Debug log
-          const response = await getCreateNewMatchAPIAuth(`admin/v1/match/getmatches/${String(formState.league)}`);
+          const response = await getCreateNewMatchAPIAuth(`match/getmatches/${String(formState.league)}`);
           console.log("Matches response:", response); // Debug log
           if (response.status === 200) {
             setMatchOptions(response.data.data || []);
@@ -75,7 +75,7 @@ const CreateNewMatch = () => {
       // Fetch match details based on selected match
       const fetchMatchDetails = async () => {
         try {
-          const response = await getCreateNewMatchAPIAuth(`admin/v1/match/getmatchdetails/${String(formState.match)}`);
+          const response = await getCreateNewMatchAPIAuth(`match/getmatchdetails/${String(formState.match)}`);
           if (response.status === 200) {
             console.log(response)
             const matchDetails = response.data;
@@ -152,7 +152,7 @@ const CreateNewMatch = () => {
       if (formState.match) {
         // Update the match if formState.match is not empty (i.e., an existing match is selected)
         response = await putUpdateMatchAPIAuth(
-          `admin/v1/match/updatematch/${formState.match}`,
+          `match/updatematch/${formState.match}`,
           formState
         );
         if (response.status === 200) {
@@ -161,7 +161,7 @@ const CreateNewMatch = () => {
       } else {
         // Create a new match if formState.match is empty (i.e., no match selected)
         response = await createNewMatchAPIAuth(
-          "admin/v1/match/creatematch",
+          "match/creatematch",
           formState
         );
         if (response.status === 200) {
