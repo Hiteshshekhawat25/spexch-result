@@ -55,12 +55,6 @@ const EditExposureLimitModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (newExposureLimit <= 0) {
-    //   alert("Exposure limit must be greater than 0");
-    //   return;
-    // }
-    
     // Dispatch the update action
     console.log("password", password);
     dispatch(updateExposure({ newExposureLimit, password, userId }));

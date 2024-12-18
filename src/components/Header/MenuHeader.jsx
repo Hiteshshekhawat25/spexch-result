@@ -14,7 +14,7 @@ const MenuHeader = () => {
       name: "Downline List",
       link: "#",
       subMenu: [
-        { name: "User Downline List", link: "/downline-list" },
+        { name: "User Downline List", link: "/user-downline-list" },
         { name: "Master DownLine List", link: "/master-downline-list" },
       ],
     },

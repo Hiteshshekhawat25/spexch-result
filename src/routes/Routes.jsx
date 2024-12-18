@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { ROUTES_CONST } from "../Constant/routesConstant";
 import Login from "../AuthModal/Login";
 import Layout from "../Layout";
-import LayoutHeader from "../LayoutHeader"
+import LayoutHeader from "../LayoutHeader";
 import ProtectedRoutes from "./Protected/ProtectedRoutes";
 
 import DownlineList from "../components/DownlineList/DownlineList";
@@ -41,6 +41,16 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
+        path={ROUTES_CONST.userDownLineList}
+        element={
+          <ProtectedRoutes>
+            <Layout>
+              <DownlineList />
+            </Layout>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
         path={ROUTES_CONST.createnewmatch}
         element={
           <ProtectedRoutes>
@@ -55,7 +65,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <CreateManualMatch /> {/* Render CreateManualMatch component */}
+              <CreateManualMatch />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -65,7 +75,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <AllMatches /> {/* Render GlobalSettings component */}
+              <AllMatches /> 
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -75,7 +85,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <SuperAdminForm /> {/* Render GlobalSettings component */}
+              <SuperAdminForm />
             </LayoutHeader>
           </ProtectedRoutes>
         }

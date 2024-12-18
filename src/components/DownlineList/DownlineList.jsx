@@ -48,10 +48,9 @@ const DownlineList = () => {
   const [settingsModal, setSettingsModal] = useState(false);
   const [accountStatus, setAccountStatus] = useState(false);
   const [roles, setRoles] = useState([]);
+  const [userList, setUserList] = useState([]);
   const location = useLocation();
-  const [roleId,setRoleId] = useState("");
-
-
+  const [roleId, setRoleId] = useState("");
 
   const handlePageChange = (direction) => {
     if (totalPages > 0) {
@@ -84,7 +83,6 @@ const DownlineList = () => {
         );
 
         if (result && result.data) {
-          console.log("data.data",result.data);
           setData(result.data);
           setTotalUsers(result.pagination?.totalUsers || 0);
         }
@@ -103,7 +101,6 @@ const DownlineList = () => {
       const fetchUserRoles = async () => {
         try {
           const rolesArray = await fetchRoles(token); // Fetch roles
-          console.log("rolesArray", rolesArray);
 
           if (Array.isArray(rolesArray)) {
             const rolesData = rolesArray.map((role) => ({
@@ -122,8 +119,11 @@ const DownlineList = () => {
     }
   }, [token]);
 
-  const filteredData = Array.isArray(data) ? data.filter(item => item.username.toLowerCase().includes(searchTerm.toLowerCase())) : [];
-
+  const filteredData = Array.isArray(data)
+    ? data.filter((item) =>
+        item.username.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
   // const filteredData = data.filter((item) =>
   //   item.username.toLowerCase().includes(searchTerm.toLowerCase())
@@ -143,29 +143,23 @@ const DownlineList = () => {
     }
   }, [token]);
 
-  useEffect(() => { console.log("location",location.pathname)
-    if (location.pathname == '/master-downline-list') {
-      console.log("inside",location.pathname)
-     
+  useEffect(() => {
+    if (location.pathname === "/master-downline-list") {
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
-          console.log("1",token);
           if (token) {
-            const rolesArray = await fetchRoles(token); 
-            console.log("rolesArray", rolesArray);
-  
+            const rolesArray = await fetchRoles(token);
+
             if (Array.isArray(rolesArray)) {
               const rolesData = rolesArray.map((role) => ({
                 role_name: role.role_name,
                 role_id: role._id,
               }));
-              console.log("master role data", rolesData);
-  
+
               setRoles(rolesData);
               if (rolesData.length > 0) {
-                setRoleId(rolesData[0].role_id); // Set default role_id
-                console.log("roleIDdddddd",rolesData[0].role_id);
+                setRoleId(rolesData[0].role_id);
               }
             } else {
               setError("Roles data is not an array.");
@@ -175,38 +169,71 @@ const DownlineList = () => {
           setError(error.message || "Failed to fetch roles.");
         }
       };
-  
+
       fetchUserRoles();
     }
   }, [token, location.pathname]);
-  
+
   useEffect(() => {
-  if (roleId ) {
-    const fetchUserByRole = async () => {
-      const token = localStorage.getItem("authToken");
-      console.log('222',token)
-      try {
-        const response = await axios.get(
-          `${BASE_URL}/user/get-user?page=1&limit=28&role=${roleId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-            
+    if (location.pathname === "/user-downline-list") {
+      const fetchUserRoles = async () => {
+        try {
+          const token = localStorage.getItem("authToken");
+          if (token) {
+            const rolesArray = await fetchRoles(token);
+
+            if (Array.isArray(rolesArray)) {
+              const rolesData = rolesArray.map((role) => ({
+                role_name: role.role_name,
+                role_id: role._id,
+              }));
+
+              setRoles(rolesData);
+
+              // Find the "user" role and set its role_id
+              const userRole = rolesData.find(
+                (role) => role.role_name === "user"
+              );
+              if (userRole) {
+                setRoleId(userRole.role_id);
+              } else if (rolesData.length > 0) {
+                setRoleId(rolesData[0].role_id);
+              }
+            } else {
+              setError("Roles data is not an array.");
+            }
           }
-        );
-        setData(response.data); 
-        console.log("ekkkkk",response?.data?.data);
-      } catch (error) {
-        console.error("Error fetching users by role:", error);
-      }
-    };
+        } catch (error) {
+          setError(error.message || "Failed to fetch roles.");
+        }
+      };
 
-    fetchUserByRole();
-  }
-}, [roleId, token]); // Also depend on token so the effect re-runs when it changes
+      fetchUserRoles();
+    }
+  }, [token, location.pathname]);
 
- 
+  useEffect(() => {
+    if (roleId) {
+      const fetchUserByRole = async () => {
+        const token = localStorage.getItem("authToken");
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/user/get-user?page=1&limit=28&role=${roleId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setData(response.data);
+        } catch (error) {
+          console.error("Error fetching users by role:", error);
+        }
+      };
+
+      fetchUserByRole();
+    }
+  }, [roleId, token]);
 
   const sortedData = useMemo(() => {
     if (!sortConfig.key) return filteredData;
@@ -320,7 +347,6 @@ const DownlineList = () => {
   };
 
   const handleOpenSettings = (user) => {
-    console.log("user",user);
     setSettingsModal(true);
     setSelectedUser(user);
   };
@@ -476,79 +502,150 @@ const DownlineList = () => {
               </td>
             </tr>
           ))}
-          {console.log("datttttt",data)}
-          {location.pathname === '/master-downline-list' && data?.data?.map((item, index) => (
-  <tr key={index} className="border border-gray-300 bg-white">
-    <td className="px-4 py-3 text-sm">
-      <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
-        {item.role_name}
-      </span>
-      {item.username}
-    </td>
-    <td className="px-4 py-3 text-sm text-blue-900">
-      {item.creditReference}
-      <div className="ml-2 inline-flex space-x-2">
-        <FaEdit
-          className="text-blue cursor-pointer"
-          onClick={() => handleEditClick(item)} // Trigger modal on click
-        />
-        <FaEye
-          className="text-blue cursor-pointer"
-          onClick={() => handleListView(item)}
-        />
-      </div>
-    </td>
-    <td className="px-4 py-3 text-sm">{item.partnership}%</td>
-    <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-    <td className="px-4 py-3 text-sm text-blue-900">
-      {item.exposureLimit}
-      <div className="ml-2 inline-flex space-x-2">
-        <FaEdit
-          className="text-blue cursor-pointer"
-          onClick={() => handleExposureEditClick(item)}
-        />
-      </div>
-    </td>
-    <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-    <td className="px-4 py-3 text-sm"></td>
-    <td className="px-4 py-3 text-sm">{item.status}</td>
-    <td className="px-4 py-3 text-sm">
-      <div className="flex space-x-2">
-        <div
-          onClick={() => handleIconClick(item)}
-          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
-        >
-          <AiFillDollarCircle className="text-darkgray" />
-        </div>
-        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-          <RiArrowUpDownFill className="text-darkgray" />
-        </div>
-        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-          <MdSettings className="text-darkgray" />
-        </div>
-        <div
-          onClick={() => statushandlechange(item)}
-          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-        >
-          <FaUserAlt className="text-darkgray" />
-        </div>
-        <div
-          onClick={() => handleOpenSettings(item)}
-          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-        >
-          <BsBuildingFillLock className="text-darkgray" />
-        </div>
-        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-          <MdDelete
-            className="text-darkgray"
-            onClick={() => handleDeleteClick(item)}
-          />
-        </div>
-      </div>
-    </td>
-  </tr>
-))}
-
+          {location.pathname === "/master-downline-list" &&
+            data?.data?.map((item, index) => (
+              <tr key={index} className="border border-gray-300 bg-white">
+                <td className="px-4 py-3 text-sm">
+                  <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
+                    {item.role_name}
+                  </span>
+                  {item.username}
+                </td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.creditReference}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleEditClick(item)} // Trigger modal on click
+                    />
+                    <FaEye
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleListView(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.exposureLimit}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleExposureEditClick(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm"></td>
+                <td className="px-4 py-3 text-sm">{item.status}</td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex space-x-2">
+                    <div
+                      onClick={() => handleIconClick(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                    >
+                      <AiFillDollarCircle className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <RiArrowUpDownFill className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdSettings className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => statushandlechange(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <FaUserAlt className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => handleOpenSettings(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <BsBuildingFillLock className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdDelete
+                        className="text-darkgray"
+                        onClick={() => handleDeleteClick(item)}
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          {location.pathname === "/user-downline-list" &&
+            data?.data?.map((item, index) => (
+              <tr key={index} className="border border-gray-300 bg-white">
+                <td className="px-4 py-3 text-sm">
+                  <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
+                    {item.role_name}
+                  </span>
+                  {item.username}
+                </td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.creditReference}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleEditClick(item)} // Trigger modal on click
+                    />
+                    <FaEye
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleListView(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.exposureLimit}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleExposureEditClick(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm"></td>
+                <td className="px-4 py-3 text-sm">{item.status}</td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex space-x-2">
+                    <div
+                      onClick={() => handleIconClick(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                    >
+                      <AiFillDollarCircle className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <RiArrowUpDownFill className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdSettings className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => statushandlechange(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <FaUserAlt className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => handleOpenSettings(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <BsBuildingFillLock className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdDelete
+                        className="text-darkgray"
+                        onClick={() => handleDeleteClick(item)}
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
       <div className="flex justify-between items-center mt-4">
@@ -590,7 +687,6 @@ const DownlineList = () => {
       </div>
       {isModalOpen && selectedUser && (
         <>
-          {console.log("userId", selectedUser?._id)} {/* Log userId */}
           <CreditEditReferenceModal
             isOpen={isModalOpen}
             onCancel={handleModalClose}
@@ -604,10 +700,6 @@ const DownlineList = () => {
           />
         </>
       )}
-      {console.log(
-        "creditReferenceTransactionList",
-        creditReferenceTransactionList?._id
-      )}{" "}
       {/* Log userId */}
       {isModalOpen && creditReferenceTransactionList && (
         <>
@@ -626,33 +718,35 @@ const DownlineList = () => {
         onConfirm={handleDeleteConfirm}
         userId={userToDelete?._id}
       />
-      {selectedUser && <>
-      <DepositModal
-        isOpen={depositModal}
-        onClose={handleDeleteModalClose}
-        // onConfirm={handleDeleteConfirm}
-        userId={selectedUser?._id}
-      />
-      </>}
-      {selectedUser && <>
-      <SportsSettingsModal
-        isOpen={settingsModal}
-        onClose={handleDeleteModalClose}
-        // onConfirm={handleDeleteConfirm}
-        userId={selectedUser?._id}
-      /></>}
+      {selectedUser && (
+        <>
+          <DepositModal
+            isOpen={depositModal}
+            onClose={handleDeleteModalClose}
+            // onConfirm={handleDeleteConfirm}
+            userId={selectedUser?._id}
+          />
+        </>
+      )}
+      {selectedUser && (
+        <>
+          <SportsSettingsModal
+            isOpen={settingsModal}
+            onClose={handleDeleteModalClose}
+            // onConfirm={handleDeleteConfirm}
+            userId={selectedUser?._id}
+          />
+        </>
+      )}
       {/* {selectedUser && <> */}
       <AccountStatus
         isOpen={accountStatus}
         onClose={handleDeleteModalClose}
         // onConfirm={handleDeleteConfirm}
         userId={selectedUser?._id}
-        
       />
-      {/* </>} */}
       {isExposureModalOpen && selectedExposureUser && (
         <>
-          {console.log("idddd", selectedExposureUser)}
           <EditExposureLimitModal
             username={selectedExposureUser.username}
             currentExposureLimit={selectedExposureUser.exposureLimit}
@@ -660,7 +754,7 @@ const DownlineList = () => {
               console.log(
                 `Updated exposure limit for ${selectedExposureUser.username}: ${newExposureLimit} (Password: ${password})`
               );
-              handleExposureModalClose(); // Close the modal after submission
+              handleExposureModalClose();
             }}
             onCancel={handleExposureModalClose}
             // onSubmit={handleSubmitFunction}

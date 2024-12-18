@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../Constant/Api";
+import { toast } from "react-toastify";
 
 
 export const getBalanceData = async (url) => {
@@ -18,7 +19,7 @@ export const getBalanceData = async (url) => {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
       localStorage.clear(); // Clear localStorage if token is invalid
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.");
     }
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
@@ -42,7 +43,7 @@ export const deleteData = async (url) => {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
       localStorage.clear(); // Clear localStorage if token is invalid
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.");
     }
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
@@ -71,7 +72,7 @@ export const createNewMatchAPIAuth = async (url, params) => {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
       localStorage.clear(); // Clear localStorage if token is invalid
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.");
     }
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
@@ -97,7 +98,7 @@ export const getCreateNewMatchAPIAuth = async (url) => {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
       localStorage.clear(); // Clear localStorage if token is invalid
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.");
     }
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
