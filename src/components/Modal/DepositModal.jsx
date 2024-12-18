@@ -45,27 +45,27 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-8 rounded-2xl shadow-xl w-96">
+    <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg w-[500px] mt-12">
         {/* Modal Header */}
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-2xl font-semibold text-gray-700">Banking - Master -</h2>
+        <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
+          <span>Banking - Master -</span>
           <button
             onClick={() => {
               resetState();
               onClose();
             }}
-            className="text-gray-500 text-2xl hover:text-gray-800"
+            className="cursor-pointer text-white text-2xl"
           >
             &times;
           </button>
         </div>
 
         {/* Modal Body */}
-        <form className="space-y-6">
+        <form className="space-y-4 p-5">
           {/* Amount Field */}
-          <div>
-            <label htmlFor="amount" className="block text-sm font-medium text-gray-700">
+          <div className="flex justify-between items-center">
+            <label className="block text-sm font-medium text-gray-700 w-1/3">
               Balance
             </label>
             <input
@@ -73,42 +73,40 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
               id="amount"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full p-2 border border-black rounded-lg text-gray-700"
               placeholder="Enter amount"
               required
             />
           </div>
-          <div>
-            <label htmlFor="remark" className="block text-sm font-medium text-gray-700">
+          <div className="flex justify-between items-center">
+            <label className="block text-sm font-medium text-gray-700 w-1/3">
               Remark
             </label>
-            <input
-              type="text"
-              id="remark"
-              value={remark}
-              onChange={(e) => setRemark(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter Remark"
-              required
-            />
+            <div className="w-2/3 flex items-center space-x-2">
+              <input
+                type="text"
+                value={remark}
+                onChange={(e) => setRemark(e.target.value)}
+                placeholder="New Credit Reference"
+                className="w-full p-2 border border-black rounded-lg text-gray-700"
+              />
+            </div>
           </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-              Your Password
+          <div className="flex justify-between items-center">
+            <label className="block text-sm font-medium text-gray-700 w-1/3">
+              Password
             </label>
             <input
               type="password"
-              id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full p-3 mt-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter Password"
-              required
+              className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
+              placeholder="Enter your password"
             />
           </div>
 
           {/* Transaction Buttons */}
-          <div className="flex justify-between space-x-4">
+          <div className="flex justify-end space-x-4">
             <button
               type="button"
               onClick={() => handleTransaction("deposit")}

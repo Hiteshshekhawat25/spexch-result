@@ -81,9 +81,11 @@ export const fetchRoles = async (token) => {
 };
 
 //get user details by id
-export const fetchUserDetails = async (token, userId) => {
+export const fetchUserDetails = async ( userId) => {
+        const token = localStorage.getItem("authToken");
+  
   try {
-    const response = await axios.get(`${BASE_URL}/admin/v1/user/get-user/${userId}`, {
+    const response = await axios.get(`${BASE_URL}/user/get-user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     console.log(response.data.data)
@@ -96,4 +98,20 @@ export const fetchUserDetails = async (token, userId) => {
   }
 };
 
-//get api to update game Action
+//get api to get all users of selected master
+export const fetchallUsers = async ( userId) => {
+  const token = localStorage.getItem("authToken");
+
+try {
+const response = await axios.get(`${BASE_URL}/user/get-user-hierarchy/${userId}?page=1&limit=3`, {
+headers: { Authorization: `Bearer ${token}` },
+});
+console.log(response.data.data)
+
+// Return the user details if the request is successful
+return response.data.data;
+} catch (error) {
+console.error("Error fetching user details:", error);
+throw new Error(error.message || "Failed to fetch user details.");
+}
+};
