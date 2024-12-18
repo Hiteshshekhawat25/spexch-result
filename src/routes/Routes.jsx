@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { ROUTES_CONST } from "../Constant/routesConstant";
 import Login from "../AuthModal/Login";
 import Layout from "../Layout";
-import LayoutHeader from "../LayoutHeader"
+import LayoutHeader from "../LayoutHeader";
 import ProtectedRoutes from "./Protected/ProtectedRoutes";
 
 import DownlineList from "../components/DownlineList/DownlineList";
@@ -11,6 +11,7 @@ import CreateNewMatch from "../components/Matches/CreateNewMatch";
 import CreateManualMatch from "../components/Matches/CreateManualMatch";
 import SuperAdminForm from "../SuperAdmin/SuperAdminComponents/SuperAdminForm/SuperAdminForm";
 import AllMatches from "../components/Matches/AllMatches";
+import { AddMasterForm } from "../components/Forms/AddMasterForm";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -24,7 +25,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <Layout>
-              <DownlineList /> {/* Render specific component */}
+              <DownlineList />
             </Layout>
           </ProtectedRoutes>
         }
@@ -34,7 +35,17 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <Layout>
-              <h1>Master Downline List</h1> {/* Replace with actual component */}
+              <DownlineList />
+            </Layout>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={ROUTES_CONST.userDownLineList}
+        element={
+          <ProtectedRoutes>
+            <Layout>
+              <DownlineList />
             </Layout>
           </ProtectedRoutes>
         }
@@ -44,7 +55,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <CreateNewMatch /> {/* Render CreateNewMatch component */}
+              <CreateNewMatch />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -54,7 +65,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <CreateManualMatch /> {/* Render CreateManualMatch component */}
+              <CreateManualMatch />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -64,7 +75,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <AllMatches /> {/* Render GlobalSettings component */}
+              <AllMatches /> 
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -74,7 +85,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <SuperAdminForm /> {/* Render GlobalSettings component */}
+              <SuperAdminForm />
             </LayoutHeader>
           </ProtectedRoutes>
         }

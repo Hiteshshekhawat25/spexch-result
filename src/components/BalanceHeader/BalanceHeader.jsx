@@ -10,7 +10,7 @@ const BalanceHeader = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getBalanceData("admin/v1/user/user-data-summary"); 
+        const response = await getBalanceData("user/user-data-summary"); 
         if (response.data?.success) {
           dispatch(setBalanceData(response.data.data));
         } else {

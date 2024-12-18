@@ -1,5 +1,6 @@
 // src/utils/api.js
 
+import { toast } from "react-toastify";
 import { BASE_URL } from "../Constant/Api";
 import axios from 'axios';
 // import { toast } from 'react-toastify';
@@ -8,7 +9,7 @@ import axios from 'axios';
 export const loginUser = async (username, password) => {
   try {
     // Ensure the URL is correctly interpolated
-    const response = await fetch(`${BASE_URL}/admin/v1/user/login`, {
+    const response = await fetch(`${BASE_URL}/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -67,7 +68,7 @@ export const saveClientApi = async (endpoint, body, token, role) => {
 // APi for fetching roles
 export const fetchRoles = async (token) => {
   try {
-    const response = await axios.get(`${BASE_URL}/admin/v1/user/get-role`, {
+    const response = await axios.get(`${BASE_URL}/user/get-role`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -78,3 +79,21 @@ export const fetchRoles = async (token) => {
     throw new Error(error.message || "Failed to fetch roles.");
   }
 };
+
+//get user details by id
+export const fetchUserDetails = async (token, userId) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/admin/v1/user/get-user/${userId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log(response.data.data)
+
+    // Return the user details if the request is successful
+    return response.data.data;
+  } catch (error) {
+    console.error("Error fetching user details:", error);
+    throw new Error(error.message || "Failed to fetch user details.");
+  }
+};
+
+//get api to update game Action

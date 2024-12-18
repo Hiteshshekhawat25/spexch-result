@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { FaSortUp, FaSortDown, FaEdit, FaEye } from "react-icons/fa";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { RiArrowUpDownFill } from "react-icons/ri";
@@ -20,6 +20,11 @@ import { BASE_URL } from "../../Constant/Api";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import { fetchRoles } from "../../Utils/LoginApi";
 import CreditReferenceTransactionModel from "../Modal/CreditReferenceTransactionModel";
+import DepositModal from "../Modal/DepositModal";
+import SportsSettingsModal from "../Modal/SportsSettings";
+import AccountStatus from "../Modal/AccountStatus";
+import { toast } from "react-toastify";
+import { useLocation } from "react-router-dom";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -31,13 +36,21 @@ const DownlineList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // State for opening the modal
   const [selectedUser, setSelectedUser] = useState(null); // State for storing selected user data
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [creditReferenceTransactionList,setCreditReferenceTransactionList] = useState(false);
+  const [creditReferenceTransactionList, setCreditReferenceTransactionList] =
+    useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [isExposureModalOpen, setIsExposureModalOpen] = useState(false);
   const [selectedExposureUser, setSelectedExposureUser] = useState(null);
   const [totalUsers, setTotalUsers] = useState(0);
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
+  const [depositModal, setDepositModal] = useState(false);
+  const [settingsModal, setSettingsModal] = useState(false);
+  const [accountStatus, setAccountStatus] = useState(false);
+  const [roles, setRoles] = useState([]);
+  const [userList, setUserList] = useState([]);
+  const location = useLocation();
+  const [roleId, setRoleId] = useState("");
 
   const handlePageChange = (direction) => {
     if (totalPages > 0) {
@@ -63,7 +76,6 @@ const DownlineList = () => {
           return;
         }
 
-        // Fetch data using the new API service
         const result = await fetchDownlineData(
           token,
           currentPage,
@@ -89,16 +101,12 @@ const DownlineList = () => {
       const fetchUserRoles = async () => {
         try {
           const rolesArray = await fetchRoles(token); // Fetch roles
-          console.log("rolesArray", rolesArray);
 
           if (Array.isArray(rolesArray)) {
-            // Map roles to an array of { role_name, role_id }
             const rolesData = rolesArray.map((role) => ({
               role_name: role.role_name,
               role_id: role._id,
             }));
-            console.log("rolesData", rolesData);
-
             setRole(rolesData);
           } else {
             setError("Roles data is not an array.");
@@ -111,58 +119,129 @@ const DownlineList = () => {
     }
   }, [token]);
 
-  console.log(data.length);
-  const filteredData = data.filter((item) =>
-    item.username.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredData = Array.isArray(data)
+    ? data.filter((item) =>
+        item.username.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : [];
 
-  console.log("filtereddata", filteredData);
+  // const filteredData = data.filter((item) =>
+  //   item.username.toLowerCase().includes(searchTerm.toLowerCase())
+  // );
 
-  // Sorting logic
-  // const sortedData = React.useMemo(() => {
-  //   if (!sortConfig.key) return filteredData;
-  //   const sorted = [...filteredData].sort((a, b) => {
-  //     const aValue = a[sortConfig.key];
-  //     const bValue = b[sortConfig.key];
-  //     // Custom sorting for username (case-insensitive)
-  //     if (sortConfig.key === "username") {
-  //       return sortConfig.direction === "ascending"
-  //         ? aValue.toLowerCase().localeCompare(bValue.toLowerCase())
-  //         : bValue.toLowerCase().localeCompare(aValue.toLowerCase());
-  //     }
-  //     // Custom sorting for creditRef (handle numbers within strings)
-  //     if (sortConfig.key === "creditRef") {
-  //       const extractNumber = (val) => parseInt(val.replace(/\D/g, ""), 10) || 0;
-  //       const numA = extractNumber(aValue);
-  //       const numB = extractNumber(bValue);
-  //       if (numA !== numB) {
-  //         return sortConfig.direction === "ascending" ? numA - numB : numB - numA;
-  //       }
-  //       return sortConfig.direction === "ascending"
-  //         ? aValue.localeCompare(bValue)
-  //         : bValue.localeCompare(aValue);
-  //     }
-  //     // Default sorting for numbers or strings
-  //     if (typeof aValue === "number") {
-  //       return sortConfig.direction === "ascending"
-  //         ? aValue - bValue
-  //         : bValue - aValue;
-  //     }
-  //     return sortConfig.direction === "ascending"
-  //       ? aValue.localeCompare(bValue)
-  //       : bValue.localeCompare(aValue);
-  //   });
-  //   return sorted;
-  // }, [filteredData, sortConfig]);
+  useEffect(() => {
+    if (token) {
+      const fetchRolesData = async () => {
+        try {
+          const rolesArray = await fetchRoles(token);
+          setRoles(rolesArray || []);
+        } catch {
+          toast.error("Failed to fetch roles.");
+        }
+      };
+      fetchRolesData();
+    }
+  }, [token]);
 
-  const sortedData = React.useMemo(() => {
+  useEffect(() => {
+    if (location.pathname === "/master-downline-list") {
+      const fetchUserRoles = async () => {
+        try {
+          const token = localStorage.getItem("authToken");
+          if (token) {
+            const rolesArray = await fetchRoles(token);
+
+            if (Array.isArray(rolesArray)) {
+              const rolesData = rolesArray.map((role) => ({
+                role_name: role.role_name,
+                role_id: role._id,
+              }));
+
+              setRoles(rolesData);
+              if (rolesData.length > 0) {
+                setRoleId(rolesData[0].role_id);
+              }
+            } else {
+              setError("Roles data is not an array.");
+            }
+          }
+        } catch (error) {
+          setError(error.message || "Failed to fetch roles.");
+        }
+      };
+
+      fetchUserRoles();
+    }
+  }, [token, location.pathname]);
+
+  useEffect(() => {
+    if (location.pathname === "/user-downline-list") {
+      const fetchUserRoles = async () => {
+        try {
+          const token = localStorage.getItem("authToken");
+          if (token) {
+            const rolesArray = await fetchRoles(token);
+
+            if (Array.isArray(rolesArray)) {
+              const rolesData = rolesArray.map((role) => ({
+                role_name: role.role_name,
+                role_id: role._id,
+              }));
+
+              setRoles(rolesData);
+
+              // Find the "user" role and set its role_id
+              const userRole = rolesData.find(
+                (role) => role.role_name === "user"
+              );
+              if (userRole) {
+                setRoleId(userRole.role_id);
+              } else if (rolesData.length > 0) {
+                setRoleId(rolesData[0].role_id);
+              }
+            } else {
+              setError("Roles data is not an array.");
+            }
+          }
+        } catch (error) {
+          setError(error.message || "Failed to fetch roles.");
+        }
+      };
+
+      fetchUserRoles();
+    }
+  }, [token, location.pathname]);
+
+  useEffect(() => {
+    if (roleId) {
+      const fetchUserByRole = async () => {
+        const token = localStorage.getItem("authToken");
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/user/get-user?page=1&limit=28&role=${roleId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setData(response.data);
+        } catch (error) {
+          console.error("Error fetching users by role:", error);
+        }
+      };
+
+      fetchUserByRole();
+    }
+  }, [roleId, token]);
+
+  const sortedData = useMemo(() => {
     if (!sortConfig.key) return filteredData;
 
     return [...filteredData].sort((a, b) => {
       const aValue = a[sortConfig.key] || ""; // Default to an empty string if undefined
       const bValue = b[sortConfig.key] || ""; // Default to an empty string if undefined
 
-      // Handle numeric sorting for partnership, balance, and exposure values
       if (
         ["partnership", "balance", "exposureLimit"].includes(sortConfig.key)
       ) {
@@ -185,31 +264,7 @@ const DownlineList = () => {
     });
   }, [filteredData, sortConfig]);
 
-  console.log("sorteddata", sortedData);
-
-  // Paginate data
-
-  // const paginatedData = sortedData.slice(
-  //   ((currentPage - 1) * entriesToShow),
-  //   currentPage * entriesToShow
-  // );
-
-  // console.log("paginatedData",paginatedData)
-
-  //   const startIndex = (currentPage - 1) * entriesToShow; // Start index for the current page
-  // const endIndex = currentPage * entriesToShow; // End index for the current page (exclusive)
-
-  // console.log('Start Index:', startIndex);
-  // console.log('End Index:', endIndex);
-  // console.log('Sorted Data Length:', sortedData.length);
-
-  // Ensure the endIndex does not exceed the length of the sortedData
-  // const paginatedData = sortedData.slice(startIndex, endIndex);
   const paginatedData = sortedData;
-
-  console.log("Paginated Data:", paginatedData);
-
-  // const totalPages = Math.ceil(filteredData.length / entriesToShow);
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
   // Event handlers
@@ -228,7 +283,6 @@ const DownlineList = () => {
     );
   };
   const handleSubmitFunction = (newCreditRef, password) => {
-    // Handle the submission logic here, such as updating the state or making an API call
     console.log("New Credit Ref:", newCreditRef, "Password:", password);
   };
 
@@ -239,7 +293,6 @@ const DownlineList = () => {
   const handleListView = (user) => {
     setCreditReferenceTransactionList(user);
     setIsModalOpen(true);
-    console.log("user", user);
   };
 
   const handleModalClose = () => {
@@ -248,7 +301,7 @@ const DownlineList = () => {
   };
 
   const handleDeleteClick = (user) => {
-    setUserToDelete(user); // Directly calling the delete action (you wanted to avoid this)
+    setUserToDelete(user);
     setIsDeleteModalOpen(true); // Open the delete confirmation modal
   };
 
@@ -264,6 +317,9 @@ const DownlineList = () => {
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
     setUserToDelete(null);
+    setDepositModal(false);
+    setSettingsModal(false);
+    setAccountStatus(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -282,6 +338,21 @@ const DownlineList = () => {
   const handleExposureModalClose = () => {
     setIsExposureModalOpen(false); // Close the modal
     setSelectedExposureUser(null); // Clear selected user data
+  };
+
+  const handleIconClick = (user) => {
+    // setIsModalOpen((prevState) => !prevState);
+    setDepositModal(true);
+    setSelectedUser(user);
+  };
+
+  const handleOpenSettings = (user) => {
+    setSettingsModal(true);
+    setSelectedUser(user);
+  };
+  const statushandlechange = (user) => {
+    setAccountStatus(true);
+    setSelectedUser(user);
   };
 
   return (
@@ -312,7 +383,6 @@ const DownlineList = () => {
           />
         </div>
       </div>
-
       <table className="w-full table-auto border-collapse border border-gray-300">
         <thead className="border border-gray-300">
           <tr className="bg-gray-300">
@@ -398,7 +468,10 @@ const DownlineList = () => {
               <td className="px-4 py-3 text-sm">{item.status}</td>
               <td className="px-4 py-3 text-sm">
                 <div className="flex space-x-2">
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                  <div
+                    onClick={() => handleIconClick(item)}
+                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                  >
                     <AiFillDollarCircle className="text-darkgray" />
                   </div>
                   <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
@@ -407,10 +480,16 @@ const DownlineList = () => {
                   <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
                     <MdSettings className="text-darkgray" />
                   </div>
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                  <div
+                    onClick={() => statushandlechange(item)}
+                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                  >
                     <FaUserAlt className="text-darkgray" />
                   </div>
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                  <div
+                    onClick={() => handleOpenSettings(item)}
+                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                  >
                     <BsBuildingFillLock className="text-darkgray" />
                   </div>
                   <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
@@ -423,9 +502,152 @@ const DownlineList = () => {
               </td>
             </tr>
           ))}
+          {location.pathname === "/master-downline-list" &&
+            data?.data?.map((item, index) => (
+              <tr key={index} className="border border-gray-300 bg-white">
+                <td className="px-4 py-3 text-sm">
+                  <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
+                    {item.role_name}
+                  </span>
+                  {item.username}
+                </td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.creditReference}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleEditClick(item)} // Trigger modal on click
+                    />
+                    <FaEye
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleListView(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.exposureLimit}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleExposureEditClick(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm"></td>
+                <td className="px-4 py-3 text-sm">{item.status}</td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex space-x-2">
+                    <div
+                      onClick={() => handleIconClick(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                    >
+                      <AiFillDollarCircle className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <RiArrowUpDownFill className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdSettings className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => statushandlechange(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <FaUserAlt className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => handleOpenSettings(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <BsBuildingFillLock className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdDelete
+                        className="text-darkgray"
+                        onClick={() => handleDeleteClick(item)}
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          {location.pathname === "/user-downline-list" &&
+            data?.data?.map((item, index) => (
+              <tr key={index} className="border border-gray-300 bg-white">
+                <td className="px-4 py-3 text-sm">
+                  <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
+                    {item.role_name}
+                  </span>
+                  {item.username}
+                </td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.creditReference}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleEditClick(item)} // Trigger modal on click
+                    />
+                    <FaEye
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleListView(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.exposureLimit}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleExposureEditClick(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm"></td>
+                <td className="px-4 py-3 text-sm">{item.status}</td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex space-x-2">
+                    <div
+                      onClick={() => handleIconClick(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                    >
+                      <AiFillDollarCircle className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <RiArrowUpDownFill className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdSettings className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => statushandlechange(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <FaUserAlt className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => handleOpenSettings(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <BsBuildingFillLock className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdDelete
+                        className="text-darkgray"
+                        onClick={() => handleDeleteClick(item)}
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            ))}
         </tbody>
       </table>
-
       <div className="flex justify-between items-center mt-4">
         <div className="text-sm text-gray-600">
           Showing {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
@@ -463,10 +685,8 @@ const DownlineList = () => {
           </button>
         </div>
       </div>
-
       {isModalOpen && selectedUser && (
         <>
-          {console.log("userId", selectedUser?._id)} {/* Log userId */}
           <CreditEditReferenceModal
             isOpen={isModalOpen}
             onCancel={handleModalClose}
@@ -480,29 +700,53 @@ const DownlineList = () => {
           />
         </>
       )}
-      {console.log("creditReferenceTransactionList", creditReferenceTransactionList?._id)} {/* Log userId */}
+      {/* Log userId */}
       {isModalOpen && creditReferenceTransactionList && (
         <>
-      <CreditReferenceTransactionModel
-      username={creditReferenceTransactionList.username}
-        isOpen={isDeleteModalOpen}
-        onClose={handleDeleteModalClose}
-        // onConfirm={handleDeleteConfirm}
-        userId={creditReferenceTransactionList?._id}
-      />
-      </>
+          <CreditReferenceTransactionModel
+            username={creditReferenceTransactionList.username}
+            isOpen={isDeleteModalOpen}
+            onClose={handleDeleteModalClose}
+            // onConfirm={handleDeleteConfirm}
+            userId={creditReferenceTransactionList?._id}
+          />
+        </>
       )}
-
       <DeleteConfirmationModal
         isOpen={isDeleteModalOpen}
         onClose={handleDeleteModalClose}
         onConfirm={handleDeleteConfirm}
         userId={userToDelete?._id}
       />
-
+      {selectedUser && (
+        <>
+          <DepositModal
+            isOpen={depositModal}
+            onClose={handleDeleteModalClose}
+            // onConfirm={handleDeleteConfirm}
+            userId={selectedUser?._id}
+          />
+        </>
+      )}
+      {selectedUser && (
+        <>
+          <SportsSettingsModal
+            isOpen={settingsModal}
+            onClose={handleDeleteModalClose}
+            // onConfirm={handleDeleteConfirm}
+            userId={selectedUser?._id}
+          />
+        </>
+      )}
+      {/* {selectedUser && <> */}
+      <AccountStatus
+        isOpen={accountStatus}
+        onClose={handleDeleteModalClose}
+        // onConfirm={handleDeleteConfirm}
+        userId={selectedUser?._id}
+      />
       {isExposureModalOpen && selectedExposureUser && (
         <>
-          {console.log("idddd", selectedExposureUser)}
           <EditExposureLimitModal
             username={selectedExposureUser.username}
             currentExposureLimit={selectedExposureUser.exposureLimit}
@@ -510,7 +754,7 @@ const DownlineList = () => {
               console.log(
                 `Updated exposure limit for ${selectedExposureUser.username}: ${newExposureLimit} (Password: ${password})`
               );
-              handleExposureModalClose(); // Close the modal after submission
+              handleExposureModalClose();
             }}
             onCancel={handleExposureModalClose}
             // onSubmit={handleSubmitFunction}

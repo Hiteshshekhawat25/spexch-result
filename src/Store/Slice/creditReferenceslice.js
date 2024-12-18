@@ -14,7 +14,7 @@ export const updateCreditReference = createAsyncThunk(
       }
 
       const response = await axios.put(
-        `${BASE_URL}/admin/v1/user/update-credit-reference`,
+        `${BASE_URL}/user/update-credit-reference`,
         { 
           username, 
           newCreditReference: newCreditRef, // Use the correct key here

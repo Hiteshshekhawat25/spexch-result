@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import loginReducer from './Slice/loginSlice';
 import clientReducer from './Slice/AddClientButtonSlice';
-import addClientReducer from './Slice/addClientSlice';
+// import addClientReducer from './Slice/addClientSlice';
 import masterReducer from './Slice/masterSlice';
 import superAdminFormReducer from "./Slice/SuperAdminFormSlice";
 import downlineReducer from './Slice/downlineSlice';
@@ -14,12 +14,15 @@ import updateCreditReference from './Slice/creditReferenceslice'
 import creditReferenceReducer from './Slice/creditTransactionSlice'
 import editStakeReducer from './Slice/editStakeSlice'
 import scoreReducer from './Slice/scoreSlice'
+import sportsReducer from './Slice/sportsSettingSlice'
+import authLoginReducer  from './Slice/authLoginSlice'
 
 export const store = configureStore({
   reducer: {
-    login: loginReducer,
+    // login: loginReducer,
+    login: authLoginReducer,
     client: clientReducer, 
-    addClient: addClientReducer,
+    // addClient: addClientReducer,
     master: masterReducer,
     downline: downlineReducer,
     createMatch: createMatchReducer,  
@@ -32,6 +35,7 @@ export const store = configureStore({
     creditReference: creditReferenceReducer,
     editStake: editStakeReducer, 
     score: scoreReducer,
+    sports: sportsReducer
   },
 });
 

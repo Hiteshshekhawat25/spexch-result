@@ -1,5 +1,6 @@
 import axios from "axios";
 import { BASE_URL } from "../Constant/Api";
+import { toast } from "react-toastify";
 
 
 export const getBalanceData = async (url) => {
@@ -18,7 +19,7 @@ export const getBalanceData = async (url) => {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
       localStorage.clear(); // Clear localStorage if token is invalid
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.");
     }
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
@@ -42,7 +43,7 @@ export const deleteData = async (url) => {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
       localStorage.clear(); // Clear localStorage if token is invalid
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.");
     }
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
@@ -71,7 +72,7 @@ export const createNewMatchAPIAuth = async (url, params) => {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
       localStorage.clear(); // Clear localStorage if token is invalid
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.");
     }
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
@@ -97,7 +98,7 @@ export const getCreateNewMatchAPIAuth = async (url) => {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
       localStorage.clear(); // Clear localStorage if token is invalid
-      alert("Session expired. Please log in again.");
+      toast.error("Session expired. Please log in again.");
     }
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
@@ -133,7 +134,7 @@ export const putUpdateMatchAPIAuth = async (url, params) => {
 export const fetchDownlineData = async (token, currentPage, entriesToShow) => {
   try {
     const response = await axios.get(
-      `${BASE_URL}/admin/v1/user/get-user`,
+      `${BASE_URL}/user/get-user`,
       {
         params: { page: currentPage, limit: entriesToShow },
         headers: {
@@ -145,5 +146,124 @@ export const fetchDownlineData = async (token, currentPage, entriesToShow) => {
     return response.data; // Return the data from the response
   } catch (error) {
     throw new Error(error.response ? error.response.data.message : "Failed to fetch data");
+  }
+};
+
+
+//api call to change status of accounts
+export const updateUserStatus = async (userId, newStatus, password) => {
+  const token = localStorage.getItem("authToken");
+  console.log("token",token)
+
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/user/update-user-status`,
+      {
+        userId,
+        newStatus,
+        password,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error updating user status:", error);
+    throw error;
+  }
+};
+
+//to call withdraw or deposit api
+
+export const performTransaction = async (transactionType, data, token) => {
+  const apiUrl =
+    transactionType === "deposit"
+      ? `${BASE_URL}/user/deposit-amount`
+      : `${BASE_URL}/user/withdraw-amount`;
+
+  try {
+    const response = await axios.post(apiUrl, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data; // Return API response data
+  } catch (error) {
+    // Return error message
+    throw error.response?.data?.message || "An error occurred while processing the transaction.";
+  }
+};
+
+//api to get sports list 
+export const getGamesList = async (token) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/games/getgames`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data; // Return the data from the response
+  } catch (error) {
+    throw new Error(error.response ? error.response.data.message : "Failed to fetch data");
+  }
+};
+
+// api to update game status 
+export const updateGameStatus = async (token, userId, gameId, active) => {
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/user/user-game-status`,
+      {
+        userId,
+        gameId,
+        active,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data; // Return the data from the response
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : "Failed to update game status"
+    );
+  }
+};
+
+export const getGameActionStatus = async (token, userId) => {
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/user/user-game-status${userId}`,
+      // {
+      //   userId,
+      //   gameId,
+      //   active,
+      // },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data; // Return the data from the response
+  } catch (error) {
+    throw new Error(
+      error.response ? error.response.data.message : "Failed to update game status"
+    );
   }
 };

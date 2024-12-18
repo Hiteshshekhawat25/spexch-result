@@ -13,7 +13,7 @@ export const fetchCreditReference = createAsyncThunk(
         }
         try {
             const response = await axios.get(
-                `${BASE_URL}/admin/v1/user/get-credit-reference/${userId}`,
+                `${BASE_URL}/user/get-credit-reference/${userId}`,
                 {
                     params: {
                         username,
@@ -25,6 +25,7 @@ export const fetchCreditReference = createAsyncThunk(
                     },
                 }
             );
+            console.log("response",response);
 
             if (response.status === 200) {
                 return response.data;

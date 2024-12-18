@@ -1,9 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
+import { fetchUserDetails } from "../../Utils/LoginApi";
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
+  const [user, setUser] = useState("");
 
   /* static data */
   const menuItems = [
@@ -12,7 +14,7 @@ const MenuHeader = () => {
       name: "Downline List",
       link: "#",
       subMenu: [
-        { name: "Downline List", link: "/downline-list" },
+        { name: "User Downline List", link: "/user-downline-list" },
         { name: "Master DownLine List", link: "/master-downline-list" },
       ],
     },
@@ -41,12 +43,30 @@ const MenuHeader = () => {
     { name: "User Report", link: "#" },
     { name: "Logout", link: "#" },
   ];
+  const token = localStorage.getItem("authToken");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetchUserDetails(token, user.id);
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    if (user) {
+      fetchData();
+    }
+  }, [user, token]);
 
   return (
     <div className="bg-LightGreen text-white px-6">
       <ul className="flex space-x px-8">
         {menuItems.map((item, index) => (
-          <li key={index} className="relative group border-l border-r border-customGray">
+          <li
+            key={index}
+            className="relative group border-l border-r border-customGray"
+          >
             <Link
               to={item.link}
               onClick={() => setActiveMenu(item.name)}

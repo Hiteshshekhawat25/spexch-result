@@ -2,6 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { saveClientApi } from "../../Services/FormDataApi";
 import { BASE_URL } from "../../Constant/Api";
 import axios from "axios"; // For making API calls
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the styles
 
 export const AddClientForm = ({ closeModal }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -9,9 +11,8 @@ export const AddClientForm = ({ closeModal }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [token, setToken] = useState(null);
   const [userRoleId, setUserRoleId] = useState(null);
-  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     username: "",
     name: "",
     commission: "",
@@ -26,57 +27,15 @@ export const AddClientForm = ({ closeModal }) => {
       matka: 0,
       casino: 0,
       binary: 0,
+      sportbook: 0,
       bookmaker: 0,
     },
     masterPassword: "",
-  });
+  };
 
-  const [formErrors, setFormErrors] = useState({
-    username: "",
-    name: "",
-    commission: "",
-    openingBalance: "",
-    creditReference: "",
-    mobileNumber: "",
-    exposureLimit: "",
-    password: "",
-    confirmPassword: "",
-    masterPassword: "",
-  });
-  // const handleModalClose = () => {
-  //   setIsModalOpen(false); // Close the modal
-  //   // setSelectedUser(null); // Clear selected user data
-  // };
+  const [formData, setFormData] = useState(initialFormData);
 
-  // const handleDeleteClick = (user) => {
-  //   // setUserToDelete(user); // Directly calling the delete action (you wanted to avoid this)
-  //   setIsModalOpen(true); // Open the delete confirmation modal
-  // };
-
-
-  // useEffect(() => {
-  //   const handleKeyDown = (event) => {
-  //     if (event.key === "Escape") {
-  //       closeModal();
-  //     }
-  //   };
-
-  //   const handleClickOutside = (event) => {
-  //     if (modalRef.current && !modalRef.current.contains(event.target)) {
-  //       console.log("close ")
-  //       closeModal();
-  //     }
-  //   };
-
-  //   document.addEventListener("keydown", handleKeyDown);
-  //   document.addEventListener("mousedown", handleClickOutside);
-
-  //   return () => {
-      
-  //     document.removeEventListener("keydown", handleKeyDown);
-  //     document.removeEventListener("mousedown", handleClickOutside);
-  //   };
-  // }, [closeModal]);
+  const [formErrors, setFormErrors] = useState({});
 
   // Fetch token from localStorage
   useEffect(() => {
@@ -84,11 +43,7 @@ export const AddClientForm = ({ closeModal }) => {
     if (storedToken) {
       try {
         const parsedToken = JSON.parse(storedToken)?.donation?.accessToken;
-        if (parsedToken) {
-          setToken(parsedToken);
-        } else {
-          setError("Access token not found in the stored data.");
-        }
+        setToken(parsedToken || storedToken);
       } catch {
         setToken(storedToken);
       }
@@ -103,24 +58,14 @@ export const AddClientForm = ({ closeModal }) => {
       const fetchRoles = async () => {
         try {
           const response = await axios.get(
-            `${BASE_URL}/admin/v1/user/get-role`,
+            `${BASE_URL}/user/get-role`,
             {
               headers: { Authorization: `Bearer ${token}` },
             }
           );
           const rolesArray = response.data.data;
-          if (Array.isArray(rolesArray)) {
-            const userRole = rolesArray.find(
-              (role) => role.role_name === "user"
-            );
-            if (userRole) {
-              setUserRoleId(userRole._id);
-            } else {
-              setError("User role not found.");
-            }
-          } else {
-            setError("Roles data is not an array.");
-          }
+          const userRole = rolesArray.find((role) => role.role_name === "user");
+          setUserRoleId(userRole?._id || null);
         } catch (error) {
           setError(error.message || "Failed to fetch roles.");
         }
@@ -135,7 +80,7 @@ export const AddClientForm = ({ closeModal }) => {
     if (name === "rollingCommissionChecked") {
       setFormData((prevData) => ({
         ...prevData,
-        rollingCommissionChecked: checked, // Toggle the checkbox state here
+        rollingCommissionChecked: checked,
       }));
     } else if (name.startsWith("rollingCommission")) {
       const [parentKey, key] = name.split(".");
@@ -148,10 +93,10 @@ export const AddClientForm = ({ closeModal }) => {
         },
       }));
     } else {
-      setFormData({
-        ...formData,
+      setFormData((prevData) => ({
+        ...prevData,
         [name]: type === "checkbox" ? checked : value,
-      });
+      }));
     }
   };
 
@@ -201,37 +146,63 @@ export const AddClientForm = ({ closeModal }) => {
     const { confirmPassword, rollingCommissionChecked, ...dataToSubmit } =
       formData;
 
-    // Convert rollingCommission values to numbers, ensuring empty fields are 0
     if (dataToSubmit.rollingCommissionChecked) {
       dataToSubmit.rollingCommission = Object.fromEntries(
         Object.entries(dataToSubmit.rollingCommission).map(([key, value]) => [
           key,
-          value ? Number(value) : 0, // If empty, set to 0
+          value ? Number(value) : 0,
         ])
       );
     }
+
     const dataWithAccountType = { ...dataToSubmit, role: userRoleId };
 
     try {
       const response = await saveClientApi(
-        `${BASE_URL}/admin/v1/user/create-user`,
+        `${BASE_URL}/user/create-user`,
         dataWithAccountType,
         token
       );
-      setSuccessMessage(
-        response.data.message || "Client created successfully!"
-      );
-      closeModal();
+
+      toast.success(response.data.message || "Client created successfully!");
+
+      // setSuccessMessage(
+      //   response.data.message || "Client created successfully!"
+      // );
+      setTimeout(() => {
+        handleCloseModal();
+      }, 2000);
     } catch (error) {
-      setError(error.message || "An error occurred while creating the client.");
+      // setError(
+      //   error.response?.data?.message ||
+      //     "An error occurred while creating the client."
+      // );
+      setError(
+      toast.error("Cannot create duplicate username")
+      )
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const handleCloseModal = () => {
+    setFormData(initialFormData);
+    setFormErrors({});
+    setError(null);
+    setSuccessMessage("");
+    closeModal();
+  };
+
   return (
-    <div className="max-w-lg mx-auto">
-      <h2 className="text-2xl font-semibold mb-4">Add Client</h2>
+    <div className="max-w-lg mx-auto bg-white p-6 rounded-lg relative">
+      <button
+        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded"
+        onClick={handleCloseModal}
+      >
+        ✕
+      </button>
+
+      <h2 className="text-2xl font-semibold mb-4">Add Master</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex justify-between">
           <label className="w-1/3">Username</label>
@@ -243,10 +214,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.username && (
-            <div className="text-red-500">{formErrors.username}</div>
-          )}
         </div>
+        {formErrors.username && (
+          <div className="text-red-500">{formErrors.username}</div>
+        )}
         <div className="flex justify-between">
           <label className="w-1/3">Name</label>
           <input
@@ -257,10 +228,8 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.name && (
-            <div className="text-red-500">{formErrors.name}</div>
-          )}
         </div>
+       
         <div className="flex justify-between">
           <label className="w-1/3">Commission(%)</label>
           <input
@@ -271,10 +240,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.commission && (
-            <div className="text-red-500">{formErrors.commission}</div>
-          )}
         </div>
+        {formErrors.commission && (
+          <div className="text-red-500">{formErrors.commission}</div>
+        )}
         <div className="flex justify-between">
           <label className="w-1/3">Opening Balance</label>
           <input
@@ -285,10 +254,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.openingBalance && (
-            <div className="text-red-500">{formErrors.openingBalance}</div>
-          )}
         </div>
+        {formErrors.openingBalance && (
+          <div className="text-red-500">{formErrors.openingBalance}</div>
+        )}
         <div className="flex justify-between">
           <label className="w-1/3">Credit Reference</label>
           <input
@@ -299,10 +268,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.creditReference && (
-            <div className="text-red-500">{formErrors.creditReference}</div>
-          )}
         </div>
+        {formErrors.creditReference && (
+          <div className="text-red-500">{formErrors.creditReference}</div>
+        )}
         <div className="flex justify-between">
           <label className="w-1/3">Mobile Number</label>
           <input
@@ -313,10 +282,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.mobileNumber && (
-            <div className="text-red-500">{formErrors.mobileNumber}</div>
-          )}
         </div>
+        {formErrors.mobileNumber && (
+          <div className="text-red-500">{formErrors.mobileNumber}</div>
+        )}
         <div className="flex justify-between">
           <label className="w-1/3">Exposure Limit</label>
           <input
@@ -327,10 +296,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.exposureLimit && (
-            <div className="text-red-500">{formErrors.exposureLimit}</div>
-          )}
         </div>
+        {formErrors.exposureLimit && (
+          <div className="text-red-500">{formErrors.exposureLimit}</div>
+        )}
         <div className="flex justify-between">
           <label className="w-1/3">Password</label>
           <input
@@ -341,10 +310,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.password && (
-            <div className="text-red-500">{formErrors.password}</div>
-          )}
         </div>
+        {formErrors.password && (
+          <div className="text-red-500">{formErrors.password}</div>
+        )}
         <div className="flex justify-between">
           <label className="w-1/3">Confirm Password</label>
           <input
@@ -355,10 +324,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.confirmPassword && (
-            <div className="text-red-500">{formErrors.confirmPassword}</div>
-          )}
         </div>
+        {formErrors.confirmPassword && (
+          <div className="text-red-500">{formErrors.confirmPassword}</div>
+        )}
         <div className="flex justify-between">
           <label className="w-1/3">Master Password</label>
           <input
@@ -369,10 +338,10 @@ export const AddClientForm = ({ closeModal }) => {
             className="w-2/3 border p-2"
             required
           />
-          {formErrors.masterPassword && (
-            <div className="text-red-500">{formErrors.masterPassword}</div>
-          )}
         </div>
+        {formErrors.masterPassword && (
+          <div className="text-red-500">{formErrors.masterPassword}</div>
+        )}
         <div className="flex items-center">
           <input
             type="checkbox"
@@ -454,11 +423,12 @@ export const AddClientForm = ({ closeModal }) => {
         >
           {isSubmitting ? "Submitting..." : "Submit"}
         </button>
-        {error && <div className="text-red-500 mt-4">{error}</div>}
+        {/* {error && <div className="text-red-500 mt-4">{error}</div>}
         {successMessage && (
           <div className="text-green-500 mt-4">{successMessage}</div>
-        )}
+        )} */}
       </form>
+      <ToastContainer autoClose={2000} draggable={true} />
     </div>
   );
 };

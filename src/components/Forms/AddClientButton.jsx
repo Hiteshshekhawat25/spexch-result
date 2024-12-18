@@ -1,22 +1,21 @@
-import React, { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { openDialog } from "../../Store/Slice/AddClientButtonSlice";
+import React, { useEffect, useRef, useState } from "react";
 import { AiOutlineUserAdd } from "react-icons/ai";
 import { RiResetLeftLine } from "react-icons/ri";
-import { useLocation } from "react-router-dom"; 
-import { AddClientForm } from "../../components/Forms/AddClientForm"; 
+import { useLocation } from "react-router-dom";
+import { AddClientForm } from "../../components/Forms/AddClientForm";
 import { AddMasterForm } from "./AddMasterForm";
 
 const AddClientButton = () => {
-  const dispatch = useDispatch();
-  const isDialogOpen = useSelector((state) => state.client.isDialogOpen);
-  const location = useLocation(); 
-  const modalRef = useRef(null); 
+  const [isDialogOpen, setIsDialogOpen] = useState(false); // Local state for dialog visibility
+  const location = useLocation();
+  const modalRef = useRef(null);
 
-  // Define handleCloseDialog before using it
-  const handleCloseDialog = () => dispatch(openDialog()); // Close modal action
+  // Function to handle opening the dialog
+  const handleOpenDialog = () => setIsDialogOpen(true);
 
-  // useEffect to handle overflow-hidden when dialog is open
+  // Function to handle closing the dialog
+  const handleCloseDialog = () => setIsDialogOpen(false);
+
   useEffect(() => {
     if (isDialogOpen) {
       document.body.classList.add("overflow-hidden");
@@ -26,9 +25,8 @@ const AddClientButton = () => {
 
     // Close modal if click occurs outside the modal
     const handleClickOutside = (event) => {
-      console.log("clicked outside")
       if (modalRef.current && !modalRef.current.contains(event.target)) {
-        dispatch(openDialog()); // Close modal
+        handleCloseDialog();
       }
     };
 
@@ -39,24 +37,37 @@ const AddClientButton = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isDialogOpen, dispatch]);
-
-  const handleOpenDialog = () => dispatch(openDialog());
+  }, [isDialogOpen]);
 
   // Determine button text and form based on the current route
   const buttonText = location.pathname === "/master-downline-list" ? "Add Master" : "Add Client";
-  const renderForm =
-    location.pathname === "/master-downline-list" ? <AddMasterForm closeModal={handleCloseDialog} /> : <AddClientForm closeModal={handleCloseDialog} />;
+
+  // Conditionally render the form based on the route
+  const renderForm = location.pathname === "/master-downline-list" ? (
+    <AddMasterForm closeModal={handleCloseDialog} />
+  ) : (
+    <AddClientForm closeModal={handleCloseDialog} />
+  );
 
   return (
     <div className="flex justify-end items-center gap-2 mb-2">
-      <button
-        onClick={handleOpenDialog}
-        className="py-2 px-4 h-12 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
-      >
-        <AiOutlineUserAdd />
-        {buttonText}
-      </button>
+      {location.pathname === "/master-downline-list" ? (
+        <button
+          onClick={handleOpenDialog}
+          className="py-2 px-4 h-12 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
+        >
+          <AiOutlineUserAdd />
+          {buttonText}
+        </button>
+      ) : (
+        <button
+          onClick={handleOpenDialog}
+          className="py-2 px-4 h-12 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
+        >
+          <AiOutlineUserAdd />
+          {buttonText}
+        </button>
+      )}
 
       <button className="py-2 px-4 h-12 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200">
         <RiResetLeftLine />

@@ -14,7 +14,7 @@ export const updateExposure = createAsyncThunk(
       }
 
       const response = await axios.put(
-        `${BASE_URL}/admin/v1/user/update-exposure-limit`,
+        `${BASE_URL}/user/update-exposure-limit`,
         { 
           userId, 
           newExposureLimit,
