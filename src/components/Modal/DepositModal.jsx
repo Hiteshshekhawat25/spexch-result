@@ -2,43 +2,43 @@ import React, { useState } from "react";
 import { performTransaction } from "../../Services/DownlineListApi";
 import { toast } from "react-toastify";
 
-const DepositModal = ({ isOpen, onClose,userId }) => {
+const DepositModal = ({ isOpen, onClose, userId }) => {
   const [amount, setAmount] = useState("");
   const [remark, setRemark] = useState("");
   const [password, setPassword] = useState("");
-  const [transactionType, setTransactionType] = useState("deposit");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
 
   const token = localStorage.getItem("authToken");
 
   if (!isOpen) return null;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const resetState = () => {
+    setAmount("");
+    setRemark("");
+    setPassword("");
+  };
 
-    // Reset previous state
-    setError("");
-    setSuccessMessage("");
+  const handleTransaction = async (type) => {
     setLoading(true);
 
     const requestData = {
-      userId: userId, 
+      userId: userId,
       amount: parseFloat(amount),
       password: password,
       description: remark,
     };
 
     try {
-      const response = await performTransaction(transactionType, requestData, token);
+      const response = await performTransaction(type, requestData, token);
       if (response.success) {
         toast.success(response.message || "Transaction Successful");
+        resetState(); // Reset state after a successful transaction
+        onClose(); // Close the modal
       } else {
         toast.error(response.message || "Transaction Failed");
       }
     } catch (err) {
-      setError(err);
+      toast.error("An error occurred while processing the transaction.");
     } finally {
       setLoading(false);
     }
@@ -50,13 +50,19 @@ const DepositModal = ({ isOpen, onClose,userId }) => {
         {/* Modal Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-semibold text-gray-700">Banking - Master -</h2>
-          <button onClick={onClose} className="text-gray-500 text-2xl hover:text-gray-800">
+          <button
+            onClick={() => {
+              resetState();
+              onClose();
+            }}
+            className="text-gray-500 text-2xl hover:text-gray-800"
+          >
             &times;
           </button>
         </div>
 
         {/* Modal Body */}
-        <form className="space-y-6" onSubmit={handleSubmit}>
+        <form className="space-y-6">
           {/* Amount Field */}
           <div>
             <label htmlFor="amount" className="block text-sm font-medium text-gray-700">
@@ -100,50 +106,27 @@ const DepositModal = ({ isOpen, onClose,userId }) => {
               required
             />
           </div>
-          {/* Transaction Type */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Transaction Type</label>
-            <div className="flex items-center mt-2 space-x-6">
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="transaction-type"
-                  value="deposit"
-                  checked={transactionType === "deposit"}
-                  onChange={(e) => setTransactionType(e.target.value)}
-                  className="mr-2"
-                />
-                Deposit
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="radio"
-                  name="transaction-type"
-                  value="withdraw"
-                  checked={transactionType === "withdraw"}
-                  onChange={(e) => setTransactionType(e.target.value)}
-                  className="mr-2"
-                />
-                Withdraw
-              </label>
-            </div>
-          </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end">
+          {/* Transaction Buttons */}
+          <div className="flex justify-between space-x-4">
             <button
-              type="submit"
+              type="button"
+              onClick={() => handleTransaction("deposit")}
               disabled={loading}
-              className="bg-NavyBlue text-white py-2 px-6 rounded-lg hover:bg-NavyBlue focus:outline-none"
+              className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 focus:outline-none"
             >
-              {loading ? "Processing..." : "Submit"}
+              {loading ? "Processing..." : "Deposit"}
+            </button>
+            <button
+              type="button"
+              onClick={() => handleTransaction("withdraw")}
+              disabled={loading}
+              className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 focus:outline-none"
+            >
+              {loading ? "Processing..." : "Withdraw"}
             </button>
           </div>
         </form>
-
-        {/* Success and Error Messages */}
-        {/* {successMessage && <div className="text-green-500 mt-4">{successMessage}</div>}
-        {error && <div className="text-red-500 mt-4">{error}</div>} */}
       </div>
     </div>
   );
