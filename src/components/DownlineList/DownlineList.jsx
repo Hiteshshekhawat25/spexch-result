@@ -82,7 +82,6 @@ const DownlineList = () => {
         }
 
         const result = await fetchDownlineData(
-          token,
           currentPage,
           entriesToShow
         );
@@ -177,7 +176,7 @@ const DownlineList = () => {
 
       fetchUserRoles();
     }
-  }, [token, location.pathname]);
+  }, [token, location.pathname,]);
 
   useEffect(() => {
     if (location.pathname === "/user-downline-list") {
@@ -220,17 +219,11 @@ const DownlineList = () => {
   useEffect(() => {
     if (roleId) {
       const fetchUserByRole = async () => {
-        const token = localStorage.getItem("authToken");
+       
         try {
-          const response = await axios.get(
-            `${BASE_URL}/user/get-user?page=1&limit=28&role=${roleId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-          setData(response.data);
+          const data = await fetchDownlineData(currentPage, entriesToShow,roleId,);
+          console.log("DATA",data);
+          setData(data?.data);
         } catch (error) {
           console.error("Error fetching users by role:", error);
         }
@@ -325,6 +318,7 @@ const DownlineList = () => {
     setDepositModal(false);
     setSettingsModal(false);
     setAccountStatus(false);
+    setCreditReferenceTransactionList(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -360,7 +354,6 @@ const DownlineList = () => {
     setSelectedUser(user);
   };
 
-  // Ensure the function is declared as async
   const handleUsernameList = async (item) => {
     console.log("heelooo", item);
     if (item.role_name === "master") {
@@ -449,101 +442,25 @@ const DownlineList = () => {
           </tr>
         </thead>
         <tbody>
-          {paginatedData.map((item, index) => (
-            <tr key={index} className="border border-gray-300 bg-white">
-              <td className="px-4 py-5 text-sm">
-                {" "}
-                <span
-                  className="bg-green-500 text-white px-2 py-2 rounded"
-                  onClick={() => handleUsernameList(item)}
-                >
-                  {item.role_name}
-                </span>
-                <span className="text-black">{item.username}</span>
-              </td>
-              <td className="px-4 py-3 text-md text-blue-700">
-                {item.creditReference}
-                <div className="ml-2 inline-flex space-x-2">
-                  <FaEdit
-                    className="text-blue cursor-pointer"
-                    onClick={() => handleEditClick(item)}
-                  />
-                  <FaEye
-                    className="text-blue cursor-pointer"
-                    onClick={() => handleListView(item)}
-                  />
-                </div>
-              </td>
-              <td className="px-4 py-3 text-sm">{item.partnership}%</td>
-              <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-              <td className="px-4 py-3 text-sm text-blue-900">
-                {item.exposureLimit}
-                <div className="ml-2 inline-flex space-x-2">
-                  <FaEdit
-                    className="text-blue cursor-pointer"
-                    onClick={() => handleExposureEditClick(item)}
-                  />
-                </div>
-              </td>
-              <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-              <td className="px-4 py-3 text-sm"></td>
-              <td className="px-4 py-3 text-sm text-green-600">
-                {item.status}
-              </td>
-              <td className="px-4 py-3 text-sm">
-                <div className="flex space-x-2">
-                  <div
-                    onClick={() => handleIconClick(item)}
-                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
-                  >
-                    <AiFillDollarCircle className="text-darkgray" />
-                  </div>
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                    <RiArrowUpDownFill className="text-darkgray" />
-                  </div>
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                    <MdSettings className="text-darkgray" />
-                  </div>
-                  <div
-                    onClick={() => statushandlechange(item)}
-                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                  >
-                    <FaUserAlt className="text-darkgray" />
-                  </div>
-                  <div
-                    onClick={() => handleOpenSettings(item)}
-                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                  >
-                    <BsBuildingFillLock className="text-darkgray" />
-                  </div>
-                  <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                    <MdDelete
-                      className="text-"
-                      onClick={() => handleDeleteClick(item)}
-                    />
-                  </div>
-                </div>
-              </td>
-            </tr>
-          ))}
-          {location.pathname === "/master-downline-list" &&
-            data?.data?.map((item, index) => (
+          {(userFetchList.length > 0 ? userFetchList : filteredData).map(
+            (item, index) => (
               <tr key={index} className="border border-gray-300 bg-white">
-                <td className="px-4 py-3 text-sm">
+                <td className="px-4 py-5 text-sm">
+                  {" "}
                   <span
-                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded"
+                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
                     onClick={() => handleUsernameList(item)}
                   >
                     {item.role_name}
                   </span>
-                  {item.username}
+                  <span className="text-black">{item.username}</span>
                 </td>
-                <td className="px-4 py-3 text-sm text-blue-900">
+                <td className="px-4 py-3 text-md text-blue-700">
                   {item.creditReference}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
                       className="text-blue cursor-pointer"
-                      onClick={() => handleEditClick(item)} // Trigger modal on click
+                      onClick={() => handleEditClick(item)}
                     />
                     <FaEye
                       className="text-blue cursor-pointer"
@@ -564,7 +481,86 @@ const DownlineList = () => {
                 </td>
                 <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
                 <td className="px-4 py-3 text-sm"></td>
-                <td className="x-4 py-3 font-bold text-green-600 text-xl">
+                <td className="x-4 py-3 font-bold text-green-600 text-l">
+                  {item.status}
+                </td>
+                <td className="px-4 py-3 text-sm">
+                  <div className="flex space-x-2">
+                    <div
+                      onClick={() => handleIconClick(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                    >
+                      <AiFillDollarCircle className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <RiArrowUpDownFill className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdSettings className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => statushandlechange(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <FaUserAlt className="text-darkgray" />
+                    </div>
+                    <div
+                      onClick={() => handleOpenSettings(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                    >
+                      <BsBuildingFillLock className="text-darkgray" />
+                    </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdDelete
+                        className="text-"
+                        onClick={() => handleDeleteClick(item)}
+                      />
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            )
+          )}
+          {location.pathname === "/master-downline-list" &&
+            userFetchList.length === 0 &&
+            data?.data?.map((item, index) => (
+              <tr key={index} className="border border-gray-300 bg-white">
+                <td className="px-4 py-3 text-sm">
+                  <span
+                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
+                    onClick={() => handleUsernameList(item)}
+                  >
+                    {item.role_name}
+                  </span>
+                  {item.username}
+                </td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.creditReference}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleEditClick(item)}
+                    />
+                    <FaEye
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleListView(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm text-blue-900">
+                  {item.exposureLimit}
+                  <div className="ml-2 inline-flex space-x-2">
+                    <FaEdit
+                      className="text-blue cursor-pointer"
+                      onClick={() => handleExposureEditClick(item)}
+                    />
+                  </div>
+                </td>
+                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm"></td>
+                <td className="x-4 py-3 font-bold text-green-600 text-l">
                   {item.status}
                 </td>
                 <td className="px-4 py-3 text-sm">
@@ -608,7 +604,7 @@ const DownlineList = () => {
               <tr key={index} className="border border-gray-300 bg-white">
                 <td className="px-4 py-3 text-sm">
                   <span
-                    className="bg-green-500 text-white px-2 py-1 rounded"
+                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
                     onClick={() => handleUsernameList(item)}
                   >
                     {item.role_name}
@@ -641,7 +637,7 @@ const DownlineList = () => {
                 </td>
                 <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
                 <td className="px-4 py-3 text-sm"></td>
-                <td className="px-4 py-3 text-sm text-green-600">
+                <td className="x-4 py-3 font-bold text-green-600 text-l">
                   {item.status}
                 </td>
                 <td className="px-4 py-3 text-sm">
@@ -680,7 +676,7 @@ const DownlineList = () => {
                 </td>
               </tr>
             ))}
-          {console.log("userFetch", userFetchList)}
+          {/* {console.log("userFetch", userFetchList)}
           {Array.isArray(userFetchList) && userFetchList.length > 0 ? (
             userFetchList.map((item, index) => (
               <tr key={index} className="border border-gray-300 bg-white">
@@ -760,11 +756,8 @@ const DownlineList = () => {
             ))
           ) : (
             <tr>
-              {/* <td colSpan="9" className="text-center px-4 py-3 text-sm text-gray-500">
-        No data available
-      </td> */}
             </tr>
-          )}
+          )} */}
         </tbody>
       </table>
       <div className="flex justify-between items-center mt-4">
@@ -824,7 +817,7 @@ const DownlineList = () => {
         <>
           <CreditReferenceTransactionModel
             username={creditReferenceTransactionList.username}
-            isOpen={isDeleteModalOpen}
+            isOpen={creditReferenceTransactionList}
             onClose={handleDeleteModalClose}
             // onConfirm={handleDeleteConfirm}
             userId={creditReferenceTransactionList?._id}

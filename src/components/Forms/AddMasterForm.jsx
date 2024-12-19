@@ -206,7 +206,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.username}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.username && (
                   <div className="text-red-500 text-sm">{errors.username}</div>
@@ -224,7 +224,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.username && (
                   <div className="text-red-500 text-sm">{errors.username}</div>
@@ -243,7 +243,7 @@ export const AddMasterForm = ({ closeModal }) => {
                     handleChange(e);
                     handleRoleSelection(e.target.value);
                   }}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 >c{console.log(formData)}
                   <option value="" disabled>
                     Select Role
@@ -261,12 +261,12 @@ export const AddMasterForm = ({ closeModal }) => {
                     handleChange(e);
                     handleRoleSelection(e.target.value); // Pass the selected role_id
                   }}
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 >
                   <option value="" disabled>
                     Select Role
                   </option>
-                  {console.log("roles",role)}
+                  {console.log("roles", role)}
                   {role?.map(({ _id, role_name }, index) => (
                     <option key={index} value={_id}>
                       {" "}
@@ -293,7 +293,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.commission}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.commission && (
                   <div className="text-red-500 text-sm">
@@ -313,7 +313,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.openingBalance}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.openingBalance && (
                   <div className="text-red-500 text-sm">
@@ -333,7 +333,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.creditReference}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.creditReference && (
                   <div className="text-red-500 text-sm">
@@ -353,7 +353,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.mobileNumber}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.mobileNumber && (
                   <div className="text-red-500 text-sm">
@@ -373,7 +373,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.partnership}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.partnership && (
                   <div className="text-red-500 text-sm">
@@ -393,7 +393,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.password && (
                   <div className="text-red-500 text-sm">{errors.password}</div>
@@ -411,7 +411,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.confirmPassword && (
                   <div className="text-red-500 text-sm">
@@ -449,7 +449,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="rollingCommission.fancy"
                         value={formData.rollingCommission.fancy || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -459,7 +459,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="rollingCommission.matka"
                         value={formData.rollingCommission.matka || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -469,7 +469,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="rollingCommission.casino"
                         value={formData.rollingCommission.casino || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -479,7 +479,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="rollingCommission.binary"
                         value={formData.rollingCommission.binary || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -489,7 +489,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="rollingCommission.sportbook"
                         value={formData.rollingCommission.sportbook || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -499,7 +499,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="rollingCommission.bookmaker"
                         value={formData.rollingCommission.bookmaker || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                   </div>
@@ -535,7 +535,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="agentRollingCommission.fancy"
                         value={formData.agentRollingCommission.fancy || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -545,7 +545,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="agentRollingCommission.matka"
                         value={formData.agentRollingCommission.matka || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -555,7 +555,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="agentRollingCommission.casino"
                         value={formData.agentRollingCommission.casino || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -565,7 +565,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="agentRollingCommission.binary"
                         value={formData.agentRollingCommission.binary || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -575,7 +575,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="agentRollingCommission.sportbook"
                         value={formData.agentRollingCommission.sportbook || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                     <div className="flex justify-between">
@@ -585,7 +585,7 @@ export const AddMasterForm = ({ closeModal }) => {
                         name="agentRollingCommission.bookmaker"
                         value={formData.agentRollingCommission.bookmaker || 0}
                         onChange={handleChange}
-                        className="w-2/3 border p-2"
+                        className="w-2/3 border p-1"
                       />
                     </div>
                   </div>
@@ -603,7 +603,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.masterPassword}
                   onChange={handleChange}
                   required
-                  className="w-full p-2 border rounded"
+                  className="w-full p-1 border rounded"
                 />
                 {errors.masterPassword && (
                   <div className="text-red-500 text-sm">
