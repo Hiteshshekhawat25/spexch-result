@@ -7,6 +7,9 @@ const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
   const [user, setUser] = useState("");
 
+  let userData = JSON.parse(localStorage.getItem('userData')); 
+  console.log(userData.data.role_name);
+
   /* static data */
   const menuItems = [
     { name: "Dashboard", link: "#" },
@@ -43,6 +46,25 @@ const MenuHeader = () => {
     { name: "User Report", link: "#" },
     { name: "Logout", link: "#" },
   ];
+
+  if (userData && userData.data.role_name === "super-admin") {
+    menuItems.push(
+      {
+        name: "Matches",
+        link: "#",
+        subMenu: [
+          { name: "Create New Match", link: "/CreateNewMatch" },
+          { name: "Create Manual Match", link: "/CreateManualMatch" },
+          { name: "All Matches", link: "/AllMatches" },
+        ],
+      },
+      {
+        name: "Global Settings",
+        link: "/GlobalSettings" ,
+      }
+    );
+  }
+
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {

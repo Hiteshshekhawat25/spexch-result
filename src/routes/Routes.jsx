@@ -19,6 +19,11 @@ import MatchOddsBets from "../components/Matches/MatchOddsBets"
 import TossMatchList from "../components/Matches/TossMatchList";
 import MultipleSession from "../components/Matches/MultipleSession";
 import AllSessionList from "../components/Matches/AllSessionList";
+import Banner from "../components/Matches/Banner";
+import SessionPreBook from "../components/Matches/SessionPreBook";
+import SessionResult from "../components/Matches/SessionResult";
+
+
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -58,7 +63,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-        path={ROUTES_CONST.createnewmatch}
+        path={ROUTES_CONST.CreateNewMatch}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
@@ -68,7 +73,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-        path={ROUTES_CONST.createmanualmatch}
+        path={ROUTES_CONST.CreateManualMatch}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
@@ -78,7 +83,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-        path={ROUTES_CONST.allmatches}
+        path={ROUTES_CONST.AllMatches}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
@@ -88,7 +93,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-        path={ROUTES_CONST.globalsettings}
+        path={ROUTES_CONST.GlobalSettings}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
@@ -170,7 +175,36 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-
+      <Route
+        path={ROUTES_CONST.Banner}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+             <Banner/>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+        <Route
+        path={ROUTES_CONST.SessionPreBook}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+             <SessionPreBook/>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={ROUTES_CONST.SessionResult}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+             <SessionResult/>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
     </Routes>
     
   );

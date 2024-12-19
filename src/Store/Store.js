@@ -17,6 +17,7 @@ import scoreReducer from './Slice/scoreSlice'
 import sportsReducer from './Slice/sportsSettingSlice'
 import authLoginReducer  from './Slice/authLoginSlice'
 import editMatchReducer from './Slice/editMatchSlice'
+import bannerReducer from './Slice/bannerSlice';
 
 export const store = configureStore({
   reducer: {
@@ -37,7 +38,8 @@ export const store = configureStore({
     editStake: editStakeReducer, 
     editMatch: editMatchReducer,
     score: scoreReducer,
-    sports: sportsReducer
+    sports: sportsReducer,
+    banners: bannerReducer
   },
 });
 
