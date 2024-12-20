@@ -20,6 +20,12 @@ import editMatchReducer from './Slice/editMatchSlice'
 import bannerReducer from './Slice/bannerSlice';
 import profitLossReducer from './Slice/profitLossSlice';
 import plFilterReducer from './Slice/plFilterSlice';
+import betListFilterReducer from './Slice/betListFilterSlice';
+import betListReducer from './Slice/betListSlice';
+import profileReducer from './Slice/profileSlice';
+import activityLogReducer from './Slice/activityLogSlice';
+import accountStatementFilterReducer from './Slice/accountStatementFilterSlice';
+import accountStatementReducer from './Slice/accountStatementSlice';
 
 export const store = configureStore({
   reducer: {
@@ -44,6 +50,12 @@ export const store = configureStore({
     banners: bannerReducer,
     profitLoss: profitLossReducer,
     plFilter: plFilterReducer,
+    betListFilter: betListFilterReducer,
+    betList: betListReducer,
+    profile: profileReducer,
+    activityLog: activityLogReducer,
+    accountStatementFilter: accountStatementFilterReducer,
+    accountStatement: accountStatementReducer,
   },
 });
 

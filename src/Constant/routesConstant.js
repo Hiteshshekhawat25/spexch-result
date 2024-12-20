@@ -20,6 +20,8 @@ export const ROUTES_CONST = {
     SessionPreBook:"/SessionPreBook",
     SessionResult:"/SessionResult",
     ProfitLoss:"/ProfitLoss",
+    BetList:"/BetList",
+    MyAccount:"/MyAccount"
     
   };
   

@@ -21,7 +21,7 @@ const MenuHeader = () => {
         { name: "Master DownLine List", link: "/master-downline-list" },
       ],
     },
-    { name: "My Account", link: "#" },
+    { name: "My Account", link: "/MyAccount" },
     {
       name: "My Report",
       link: "#",
@@ -30,7 +30,7 @@ const MenuHeader = () => {
         { name: "Downline Profit/Loss", link: "/ProfitLoss" },
       ],
     },
-    { name: "BetList", link: "#" },
+    { name: "BetList", link: "/BetList" },
     { name: "Market Analysis", link: "#" },
     {
       name: "Banking",
