@@ -1,4 +1,5 @@
 
+
 export const ROUTES_CONST = {
     login: "/",
     dashboard: "/dashboard",
@@ -18,6 +19,7 @@ export const ROUTES_CONST = {
     Banner:"/Banner",
     SessionPreBook:"/SessionPreBook",
     SessionResult:"/SessionResult",
+    ProfitLoss:"/ProfitLoss",
     
   };
   

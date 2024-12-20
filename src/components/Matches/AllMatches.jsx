@@ -27,7 +27,7 @@ const AllMatches = () => {
     const fetchSports = async () => {
       setLoading(true);
       try {
-        const response = await getCreateNewMatchAPIAuth('games/getgames');
+        const response = await getCreateNewMatchAPIAuth('games/getgames?page=1&limit=2');
         if (response.status === 200) {
           setSportsOptions(response.data.data || []);
           if (!sport) {

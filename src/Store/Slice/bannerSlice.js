@@ -9,7 +9,7 @@ const bannerSlice = createSlice({
         state.banners = action.payload;
       },
       addBanner: (state, action) => {
-        state.banners.push(action.payload); ;
+        state.banners = [...state.banners, action.payload]; // Add new banner to the list
       },
       deleteBanner: (state, action) => {
         // Filter out the banner with the matching _id

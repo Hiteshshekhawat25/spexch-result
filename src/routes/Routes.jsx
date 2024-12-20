@@ -22,6 +22,7 @@ import AllSessionList from "../components/Matches/AllSessionList";
 import Banner from "../components/Matches/Banner";
 import SessionPreBook from "../components/Matches/SessionPreBook";
 import SessionResult from "../components/Matches/SessionResult";
+import ProfitLoss from "../components/DownlineList/ProfitLoss";
 
 
 
@@ -201,6 +202,16 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
              <SessionResult/>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={ROUTES_CONST.ProfitLoss}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <ProfitLoss />
             </LayoutHeader>
           </ProtectedRoutes>
         }

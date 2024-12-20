@@ -26,8 +26,8 @@ const MenuHeader = () => {
       name: "My Report",
       link: "#",
       subMenu: [
-        { name: "Daily Report", link: "/daily-report" },
-        { name: "Monthly Report", link: "/monthly-report" },
+        { name: "Event Profit/Loss", link: "/EventProfitLoss" },
+        { name: "Downline Profit/Loss", link: "/ProfitLoss" },
       ],
     },
     { name: "BetList", link: "#" },
