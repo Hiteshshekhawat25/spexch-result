@@ -180,23 +180,37 @@ export const putUpdateMatchAPIAuth = async (url, params) => {
 };
 
 // Api to get list of everyone in downline list
-export const fetchDownlineData = async (token, currentPage, entriesToShow) => {
+export const fetchDownlineData = async ( currentPage, entriesToShow,roleId) => {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/user/get-user`,
-      {
-        params: { page: currentPage, limit: entriesToShow },
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+     const token = localStorage.getItem("authToken");
+    // Prepare parameters
+    const params = {
+      page: currentPage,
+      limit: entriesToShow,
+    };
+
+    // Include roleId in params if it is provided
+    if (roleId) {
+      params.role = roleId;
+    }
+
+    // Make the API call with or without roleId
+    const response = await axios.get(`${BASE_URL}/user/get-user`, {
+      params: params,
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("params",params);
+
+
     return response.data; // Return the data from the response
   } catch (error) {
     throw new Error(error.response ? error.response.data.message : "Failed to fetch data");
   }
 };
+
 
 
 //api call to change status of accounts

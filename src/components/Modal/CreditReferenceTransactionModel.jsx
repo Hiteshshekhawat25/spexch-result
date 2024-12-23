@@ -1,30 +1,60 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCreditReference } from '../../Store/Slice/creditTransactionSlice'; // Adjust path as needed
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCreditReference } from "../../Store/Slice/creditTransactionSlice"; // Adjust path as needed
 
-const CreditReferenceTransactionModel = ({ userId, username, page = 1, limit = 2 }) => {
+const CreditReferenceTransactionModel = ({
+  userId,
+  username,
+  page = 1,
+  limit = 5,
+  onClose,
+}) => {
   const [isOpen, setIsOpen] = useState(true);
+  const [currentPage, setCurrentPage] = useState(page);
   const modalRef = useRef(null);
   const dispatch = useDispatch();
 
   // Redux state
-  const { data, loading, error } = useSelector((state) => state.creditReference);
+  const { data, loading, error } = useSelector(
+    (state) => state.creditReference
+  );
 
   useEffect(() => {
-    // Fetch credit reference data
-    dispatch(fetchCreditReference({ userId, username, page, limit }));
-  }, [dispatch, userId, username, page, limit]);
+    if (isOpen) {
+      dispatch(
+        fetchCreditReference({ userId, username, page: currentPage, limit })
+      );
+    }
+  }, [dispatch, userId, username, currentPage, limit, isOpen]);
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {
-      setIsOpen(false);
+      handleClose();
     }
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      handleClose();
+    }
+  };
+
+  const handleClose = () => {
+    setIsOpen(false);
+    onClose();
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
+
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleKeyDown);
+
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
 
@@ -34,51 +64,96 @@ const CreditReferenceTransactionModel = ({ userId, username, page = 1, limit = 2
   const pagination = data?.pagination || {};
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
       <div
         ref={modalRef}
-        className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl relative"
+        className="bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl relative"
       >
-        {/* Single-Line Heading and Username */}
+        {/* Modal Header */}
         <div className="mb-4">
-          <h3 className="text-xl font-semibold">Credit Reference Log</h3>
-          {/* Username in the right-bottom corner */}
-          <span className="absolute bottom-4 right-4 text-sm text-gray-500">{username}</span>
+          <h3 className="text-l font-semibold">Credit Reference Log</h3>
+          {/* <span className="absolute bottom-4 right-4 text-sm text-gray-500">{username}</span> */}
         </div>
 
+        {/* Content */}
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">Error: {error}</p>}
         {!loading && !error && entries.length > 0 && (
-          <>
+          <div>
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
-                  <th className="border border-gray-300 px-4 py-2 text-left">From Name</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">User Name</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Old Credit Reference</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">New Credit Reference</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Date & Time</th>
+                  <th className="border border-gray-300 px-2 py-1 text-left">
+                    From Name
+                  </th>
+                  <th className="border border-gray-300 px-2 py-1 text-left">
+                    User Name
+                  </th>
+                  <th className="border border-gray-300 px-2 py-1 text-left">
+                    Old Credit Reference
+                  </th>
+                  <th className="border border-gray-300 px-2 py-1 text-left">
+                    New Credit Reference
+                  </th>
+                  <th className="border border-gray-300 px-2 py-1 text-left">
+                    Date & Time
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {entries.map((row, index) => (
                   <tr key={index} className="even:bg-gray-50">
-                    <td className="border border-gray-300 px-4 py-2">{row.from_name || 'N/A'}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.username || 'N/A'}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.oldCreditReference ?? 0}</td>
-                    <td className="border border-gray-300 px-4 py-2">{row.newCreditReference ?? 0}</td>
-                    <td className="border border-gray-300 px-4 py-2">
-                    {row.createdAt ? new Date(row.createdAt).toLocaleString() : 'N/A'}
+                    <td className="border border-gray-300 px-2 py-1">
+                      {row.from_name || "N/A"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1">
+                      {row.username || "N/A"}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1">
+                      {row.oldCreditReference ?? 0}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1">
+                      {row.newCreditReference ?? 0}
+                    </td>
+                    <td className="border border-gray-300 px-2 py-1">
+                      {row.createdAt
+                        ? new Date(row.createdAt).toLocaleString()
+                        : "N/A"}
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <p className="text-sm text-gray-600 mt-4">
-              Showing {pagination.currentPage} to {pagination.totalPages} of {pagination.totalRecords} entries
-            </p>
-          </>
+
+            {/* Pagination Controls */}
+            <div>
+              <div className="flex items-center justify-between mt-10">
+                <p className="text-sm text-gray-600">
+                   {currentPage} of {pagination.totalPages}
+                </p>
+
+                <div className="flex space-x-4">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
+                  >
+                    Previous
+                  </button>
+
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === pagination.totalPages}
+                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
+                  >
+                    Next
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
+
         {entries.length === 0 && !loading && !error && (
           <p>No credit reference transactions found.</p>
         )}

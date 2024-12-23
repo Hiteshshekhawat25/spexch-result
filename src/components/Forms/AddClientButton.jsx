@@ -40,14 +40,16 @@ const AddClientButton = () => {
   }, [isDialogOpen]);
 
   // Determine button text and form based on the current route
-  const buttonText = location.pathname === "/master-downline-list" ? "Add Master" : "Add Client";
+  const buttonText =
+    location.pathname === "/master-downline-list" ? "Add Master" : "Add Client";
 
   // Conditionally render the form based on the route
-  const renderForm = location.pathname === "/master-downline-list" ? (
-    <AddMasterForm closeModal={handleCloseDialog} />
-  ) : (
-    <AddClientForm closeModal={handleCloseDialog} />
-  );
+  const renderForm =
+    location.pathname === "/master-downline-list" ? (
+      <AddMasterForm closeModal={handleCloseDialog} />
+    ) : (
+      <AddClientForm closeModal={handleCloseDialog} />
+    );
 
   return (
     <div className="flex justify-end items-center gap-2 mb-2">
@@ -78,7 +80,7 @@ const AddClientButton = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div
             ref={modalRef}
-            className="bg-white p-6 rounded-lg shadow-lg max-h-[80vh] overflow-y-auto w-full max-w-md"
+            className="bg-white p-6 rounded-lg shadow-lg max-h-[95vh] overflow-y-auto w-full max-w-lg"
           >
             {renderForm}
           </div>

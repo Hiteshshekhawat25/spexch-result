@@ -195,14 +195,7 @@ export const AddClientForm = ({ closeModal }) => {
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 rounded-lg relative">
-      <button
-        className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded"
-        onClick={handleCloseModal}
-      >
-        ✕
-      </button>
-
-      <h2 className="text-2xl font-semibold mb-4">Add Master</h2>
+      <h2 className="text-2xl font-semibold mb-4">Add Client</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex justify-between">
           <label className="w-1/3">Username</label>
@@ -211,7 +204,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -225,7 +218,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -237,7 +230,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="commission"
             value={formData.commission}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -251,7 +244,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="openingBalance"
             value={formData.openingBalance}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -265,7 +258,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="creditReference"
             value={formData.creditReference}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -279,7 +272,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="mobileNumber"
             value={formData.mobileNumber}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -293,7 +286,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="exposureLimit"
             value={formData.exposureLimit}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -307,7 +300,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -321,7 +314,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -335,7 +328,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="masterPassword"
             value={formData.masterPassword}
             onChange={handleChange}
-            className="w-2/3 border p-2"
+            className="w-2/3 border p-1"
             required
           />
         </div>
@@ -361,7 +354,7 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.fancy"
                 value={formData.rollingCommission.fancy || 0}
                 onChange={handleChange}
-                className="w-2/3 border p-2"
+                className="w-2/3 border p-1"
               />
             </div>
             <div className="flex justify-between">
@@ -371,7 +364,7 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.matka"
                 value={formData.rollingCommission.matka || 0}
                 onChange={handleChange}
-                className="w-2/3 border p-2"
+                className="w-2/3 border p-1"
               />
             </div>
             <div className="flex justify-between">
@@ -381,7 +374,7 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.casino"
                 value={formData.rollingCommission.casino || 0}
                 onChange={handleChange}
-                className="w-2/3 border p-2"
+                className="w-2/3 border p-1"
               />
             </div>
             <div className="flex justify-between">
@@ -391,7 +384,7 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.binary"
                 value={formData.rollingCommission.binary || 0}
                 onChange={handleChange}
-                className="w-2/3 border p-2"
+                className="w-2/3 border p-1"
               />
             </div>
             <div className="flex justify-between">
@@ -401,7 +394,7 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.sportsbook"
                 value={formData.rollingCommission.sportsbook || 0}
                 onChange={handleChange}
-                className="w-2/3 border p-2"
+                className="w-2/3 border p-1"
               />
             </div>
             <div className="flex justify-between">
@@ -411,7 +404,7 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.bookmaker"
                 value={formData.rollingCommission.bookmaker || 0}
                 onChange={handleChange}
-                className="w-2/3 border p-2"
+                className="w-2/3 border p-1"
               />
             </div>
           </div>
@@ -419,7 +412,7 @@ export const AddClientForm = ({ closeModal }) => {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-NavyBlue text-white p-2 mt-4"
+          className="w-full bg-NavyBlue text-white p-1 mt-4"
         >
           {isSubmitting ? "Submitting..." : "Submit"}
         </button>
