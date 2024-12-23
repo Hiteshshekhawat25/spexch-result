@@ -195,7 +195,7 @@ export const AddClientForm = ({ closeModal }) => {
 
   return (
     <div className="max-w-lg mx-auto bg-white p-6 rounded-lg relative">
-      <h2 className="text-2xl font-semibold mb-4">Add Client</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">Add Client</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex justify-between">
           <label className="w-1/3">Username</label>

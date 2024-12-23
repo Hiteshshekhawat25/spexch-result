@@ -26,12 +26,14 @@ import profileReducer from './Slice/profileSlice';
 import activityLogReducer from './Slice/activityLogSlice';
 import accountStatementFilterReducer from './Slice/accountStatementFilterSlice';
 import accountStatementReducer from './Slice/accountStatementSlice';
+import userReducer from './Slice/userInfoSlice';
 
 export const store = configureStore({
   reducer: {
     // login: loginReducer,
     login: authLoginReducer,
     client: clientReducer, 
+    user: userReducer,
     // addClient: addClientReducer,
     master: masterReducer,
     downline: downlineReducer,
