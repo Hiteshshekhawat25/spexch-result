@@ -192,7 +192,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
   return (
     <div className="max-w-xl mx-auto bg-white p-6 rounded shadow-lg">
-      <h2 className="text-2xl font-semibold mb-4">Add Master</h2>
+      <h2 className="text-2xl font-semibold mb-4 text-center">Add Master</h2>
       <form onSubmit={handleSubmit}>
         <table className="w-full">
           <tbody>

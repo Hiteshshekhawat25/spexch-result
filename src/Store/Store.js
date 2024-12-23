@@ -12,14 +12,28 @@ import allMatchReducer from './Slice/allMatchSlice';
 import balanceReducer from './Slice/balanceSlice';
 import updateCreditReference from './Slice/creditReferenceslice'
 import creditReferenceReducer from './Slice/creditTransactionSlice'
+import editStakeReducer from './Slice/editStakeSlice'
+import scoreReducer from './Slice/scoreSlice'
 import sportsReducer from './Slice/sportsSettingSlice'
 import authLoginReducer  from './Slice/authLoginSlice'
+import editMatchReducer from './Slice/editMatchSlice'
+import bannerReducer from './Slice/bannerSlice';
+import profitLossReducer from './Slice/profitLossSlice';
+import plFilterReducer from './Slice/plFilterSlice';
+import betListFilterReducer from './Slice/betListFilterSlice';
+import betListReducer from './Slice/betListSlice';
+import profileReducer from './Slice/profileSlice';
+import activityLogReducer from './Slice/activityLogSlice';
+import accountStatementFilterReducer from './Slice/accountStatementFilterSlice';
+import accountStatementReducer from './Slice/accountStatementSlice';
+import userReducer from './Slice/userInfoSlice';
 
 export const store = configureStore({
   reducer: {
     // login: loginReducer,
     login: authLoginReducer,
     client: clientReducer, 
+    user: userReducer,
     // addClient: addClientReducer,
     master: masterReducer,
     downline: downlineReducer,
@@ -31,7 +45,19 @@ export const store = configureStore({
     balance: balanceReducer,
     credit: updateCreditReference,
     creditReference: creditReferenceReducer,
-    sports: sportsReducer
+    editStake: editStakeReducer, 
+    editMatch: editMatchReducer,
+    score: scoreReducer,
+    sports: sportsReducer,
+    banners: bannerReducer,
+    profitLoss: profitLossReducer,
+    plFilter: plFilterReducer,
+    betListFilter: betListFilterReducer,
+    betList: betListReducer,
+    profile: profileReducer,
+    activityLog: activityLogReducer,
+    accountStatementFilter: accountStatementFilterReducer,
+    accountStatement: accountStatementReducer,
   },
 });
 

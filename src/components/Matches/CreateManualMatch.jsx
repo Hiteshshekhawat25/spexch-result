@@ -17,7 +17,7 @@ const CreateManualMatch = () => {
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const response = await getCreateNewMatchAPIAuth("admin/v1/games/getgames");
+        const response = await getCreateNewMatchAPIAuth("games/getgames");
         if (response.status === 200) {
           setSportsOptions(response.data.data || []); // Adjust based on API response
         }
@@ -52,7 +52,7 @@ const CreateManualMatch = () => {
     e.preventDefault();
     try {
       const response = await createNewMatchAPIAuth(
-        "admin/v1/match/creatematchmanual",
+        "match/creatematchmanual",
         formState
       );
       if (response.status === 200) {

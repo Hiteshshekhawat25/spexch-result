@@ -1,46 +1,57 @@
 import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  clearUserData,
+  fetchUserDataFailure,
+  fetchUserDataStart,
+  fetchUserDataSuccess,
+} from "../../Store/Slice/userInfoSlice";
+import { getUserData } from "../../Services/UserInfoApi";
 
 const TopHeader = () => {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const { userData, loading, error } = useSelector((state) => state.user);
 
   useEffect(() => {
-    // Fetch user data from localStorage
-    const storedUserData = localStorage.getItem("userData");
+    const fetchData = async () => {
+      dispatch(fetchUserDataStart());
+      try {
+        const data = await getUserData();
+        dispatch(fetchUserDataSuccess(data));
+      } catch (err) {
+        dispatch(fetchUserDataFailure(err.message));
+      }
+    };
 
-    if (storedUserData) {
-      setUser(JSON.parse(storedUserData));
-    }
-  }, []);
+    fetchData();
+  }, [dispatch]);
+
   return (
     <div className="w-full bg-NavyBlue text-white py-6 px-6 flex justify-between items-center">
       <div className="flex items-center space-x-6">
         <div className="text-xl font-bold ml-8 pl-2">SPEXCH</div>
       </div>
-
-      {/* User-specific section */}
       <div className="flex items-center space-x-4">
-        {user ? (
+        {loading ? (
+          <span>Loading...</span>
+        ) : error ? (
+          <span>Error: {error}</span>
+        ) : userData ? (
           <>
-            {/* Display user-specific info, e.g., username */}
-            {/* <span className="text-sm font-medium">Hello, {user?.data?.username}</span> */}
-            {/* <span className="bg-LightGreen px-2 py-1 rounded text-sm">
-              WHITE_LABEL
-            </span> */}
-            <span>{user?.data?.name}</span>
-            {/* <span>IRP 0</span> */}
+            <span>{userData?.data?.name}</span>
             <button
               className="hover:underline"
               onClick={() => {
-                // Handle logout logic here, e.g., clearing localStorage
+                dispatch(clearUserData());
                 localStorage.clear();
-                window.location.reload(); // or navigate to login page
+                window.location.reload();
               }}
             >
               Logout
             </button>
           </>
         ) : (
-          <span>Loading...</span> // Display a loading message while user data is fetched
+          <span>Logged out</span>
         )}
       </div>
     </div>
