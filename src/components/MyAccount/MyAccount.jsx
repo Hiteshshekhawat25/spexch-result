@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import MyProfile from './MyProfile';
-import AccountStatement from './AccountStatement';
-import ActivityLog from './ActivityLog';
+import MyProfile from '../DownlineList/MyProfile';
+import AccountStatement from '../DownlineList/AccountStatement';
+import ActivityLog from '../DownlineList/ActivityLog';
 
 const MyAccount = () => {
   const [selectedPage, setSelectedPage] = useState('myProfile'); // Default to 'myProfile'

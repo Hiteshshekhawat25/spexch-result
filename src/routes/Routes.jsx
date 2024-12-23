@@ -22,9 +22,9 @@ import AllSessionList from "../components/Matches/AllSessionList";
 import Banner from "../components/Matches/Banner";
 import SessionPreBook from "../components/Matches/SessionPreBook";
 import SessionResult from "../components/Matches/SessionResult";
-import ProfitLoss from "../components/DownlineList/ProfitLoss";
-import BetList from "../components/DownlineList/BetList";
-import MyAccount from "../components/DownlineList/MyAccount";
+import ProfitLoss from "../components/MyReport/ProfitLoss";
+import BetList from "../components/BetList/BetList";
+import MyAccount from "../components/MyAccount/MyAccount";
 
 
 
