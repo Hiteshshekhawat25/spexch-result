@@ -92,7 +92,7 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
                 type="text"
                 value={remark}
                 onChange={(e) => setRemark(e.target.value)}
-                placeholder="New Credit Reference"
+                placeholder="Enter Remark"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>

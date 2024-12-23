@@ -31,6 +31,7 @@ const AccountStatus = ({ userId, isOpen, onClose }) => {
         setStatusUpdated(true);
         toast.success(response.message || "Status updated successfully");
       }
+      window.location.reload();
     } catch (err) {
       setError("An error occurred. Please try again.");
     } finally {
