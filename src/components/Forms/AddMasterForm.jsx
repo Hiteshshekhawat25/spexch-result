@@ -187,6 +187,9 @@ export const AddMasterForm = ({ closeModal }) => {
       );
     } finally {
       setIsSubmitting(false);
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
   };
 

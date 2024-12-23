@@ -7,6 +7,7 @@ import {
   fetchUserDataSuccess,
 } from "../../Store/Slice/userInfoSlice";
 import { getUserData } from "../../Services/UserInfoApi";
+import { Link } from "react-router-dom";
 
 const TopHeader = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,9 @@ const TopHeader = () => {
   return (
     <div className="w-full bg-NavyBlue text-white py-6 px-6 flex justify-between items-center">
       <div className="flex items-center space-x-6">
-        <div className="text-xl font-bold ml-8 pl-2">SPEXCH</div>
+        <Link to="/dashboard">
+          <div className="text-xl font-bold ml-8 pl-2">SPEXCH</div>
+        </Link>
       </div>
       <div className="flex items-center space-x-4">
         {loading ? (

@@ -233,8 +233,8 @@ export const updateUserStatus = async (userId, newStatus, password) => {
         },
       }
     );
-
-    return response.data;
+    console.log("user response-account",response?.data?.data);
+    return response?.data?.data;
   } catch (error) {
     console.error("Error updating user status:", error);
     throw error;
@@ -299,7 +299,7 @@ export const updateGameStatus = async (token, userId, gameId, active) => {
         },
       }
     );
-    return response.data; // Return the data from the response
+    return response.data; 
   } catch (error) {
     throw new Error(
       error.response ? error.response.data.message : "Failed to update game status"
@@ -323,7 +323,7 @@ export const getGameActionStatus = async (token, userId) => {
         },
       }
     );
-    return response.data; // Return the data from the response
+    return response.data; 
   } catch (error) {
     throw new Error(
       error.response ? error.response.data.message : "Failed to update game status"
