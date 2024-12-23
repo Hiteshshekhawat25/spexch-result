@@ -52,7 +52,12 @@ const Layout = ({ children }) => {
             <BalanceHeader />
           </Suspense>
         </div>
+<<<<<<<<< Temporary merge branch 1
         <div>{children}</div> 
+=========
+
+        <div>{children}</div> {/* Dynamic content */}
+>>>>>>>>> Temporary merge branch 2
       </div>
     </div>
   );
