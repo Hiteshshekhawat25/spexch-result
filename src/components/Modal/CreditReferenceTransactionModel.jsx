@@ -45,7 +45,9 @@ const CreditReferenceTransactionModel = ({
   };
 
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+    if (newPage >= 1 && newPage <= (data?.pagination?.totalPages || 1)) {
+      setCurrentPage(newPage);
+    }
   };
 
   useEffect(() => {
@@ -61,7 +63,7 @@ const CreditReferenceTransactionModel = ({
   if (!isOpen) return null;
 
   const entries = data?.data || [];
-  const pagination = data?.pagination || {};
+  const pagination = data?.pagination || { totalPages: 1 };
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
@@ -73,22 +75,18 @@ const CreditReferenceTransactionModel = ({
         <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
           <h3 className="text-l font-semibold">Credit Reference Log</h3>
           <button
-            onClick={() => {
-              // resetState();
-              onClose();
-            }}
+            onClick={handleClose}
             className="cursor-pointer text-white text-2xl"
           >
             &times;
           </button>
-          {/* <span className="absolute bottom-4 right-4 text-sm text-gray-500">{username}</span> */}
         </div>
 
         {/* Content */}
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">Error: {error}</p>}
         {!loading && !error && entries.length > 0 && (
-          <div>
+          <div className="mt-4 overflow-auto max-h-96">
             <table className="table-auto w-full border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-gray-100">
@@ -133,39 +131,35 @@ const CreditReferenceTransactionModel = ({
                 ))}
               </tbody>
             </table>
-
-            {/* Pagination Controls */}
-            <div>
-              <div className="flex items-center justify-between mt-10">
-                <p className="text-sm text-gray-600">
-                   {currentPage} of {pagination.totalPages}
-                </p>
-
-                <div className="flex space-x-4">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
-                  >
-                    Previous
-                  </button>
-
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === pagination.totalPages}
-                    className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
-                  >
-                    Next
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         )}
 
         {entries.length === 0 && !loading && !error && (
           <p>No credit reference transactions found.</p>
         )}
+
+        {/* Pagination Controls */}
+        <div className="flex items-center justify-between mt-4">
+          <p className="text-sm text-gray-600">
+            Page {currentPage} of {pagination.totalPages}
+          </p>
+          <div className="flex space-x-4">
+            <button
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage === pagination.totalPages}
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
