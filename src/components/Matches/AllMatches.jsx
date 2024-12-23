@@ -27,11 +27,11 @@ const AllMatches = () => {
     const fetchSports = async () => {
       setLoading(true);
       try {
-        const response = await getCreateNewMatchAPIAuth('games/getgames?page=1&limit=2');
+        const response = await getCreateNewMatchAPIAuth('games/getgames');
         if (response.status === 200) {
           setSportsOptions(response.data.data || []);
           if (!sport) {
-            const defaultSport = response.data.data.find((sport) => sport.gameId === '4');
+            const defaultSport = response.data.data.find((sport) => sport.gameId === '1');
             if (defaultSport) {
               dispatch(setSport(defaultSport.gameId));
             }

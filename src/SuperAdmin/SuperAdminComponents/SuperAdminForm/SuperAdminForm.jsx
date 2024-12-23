@@ -139,17 +139,27 @@ const SuperAdminForm = () => {
               className="w-full border border-gray-300 rounded p-2"
               placeholder={`Enter ${key.replace(/([A-Z])/g, " $1")}`}
             />
+            
           </div>
+          
         ))}
-      </div>
 
-      <div className="flex justify-between items-center">
+<div className="col-span-1"></div>
+
+{/* Submit button */}
+<div className="col-span-1 flex items-end">
+         
         <button
           type="submit"
-          className="bg-blue text-white px-6 py-2 rounded hover:bg-blue-600"
+          className="bg-lightblue text-white px-4 py-2 rounded hover:bg-lightblue w-1/2"
         >
           Submit
         </button>
+      </div>
+      </div>
+
+      <div className="flex justify-between items-center">
+        
         <button
           type="button"
           onClick={() => alert("Place Bet Allow Only In InPlay Mode")}
