@@ -14,7 +14,7 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
     setApiError(null); // Clear any previous error
 
     try {
-      await deleteData(`admin/v1/user/delete-user/${userId}`); // Call API
+      await deleteData(`user/delete-user/${userId}`); // Call API
       setLoading(false);
       onConfirm(); // Trigger parent refresh
       dispatch(resetDeleteState()); // Reset Redux state if necessary

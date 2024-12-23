@@ -52,29 +52,18 @@ const CreditEditReferenceModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validation for newCreditRef (ensure it's a number and greater than 0)
     if (newCreditRef <= 0 || isNaN(newCreditRef)) {
       alert("Please enter a valid credit reference greater than 0");
       return;
     }
 
-    // Dispatch the update action
     dispatch(updateCreditReference({ newCreditRef, password, userId })); // Pass userId here
 
-    // Call the parent onSubmit after dispatch
     onSubmit(newCreditRef, password);
 
     try {
-      // Call fetchDownline API to update and render the new value
       await fetchDownlineData(currentPage, entriesToShow);
-
-      // After the data is fetched, you can refresh the page or update state to reflect new data
-      // Option 1: Force a page reload
       window.location.reload();
-
-      // Option 2: Alternatively, if you're managing the downline data in your state, you can call a setState here to update the UI
-      // setDownlineData(newData);  // Replace `setDownlineData` with your actual state update logic
-
       setTimeout(() => {
         onCancel();
       }, 2000);

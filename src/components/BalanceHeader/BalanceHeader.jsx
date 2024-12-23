@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setBalanceData } from "../../Store/Slice/balanceSlice"; // Adjust path as needed
-import { getBalanceData } from "../../Services/Downlinelistapi"; // Adjust path as needed
+import { setBalanceData } from "../../Store/Slice/balanceSlice";
+import { getBalanceData } from "../../Services/Downlinelistapi"; 
 
 const BalanceHeader = () => {
   const dispatch = useDispatch();

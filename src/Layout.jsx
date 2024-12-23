@@ -1,35 +1,14 @@
-// import BalanceHeader from "./components/BalanceHeader/BalanceHeader";
-// import DownlineList from "./components/DownlineList/DownlineList";
-// import AddClientButton from "./components/Forms/AddClientButton";
-// import MenuHeader from "./components/Header/MenuHeader";
-// import TopHeader from "./components/Header/TopHeader";
-// import React from "react";
-
-// const Layout = ({ children }) => {
-//   return (
-//     <div>
-//       <TopHeader />
-//       <MenuHeader />
-//       <div className="p-6">
-//         <AddClientButton />
-//         <div className="mb-6">
-//           <BalanceHeader />
-//         </div>
-//         <div>{children}</div> {/* Dynamic content */}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default Layout;
-
 import React, { Suspense } from "react";
 
 // Lazily load components
 const TopHeader = React.lazy(() => import("./components/Header/TopHeader"));
 const MenuHeader = React.lazy(() => import("./components/Header/MenuHeader"));
-const AddClientButton = React.lazy(() => import("./components/Forms/AddClientButton"));
-const BalanceHeader = React.lazy(() => import("./components/BalanceHeader/BalanceHeader"));
+const AddClientButton = React.lazy(() =>
+  import("./components/Forms/AddClientButton")
+);
+const BalanceHeader = React.lazy(() =>
+  import("./components/BalanceHeader/BalanceHeader")
+);
 
 const Layout = ({ children }) => {
   return (
@@ -52,12 +31,7 @@ const Layout = ({ children }) => {
             <BalanceHeader />
           </Suspense>
         </div>
-<<<<<<<<< Temporary merge branch 1
-        <div>{children}</div> 
-=========
-
-        <div>{children}</div> {/* Dynamic content */}
->>>>>>>>> Temporary merge branch 2
+        <div>{children}</div>
       </div>
     </div>
   );

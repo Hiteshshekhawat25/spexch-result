@@ -15,7 +15,7 @@ const SuperAdminForm = () => {
     const fetchData = async () => {
       try {
         console.log("Fetching data...");
-        const response = await globalsettingsGetAPIAuth("admin/v1/admin/getglobal");
+        const response = await globalsettingsGetAPIAuth("admin/getglobal");
         console.log("Raw API response:", response);
   
         if (response.status === 200 && response.data && response.data.data) {
@@ -67,12 +67,12 @@ const SuperAdminForm = () => {
   
       if (recordId) {
         response = await globalsettingsPutAPIAuth(
-          `admin/v1/admin/updateGlobalSettings/${recordId}`,
+          `admin/updateGlobalSettings/${recordId}`,
           formData
         );
       } else {
         response = await globalsettingsPostAPIAuth(
-          "admin/v1/admin/createGlobalSettings",
+          "admin/createGlobalSettings",
           formData
         );
       }
