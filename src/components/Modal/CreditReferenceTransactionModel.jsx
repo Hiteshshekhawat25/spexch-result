@@ -70,8 +70,17 @@ const CreditReferenceTransactionModel = ({
         className="bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl relative"
       >
         {/* Modal Header */}
-        <div className="mb-4">
+        <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
           <h3 className="text-l font-semibold">Credit Reference Log</h3>
+          <button
+            onClick={() => {
+              // resetState();
+              onClose();
+            }}
+            className="cursor-pointer text-white text-2xl"
+          >
+            &times;
+          </button>
           {/* <span className="absolute bottom-4 right-4 text-sm text-gray-500">{username}</span> */}
         </div>
 
