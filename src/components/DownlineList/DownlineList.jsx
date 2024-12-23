@@ -81,10 +81,7 @@ const DownlineList = () => {
           return;
         }
 
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow
-        );
+        const result = await fetchDownlineData(currentPage, entriesToShow);
 
         if (result && result.data) {
           setData(result.data);
@@ -176,7 +173,7 @@ const DownlineList = () => {
 
       fetchUserRoles();
     }
-  }, [token, location.pathname,]);
+  }, [token, location.pathname]);
 
   useEffect(() => {
     if (location.pathname === "/user-downline-list") {
@@ -216,10 +213,13 @@ const DownlineList = () => {
   useEffect(() => {
     if (roleId) {
       const fetchUserByRole = async () => {
-       
         try {
-          const data = await fetchDownlineData(currentPage, entriesToShow,roleId,);
-          console.log("DATA",data);
+          const data = await fetchDownlineData(
+            currentPage,
+            entriesToShow,
+            roleId
+          );
+          console.log("DATA", data);
           setData(data?.data);
         } catch (error) {
           console.error("Error fetching users by role:", error);
@@ -441,7 +441,7 @@ const DownlineList = () => {
         </thead>
         <tbody>
           {(userFetchList.length > 0 ? userFetchList : filteredData).map(
-            (item, index) => (console.log("itrem",item),
+            (item, index) => (
               <tr key={index} className="border border-gray-300 bg-white">
                 <td className="px-4 py-5 text-sm">
                   {" "}
