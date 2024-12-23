@@ -32,8 +32,13 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
       const response = await performTransaction(type, requestData, token);
       if (response.success) {
         toast.success(response.message || "Transaction Successful");
-        resetState(); // Reset state after a successful transaction
-        onClose(); // Close the modal
+        resetState(); 
+        window.location.reload();
+
+        // // Close the modal after update and API call
+        setTimeout(() => {
+          oncancel();
+        }, 2000); 
       } else {
         toast.error(response.message || "Transaction Failed");
       }
