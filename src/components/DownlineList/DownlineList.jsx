@@ -480,7 +480,15 @@ const DownlineList = () => {
                 <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
                 <td className="px-4 py-3 text-sm">{}</td>
                 <td className="px-4 py-3 text-sm">{item.partnership}</td>
-                <td className="x-4 py-3 font-bold text-green-600 text-l">
+                <td
+                  className={`px-4 py-3 font-bold text-l ${
+                    item.status === "active"
+                      ? "text-green-600"
+                      : item.status === "suspended" || item.status === "locked"
+                      ? "text-red-600"
+                      : "text-gray-600" // Default color for other statuses
+                  }`}
+                >
                   {item.status}
                 </td>
                 <td className="px-4 py-3 text-sm">
