@@ -64,13 +64,15 @@ const EditExposureLimitModal = ({
 
     try {
       // Call fetchDownline API to update and render the new value
-      await fetchDownlineData(token, currentPage, entriesToShow);
+      await fetchDownlineData( currentPage, entriesToShow);
 
       // // After the data is fetched, refresh the page or update state to reflect new data
       window.location.reload();
 
       // // Close the modal after update and API call
-      onCancel();
+      setTimeout(() => {
+        onCancel();
+      }, 2000);
     } catch (error) {
       console.error("Error fetching downline data:", error);
       setError("Failed to fetch the downline data.");

@@ -37,8 +37,8 @@ const DownlineList = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
-  const [isModalOpen, setIsModalOpen] = useState(false); // State for opening the modal
-  const [selectedUser, setSelectedUser] = useState(null); // State for storing selected user data
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [creditReferenceTransactionList, setCreditReferenceTransactionList] =
     useState(false);
@@ -104,7 +104,7 @@ const DownlineList = () => {
     if (token) {
       const fetchUserRoles = async () => {
         try {
-          const rolesArray = await fetchRoles(token); // Fetch roles
+          const rolesArray = await fetchRoles(token);
 
           if (Array.isArray(rolesArray)) {
             const rolesData = rolesArray.map((role) => ({
@@ -191,10 +191,7 @@ const DownlineList = () => {
                 role_name: role.role_name,
                 role_id: role._id,
               }));
-
               setRoles(rolesData);
-
-              // Find the "user" role and set its role_id
               const userRole = rolesData.find(
                 (role) => role.role_name === "user"
               );
@@ -401,11 +398,12 @@ const DownlineList = () => {
             {[
               { key: "username", label: "Username" },
               { key: "creditRef", label: "CreditRef" },
-              { key: "partnership", label: "Partnership" },
               { key: "balance", label: "Balance" },
-              { key: "exposure", label: "Exposure" },
+              { key: "exposures", label: "Exposures" },
+              { key: "exposure", label: "Exposure Limit" },
               { key: "availableBalance", label: "Avail. Bal" },
               { key: "refPL", label: "Ref. P/L" },
+              { key: "partnership", label: "Partnership" },
               { key: "status", label: "Status" },
             ].map(({ key, label }) => (
               <th
@@ -443,7 +441,7 @@ const DownlineList = () => {
         </thead>
         <tbody>
           {(userFetchList.length > 0 ? userFetchList : filteredData).map(
-            (item, index) => (
+            (item, index) => (console.log("itrem",item),
               <tr key={index} className="border border-gray-300 bg-white">
                 <td className="px-4 py-5 text-sm">
                   {" "}
@@ -468,8 +466,8 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
                 <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
+                <td className="px-4 py-3 text-sm">0</td>
                 <td className="px-4 py-3 text-sm text-blue-900">
                   {item.exposureLimit}
                   <div className="ml-2 inline-flex space-x-2">
@@ -480,7 +478,8 @@ const DownlineList = () => {
                   </div>
                 </td>
                 <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm"></td>
+                <td className="px-4 py-3 text-sm">{}</td>
+                <td className="px-4 py-3 text-sm">{item.partnership}</td>
                 <td className="x-4 py-3 font-bold text-green-600 text-l">
                   {item.status}
                 </td>

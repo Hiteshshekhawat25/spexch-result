@@ -68,15 +68,15 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
             <label className="block text-sm font-medium text-gray-700 w-1/3">
               Balance
             </label>
-            <input
-              type="number"
-              id="amount"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              className="w-full p-2 border border-black rounded-lg text-gray-700"
-              placeholder="Enter amount"
-              required
-            />
+            <div className="w-2/3 flex items-center space-x-2">
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="Enter Amount"
+                className="w-full p-2 border border-black rounded-lg text-gray-700"
+              />
+            </div>
           </div>
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">

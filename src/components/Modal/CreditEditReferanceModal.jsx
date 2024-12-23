@@ -66,7 +66,7 @@ const CreditEditReferenceModal = ({
 
     try {
       // Call fetchDownline API to update and render the new value
-      await fetchDownlineData(token, currentPage, entriesToShow);
+      await fetchDownlineData(currentPage, entriesToShow);
 
       // After the data is fetched, you can refresh the page or update state to reflect new data
       // Option 1: Force a page reload
