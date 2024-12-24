@@ -1,10 +1,48 @@
-// ActivityLog.jsx
-import React from 'react';
-import { useSelector } from 'react-redux';
-import { selectActivityLogs } from '../../Store/Slice/activityLogSlice';
+// // ActivityLog.jsx
+
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectActivityLogs, setActivityLogs, setActivityLogsLoading, setActivityLogsError } from '../../Store/Slice/activityLogSlice';
+ // Adjust import path if necessary
+import { getUserData } from '../../Services/Downlinelistapi';
 
 const ActivityLog = () => {
+  const dispatch = useDispatch();
   const logs = useSelector(selectActivityLogs);
+  const activityLogsStatus = useSelector(state => state.activityLog.status); // Assuming you have a status in your slice
+  const activityLogsError = useSelector(state => state.activityLog.error); // Assuming you have an error in your slice
+
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  const userId = userData?.data?._id;
+
+  useEffect(() => {
+    if (activityLogsStatus === 'idle' && userId) {
+      console.log('Setting activity logs to loading...');
+      dispatch(setActivityLogsLoading());
+
+      const fetchActivityLogs = async () => {
+        try {
+          const response = await getUserData(`user/login-activity/${userId}?page=2&limit=3`);
+          console.log('API Response:', response.data);
+          dispatch(setActivityLogs(response.data.data));
+        } catch (error) {
+          console.error('Fetch Activity Logs Error:', error);
+          dispatch(setActivityLogsError(error.message || 'Failed to fetch activity logs'));
+        }
+      };
+
+      fetchActivityLogs();
+    }
+  }, [activityLogsStatus, dispatch, userId]);
+
+  // Handle loading and error states
+  if (activityLogsStatus === 'loading') {
+    return <div>Loading...</div>;
+  }
+
+  if (activityLogsStatus === 'failed') {
+    return <div>Error: {activityLogsError}</div>;
+  }
 
   return (
     <div className="border border-gray-400 rounded-lg bg-white shadow-sm">
@@ -32,7 +70,7 @@ const ActivityLog = () => {
                 <td className="border border-gray-400 px-4 py-2">{log.loginStatus}</td>
                 <td className="border border-gray-400 px-4 py-2">{log.ipAddress}</td>
                 <td className="border border-gray-400 px-4 py-2">{log.isp}</td>
-                <td className="border border-gray-400 px-4 py-2">{log.location}</td>
+                <td className="border border-gray-400 px-4 py-2">{log.city}/{log.country}</td>
               </tr>
             ))}
           </tbody>
@@ -43,3 +81,4 @@ const ActivityLog = () => {
 };
 
 export default ActivityLog;
+
