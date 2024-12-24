@@ -1,8 +1,17 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchSportsList, updateGameStatusThunk } from "../../Store/Slice/sportsSettingSlice";
-import { selectSportsList, selectLoading, selectError } from "../../Store/Selectors/SportsSelector";
+import {
+  fetchSportsList,
+  updateGameStatusThunk,
+  fetchUserGameStatusThunk,
+} from "../../Store/Slice/sportsSettingSlice";
+import {
+  selectSportsList,
+  selectLoading,
+  selectError,
+} from "../../Store/Selectors/SportsSelector";
 import { toast } from "react-toastify";
+import { IoClose } from "react-icons/io5";
 
 const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
   const dispatch = useDispatch();
@@ -11,19 +20,28 @@ const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
   const sportsList = useSelector(selectSportsList);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
+  console.log("Sports compone List:", sportsList);
 
   const token = localStorage.getItem("authToken");
 
-  // Fetch data when modal opens
+  // Fetch sports list when modal opens
   useEffect(() => {
     if (isOpen) {
-      dispatch(fetchSportsList(token));
+      dispatch(fetchSportsList({ token }));
     }
   }, [isOpen, dispatch, token]);
 
-  // Handle checkbox state changes
+  // Fetch specific user-game status when userId changes
+  useEffect(() => {
+    if (isOpen && userId) {
+      dispatch(fetchUserGameStatusThunk({ userId }));
+    }
+  }, [isOpen, userId, dispatch]);
+
   const handleCheckboxChange = (gameId, isChecked) => {
-    dispatch(updateGameStatusThunk({ token, userId, gameId, isChecked: !isChecked }))
+    dispatch(
+      updateGameStatusThunk({ token, userId, gameId, isChecked: !isChecked })
+    )
       .unwrap()
       .then((response) => {
         toast.success(response.message || "Game status updated successfully");
@@ -36,15 +54,16 @@ const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-500 bg-opacity-75">
-          <div className="bg-white rounded-lg w-1/3 shadow-lg p-6 relative">
-            <button
-              className="absolute top-2 right-2 text-gray-600"
-              onClick={onClose}
-            >
-              ✕
-            </button>
-            <h2 className="text-xl font-semibold text-center mb-4">Sports Settings</h2>
+        <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
+          <div className="bg-white rounded-lg w-[500px] mt-12">
+            {/* Header */}
+            <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
+              <span>Sports Settings</span>
+              <IoClose
+                onClick={onClose} 
+                className="cursor-pointer text-white text-2xl"
+              />
+            </div>
 
             {loading && <p className="text-center text-gray-500">Loading...</p>}
             {error && <p className="text-center text-red-500">{error}</p>}
@@ -59,15 +78,21 @@ const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {sportsList.map((sport, index) => (
-                    <tr key={sport.gameId} className="border-b">
+                  {console.log("sportsLissstedd", sportsList)}
+                  {sportsList?.map((sport, index) => (
+                    <tr key={sport?.gameId} className="border-b">
                       <td className="px-4 py-2 text-center">{index + 1}</td>
                       <td className="px-4 py-2">{sport.name}</td>
                       <td className="px-4 py-2 text-center">
                         <input
                           type="checkbox"
-                          checked={sport.isChecked}
-                          onChange={() => handleCheckboxChange(sport.gameId, sport.isChecked)}
+                          checked={sport?.isChecked} 
+                          onChange={() =>
+                            handleCheckboxChange(
+                              sport?.gameId,
+                              sport?.isChecked
+                            )
+                          }
                           className="form-checkbox h-5 w-5 text-blue-600"
                         />
                       </td>

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { performTransaction } from "../../Services/DownlineListApi";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const DepositModal = ({ isOpen, onClose, userId }) => {
   const [amount, setAmount] = useState("");
   const [remark, setRemark] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const { userData, error } = useSelector((state) => state.user);
+  console.log("userDatauserData",userData?.data?.name);
 
   const token = localStorage.getItem("authToken");
 
@@ -32,13 +35,11 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
       const response = await performTransaction(type, requestData, token);
       if (response.success) {
         toast.success(response.message || "Transaction Successful");
-        resetState(); 
+        resetState();
         window.location.reload();
-
-        // // Close the modal after update and API call
         setTimeout(() => {
           oncancel();
-        }, 2000); 
+        }, 2000);
       } else {
         toast.error(response.message || "Transaction Failed");
       }
@@ -54,7 +55,7 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
       <div className="bg-white rounded-lg w-[500px] mt-12">
         {/* Modal Header */}
         <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
-          <span>Banking - Master -</span>
+          <span>Banking - Master -{userData?.data?.name}</span>
           <button
             onClick={() => {
               resetState();

@@ -1,55 +1,78 @@
-// AccountStatus.js
-import React, { useState } from "react";
-import { updateUserStatus } from "../../Services/DownlineListApi";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { toast } from "react-toastify";
+import {
+  resetStatusState,
+  updateUserStatusThunk,
+} from "../../Store/Slice/accountStatusSlice";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
+import { BASE_URL } from "../../Constant/Api";
+import { getUserDatabyId } from "../../Services/UserInfoApi";
 
 const AccountStatus = ({ userId, isOpen, onClose }) => {
-  console.log("00000", userId);
   const [status, setStatus] = useState("active");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [statusUpdated, setStatusUpdated] = useState(false);
+  const [userName, setUserName] = useState("");
+  const dispatch = useDispatch();
+  const { loading, error, successMessage } = useSelector(
+    (state) => state.accountStatus
+  );
+console.log("userID",userId)
+  useEffect(() => {
+    if (isOpen) {
+      fetchUserStatus();
+    }
+  }, [isOpen]);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(resetStatusState());
+      onClose();
+      setTimeout(() => {
+        // Optional: Reload or perform any additional actions
+        window.location.reload();
+      }, 1000);
+    }
+    if (error) {
+      toast.error(error);
+    }
+  }, [successMessage, error, dispatch]);
 
-  const handleStatusChange = (newStatus) => {
-    setStatus(newStatus);
-  };
+  
+const fetchUserStatus = async () => {
+  try {
+    const userData = await getUserDatabyId(userId);
+    console.log("userdata",userData);
+    setStatus(userData?.data?.status);
+    setUserName(userData?.data?.userName);
+  } catch (err) {
+    toast.error("Failed to fetch user data.");
+  }
+};
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const response = await updateUserStatus(userId, status, password);
-      if (response) {
-        setStatusUpdated(true);
-        toast.success(response.message || "Status updated successfully");
-      }
-      window.location.reload();
-    } catch (err) {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+  const handleStatusChange = (newStatus) => {
+    setStatus(newStatus);
+  };
+
+  if (!isOpen) return null;
+
+  const handleSubmit = () => {
+    dispatch(updateUserStatusThunk({ userId, newStatus: status, password }));
   };
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-12">
-        {/* Modal Header */}
         <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
-          {" "}
-          {/* Reduced padding */}
-          <span>Change Status {""}</span>
-          {/* Close Button */}
+          <span>Change Status</span>
           <IoClose
-            onClick={onClose} // Close the modal
+            onClick={onClose}
             className="cursor-pointer text-white text-2xl"
           />
         </div>
@@ -59,12 +82,18 @@ const AccountStatus = ({ userId, isOpen, onClose }) => {
           <div className="flex justify-between items-center mb-4">
             <div className="font-medium text-lg font-bold">
               <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
-                {"User"}{" "}
+                User
               </span>
-              rinku8
+              {userName}
             </div>
             <div
-              className={`text-${status === "active" ? "green" : "red"}-500`}
+              className={`text-${
+                status === "active"
+                  ? "green"
+                  : status === "suspended"
+                  ? "red"
+                  : "gray"
+              }-500`}
             >
               {status === "active"
                 ? "Active"
