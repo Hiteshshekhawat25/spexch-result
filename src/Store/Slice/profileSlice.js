@@ -18,12 +18,20 @@ const profileSlice = createSlice({
   initialState,
   reducers: {
     updateProfile: (state, action) => {
-      return { ...state, ...action.payload };
+      // Merge payload into the state and set status to 'succeeded'
+      return { 
+        ...state, 
+        ...action.payload, 
+        status: 'succeeded', // Mark status as succeeded
+        error: null // Clear any previous errors
+      };
     },
     setProfileLoading: (state) => {
+      // Set status to loading
       state.status = 'loading';
     },
     setProfileError: (state, action) => {
+      // Set status to failed and store the error message
       state.status = 'failed';
       state.error = action.payload;
     },
@@ -31,36 +39,12 @@ const profileSlice = createSlice({
 });
 
 export const { updateProfile, setProfileLoading, setProfileError } = profileSlice.actions;
+
+// Selectors to access specific parts of the state
 export const selectProfileData = (state) => state.profile;
 export const selectProfileStatus = (state) => state.profile.status;
 export const selectProfileError = (state) => state.profile.error;
 
 export default profileSlice.reducer;
 
-// // Store/Slice/profileSlice.js
-// import { createSlice } from '@reduxjs/toolkit';
 
-// const initialState = {
-//   name: 'John Doe',
-//   commission: 5,
-//   rollingCommission: 10,
-//   agentRollingCommission: 15,
-//   currency: 'USD',
-//   partnership: 'Standard',
-//   mobileNumber: '123-456-7890',
-//   password: '******',
-// };
-
-// const profileSlice = createSlice({
-//   name: 'profile',
-//   initialState,
-//   reducers: {
-//     updateProfile: (state, action) => {
-//       return { ...state, ...action.payload };
-//     },
-//   },
-// });
-
-// export const { updateProfile } = profileSlice.actions;
-// export const selectProfileData = (state) => state.profile;
-// export default profileSlice.reducer;
