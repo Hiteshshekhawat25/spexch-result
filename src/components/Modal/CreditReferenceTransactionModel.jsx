@@ -5,12 +5,11 @@ import { fetchCreditReference } from "../../Store/Slice/creditTransactionSlice";
 const CreditReferenceTransactionModel = ({
   userId,
   username,
-  page = 1,
-  limit = 5,
+  currentPage,
+  entriesToShow,
   onClose,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const [currentPage, setCurrentPage] = useState(page);
   const modalRef = useRef(null);
   const dispatch = useDispatch();
 
@@ -22,10 +21,10 @@ const CreditReferenceTransactionModel = ({
   useEffect(() => {
     if (isOpen) {
       dispatch(
-        fetchCreditReference({ userId, username, page: currentPage, limit })
+        fetchCreditReference({ userId, username, page: currentPage, entriesToShow })
       );
     }
-  }, [dispatch, userId, username, currentPage, limit, isOpen]);
+  }, [dispatch, userId, username, currentPage, entriesToShow, isOpen]);
 
   const handleClickOutside = (event) => {
     if (modalRef.current && !modalRef.current.contains(event.target)) {

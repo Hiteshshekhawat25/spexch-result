@@ -81,13 +81,12 @@ const EditExposureLimitModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      {/* Modal container adjusted to center properly and cover the screen */}
-      <div className="bg-white rounded-lg w-[500px] mt-20"> {/* Adjusted margin-top to mt-20 for proper centering */}
+      <div className="bg-white rounded-lg w-[500px] mt-20">
         {/* Header */}
         <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-2">
           <span>Edit Exposure Limit - {username}</span>
           <IoClose
-            onClick={onCancel} // Close the modal
+            onClick={onCancel} 
             className="cursor-pointer text-white text-2xl"
           />
         </div>
