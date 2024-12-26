@@ -13,7 +13,8 @@ import {
 import { toast } from "react-toastify";
 import { IoClose } from "react-icons/io5";
 
-const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
+const SportsSettingsModal = ({ isOpen, onClose, userId,currentPage,entriesToShow }) => {
+
   const dispatch = useDispatch();
 
   // Selectors
@@ -31,7 +32,6 @@ const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
     }
   }, [isOpen, dispatch, token]);
 
-  // Fetch specific user-game status when userId changes
   useEffect(() => {
     if (isOpen && userId) {
       dispatch(fetchUserGameStatusThunk({ userId }));

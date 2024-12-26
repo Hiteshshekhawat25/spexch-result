@@ -57,7 +57,7 @@ const creditSlice = createSlice({
       .addCase(updateCreditReference.fulfilled, (state, action) => {
         state.loading = false;
         state.creditRef = action.payload;
-      })
+      })      
       .addCase(updateCreditReference.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

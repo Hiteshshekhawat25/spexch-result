@@ -1,15 +1,25 @@
 import React, { useState } from "react";
-import { performTransaction } from "../../Services/DownlineListApi";
+import {
+  fetchDownlineData,
+  performTransaction,
+} from "../../Services/DownlineListApi";
 import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setDownlineData } from "../../Store/Slice/downlineSlice";
 
-const DepositModal = ({ isOpen, onClose, userId }) => {
+const DepositModal = ({
+  isOpen,
+  onClose,
+  userId,
+  currentPage,
+  entriesToShow,
+}) => {
   const [amount, setAmount] = useState("");
   const [remark, setRemark] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { userData, error } = useSelector((state) => state.user);
-  console.log("userDatauserData",userData?.data?.name);
+  const dispatch = useDispatch();
 
   const token = localStorage.getItem("authToken");
 
@@ -20,7 +30,6 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
     setRemark("");
     setPassword("");
   };
-
   const handleTransaction = async (type) => {
     setLoading(true);
 
@@ -35,16 +44,19 @@ const DepositModal = ({ isOpen, onClose, userId }) => {
       const response = await performTransaction(type, requestData, token);
       if (response.success) {
         toast.success(response.message || "Transaction Successful");
-        resetState();
-        window.location.reload();
-        setTimeout(() => {
-          oncancel();
-        }, 2000);
+        const result = await fetchDownlineData(currentPage, entriesToShow);
+        if (result && result.data) {
+          dispatch(setDownlineData(result.data));
+          resetState();
+          onClose();
+        } else {
+          toast.warning("Unable to fetch updated downline data.");
+        }
       } else {
         toast.error(response.message || "Transaction Failed");
       }
     } catch (err) {
-      toast.error("An error occurred while processing the transaction.");
+      toast.error(err || "An error occurred while processing the transaction.");
     } finally {
       setLoading(false);
     }

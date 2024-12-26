@@ -782,6 +782,8 @@ const DownlineList = () => {
             onClose={handleDeleteModalClose}
             // onConfirm={handleDeleteConfirm}
             userId={selectedUser?._id}
+            currentPage={currentPage}
+            entriesToShow={entriesToShow}
           />
         </>
       )}
@@ -791,6 +793,8 @@ const DownlineList = () => {
         onClose={handleDeleteModalClose}
         // onConfirm={handleDeleteConfirm}
         userId={selectedUser?._id}
+        currentPage={currentPage}
+        entriesToShow={entriesToShow}
       />
       {isExposureModalOpen && selectedExposureUser && (
         <>
