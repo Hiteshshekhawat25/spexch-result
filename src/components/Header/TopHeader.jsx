@@ -13,12 +13,14 @@ import spexec from '../../assets/spexec.jpg';
 const TopHeader = () => {
   const dispatch = useDispatch();
   const { userData, loading, error } = useSelector((state) => state.user);
+  console.log("userData",userData)
 
   useEffect(() => {
     const fetchData = async () => {
       dispatch(fetchUserDataStart());
       try {
         const data = await getUserData();
+        console.log("user ka data",data);
         dispatch(fetchUserDataSuccess(data));
       } catch (err) {
         dispatch(fetchUserDataFailure(err.message));
@@ -45,6 +47,7 @@ const TopHeader = () => {
         ) : userData ? (
           <>
             <span>{userData?.data?.name}</span>
+            <span>IRP {userData?.data?.openingBalance}</span>
             <button
               className="hover:underline"
               onClick={() => {

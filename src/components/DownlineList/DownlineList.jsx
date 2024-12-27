@@ -371,7 +371,7 @@ const DownlineList = () => {
   };
 
   return (
-    <div className="p-4 border border-gray-300 rounded-md bg-white">
+    <div className="p-4 border border-gray-200 rounded-md bg-white">
       <div className="flex justify-between items-center mb-4">
         <div className="border border-gray-300 p-2 rounded-md">
           <label className="mr-2 text-sm font-medium">Show</label>
@@ -414,12 +414,12 @@ const DownlineList = () => {
             ].map(({ key, label }) => (
               <th
                 key={key}
-                className="border border-gray-300 text-left px-4 py-3 text-sm font-medium text-black cursor-pointer"
+                className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
                 onClick={() => handleSort(key)}
               >
                 <div className="flex justify-between items-center">
                   {label}
-                  <div className="flex flex-col items-center space-y-1 ml-2">
+                  <div className="flex flex-col items-center ml-2">
                     <FaSortUp
                       className={`${
                         sortConfig.key === key &&
@@ -440,7 +440,7 @@ const DownlineList = () => {
                 </div>
               </th>
             ))}
-            <th className="border border-gray-300 text-left px-4 py-3 text-sm font-medium text-black">
+            <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
               Actions
             </th>
           </tr>
@@ -448,18 +448,18 @@ const DownlineList = () => {
         <tbody>
           {(userFetchList.length > 0 ? userFetchList : downlineData).map(
             (item, index) => (
-              <tr key={index} className="border border-gray-300 bg-white">
-                <td className="px-4 py-5 text-sm">
+              <tr key={index} className="border border-gray-400 bg-white">
+                <td className="px-4 py-2 text-sm">
                   {" "}
                   <span
-                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
+                    className="bg-green-500 text-white px-2 py-2 mr-1 rounded font-bold text-l"
                     onClick={() => handleUsernameList(item)}
                   >
                     {item.role_name}
                   </span>
                   <span className="text-black">{item.username}</span>
                 </td>
-                <td className="px-4 py-3 text-md text-blue-700">
+                <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700">
                   {item.creditReference}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
@@ -472,9 +472,9 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm">0</td>
-                <td className="px-4 py-3 text-sm text-blue-900">
+                <td className="border border-gray-400 px-4 py-2 text-sm">{item.openingBalance}</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm">0</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900">
                   {item.exposureLimit}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
@@ -483,11 +483,11 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm">{}</td>
-                <td className="px-4 py-3 text-sm">{item.partnership}</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm">{item.openingBalance}</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm">{}</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm">{item.partnership}</td>
                 <td
-                  className={`px-4 py-3 font-bold text-l ${
+                  className={`border border-gray-400 px-4 py-2 font-bold text-l ${
                     item.status === "active"
                       ? "text-green-600"
                       : item.status === "suspended" || item.status === "locked"
@@ -497,7 +497,7 @@ const DownlineList = () => {
                 >
                   {item.status}
                 </td>
-                <td className="px-4 py-3 text-sm">
+                <td className="px-4 py-2 text-sm">
                   <div className="flex space-x-2">
                     <div
                       onClick={() => handleIconClick(item)}
