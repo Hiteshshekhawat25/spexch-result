@@ -17,7 +17,7 @@ const CreditEditReferenceModal = ({
   currentPage,
   entriesToShow,
 }) => {
-  const [newCreditRef, setNewCreditRef] = useState(currentCreditRef);
+  const [newCreditRef, setNewCreditRef] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);

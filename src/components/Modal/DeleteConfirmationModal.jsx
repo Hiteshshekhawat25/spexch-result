@@ -1,24 +1,24 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MdClose } from "react-icons/md";
-import { resetDeleteState } from "../../Store/Slice/deleteSlice"; // Keep the reset action
+import { resetDeleteState } from "../../Store/Slice/deleteSlice";
 import { deleteData } from "../../Services/Downlinelistapi";
 const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
   const dispatch = useDispatch();
-  const { error, success } = useSelector((state) => state.delete); // Keep using Redux for `resetDeleteState`
-  const [loading, setLoading] = React.useState(false); // Local state for loading
-  const [apiError, setApiError] = React.useState(null); // Local state for error
+  const { error, success } = useSelector((state) => state.delete);
+  const [loading, setLoading] = React.useState(false); 
+  const [apiError, setApiError] = React.useState(null); 
 
   const handleDelete = async () => {
     setLoading(true);
-    setApiError(null); // Clear any previous error
+    setApiError(null); 
 
     try {
-      await deleteData(`user/delete-user/${userId}`); // Call API
+      await deleteData(`user/delete-user/${userId}`); 
       setLoading(false);
-      onConfirm(); // Trigger parent refresh
-      dispatch(resetDeleteState()); // Reset Redux state if necessary
-      onClose(); // Close the modal
+      onConfirm(); 
+      dispatch(resetDeleteState()); 
+      onClose(); 
     } catch (err) {
       setLoading(false);
       const errorMessage = err.response?.data?.message || "An error occurred. Please try again.";
@@ -28,7 +28,6 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
 
   React.useEffect(() => {
     if (apiError) {
-      // Automatically clear the error message after 5 seconds
       const timer = setTimeout(() => setApiError(null), 5000);
       return () => clearTimeout(timer); // Cleanup timer on unmount
     }
@@ -36,7 +35,6 @@ const DeleteConfirmationModal = ({ isOpen, onClose, onConfirm, userId }) => {
 
   if (!isOpen) return null;
 
-  // Handle error rendering
   const errorMessage = apiError || (error && (typeof error === "object" ? error.message : error));
 
   return (

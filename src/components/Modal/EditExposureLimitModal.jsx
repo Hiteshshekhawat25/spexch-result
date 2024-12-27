@@ -17,11 +17,11 @@ const EditExposureLimitModal = ({
   currentPage,
   entriesToShow,
 }) => {
-  console.log("currentExposureLimit", currentExposureLimit);
+  // console.log("currentExposureLimit", currentExposureLimit);
   const dispatch = useDispatch();
 
   const [newExposureLimit, setNewExposureLimit] =
-    useState(currentExposureLimit);
+    useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
