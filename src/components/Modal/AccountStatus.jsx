@@ -9,8 +9,16 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Constant/Api";
 import { getUserDatabyId } from "../../Services/UserInfoApi";
+import { setDownlineData, setError } from "../../Store/Slice/downlineSlice";
+import { fetchDownlineData } from "../../Services/Downlinelistapi";
 
-const AccountStatus = ({ userId, isOpen, onClose }) => {
+const AccountStatus = ({
+  userId,
+  isOpen,
+  onClose,
+  currentPage,
+  entriesToShow,
+}) => {
   const [status, setStatus] = useState("active");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
@@ -18,7 +26,8 @@ const AccountStatus = ({ userId, isOpen, onClose }) => {
   const { loading, error, successMessage } = useSelector(
     (state) => state.accountStatus
   );
-console.log("userID",userId)
+
+  console.log("userID", userId);
   useEffect(() => {
     if (isOpen) {
       fetchUserStatus();
@@ -27,30 +36,24 @@ console.log("userID",userId)
 
   useEffect(() => {
     if (successMessage) {
-      toast.success(successMessage);
+      // toast.success(successMessage);
       dispatch(resetStatusState());
       onClose();
-      setTimeout(() => {
-        // Optional: Reload or perform any additional actions
-        window.location.reload();
-      }, 1000);
     }
     if (error) {
       toast.error(error);
     }
   }, [successMessage, error, dispatch]);
 
-  
-const fetchUserStatus = async () => {
-  try {
-    const userData = await getUserDatabyId(userId);
-    console.log("userdata",userData);
-    setStatus(userData?.data?.status);
-    setUserName(userData?.data?.userName);
-  } catch (err) {
-    toast.error("Failed to fetch user data.");
-  }
-};
+  const fetchUserStatus = async () => {
+    try {
+      const userData = await getUserDatabyId(userId);
+      setStatus(userData?.data?.status);
+      setUserName(userData?.data?.userName);
+    } catch (err) {
+      toast.error("Failed to fetch user data.");
+    }
+  };
 
   const handlePasswordChange = (event) => {
     setPassword(event.target.value);
@@ -62,8 +65,31 @@ const fetchUserStatus = async () => {
 
   if (!isOpen) return null;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     dispatch(updateUserStatusThunk({ userId, newStatus: status, password }));
+
+    try {
+      const result = await fetchDownlineData(currentPage, entriesToShow);
+
+      if (result && result.data) {
+        dispatch(setDownlineData(result.data));
+
+        setPassword("");
+
+        onClose();
+
+        toast.success("Status updated successfully");
+      } else {
+        toast.warning("Unable to fetch updated downline data.");
+      }
+    } catch (error) {
+      console.error("Error fetching downline data:", error);
+
+      dispatch(setError(error.message || "Failed to fetch the downline data."));
+      toast.error(
+        error.message || "An error occurred while fetching the downline data."
+      );
+    }
   };
 
   return (

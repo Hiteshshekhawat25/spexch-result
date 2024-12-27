@@ -23,7 +23,6 @@ export const fetchSportsList = createAsyncThunk(
 export const updateGameStatusThunk = createAsyncThunk(
   "sportsSettings/updateGameStatus",
   async ({ token, userId, gameId, isChecked }, { rejectWithValue }) => {
-    console.log("userId", userId)
     try {
 
       const response = await axios.put(
@@ -97,7 +96,7 @@ const sportsSettingSlice = createSlice({
               (status) => status.gameId === game.gameId
             );
             if (userStatus) {
-              game.isChecked = userStatus.active; // Override with user-specific status
+              game.isChecked = userStatus.active;
             }
           });
         }
@@ -108,13 +107,11 @@ const sportsSettingSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Update game status
       .addCase(updateGameStatusThunk.fulfilled, (state, action) => {
         const { gameId, isChecked } = action.payload;
         const sport = state.sportsList.find((sport) => sport.gameId === gameId);
         if (sport) sport.isChecked = isChecked;
       })
-      // Fetch user-game status
       .addCase(fetchUserGameStatusThunk.pending, (state) => {
         state.loading = true;
         state.error = null;

@@ -8,16 +8,19 @@ import {
 } from "../../Store/Slice/userInfoSlice";
 import { getUserData } from "../../Services/UserInfoApi";
 import { Link } from "react-router-dom";
+import spexec from '../../assets/spexec.jpg';
 
 const TopHeader = () => {
   const dispatch = useDispatch();
   const { userData, loading, error } = useSelector((state) => state.user);
+  console.log("userData",userData)
 
   useEffect(() => {
     const fetchData = async () => {
       dispatch(fetchUserDataStart());
       try {
         const data = await getUserData();
+        console.log("user ka data",data);
         dispatch(fetchUserDataSuccess(data));
       } catch (err) {
         dispatch(fetchUserDataFailure(err.message));
@@ -28,10 +31,12 @@ const TopHeader = () => {
   }, [dispatch]);
 
   return (
-    <div className="w-full bg-NavyBlue text-white py-6 px-6 flex justify-between items-center">
+    <div className="w-full bg-gradient-blue text-white py-6 px-6 flex justify-between items-center">
       <div className="flex items-center space-x-6">
         <Link to="/dashboard">
-          <div className="text-xl font-bold ml-8 pl-2">SPEXCH</div>
+        <div className="text-xl font-bold ml-8">
+            <img src={spexec} alt="Logo" height={100} width={100} />
+          </div>
         </Link>
       </div>
       <div className="flex items-center space-x-4">
@@ -42,6 +47,7 @@ const TopHeader = () => {
         ) : userData ? (
           <>
             <span>{userData?.data?.name}</span>
+            <span>IRP {userData?.data?.openingBalance}</span>
             <button
               className="hover:underline"
               onClick={() => {

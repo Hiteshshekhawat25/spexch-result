@@ -27,7 +27,7 @@ export const getBalanceData = async (url) => {
   }
 };
 
-export const getAccountStatementData  = async (url) => {
+export const getAccountStatementData = async (url) => {
   const token = localStorage.getItem("authToken");
 
   try {
@@ -51,7 +51,7 @@ export const getAccountStatementData  = async (url) => {
   }
 };
 
-export const getUserData  = async (url) => {
+export const getUserData = async (url) => {
   const token = localStorage.getItem("authToken");
 
   try {
@@ -103,7 +103,7 @@ export const deleteData = async (url) => {
 // POST with Authorization for Create New Match
 export const createNewMatchAPIAuth = async (url, params) => {
   const token = localStorage.getItem("authToken");
-  console.log("token",token)
+  console.log("token", token)
 
   try {
     const response = await axios.post(`${BASE_URL}/${url}`, params, {
@@ -112,11 +112,11 @@ export const createNewMatchAPIAuth = async (url, params) => {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },
-      
+
     });
     return response;
-    
-   
+
+
   } catch (error) {
     // Handle specific token expiry case
     if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
@@ -127,7 +127,7 @@ export const createNewMatchAPIAuth = async (url, params) => {
     console.error("API error:", error.response?.data || error.message);
     throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }
-   
+
 };
 
 // GET with Authorization for Create New Match
@@ -180,21 +180,18 @@ export const putUpdateMatchAPIAuth = async (url, params) => {
 };
 
 // Api to get list of everyone in downline list
-export const fetchDownlineData = async ( currentPage, entriesToShow,roleId) => {
+export const fetchDownlineData = async (currentPage, entriesToShow, roleId) => {
   try {
-     const token = localStorage.getItem("authToken");
-    // Prepare parameters
+    const token = localStorage.getItem("authToken");
     const params = {
       page: currentPage,
       limit: entriesToShow,
     };
 
-    // Include roleId in params if it is provided
     if (roleId) {
       params.role = roleId;
     }
 
-    // Make the API call with or without roleId
     const response = await axios.get(`${BASE_URL}/user/get-user`, {
       params: params,
       headers: {
@@ -202,10 +199,9 @@ export const fetchDownlineData = async ( currentPage, entriesToShow,roleId) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("params",params);
 
 
-    return response.data; // Return the data from the response
+    return response.data;
   } catch (error) {
     throw new Error(error.response ? error.response.data.message : "Failed to fetch data");
   }
@@ -216,7 +212,7 @@ export const fetchDownlineData = async ( currentPage, entriesToShow,roleId) => {
 //api call to change status of accounts
 export const updateUserStatus = async (userId, newStatus, password) => {
   const token = localStorage.getItem("authToken");
-  console.log("token",token)
+  console.log("token", token)
 
   try {
     const response = await axios.put(
@@ -233,7 +229,6 @@ export const updateUserStatus = async (userId, newStatus, password) => {
         },
       }
     );
-    console.log("user response-account",response?.data?.data);
     return response?.data?.data;
   } catch (error) {
     console.error("Error updating user status:", error);
@@ -299,7 +294,7 @@ export const updateGameStatus = async (token, userId, gameId, active) => {
         },
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error) {
     throw new Error(
       error.response ? error.response.data.message : "Failed to update game status"
@@ -323,7 +318,7 @@ export const getGameActionStatus = async (token, userId) => {
         },
       }
     );
-    return response.data; 
+    return response.data;
   } catch (error) {
     throw new Error(
       error.response ? error.response.data.message : "Failed to update game status"

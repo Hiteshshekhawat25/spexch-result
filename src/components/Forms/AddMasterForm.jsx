@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchRoles, saveClientApi } from "../../Utils/LoginApi";
 import { BASE_URL } from "../../Constant/Api";
 import { toast, ToastContainer } from "react-toastify";
+import { useSelector } from "react-redux";
 
 export const AddMasterForm = ({ closeModal }) => {
   const [formData, setFormData] = useState({
@@ -40,6 +41,8 @@ export const AddMasterForm = ({ closeModal }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
+  const { userData, loading, error } = useSelector((state) => state.user);
+  console.log("userData", userData?.data?.role_name);
 
   // Handle input changes
   const handleChange = (e) => {
@@ -269,15 +272,17 @@ export const AddMasterForm = ({ closeModal }) => {
                   <option value="" disabled>
                     Select Role
                   </option>
-                  {console.log("roles", role)}
-                  {role?.map(({ _id, role_name }, index) => (
-                    <option key={index} value={_id}>
-                      {" "}
-                      {/* Pass role_id as value */}
-                      {role_name}
-                      {console.log(_id)}
-                    </option>
-                  ))}
+                  {role
+                    ?.filter(
+                      ({ role_name }) =>
+                        userData?.data?.role_name !== "master" ||
+                        role_name !== "master"
+                    ) // Filter condition
+                    .map(({ _id, role_name }, index) => (
+                      <option key={index} value={_id}>
+                        {role_name}
+                      </option>
+                    ))}
                 </select>
 
                 {errors.role && (

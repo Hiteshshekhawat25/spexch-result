@@ -38,13 +38,12 @@ export const updateExposure = createAsyncThunk(
   }
 );
 
-// Create slice
 const exposureSlice = createSlice({
   name: 'exposure',
   initialState: {
-    exposure: null, // Store the exposure value
+    exposure: null, 
     loading: false,
-    error: null, // Store the error message if any
+    error: null, 
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -54,11 +53,12 @@ const exposureSlice = createSlice({
       })
       .addCase(updateExposure.fulfilled, (state, action) => {
         state.loading = false;
-        state.exposure = action.payload; // Assuming response contains the updated exposure
+        state.exposure = action.payload;
+        console.log("update exposure", action.payload);
       })
       .addCase(updateExposure.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; // Store the error message
+        state.error = action.payload; 
       });
   },
 });

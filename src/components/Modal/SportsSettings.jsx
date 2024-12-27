@@ -13,14 +13,14 @@ import {
 import { toast } from "react-toastify";
 import { IoClose } from "react-icons/io5";
 
-const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
+const SportsSettingsModal = ({ isOpen, onClose, userId,currentPage,entriesToShow }) => {
+
   const dispatch = useDispatch();
 
   // Selectors
   const sportsList = useSelector(selectSportsList);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
-  console.log("Sports compone List:", sportsList);
 
   const token = localStorage.getItem("authToken");
 
@@ -28,15 +28,15 @@ const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
   useEffect(() => {
     if (isOpen) {
       dispatch(fetchSportsList({ token }));
+      dispatch(fetchUserGameStatusThunk({ userId }));
     }
   }, [isOpen, dispatch, token]);
 
-  // Fetch specific user-game status when userId changes
-  useEffect(() => {
-    if (isOpen && userId) {
-      dispatch(fetchUserGameStatusThunk({ userId }));
-    }
-  }, [isOpen, userId, dispatch]);
+  // useEffect(() => {
+  //   if (isOpen && userId) {
+  //     dispatch(fetchUserGameStatusThunk({ userId }));
+  //   }
+  // }, [isOpen, userId, dispatch]);
 
   const handleCheckboxChange = (gameId, isChecked) => {
     dispatch(
@@ -78,7 +78,6 @@ const SportsSettingsModal = ({ isOpen, onClose, userId }) => {
                   </tr>
                 </thead>
                 <tbody>
-                  {console.log("sportsLissstedd", sportsList)}
                   {sportsList?.map((sport, index) => (
                     <tr key={sport?.gameId} className="border-b">
                       <td className="px-4 py-2 text-center">{index + 1}</td>

@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5"; // Importing the close icon
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateCreditReference } from "../../Store/Slice/creditReferenceslice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import { setDownlineData, setLoading } from "../../Store/Slice/downlineSlice";
+import { toast } from "react-toastify";
 
 const CreditEditReferenceModal = ({
   username,
@@ -15,38 +17,15 @@ const CreditEditReferenceModal = ({
   currentPage,
   entriesToShow,
 }) => {
-  console.log("currentCreditRef", currentCreditRef);
-  const [newCreditRef, setNewCreditRef] = useState(currentCreditRef);
+  const [newCreditRef, setNewCreditRef] = useState("");
   const [password, setPassword] = useState("");
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
+  const { creditReference } = useSelector((state) => state);
+
   const dispatch = useDispatch();
-
-  // Function to fetch token from localStorage
-  useEffect(() => {
-    const storedToken = localStorage.getItem("authToken");
-    if (storedToken) {
-      try {
-        const parsedToken = JSON.parse(storedToken)?.donation?.accessToken;
-        if (parsedToken) {
-          setToken(parsedToken);
-        } else {
-          setError("Access token not found in the stored data.");
-        }
-      } catch {
-        setToken(storedToken);
-      }
-    } else {
-      setError("Token is missing. Please login again.");
-    }
-  }, []);
-
   const handleIncrease = () => {
     setNewCreditRef((prev) => prev + 1);
-  };
-
-  const handleDecrease = () => {
-    setNewCreditRef((prev) => (prev > 0 ? prev - 1 : 0)); // Ensure it doesn't go below 0
   };
 
   const handleSubmit = async (e) => {
@@ -57,19 +36,30 @@ const CreditEditReferenceModal = ({
       return;
     }
 
-    dispatch(updateCreditReference({ newCreditRef, password, userId })); // Pass userId here
+    await dispatch(updateCreditReference({ newCreditRef, password, userId }));
 
     onSubmit(newCreditRef, password);
+    setLoading(true);
 
     try {
-      await fetchDownlineData(currentPage, entriesToShow);
-      window.location.reload();
-      setTimeout(() => {
+      const result = await fetchDownlineData(currentPage, entriesToShow);
+      if (result && result.data) {
+        dispatch(setDownlineData(result.data));
+        setNewCreditRef(0);
+        setPassword("");
         onCancel();
-      }, 2000);
+        toast.success("Credit Reference data updated successfully.");
+      } else {
+        toast.warning("Unable to fetch updated downline data.");
+      }
     } catch (error) {
-      console.error("Error fetching downline data:", error);
-      setError("Failed to fetch the downline data.");
+      console.error(error);
+      setError(error.message || "Failed to fetch the downline data.");
+      toast.error(
+        error.message || "An error occurred while fetching the downline data."
+      );
+    } finally {
+      setLoading(false);
     }
   };
 
