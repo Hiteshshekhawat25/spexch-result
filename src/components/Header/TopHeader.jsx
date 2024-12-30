@@ -7,20 +7,22 @@ import {
   fetchUserDataSuccess,
 } from "../../Store/Slice/userInfoSlice";
 import { getUserData } from "../../Services/UserInfoApi";
-import { Link } from "react-router-dom";
-import spexec from '../../assets/spexec.jpg';
+import { Link, useLocation } from "react-router-dom";
+import spexec from "../../assets/spexchlogo.png";
+import { ROUTES_CONST } from "../../Constant/routesConstant";
 
 const TopHeader = () => {
   const dispatch = useDispatch();
   const { userData, loading, error } = useSelector((state) => state.user);
-  console.log("userData",userData)
+  const location = useLocation();
+  console.log("userData", userData);
 
   useEffect(() => {
     const fetchData = async () => {
       dispatch(fetchUserDataStart());
       try {
         const data = await getUserData();
-        console.log("user ka data",data);
+        console.log("user ka data", data);
         dispatch(fetchUserDataSuccess(data));
       } catch (err) {
         dispatch(fetchUserDataFailure(err.message));
@@ -28,14 +30,14 @@ const TopHeader = () => {
     };
 
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, location.pathname]);
 
   return (
     <div className="w-full bg-gradient-blue text-white py-6 px-6 flex justify-between items-center">
       <div className="flex items-center space-x-6">
-        <Link to="/dashboard">
-        <div className="text-xl font-bold ml-8">
-            <img src={spexec} alt="Logo" height={100} width={100} />
+        <Link to={ROUTES_CONST.dashboard}>
+          <div className="text-xl font-bold ml-8 top-0">
+            <img src={spexec} alt="Logo" height={120} width={100} />
           </div>
         </Link>
       </div>
