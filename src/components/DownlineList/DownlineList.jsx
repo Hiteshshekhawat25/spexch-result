@@ -294,20 +294,17 @@ const DownlineList = () => {
   };
   const handleListView = (user) => {
     setCreditReferenceTransactionList(user);
-    setIsModalOpen(true);
   };
 
   const handleModalClose = () => {
-    setIsModalOpen(false); 
-    setSelectedUser(null); 
+    setIsModalOpen(false);
+    setSelectedUser(null);
   };
 
   const handleDeleteClick = (user) => {
     setUserToDelete(user);
-    setIsDeleteModalOpen(true); 
+    setIsDeleteModalOpen(true);
   };
-
-  // const error = useSelector((state) => state.selectedUser?.error);
 
   if (error) {
     console.error("Error fetching user:", error);
@@ -323,6 +320,7 @@ const DownlineList = () => {
     setSettingsModal(false);
     setAccountStatus(false);
     setCreditReferenceTransactionList(false);
+    setIsModalOpen(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -334,17 +332,16 @@ const DownlineList = () => {
   };
 
   const handleExposureEditClick = (user) => {
-    setSelectedExposureUser(user); // Set the selected user
-    setIsExposureModalOpen(true); // Open the modal
+    setSelectedExposureUser(user);
+    setIsExposureModalOpen(true);
   };
 
   const handleExposureModalClose = () => {
-    setIsExposureModalOpen(false); 
-    setSelectedExposureUser(null); 
+    setIsExposureModalOpen(false);
+    setSelectedExposureUser(null);
   };
 
   const handleIconClick = (user) => {
-    // setIsModalOpen((prevState) => !prevState);
     setDepositModal(true);
     setSelectedUser(user);
   };
@@ -455,7 +452,7 @@ const DownlineList = () => {
                     className="bg-green-500 text-white px-2 py-2 mr-1 rounded font-bold text-l"
                     onClick={() => handleUsernameList(item)}
                   >
-                    {item.role_name}
+                    {item.role_name.toUpperCase()}
                   </span>
                   <span className="text-black">{item.username}</span>
                 </td>
@@ -472,7 +469,9 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">{item.openingBalance}</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm">
+                  {item.openingBalance}
+                </td>
                 <td className="border border-gray-400 px-4 py-2 text-sm">0</td>
                 <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900">
                   {item.exposureLimit}
@@ -483,20 +482,26 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">{item.openingBalance}</td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">{}</td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">{item.partnership}</td>
-                <td
-                  className={`border border-gray-400 px-4 py-2 font-bold text-l ${
-                    item.status === "active"
-                      ? "text-green-600"
-                      : item.status === "suspended" || item.status === "locked"
-                      ? "text-red-600"
-                      : "text-gray-600" // Default color for other statuses
-                  }`}
-                >
-                  {item.status}
+                <td className="border border-gray-400 px-4 py-2 text-sm">
+                  {item.openingBalance}
                 </td>
+                <td className="border border-gray-400 px-4 py-2 text-sm">{}</td>
+                <td className="border border-gray-400 px-4 py-2 font-bold text-l">
+                  <span
+                    className={`p-1 rounded border ${
+                      item.status === "active"
+                        ? "text-green-600 border-green-600 bg-green-100"
+                        : item.status === "suspended"
+                        ? "text-red-600 border-red-600 bg-red-100"
+                        : item.status === "locked"
+                        ? "text-red-600 border-red-600 bg-red-100"
+                        : "text-gray-600 border-gray-600 bg-gray-100"
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </td>
+
                 <td className="px-4 py-2 text-sm">
                   <div className="flex space-x-2">
                     <div
@@ -744,7 +749,7 @@ const DownlineList = () => {
         </>
       )}
       {/* Log userId */}
-      {isModalOpen && creditReferenceTransactionList && (
+      {creditReferenceTransactionList && (
         <>
           <CreditReferenceTransactionModel
             username={creditReferenceTransactionList.username}
