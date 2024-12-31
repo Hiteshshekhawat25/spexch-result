@@ -43,3 +43,61 @@ export const getUserData = async () => {
     throw new Error(error.response?.data?.message || error.message);
   }
 };
+
+
+export const putUserPassword = async (url, params) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const response = await axios.put(`${BASE_URL}/${url}`, params, {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear(); // Clear localStorage if token is invalid
+      alert("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+  }
+};
+
+
+export const changeUserPassword = async (currentPassword, newPassword) => {
+  const token = localStorage.getItem("authToken");
+
+  if (!token) {
+    throw new Error("Auth token is missing. Please log in again.");
+  }
+
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/user/change-password`,
+      {
+        currentPassword,
+        newPassword,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "Failed to change password. Please try again.");
+  }
+};
