@@ -28,6 +28,7 @@ import accountStatementFilterReducer from './Slice/accountStatementFilterSlice';
 import accountStatementReducer from './Slice/accountStatementSlice';
 import userReducer from './Slice/userInfoSlice';
 import accountStatusReducer from '../Store/Slice/accountStatusSlice';
+import sessionReducer from '../Store/Slice/SessionSlice';
 
 
 export const store = configureStore({
@@ -59,7 +60,7 @@ export const store = configureStore({
     accountStatementFilter: accountStatementFilterReducer,
     accountStatement: accountStatementReducer,
     accountStatus: accountStatusReducer,
-  
+    sessions: sessionReducer,
   },
 });
 

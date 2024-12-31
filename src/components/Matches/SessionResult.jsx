@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { ImBook } from 'react-icons/im';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchSessions, selectSessions } from '../../Store/Slice/SessionSlice';
 
 const SessionResult = () => {
+  const dispatch = useDispatch();
+  const { sessions, loading, error } = useSelector((state) => state);
+
+
+  useEffect(() => {
+    dispatch(fetchSessions());
+  }, [dispatch]);
   return (
     <div className="w-full p-4">
       {/* Title Section */}
@@ -97,24 +106,26 @@ const SessionResult = () => {
               <th className="px-4 py-2 text-left">Session Book</th>
               <th className="px-4 py-2 text-left">Transfer Coins</th>
               <th className="px-4 py-2 text-left">Coin Log</th>
-              <th className="px-4 py-2 text-left">Result</th>
+              <th className="px-4 py-2 text-left">Result Log</th>
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="px-4 py-2">1</td>
-              <td className="px-4 py-2">Session 1</td>
-              <td className="px-4 py-2">Result 1</td>
-              <td className="px-4 py-2">Edit</td>
-              <td className="px-4 py-2">123</td>
-              <td className="px-4 py-2">500</td>
-              <td className="px-4 py-2">2024-12-19</td>
-              <td className="px-4 py-2">Book 1</td>
-              <td className="px-4 py-2">100</td>
-              <td className="px-4 py-2">Log 1</td>
-              <td className="px-4 py-2">Passed</td>
-            </tr>
-            {/* Add more rows as necessary */}
+          {sessions?.sessions?.map((session, index) => (
+            console.log("sesss",sessions),
+                  <tr key={index}>
+                    <td className="px-4 py-2">{session.id}</td>
+                    <td className="px-4 py-2">{session.marketName}</td>
+                    <td className="px-4 py-2">{session.result}</td>
+                    <td className="px-4 py-2">Edit</td>
+                    <td className="px-4 py-2">{session.marketId}</td>
+                    <td className="px-4 py-2">{session.coinTransferred}</td>
+                    <td className="px-4 py-2">{session.marketTime}</td>
+                    <td className="px-4 py-2">{session.sessionBook}</td>
+                    <td className="px-4 py-2">{session.transferCoins}</td>
+                    <td className="px-4 py-2">{session.coinLog}</td>
+                    <td className="px-4 py-2">{session.result}</td>
+                  </tr>
+                ))}
           </tbody>
         </table>
       </div>
