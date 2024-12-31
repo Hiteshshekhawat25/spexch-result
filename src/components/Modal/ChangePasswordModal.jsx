@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
 import { IoClose } from 'react-icons/io5'; // Close icon
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  setChangePasswordLoading,
+  setChangePasswordSuccess,
+  setChangePasswordError,
+  selectChangePasswordStatus,
+  selectChangePasswordError,
+} from '../../Store/Slice/profileSlice';
+import { toast } from "react-toastify";
+import { changeUserPassword } from '../../Services/UserInfoApi'; // Import the API utility function
 
 const ChangePasswordModal = ({ onCancel }) => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -7,7 +17,11 @@ const ChangePasswordModal = ({ onCancel }) => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleSubmit = () => {
+  const dispatch = useDispatch();
+  const changePasswordStatus = useSelector(selectChangePasswordStatus);
+  const changePasswordError = useSelector(selectChangePasswordError);
+
+  const handleSubmit = async () => {
     if (!currentPassword || !newPassword || !confirmPassword) {
       setError('All fields are required');
       return;
@@ -16,11 +30,25 @@ const ChangePasswordModal = ({ onCancel }) => {
       setError('New password and confirm password do not match');
       return;
     }
-    // Submit logic (e.g., API call for password change)
-    // Reset error after successful change
-    setError('');
-    // For now, just close the modal after validation
-    onCancel();
+
+    dispatch(setChangePasswordLoading());
+
+    try {
+      // Use the utility function for API call
+      await changeUserPassword(currentPassword, newPassword);
+      dispatch(setChangePasswordSuccess());
+
+      toast.success('Password changed successfully!', {
+        
+      });
+
+      onCancel(); // Close modal on success
+    } catch (err) {
+      dispatch(setChangePasswordError(err.message));
+      setError(err.message);
+      toast.error('Failed to change password. Please try again.', {
+      });
+    }
   };
 
   return (
@@ -80,19 +108,25 @@ const ChangePasswordModal = ({ onCancel }) => {
           </div>
 
           {/* Error Message */}
-          {error && <div className="text-red-600 text-sm mt-2">{error}</div>}
+          {(error || changePasswordError) && (
+            <div className="text-red-600 text-sm mt-2">
+              {error || changePasswordError}
+            </div>
+          )}
 
           {/* Buttons */}
           <div className="flex justify-between mt-4">
             <button
               onClick={handleSubmit}
               className="bg-gradient-blue text-white px-4 py-2 rounded mr-2"
+              disabled={changePasswordStatus === 'loading'}
             >
-              Yes
+              {changePasswordStatus === 'loading' ? 'Processing...' : 'Yes'}
             </button>
             <button
               onClick={onCancel}
               className="bg-gray-400 text-white px-4 py-2 rounded"
+              disabled={changePasswordStatus === 'loading'}
             >
               No
             </button>
@@ -104,3 +138,4 @@ const ChangePasswordModal = ({ onCancel }) => {
 };
 
 export default ChangePasswordModal;
+
