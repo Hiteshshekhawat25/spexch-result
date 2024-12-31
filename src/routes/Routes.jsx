@@ -25,6 +25,7 @@ import SessionResult from "../components/Matches/SessionResult";
 import ProfitLoss from "../components/MyReport/ProfitLoss";
 import BetList from "../components/BetList/BetList";
 import MyAccount from "../components/MyAccount/MyAccount";
+import EventProfitLoss  from "../components/MyReport/EventProfitLoss";
 
 
 
@@ -214,6 +215,16 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <ProfitLoss />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+       <Route
+        path={ROUTES_CONST.EventProfitLoss}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <EventProfitLoss />
             </LayoutHeader>
           </ProtectedRoutes>
         }
