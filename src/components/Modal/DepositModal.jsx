@@ -61,6 +61,88 @@ const DepositModal = ({
       setLoading(false);
     }
   };
+  // const handleTransaction = async (type) => {
+  //   setLoading(true);
+  
+  //   try {
+  //     const token = localStorage.getItem("authToken");
+  //     if (!token) {
+  //       toast.error("Authentication token not found. Please log in again.");
+  //       setLoading(false);
+  //       return;
+  //     }
+  
+  //     if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+  //       toast.error("Please enter a valid transaction amount greater than 0.");
+  //       setLoading(false);
+  //       return;
+  //     }
+  
+  //     const requestData = {
+  //       userId,
+  //       amount: parseFloat(amount),
+  //       password,
+  //       description: remark,
+  //     };
+  
+  //     // Perform the transaction
+  //     const response = await performTransaction(type, requestData, token);
+  
+  //     if (response.success) {
+  //       toast.success(response.message || "Transaction Successful");
+  
+  //       const rolesArray = await fetchRoles(token);
+  //       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
+  //         toast.warning("No roles found. Please check your configuration.");
+  //         setLoading(false);
+  //         return;
+  //       }
+  
+  //       const rolesData = rolesArray.map((role) => ({
+  //         role_name: role.role_name,
+  //         role_id: role._id,
+  //       }));
+  //       setRoles(rolesData);
+  
+  //       let roleId = null;
+  //       if (location.pathname === "/user-downline-list") {
+  //         console.log("Inside user-downline-list");
+  //         const userRole = rolesData.find((role) => role.role_name === "user");
+  //         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
+  //       } else if (location.pathname === "/master-downline-list") {
+  //         console.log("Inside master-downline-list");
+  //         const masterRole = rolesData.find((role) => role.role_name === "master");
+  //         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+  //       } else {
+  //         toast.warning("Invalid location path. Unable to determine action.");
+  //         setLoading(false);
+  //         return;
+  //       }
+  
+  //       console.log("roleId:", roleId);
+  
+  //       // Fetch updated downline data with roleId
+  //       const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
+      
+  //       console.log("result",result);
+  //       if (result && result.data) {
+  //         dispatch(setDownlineData(result.data));
+  //         resetState(); // Reset form state
+  //         onClose(); // Close the modal or transaction form
+  //       } else {
+  //         toast.warning("Unable to fetch updated downline data.");
+  //       }
+  //     } else {
+  //       toast.error(response.message || "Transaction Failed");
+  //     }
+  //   } catch (err) {
+  //     console.error("Error processing transaction:", err);
+  //     toast.error(err.message || "An error occurred while processing the transaction.");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">

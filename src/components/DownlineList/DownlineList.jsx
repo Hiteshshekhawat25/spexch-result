@@ -539,7 +539,7 @@ const DownlineList = () => {
               </tr>
             )
           )}
-          {location.pathname === "/master-downline-list" &&
+          {/* {location.pathname === "/master-downline-list" &&
             userFetchList.length === 0 &&
             downlineData?.data?.map((item, index) => (
               <tr key={index} className="border border-gray-300 bg-white">
@@ -616,8 +616,8 @@ const DownlineList = () => {
                   </div>
                 </td>
               </tr>
-            ))}
-          {location.pathname === "/user-downline-list" &&
+            ))} */}
+          {/* {location.pathname === "/user-downline-list" &&
             downlineData?.data?.map((item, index) => (
               <tr key={index} className="border border-gray-300 bg-white">
                 <td className="px-4 py-3 text-sm">
@@ -693,7 +693,7 @@ const DownlineList = () => {
                   </div>
                 </td>
               </tr>
-            ))}
+            ))} */}
         </tbody>
       </table>
       <div className="flex justify-between items-center mt-4">

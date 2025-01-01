@@ -5,6 +5,7 @@ import { updateCreditReference } from "../../Store/Slice/creditReferenceslice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import { setDownlineData, setLoading } from "../../Store/Slice/downlineSlice";
 import { toast } from "react-toastify";
+import { fetchRoles } from "../../Utils/LoginApi";
 
 const CreditEditReferenceModal = ({
   username,
@@ -22,6 +23,7 @@ const CreditEditReferenceModal = ({
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
   const { creditReference } = useSelector((state) => state);
+  const [roles, setRoles] = useState([]);
 
   const dispatch = useDispatch();
   const handleIncrease = () => {
@@ -30,19 +32,55 @@ const CreditEditReferenceModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (newCreditRef <= 0 || isNaN(newCreditRef)) {
-      alert("Please enter a valid credit reference greater than 0");
+      toast.error("Please enter a valid credit reference greater than 0.");
       return;
     }
-
-    await dispatch(updateCreditReference({ newCreditRef, password, userId }));
-
-    onSubmit(newCreditRef, password);
+  
+    dispatch(updateCreditReference({ newCreditRef, password, userId }));
+  
     setLoading(true);
-
+  
     try {
-      const result = await fetchDownlineData(currentPage, entriesToShow);
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        toast.error("Authentication token not found. Please log in again.");
+        setLoading(false);
+        return;
+      }
+  
+      const rolesArray = await fetchRoles(token);
+      if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
+        toast.warning("No roles found. Please check your configuration.");
+        setLoading(false);
+        return;
+      }
+  
+      const rolesData = rolesArray.map((role) => ({
+        role_name: role.role_name,
+        role_id: role._id,
+      }));
+      setRoles(rolesData);
+  
+      let roleId = null;
+      if (location.pathname === "/user-downline-list") {
+        console.log("Inside user-downline-list");
+        const userRole = rolesData.find((role) => role.role_name === "user");
+        roleId = userRole ? userRole.role_id : rolesData[0].role_id;
+      } else if (location.pathname === "/master-downline-list") {
+        console.log("Inside master-downline-list");
+        const masterRole = rolesData.find((role) => role.role_name === "master");
+        roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+      } else {
+        toast.warning("Invalid location path. Unable to determine action.");
+        setLoading(false);
+        return;
+      }
+  
+      console.log("roleId:", roleId);
+  
+      const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
       if (result && result.data) {
         dispatch(setDownlineData(result.data));
         setNewCreditRef(0);
@@ -53,7 +91,7 @@ const CreditEditReferenceModal = ({
         toast.warning("Unable to fetch updated downline data.");
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching downline data:", error);
       setError(error.message || "Failed to fetch the downline data.");
       toast.error(
         error.message || "An error occurred while fetching the downline data."
@@ -62,7 +100,7 @@ const CreditEditReferenceModal = ({
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-12">
