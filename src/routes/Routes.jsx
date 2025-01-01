@@ -25,6 +25,7 @@ import SessionResult from "../components/Matches/SessionResult";
 import ProfitLoss from "../components/MyReport/ProfitLoss";
 import BetList from "../components/BetList/BetList";
 import MyAccount from "../components/MyAccount/MyAccount";
+import Dashboard from "../components/Dashboard/dashboard";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -232,6 +233,16 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <MyAccount />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+       path={ROUTES_CONST.dashboardPage}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <Dashboard />
             </LayoutHeader>
           </ProtectedRoutes>
         }

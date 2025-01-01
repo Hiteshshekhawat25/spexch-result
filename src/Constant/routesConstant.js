@@ -1,6 +1,7 @@
 export const ROUTES_CONST = {
     login: "/",
     dashboard: "/dashboard",
+    dashboardPage: "/dashboardPage",
     masterdownlineList: "/master-downline-list",
     GlobalSettings:"/GlobalSettings",
     CreateNewMatch:"/CreateNewMatch",
