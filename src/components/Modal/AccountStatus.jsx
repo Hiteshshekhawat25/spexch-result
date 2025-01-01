@@ -11,6 +11,7 @@ import { BASE_URL } from "../../Constant/Api";
 import { getUserDatabyId } from "../../Services/UserInfoApi";
 import { setDownlineData, setError } from "../../Store/Slice/downlineSlice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import { fetchRoles } from "../../Utils/LoginApi";
 
 const AccountStatus = ({
   userId,
@@ -22,6 +23,7 @@ const AccountStatus = ({
   const [status, setStatus] = useState("active");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  const [roles, setRoles] = useState([]);
   const dispatch = useDispatch();
   const { loading, error, successMessage } = useSelector(
     (state) => state.accountStatus
@@ -66,25 +68,63 @@ const AccountStatus = ({
   if (!isOpen) return null;
 
   const handleSubmit = async () => {
+    console.log("Inside handleSubmit");
     dispatch(updateUserStatusThunk({ userId, newStatus: status, password }));
 
     try {
-      const result = await fetchDownlineData(currentPage, entriesToShow);
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        toast.error("Authentication token not found. Please log in again.");
+        return;
+      }
+
+      const rolesArray = await fetchRoles(token);
+      if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
+        toast.warning("No roles found. Please check your configuration.");
+        return;
+      }
+
+      const rolesData = rolesArray.map((role) => ({
+        role_name: role.role_name,
+        role_id: role._id,
+      }));
+      setRoles(rolesData);
+
+      let roleId = null;
+      if (location.pathname === "/user-downline-list") {
+        console.log("Inside user-downline-list");
+        const userRole = rolesData.find((role) => role.role_name === "user");
+        roleId = userRole ? userRole.role_id : rolesData[0].role_id;
+      } else if (location.pathname === "/master-downline-list") {
+        console.log("Inside master-downline-list");
+        const masterRole = rolesData.find(
+          (role) => role.role_name === "master"
+        );
+        roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+      } else {
+        toast.warning("Invalid location path. Unable to determine action.");
+        return;
+      }
+
+      console.log("roleId:", roleId);
+
+      // Fetch downline data with roleId
+      const result = await fetchDownlineData(
+        currentPage,
+        entriesToShow,
+        roleId
+      );
 
       if (result && result.data) {
         dispatch(setDownlineData(result.data));
-
         setPassword("");
-
         onClose();
-
         toast.success("Status updated successfully");
       } else {
         toast.warning("Unable to fetch updated downline data.");
       }
     } catch (error) {
       console.error("Error fetching downline data:", error);
-
       dispatch(setError(error.message || "Failed to fetch the downline data."));
       toast.error(
         error.message || "An error occurred while fetching the downline data."
