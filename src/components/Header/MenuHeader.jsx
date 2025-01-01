@@ -9,7 +9,7 @@ const MenuHeader = () => {
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   const menuItems = [
-    { name: "Dashboard", link: "#" },
+    { name: "Dashboard", link: "/dashboardPage" },
     {
       name: "Downline List",
       link: "#",
