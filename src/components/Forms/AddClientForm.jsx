@@ -4,6 +4,9 @@ import { BASE_URL } from "../../Constant/Api";
 import axios from "axios"; // For making API calls
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import the styles
+import { useDispatch } from "react-redux";
+import { setDownlineData } from "../../Store/Slice/downlineSlice";
+import { fetchDownlineData } from "../../Services/Downlinelistapi";
 
 export const AddClientForm = ({ closeModal }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -11,6 +14,7 @@ export const AddClientForm = ({ closeModal }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [token, setToken] = useState(null);
   const [userRoleId, setUserRoleId] = useState(null);
+  const dispatch = useDispatch();
 
   const initialFormData = {
     username: "",
@@ -125,11 +129,11 @@ export const AddClientForm = ({ closeModal }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const errors = validateForm();
     setFormErrors(errors);
     if (Object.keys(errors).length > 0) return;
-
+  
     if (!token) {
       setError("Token is missing. Please login again.");
       return;
@@ -138,14 +142,14 @@ export const AddClientForm = ({ closeModal }) => {
       setError("User role ID is not available. Please try again later.");
       return;
     }
-
+  
     setIsSubmitting(true);
     setError(null);
     setSuccessMessage("");
-
+  
     const { confirmPassword, rollingCommissionChecked, ...dataToSubmit } =
       formData;
-
+  
     if (dataToSubmit.rollingCommissionChecked) {
       dataToSubmit.rollingCommission = Object.fromEntries(
         Object.entries(dataToSubmit.rollingCommission).map(([key, value]) => [
@@ -154,36 +158,40 @@ export const AddClientForm = ({ closeModal }) => {
         ])
       );
     }
-
+  
     const dataWithAccountType = { ...dataToSubmit, role: userRoleId };
-
+  
     try {
       const response = await saveClientApi(
         `${BASE_URL}/user/create-user`,
         dataWithAccountType,
         token
       );
-
+  
       toast.success(response.data.message || "Client created successfully!");
-
-      // setSuccessMessage(
-      //   response.data.message || "Client created successfully!"
-      // );
+  
+      // Call setDownline API to update the downline data
+      
+  
       setTimeout(() => {
         handleCloseModal();
       }, 2000);
     } catch (error) {
-      // setError(
-      //   error.response?.data?.message ||
-      //     "An error occurred while creating the client."
-      // );
       setError(
-      toast.error("Cannot create duplicate username")
-      )
+        error.response?.data?.message ||
+          "An error occurred while creating the client."
+      );
+      toast.error("Cannot create duplicate username");
     } finally {
       setIsSubmitting(false);
+      window.location.reload();
+      // dispatch(
+      //   fetchDownlineData({
+      //   })
+      // );
     }
   };
+  
 
   const handleCloseModal = () => {
     setFormData(initialFormData);

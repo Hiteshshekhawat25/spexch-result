@@ -37,9 +37,17 @@ const MenuHeader = () => {
         { name: "Withdraw", link: "/withdraw" },
       ],
     },
-    { name: "Commission", link: "#" },
-    { name: "Password History", link: "#" },
-    { name: "Restore User", link: "#" },
+    {
+      name: "Session",
+      link: "#",
+      subMenu: [
+        { name: "Session Result", link: "/SessionResult" },
+        { name: "Session Prebook", link: "/SessionPrebook" },
+      ],
+    },
+    // { name: "Commission", link: "#" },
+    // { name: "Password History", link: "#" },
+    // { name: "Restore User", link: "#" },
     { name: "User Report", link: "#" },
     { name: "Logout", link: "#" },
   ];
