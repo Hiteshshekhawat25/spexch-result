@@ -470,7 +470,7 @@ const DownlineList = () => {
                   </div>
                 </td>
                 <td className="border border-gray-400 px-4 py-2 text-sm">
-                  {item.totalBalance}
+                  {item.openingBalance}
                 </td>
                 <td className="border border-gray-400 px-4 py-2 text-sm">0</td>
                 <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900">
