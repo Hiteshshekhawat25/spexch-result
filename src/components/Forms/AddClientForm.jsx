@@ -169,6 +169,7 @@ export const AddClientForm = ({ closeModal }) => {
       );
   
       toast.success(response.data.message || "Client created successfully!");
+      window.location.reload();
   
       // Call setDownline API to update the downline data
       
@@ -184,7 +185,7 @@ export const AddClientForm = ({ closeModal }) => {
       toast.error("Cannot create duplicate username");
     } finally {
       setIsSubmitting(false);
-      window.location.reload();
+     
       // dispatch(
       //   fetchDownlineData({
       //   })
