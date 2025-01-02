@@ -40,7 +40,7 @@ const BetListFilter = ({
     }
   
     try {
-      const url = `user/get-bet-list?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&type=${type}&sport=${sport}`;
+      const url = `user/get-bet-list?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&type=${type}${sport ? `&sport=${sport}` : ''}`;
       console.log('Fetching data with URL:', url);
       
 
@@ -86,9 +86,9 @@ const BetListFilter = ({
           className="border rounded px-2 py-1 text-sm w-full sm:w-auto"
         >
           <option value="">Select Type</option>
-          <option value="type1">settled</option>
-          <option value="type2">unsettled</option>
-          <option value="type3">void</option>
+          <option value="settled">settled</option>
+          <option value="unsettled">unsettled</option>
+          <option value="void">void</option>
         </select>
       </div>
 
@@ -105,7 +105,7 @@ const BetListFilter = ({
         >
           <option value="">Select Sport</option>
           {sportsOptions.map((sport) => (
-            <option key={sport._id} value={sport.gameId}>
+            <option key={sport._id} value={sport.name}>
               {sport.name} {/* Display the name here */}
             </option>
           ))}
