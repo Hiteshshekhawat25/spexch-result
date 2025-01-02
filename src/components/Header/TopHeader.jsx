@@ -35,11 +35,11 @@ const TopHeader = () => {
   return (
     <div className="w-full bg-gradient-blue text-white py-6 px-6 flex justify-between items-center">
       <div className="flex items-center space-x-6">
-        <Link to={ROUTES_CONST.dashboard}>
+        {/* <Link to={ROUTES_CONST.dashboard}> */}
           <div className="text-xl font-bold ml-8 top-0">
             <img src={spexec} alt="Logo" height={120} width={100} />
           </div>
-        </Link>
+        {/* </Link> */}
       </div>
       <div className="flex items-center space-x-4">
         {loading ? (
