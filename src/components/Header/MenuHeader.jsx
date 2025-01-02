@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
+import { IoLogOutOutline } from "react-icons/io5"; // Import the logout icon
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -37,22 +38,14 @@ const MenuHeader = () => {
         { name: "Withdraw", link: "/withdraw" },
       ],
     },
-    {
-      name: "Session",
-      link: "#",
-      subMenu: [
-        { name: "Session Result", link: "/SessionResult" },
-        { name: "Session Prebook", link: "/SessionPrebook" },
-      ],
-    },
-    // { name: "Commission", link: "#" },
-    // { name: "Password History", link: "#" },
-    // { name: "Restore User", link: "#" },
-    { name: "User Report", link: "#" },
-    { name: "Logout", link: "#" },
+    { name: "Commission", link: "#" },
+    { name: "Password History", link: "#" },
+    { name: "Restore User", link: "#" },
+    { name: "Logout", link: "#" }, // Logout item
   ];
 
-  if (userData && userData.data.role_name === "super-admin") {
+  // Additional menu items for super-master role
+  if (userData && userData.data.role_name === "super-master") {
     menuItems.push(
       {
         name: "Matches",
@@ -75,9 +68,9 @@ const MenuHeader = () => {
   };
 
   return (
-    <div className="bg-gradient-green text-black font-bold px-2">
+    <div className="bg-gradient-green text-black font-bold px-2 ">
       {/* Mobile Menu Toggle */}
-      <div className="flex justify-between items-center lg:hidden py-2">
+      <div className="flex justify-between items-center lg:hidden py-2  ml-12 mr-4">
         <h1 className="text-sm font-bold">Menu</h1>
         <button
           onClick={toggleMobileMenu}
@@ -89,14 +82,14 @@ const MenuHeader = () => {
 
       {/* Main Menu */}
       <ul
-        className={`flex flex-wrap justify-center lg:justify-start ${
+        className={`flex flex-wrap justify-center lg:justify-start ml-12 mr-4 ${
           isMobileMenuOpen ? "block" : "hidden lg:flex"
         }`}
       >
         {menuItems.map((item, index) => (
           <li
             key={index}
-            className="relative group border-l border-r border-theme1 text-sm"
+            className="relative group border-l border-r border-gray-400 text-sm"
           >
             <Link
               to={item.link}
@@ -108,6 +101,8 @@ const MenuHeader = () => {
               }`}
             >
               {item.name}
+              {/* Add the logout icon next to the Logout menu item */}
+              {item.name === "Logout" && <IoLogOutOutline className="inline ml-2" />}
             </Link>
             {item.subMenu && (
               <ul className="absolute left-0 top-full hidden bg-gradient-blue-hover group-hover:block shadow-lg z-10">
