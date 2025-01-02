@@ -41,7 +41,7 @@ const AddClientButton = () => {
 
   // Determine button text and form based on the current route
   const buttonText =
-    location.pathname === "/master-downline-list" ? "Add Master" : "Add Client";
+    location.pathname === "/master-downline-list" ? "Add Master" : "Add User";
 
   // Conditionally render the form based on the route
   const renderForm =
@@ -52,11 +52,11 @@ const AddClientButton = () => {
     );
 
   return (
-    <div className="flex justify-end items-center gap-2 mb-2">
+    <div className="flex justify-end items-center gap-2 mb-6">
       {location.pathname === "/master-downline-list" ? (
         <button
           onClick={handleOpenDialog}
-          className="py-2 px-4 h-12 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
+          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
         >
           <AiOutlineUserAdd />
           {buttonText}
@@ -64,14 +64,14 @@ const AddClientButton = () => {
       ) : (
         <button
           onClick={handleOpenDialog}
-          className="py-2 px-4 h-12 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
+          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
         >
           <AiOutlineUserAdd />
           {buttonText}
         </button>
       )}
 
-      <button className="py-2 px-4 h-12 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200">
+      <button className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200">
         <RiResetLeftLine />
         Reset
       </button>
