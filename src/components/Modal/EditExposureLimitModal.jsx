@@ -3,8 +3,9 @@ import { IoClose } from "react-icons/io5"; // Importing the close icon
 import { useDispatch } from "react-redux";
 import { updateExposure } from "../../Store/Slice/editExposureSlice"; // Import the update exposure thunk
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
-import { setDownlineData, setError } from "../../Store/Slice/downlineSlice";
+import { setDownlineData, setError, setLoading } from "../../Store/Slice/downlineSlice";
 import { toast } from "react-toastify";
+import { fetchRoles } from "../../Utils/LoginApi";
 
 const EditExposureLimitModal = ({
   username,
@@ -23,21 +24,61 @@ const EditExposureLimitModal = ({
   const [newExposureLimit, setNewExposureLimit] =
     useState("");
   const [password, setPassword] = useState("");
+  const [roles, setRoles] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (newExposureLimit <= 0 || newExposureLimit > 100) {
-      alert("Exposure limit must be between 0 and 100");
+      toast.error("Exposure limit must be between 0 and 100.");
       return;
     }
-
-    dispatch(updateExposure({ newExposureLimit, password, userId }));
-
-    onSubmit(newExposureLimit, password);
-
+  
+    setLoading(true);
+  
     try {
-      const result = await fetchDownlineData(currentPage, entriesToShow);
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        toast.error("Authentication token not found. Please log in again.");
+        setLoading(false);
+        return;
+      }
+  
+      // Dispatch exposure limit update
+      dispatch(updateExposure({ newExposureLimit, password, userId }));
+  
+      const rolesArray = await fetchRoles(token);
+      if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
+        toast.warning("No roles found. Please check your configuration.");
+        setLoading(false);
+        return;
+      }
+  
+      const rolesData = rolesArray.map((role) => ({
+        role_name: role.role_name,
+        role_id: role._id,
+      }));
+      setRoles(rolesData);
+  
+      let roleId = null;
+      if (location.pathname === "/user-downline-list") {
+        console.log("Inside user-downline-list");
+        const userRole = rolesData.find((role) => role.role_name === "user");
+        roleId = userRole ? userRole.role_id : rolesData[0].role_id;
+      } else if (location.pathname === "/master-downline-list") {
+        console.log("Inside master-downline-list");
+        const masterRole = rolesData.find((role) => role.role_name === "master");
+        roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+      } else {
+        toast.warning("Invalid location path. Unable to determine action.");
+        setLoading(false);
+        return;
+      }
+  
+      console.log("roleId:", roleId);
+  
+      // Fetch downline data with roleId
+      const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
       if (result && result.data) {
         dispatch(setDownlineData(result.data));
         setNewExposureLimit(0);
@@ -56,8 +97,11 @@ const EditExposureLimitModal = ({
       toast.error(
         error.message || "An error occurred while fetching the downline data."
       );
+    } finally {
+      setLoading(false);
     }
   };
+  
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">

@@ -294,20 +294,17 @@ const DownlineList = () => {
   };
   const handleListView = (user) => {
     setCreditReferenceTransactionList(user);
-    setIsModalOpen(true);
   };
 
   const handleModalClose = () => {
-    setIsModalOpen(false); 
-    setSelectedUser(null); 
+    setIsModalOpen(false);
+    setSelectedUser(null);
   };
 
   const handleDeleteClick = (user) => {
     setUserToDelete(user);
-    setIsDeleteModalOpen(true); 
+    setIsDeleteModalOpen(true);
   };
-
-  // const error = useSelector((state) => state.selectedUser?.error);
 
   if (error) {
     console.error("Error fetching user:", error);
@@ -323,6 +320,7 @@ const DownlineList = () => {
     setSettingsModal(false);
     setAccountStatus(false);
     setCreditReferenceTransactionList(false);
+    setIsModalOpen(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -334,17 +332,16 @@ const DownlineList = () => {
   };
 
   const handleExposureEditClick = (user) => {
-    setSelectedExposureUser(user); // Set the selected user
-    setIsExposureModalOpen(true); // Open the modal
+    setSelectedExposureUser(user);
+    setIsExposureModalOpen(true);
   };
 
   const handleExposureModalClose = () => {
-    setIsExposureModalOpen(false); 
-    setSelectedExposureUser(null); 
+    setIsExposureModalOpen(false);
+    setSelectedExposureUser(null);
   };
 
   const handleIconClick = (user) => {
-    // setIsModalOpen((prevState) => !prevState);
     setDepositModal(true);
     setSelectedUser(user);
   };
@@ -371,7 +368,7 @@ const DownlineList = () => {
   };
 
   return (
-    <div className="p-4 border border-gray-300 rounded-md bg-white">
+    <div className="p-4 border border-gray-200 rounded-md bg-white">
       <div className="flex justify-between items-center mb-4">
         <div className="border border-gray-300 p-2 rounded-md">
           <label className="mr-2 text-sm font-medium">Show</label>
@@ -414,12 +411,12 @@ const DownlineList = () => {
             ].map(({ key, label }) => (
               <th
                 key={key}
-                className="border border-gray-300 text-left px-4 py-3 text-sm font-medium text-black cursor-pointer"
+                className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
                 onClick={() => handleSort(key)}
               >
                 <div className="flex justify-between items-center">
                   {label}
-                  <div className="flex flex-col items-center space-y-1 ml-2">
+                  <div className="flex flex-col items-center ml-2">
                     <FaSortUp
                       className={`${
                         sortConfig.key === key &&
@@ -440,7 +437,7 @@ const DownlineList = () => {
                 </div>
               </th>
             ))}
-            <th className="border border-gray-300 text-left px-4 py-3 text-sm font-medium text-black">
+            <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
               Actions
             </th>
           </tr>
@@ -448,18 +445,18 @@ const DownlineList = () => {
         <tbody>
           {(userFetchList.length > 0 ? userFetchList : downlineData).map(
             (item, index) => (
-              <tr key={index} className="border border-gray-300 bg-white">
-                <td className="px-4 py-5 text-sm">
+              <tr key={index} className="border border-gray-400 bg-white">
+                <td className="px-4 py-2 text-sm">
                   {" "}
                   <span
-                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
+                    className="bg-green-500 text-white px-2 py-2 mr-1 rounded font-bold text-l"
                     onClick={() => handleUsernameList(item)}
                   >
-                    {item.role_name}
+                    {item.role_name.toUpperCase()}
                   </span>
                   <span className="text-black">{item.username}</span>
                 </td>
-                <td className="px-4 py-3 text-md text-blue-700">
+                <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700">
                   {item.creditReference}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
@@ -472,9 +469,11 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm">0</td>
-                <td className="px-4 py-3 text-sm text-blue-900">
+                <td className="border border-gray-400 px-4 py-2 text-sm">
+                  {item.openingBalance}
+                </td>
+                <td className="border border-gray-400 px-4 py-2 text-sm">0</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900">
                   {item.exposureLimit}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
@@ -483,21 +482,27 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm">{}</td>
-                <td className="px-4 py-3 text-sm">{item.partnership}</td>
-                <td
-                  className={`px-4 py-3 font-bold text-l ${
-                    item.status === "active"
-                      ? "text-green-600"
-                      : item.status === "suspended" || item.status === "locked"
-                      ? "text-red-600"
-                      : "text-gray-600" // Default color for other statuses
-                  }`}
-                >
-                  {item.status}
+                <td className="border border-gray-400 px-4 py-2 text-sm">
+                  {item.totalBalance}
                 </td>
-                <td className="px-4 py-3 text-sm">
+                <td className="border border-gray-400 px-4 py-2 text-sm">{}</td>
+                <td className="border border-gray-400 px-4 py-2 font-bold text-l">
+                  <span
+                    className={`p-1 rounded border ${
+                      item.status === "active"
+                        ? "text-green-600 border-green-600 bg-green-100"
+                        : item.status === "suspended"
+                        ? "text-red-600 border-red-600 bg-red-100"
+                        : item.status === "locked"
+                        ? "text-red-600 border-red-600 bg-red-100"
+                        : "text-gray-600 border-gray-600 bg-gray-100"
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </td>
+
+                <td className="px-4 py-2 text-sm">
                   <div className="flex space-x-2">
                     <div
                       onClick={() => handleIconClick(item)}
@@ -534,7 +539,7 @@ const DownlineList = () => {
               </tr>
             )
           )}
-          {location.pathname === "/master-downline-list" &&
+          {/* {location.pathname === "/master-downline-list" &&
             userFetchList.length === 0 &&
             downlineData?.data?.map((item, index) => (
               <tr key={index} className="border border-gray-300 bg-white">
@@ -611,8 +616,8 @@ const DownlineList = () => {
                   </div>
                 </td>
               </tr>
-            ))}
-          {location.pathname === "/user-downline-list" &&
+            ))} */}
+          {/* {location.pathname === "/user-downline-list" &&
             downlineData?.data?.map((item, index) => (
               <tr key={index} className="border border-gray-300 bg-white">
                 <td className="px-4 py-3 text-sm">
@@ -688,7 +693,7 @@ const DownlineList = () => {
                   </div>
                 </td>
               </tr>
-            ))}
+            ))} */}
         </tbody>
       </table>
       <div className="flex justify-between items-center mt-4">
@@ -744,7 +749,7 @@ const DownlineList = () => {
         </>
       )}
       {/* Log userId */}
-      {isModalOpen && creditReferenceTransactionList && (
+      {creditReferenceTransactionList && (
         <>
           <CreditReferenceTransactionModel
             username={creditReferenceTransactionList.username}

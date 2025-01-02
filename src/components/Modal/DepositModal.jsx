@@ -6,6 +6,7 @@ import {
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setDownlineData } from "../../Store/Slice/downlineSlice";
+import { fetchRoles } from "../../Utils/LoginApi";
 
 const DepositModal = ({
   isOpen,
@@ -19,6 +20,7 @@ const DepositModal = ({
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const { userData, error } = useSelector((state) => state.user);
+  const [roles, setRoles] = useState([]);
   const dispatch = useDispatch();
 
   const token = localStorage.getItem("authToken");
@@ -33,22 +35,74 @@ const DepositModal = ({
   const handleTransaction = async (type) => {
     setLoading(true);
 
-    const requestData = {
-      userId: userId,
-      amount: parseFloat(amount),
-      password: password,
-      description: remark,
-    };
-
     try {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        toast.error("Authentication token not found. Please log in again.");
+        setLoading(false);
+        return;
+      }
+
+      if (!amount || isNaN(amount) || parseFloat(amount) <= 0) {
+        toast.error("Please enter a valid transaction amount greater than 0.");
+        setLoading(false);
+        return;
+      }
+
+      const requestData = {
+        userId,
+        amount: parseFloat(amount),
+        password,
+        description: remark,
+      };
+
       const response = await performTransaction(type, requestData, token);
+
       if (response.success) {
         toast.success(response.message || "Transaction Successful");
-        const result = await fetchDownlineData(currentPage, entriesToShow);
+
+        const rolesArray = await fetchRoles(token);
+        if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
+          toast.warning("No roles found. Please check your configuration.");
+          setLoading(false);
+          return;
+        }
+
+        const rolesData = rolesArray.map((role) => ({
+          role_name: role.role_name,
+          role_id: role._id,
+        }));
+        setRoles(rolesData);
+
+        let roleId = null;
+        if (location.pathname === "/user-downline-list") {
+          const userRole = rolesData.find((role) => role.role_name === "user");
+          roleId = userRole ? userRole.role_id : rolesData[0].role_id;
+        } else if (location.pathname === "/master-downline-list") {
+          const masterRole = rolesData.find(
+            (role) => role.role_name === "master"
+          );
+          roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+        } else {
+          toast.warning("Invalid location path. Unable to determine action.");
+          setLoading(false);
+          return;
+        }
+
+        console.log("roleId:", roleId);
+
+        // Fetch updated downline data with roleId
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
+
+        console.log("result", result);
         if (result && result.data) {
           dispatch(setDownlineData(result.data));
-          resetState();
-          onClose();
+          resetState(); // Reset form state
+          onClose(); // Close the modal or transaction form
         } else {
           toast.warning("Unable to fetch updated downline data.");
         }
@@ -56,7 +110,10 @@ const DepositModal = ({
         toast.error(response.message || "Transaction Failed");
       }
     } catch (err) {
-      toast.error(err || "An error occurred while processing the transaction.");
+      console.error("Error processing transaction:", err);
+      toast.error(
+        err.message || "An error occurred while processing the transaction."
+      );
     } finally {
       setLoading(false);
     }

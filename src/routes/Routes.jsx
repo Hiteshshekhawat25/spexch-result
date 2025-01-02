@@ -15,7 +15,7 @@ import { AddMasterForm } from "../components/Forms/AddMasterForm";
 import TransferMatchCoins from "../components/Matches/TransferMatchCoins";
 import PendingLiability from "../components/Matches/PendingLiability";
 import CoinLog from "../components/Matches/CoinLog";
-import MatchOddsBets from "../components/Matches/MatchOddsBets"
+import MatchOddsBets from "../components/Matches/MatchOddsBets";
 import TossMatchList from "../components/Matches/TossMatchList";
 import MultipleSession from "../components/Matches/MultipleSession";
 import AllSessionList from "../components/Matches/AllSessionList";
@@ -26,8 +26,7 @@ import ProfitLoss from "../components/MyReport/ProfitLoss";
 import BetList from "../components/BetList/BetList";
 import MyAccount from "../components/MyAccount/MyAccount";
 import EventProfitLoss  from "../components/MyReport/EventProfitLoss";
-
-
+import Dashboard from "../components/Dashboard/dashboard";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -91,7 +90,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <AllMatches /> 
+              <AllMatches />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -107,23 +106,23 @@ const RoutesComp = ({ socket }) => {
         }
       />
 
-<Route
+      <Route
         path={ROUTES_CONST.TransferMatchCoins}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <TransferMatchCoins/>
+              <TransferMatchCoins />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
 
-<Route
+      <Route
         path={ROUTES_CONST.PendingLiability}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <PendingLiability/>
+              <PendingLiability />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -133,7 +132,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <CoinLog/>
+              <CoinLog />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -143,7 +142,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <MatchOddsBets/>
+              <MatchOddsBets />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -153,28 +152,28 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <TossMatchList/>
+              <TossMatchList />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
 
-<Route
+      <Route
         path={ROUTES_CONST.MultipleSession}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <MultipleSession/>
+              <MultipleSession />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
-<Route
+      <Route
         path={ROUTES_CONST.AllSessionList}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <AllSessionList/>
+              <AllSessionList />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -184,17 +183,17 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <Banner/>
+              <Banner />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
-        <Route
+      <Route
         path={ROUTES_CONST.SessionPreBook}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <SessionPreBook/>
+              <SessionPreBook />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -204,7 +203,7 @@ const RoutesComp = ({ socket }) => {
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-             <SessionResult/>
+              <SessionResult />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -229,7 +228,17 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-          <Route
+       <Route
+        path={ROUTES_CONST.EventProfitLoss}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <EventProfitLoss />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
         path={ROUTES_CONST.BetList}
         element={
           <ProtectedRoutes>
@@ -239,18 +248,27 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-       <Route
+      <Route
         path={ROUTES_CONST.MyAccount}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <MyAccount/>
+              <MyAccount />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+       path={ROUTES_CONST.dashboardPage}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <Dashboard />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
     </Routes>
-    
   );
 };
 
