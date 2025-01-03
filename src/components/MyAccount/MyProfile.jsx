@@ -131,13 +131,14 @@ const MyProfile = () => {
     </div>
     <div className="flex py-3 px-4">
       <span className="font-medium w-48">Password</span>
-      <span className="text-left ml-4">
-        ******** 
-        <FaRegEdit 
-          className="ml-2 text-blue cursor-pointer" 
-          onClick={handleOpenChangePasswordModal}
-        />
-      </span>
+      <span className="flex items-center ml-4">
+  <span className="mr-2">********</span>
+  <FaRegEdit 
+    className="text-blue cursor-pointer" 
+    onClick={handleOpenChangePasswordModal}
+  />
+</span>
+
     </div>
   </div>
 

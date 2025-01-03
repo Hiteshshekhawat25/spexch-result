@@ -45,7 +45,7 @@ const AccountStatement = () => {
         setCurrentPage={setCurrentPage} // Pass setCurrentPage to allow it to update the currentPage state
       />
 
-      <div className="border border-gray-300 rounded-md bg-white">
+<div className="border border-gray-300 rounded-md bg-white">
         <h1 className="text-xl bg-gradient-seablue text-white font-bold">Account Statement</h1>
 
         <div className="flex justify-between items-center mb-4 p-4">

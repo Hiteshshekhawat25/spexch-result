@@ -10,6 +10,7 @@ module.exports = {
         lightGray:'#e5e7eb',
         black: '#000000',
         blue: '#00008B',
+        lime:'#ecfccb',
         customGray: '#2d2d2d',
         darkgray: "#404040",
         whiteGray: "#d7dede",
@@ -18,6 +19,7 @@ module.exports = {
         LightGreen: '#4d7c0f',
         darkGreen: '#365314',
         NavyBlue: '#1b186e',
+        bluehover:'#d1ddef',
         lightblue: '#38bdf8',
         cream:'#fffbeb',
         success: '#4CAF50', // Custom success color
