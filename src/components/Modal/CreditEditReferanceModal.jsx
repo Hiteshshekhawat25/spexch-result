@@ -107,7 +107,7 @@ const CreditEditReferenceModal = ({
         {" "}
         {/* Reduced margin-top */}
         {/* Header */}
-        <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
           {" "}
           {/* Reduced padding */}
           <span>Edit Credit Reference - {username}</span>
