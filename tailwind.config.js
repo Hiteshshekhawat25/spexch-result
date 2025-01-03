@@ -35,6 +35,7 @@ module.exports = {
         'gradient-green-hover': 'linear-gradient(#4f9f21 0%, #a4dc60 100%)',
         'gradient-blue' : 'linear-gradient(-180deg, #315195 0%, #14213d 100%)',
         'gradient-blue-hover' : 'linear-gradient(#14213d 0%, #315195 100%)',
+        'gradient-seablue':'linear-gradient(-180deg, #2E4B5E 0%, #243A48 82%) ',
         'gradient-green2' : 'linear-gradient(180deg,#0a92a5 15%,#076875 100%)',
       },
       // Custom spacing for positioning toasts
