@@ -261,7 +261,7 @@ console.log("Matches",matches);
                 <td className="px-2 py-2 border border-gray-300">{new Date(match.event?.openDate).toLocaleString()}</td>
                 <td className="px-2 py-2 border border-gray-300">
                   <button
-                    className={`py-1 px-3 rounded-full text-white bg-lightblue ${match.oddsStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
+                    className={`py-1 px-3 rounded-full text-white bg-lightblue hover:bg-green-500 ${match.oddsStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
                     onClick={() => handleStatusToggle(match._id, 'oddsStatus', match.oddsStatus)}
                   >
                     {match.oddsStatus === 'active' ? 'Odds Opened' : 'Odds Closed'}
@@ -269,7 +269,7 @@ console.log("Matches",matches);
                 </td>
                 <td className="px-4 py-2 border border-gray-300">
                   <button
-                    className={`py-1 px-2 rounded-full text-white bg-lightblue ${match.bookMakerStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
+                    className={`py-1 px-2 rounded-full text-white bg-lightblue hover:bg-green-500 ${match.bookMakerStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
                     onClick={() => handleStatusToggle(match._id, 'bookMakerStatus', match.bookMakerStatus)}
                   >
                     {match.bookMakerStatus === 'active' ? 'Bookmaker Opened' : 'Bookmaker Closed'}
@@ -277,7 +277,7 @@ console.log("Matches",matches);
                 </td>
                 <td className="px-2 py-2 border border-gray-300">
                   <button
-                    className={`py-1 px-3 rounded-full text-white bg-lightblue ${match.sessionStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
+                    className={`py-1 px-3 rounded-full text-white bg-lightblue hover:bg-green-500 ${match.sessionStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
                     onClick={() => handleStatusToggle(match._id, 'sessionStatus', match.sessionStatus)}
                   >
                     {match.sessionStatus === 'active' ? 'Session Opened' : 'Session Closed'}
@@ -285,7 +285,7 @@ console.log("Matches",matches);
                 </td>
                 <td className="px-2 py-2 border border-gray-300">
                   <button
-                    className={`py-1 px-3 rounded-full text-white bg-lightblue ${match.tossStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
+                    className={`py-1 px-3 rounded-full text-white bg-lightblue hover:bg-green-500 ${match.tossStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
                     onClick={() => handleStatusToggle(match._id, 'tossStatus', match.tossStatus)}
                   >
                     {match.tossStatus === 'active' ? 'Toss Opened' : 'Toss Closed'}

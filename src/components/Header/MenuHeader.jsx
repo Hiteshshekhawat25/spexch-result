@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
+import { IoLogOutOutline } from "react-icons/io5"; // Import the logout icon
+import { TbTriangleInvertedFilled } from "react-icons/tb"; // Import the triangle icon
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
@@ -37,22 +38,17 @@ const MenuHeader = () => {
         { name: "Withdraw", link: "/withdraw" },
       ],
     },
+    { name: "Commission", link: "#" },
+    { name: "Password History", link: "#" },
+    { name: "Restore User", link: "#" },
     {
-      name: "Session",
+      name: "Logout",
       link: "#",
-      subMenu: [
-        { name: "Session Result", link: "/SessionResult" },
-        { name: "Session Prebook", link: "/SessionPrebook" },
-      ],
-    },
-    // { name: "Commission", link: "#" },
-    // { name: "Password History", link: "#" },
-    // { name: "Restore User", link: "#" },
-    { name: "User Report", link: "#" },
-    { name: "Logout", link: "#" },
+    }, // Logout item
   ];
 
-  if (userData && userData.data.role_name === "super-admin") {
+  // Additional menu items for super-master role
+  if (userData && userData.data.role_name === "super-master") {
     menuItems.push(
       {
         name: "Matches",
@@ -70,33 +66,44 @@ const MenuHeader = () => {
     );
   }
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen((prev) => !prev);
-  };
-
   return (
     <div className="bg-gradient-green text-black font-bold px-2">
-      {/* Mobile Menu Toggle */}
-      <div className="flex justify-between items-center lg:hidden py-2">
-        <h1 className="text-sm font-bold">Menu</h1>
-        <button
-          onClick={toggleMobileMenu}
-          className="p-1 text-white bg-gradient-blue-hover rounded-md"
-        >
-          {isMobileMenuOpen ? "Close" : "Menu"}
-        </button>
+      {/* Main Menu (now with horizontal scroll for small screens) */}
+      <div className="lg:hidden overflow-x-auto whitespace-nowrap">
+        <ul className="flex">
+          {menuItems.map((item, index) => (
+            <li
+              key={index}
+              className="text-sm py-2 px-4 border-l border-r border-gray-400"
+            >
+              <Link
+                to={item.link}
+                onClick={() => setActiveMenu(item.name)}
+                className={`block py-1 px-2 hover:bg-gradient-blue-hover border-b-2 border-transparent ${
+                  activeMenu === item.name
+                    ? "bg-gradient-blue-hover text-white"
+                    : "hover:border-gradient-blue-hover hover:text-white"
+                } ${item.name === "Logout" ? "pl-48" : ""}`}
+              >
+                {item.name}
+                {item.subMenu && (
+                  <TbTriangleInvertedFilled className="inline ml-2 size-2" />
+                )}
+                {item.name === "Logout" && (
+                  <IoLogOutOutline className="inline ml-2" />
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* Main Menu */}
-      <ul
-        className={`flex flex-wrap justify-center lg:justify-start ${
-          isMobileMenuOpen ? "block" : "hidden lg:flex"
-        }`}
-      >
+      {/* Main Menu for Large Screens */}
+      <ul className="hidden lg:flex justify-center lg:justify-start ml-24 mr-4">
         {menuItems.map((item, index) => (
           <li
             key={index}
-            className="relative group border-l border-r border-theme1 text-sm"
+            className="relative group border-l border-r border-gray-400 text-sm"
           >
             <Link
               to={item.link}
@@ -105,9 +112,15 @@ const MenuHeader = () => {
                 activeMenu === item.name
                   ? "bg-gradient-blue-hover text-white"
                   : "hover:border-gradient-blue-hover hover:text-white"
-              }`}
+              } ${item.name === "Logout" ? "pl-48" : ""}`}
             >
               {item.name}
+              {item.subMenu && (
+                <TbTriangleInvertedFilled className="inline ml-2 size-2" />
+              )}
+              {item.name === "Logout" && (
+                <IoLogOutOutline className="inline ml-2" />
+              )}
             </Link>
             {item.subMenu && (
               <ul className="absolute left-0 top-full hidden bg-gradient-blue-hover group-hover:block shadow-lg z-10">
@@ -131,3 +144,7 @@ const MenuHeader = () => {
 };
 
 export default MenuHeader;
+
+
+
+

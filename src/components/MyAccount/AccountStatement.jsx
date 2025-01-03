@@ -86,7 +86,7 @@ const AccountStatement = () => {
               {statementData.length > 0 ? (
                 statementData.map((item, index) => (
                   <tr key={index} className="border-b border-gray-400">
-                    <td className="px-4 py-3 text-sm text-center">{item._id}</td>
+                    <td className="px-4 py-3 text-sm text-center">{item.createdAt}</td>
                     <td className="px-4 py-3 text-sm text-center">{item.deposit}</td>
                     <td className="px-4 py-3 text-sm text-center">{item.withdraw}</td>
                     <td className="px-4 py-3 text-sm text-center">{item.balance}</td>

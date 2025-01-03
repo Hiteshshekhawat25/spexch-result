@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IoClose } from 'react-icons/io5'; // Close icon
+import { IoClose } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setChangePasswordLoading,
@@ -8,8 +8,9 @@ import {
   selectChangePasswordStatus,
   selectChangePasswordError,
 } from '../../Store/Slice/profileSlice';
+import { clearUserData } from '../../Store/Slice/userInfoSlice'; // Import clearUserData action
 import { toast } from "react-toastify";
-import { changeUserPassword } from '../../Services/UserInfoApi'; // Import the API utility function
+import { changeUserPassword } from '../../Services/UserInfoApi';
 
 const ChangePasswordModal = ({ onCancel }) => {
   const [currentPassword, setCurrentPassword] = useState('');
@@ -38,23 +39,22 @@ const ChangePasswordModal = ({ onCancel }) => {
       await changeUserPassword(currentPassword, newPassword);
       dispatch(setChangePasswordSuccess());
 
-      toast.success('Password changed successfully!', {
-        
-      });
+      toast.success('Password changed successfully!', {});
 
-      onCancel(); // Close modal on success
+      // Clear user data and logout
+      dispatch(clearUserData());
+      localStorage.clear();
+      window.location.reload();
     } catch (err) {
       dispatch(setChangePasswordError(err.message));
       setError(err.message);
-      toast.error('Failed to change password. Please try again.', {
-      });
+      toast.error('Failed to change password. Please try again.', {});
     }
   };
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-20">
-        {/* Header */}
         <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-2">
           <span>Change Password</span>
           <IoClose
@@ -63,9 +63,7 @@ const ChangePasswordModal = ({ onCancel }) => {
           />
         </div>
 
-        {/* Content */}
         <div className="p-5 space-y-4">
-          {/* Current Password */}
           <div>
             <label className="text-sm font-medium text-gray-700">
               Your Password <span className="text-red-600">*</span>
@@ -79,7 +77,6 @@ const ChangePasswordModal = ({ onCancel }) => {
             />
           </div>
 
-          {/* New Password */}
           <div>
             <label className="text-sm font-medium text-gray-700">
               New Password <span className="text-red-600">*</span>
@@ -93,7 +90,6 @@ const ChangePasswordModal = ({ onCancel }) => {
             />
           </div>
 
-          {/* Confirm New Password */}
           <div>
             <label className="text-sm font-medium text-gray-700">
               Confirm Password <span className="text-red-600">*</span>
@@ -107,14 +103,12 @@ const ChangePasswordModal = ({ onCancel }) => {
             />
           </div>
 
-          {/* Error Message */}
           {(error || changePasswordError) && (
             <div className="text-red-600 text-sm mt-2">
               {error || changePasswordError}
             </div>
           )}
 
-          {/* Buttons */}
           <div className="flex justify-between mt-4">
             <button
               onClick={handleSubmit}
@@ -138,4 +132,5 @@ const ChangePasswordModal = ({ onCancel }) => {
 };
 
 export default ChangePasswordModal;
+
 

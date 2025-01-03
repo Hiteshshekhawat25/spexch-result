@@ -31,7 +31,8 @@ import DepositModal from "../Modal/DepositModal";
 import SportsSettingsModal from "../Modal/SportsSettings";
 import AccountStatus from "../Modal/AccountStatus";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { ROUTES_CONST } from "../../Constant/routesConstant";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -516,15 +517,17 @@ const DownlineList = () => {
                     <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
                       <RiArrowUpDownFill className="text-darkgray" />
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdSettings className="text-darkgray" />
-                    </div>
                     <div
                       onClick={() => statushandlechange(item)}
                       className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                     >
-                      <FaUserAlt className="text-darkgray" />
+                      <MdSettings className="text-darkgray" />
                     </div>
+                    <Link to={ROUTES_CONST.MyAccount}>
+                      <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
+                        <FaUserAlt className="text-darkgray" />
+                      </div>
+                    </Link>
                     <div
                       onClick={() => handleOpenSettings(item)}
                       className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
@@ -770,6 +773,8 @@ const DownlineList = () => {
         onClose={handleDeleteModalClose}
         onConfirm={handleDeleteConfirm}
         userId={userToDelete?._id}
+        currentPage={currentPage}
+        entriesToShow={entriesToShow}
       />
       {selectedUser && (
         <>

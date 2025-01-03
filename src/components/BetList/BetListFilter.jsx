@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setType, setSport, setFromDate, setToDate, selectBetListFilter } from '../../Store/Slice/betListFilterSlice';
 import { getBetlistData } from '../../Services/Betlistapi';
+import { getCreateNewMatchAPIAuth } from "../../Services/Newmatchapi";
 
 const BetListFilter = ({
   setBetlistData,
@@ -15,16 +16,33 @@ const BetListFilter = ({
   const dispatch = useDispatch();
   const { type, sport, fromDate, toDate } = useSelector(selectBetListFilter);
 
+  const [sportsOptions, setSportsOptions] = useState([]);
+
+  useEffect(() => {
+    // Fetch sports options
+    const fetchSports = async () => {
+      try {
+        const response = await getCreateNewMatchAPIAuth("games/getgames");
+        if (response.status === 200) {
+          setSportsOptions(response.data.data || []); // Adjust based on API response
+        }
+      } catch (error) {
+        console.error("Error fetching sports:", error);
+      }
+    };
+    fetchSports();
+  }, []);
+
   // Fetch Bet History data
   const handleGetHistory = async () => {
-    if (!fromDate || !toDate) {
-      alert('Please select both From Date and To Date');
-      return;
+    if (!fromDate || !toDate || !type || !sport) {
+      return; // Simply return without making the API call if any required field is missing
     }
-
+  
     try {
-      const url = `user/get-bet-list?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&type=${type || ''}&sport=${sport || ''}`;
+      const url = `user/get-bet-list?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&type=${type}${sport ? `&sport=${sport}` : ''}`;
       console.log('Fetching data with URL:', url);
+      
 
       const response = await getBetlistData(url);
 
@@ -68,9 +86,9 @@ const BetListFilter = ({
           className="border rounded px-2 py-1 text-sm w-full sm:w-auto"
         >
           <option value="">Select Type</option>
-          <option value="type1">Type 1</option>
-          <option value="type2">Type 2</option>
-          <option value="type3">Type 3</option>
+          <option value="settled">settled</option>
+          <option value="unsettled">unsettled</option>
+          <option value="void">void</option>
         </select>
       </div>
 
@@ -86,9 +104,11 @@ const BetListFilter = ({
           className="border rounded px-2 py-1 text-sm w-full sm:w-auto"
         >
           <option value="">Select Sport</option>
-          <option value="football">Football</option>
-          <option value="basketball">Basketball</option>
-          <option value="tennis">Tennis</option>
+          {sportsOptions.map((sport) => (
+            <option key={sport._id} value={sport.name}>
+              {sport.name} {/* Display the name here */}
+            </option>
+          ))}
         </select>
       </div>
 
@@ -133,6 +153,7 @@ const BetListFilter = ({
 };
 
 export default BetListFilter;
+
 
 // import React, { useEffect } from 'react';
 // import { useDispatch, useSelector } from 'react-redux';
