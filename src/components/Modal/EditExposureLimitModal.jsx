@@ -31,12 +31,6 @@ const EditExposureLimitModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (newExposureLimit <= 0 || newExposureLimit > 100) {
-      toast.error("Exposure limit must be between 0 and 100.");
-      return;
-    }
-
     setLoading(true);
 
     try {

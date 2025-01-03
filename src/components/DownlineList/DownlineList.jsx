@@ -450,14 +450,16 @@ const DownlineList = () => {
                 <td className="px-4 py-2 text-sm">
                   {" "}
                   <span
-                    className="bg-green-500 text-white px-2 py-2 mr-1 rounded font-bold text-l"
+                    className="bg-green-500 text-white px-2 py-2 mr-1 rounded font-semibold text-l"
                     onClick={() => handleUsernameList(item)}
                   >
                     {item.role_name.toUpperCase()}
                   </span>
-                  <span className="text-black">{item.username}</span>
+                  <span className="text-black font-semibold">
+                    {item.username}
+                  </span>
                 </td>
-                <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700">
+                <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
                   {item.creditReference}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
@@ -470,12 +472,14 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">
-                  {item.openingBalance}
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">0</td>
-                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900">
-                  {item.exposureLimit}
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  0
+                </td>
+                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.exposureLimit)}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
                       className="text-blue cursor-pointer"
@@ -483,13 +487,17 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">
-                  {item.totalBalance}
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(
+                    item.totalBalance || 0
+                  )}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">
-                  {item.profit_loss}
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">{}</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  {}
+                </td>
                 <td className="border border-gray-400 px-4 py-2 font-bold text-l">
                   <span
                     className={`p-1 rounded border ${
@@ -517,14 +525,15 @@ const DownlineList = () => {
                     <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
                       <RiArrowUpDownFill className="text-darkgray" />
                     </div>
+
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdManageHistory className="text-darkgray" />
+                    </div>
                     <div
                       onClick={() => statushandlechange(item)}
                       className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                     >
                       <MdSettings className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdManageHistory className="text-darkgray" />
                     </div>
                     <Link to={ROUTES_CONST.MyAccount}>
                       <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
@@ -779,17 +788,15 @@ const DownlineList = () => {
         currentPage={currentPage}
         entriesToShow={entriesToShow}
       />
-      {selectedUser && (
-        <>
-          <DepositModal
-            isOpen={depositModal}
-            onClose={handleDeleteModalClose}
-            // onConfirm={handleDeleteConfirm}
-            userId={selectedUser?._id}
-            currentPage={currentPage}
-            entriesToShow={entriesToShow}
-          />
-        </>
+      {selectedUser && depositModal && (
+        <DepositModal
+          isOpen={depositModal}
+          onClose={handleDeleteModalClose}
+          userId={selectedUser?._id}
+          currentPage={currentPage}
+          entriesToShow={entriesToShow}
+          user={selectedUser}
+        />
       )}
       {selectedUser && (
         <>
@@ -803,15 +810,19 @@ const DownlineList = () => {
           />
         </>
       )}
-      {/* {selectedUser && <> */}
-      <AccountStatus
-        isOpen={accountStatus}
-        onClose={handleDeleteModalClose}
-        // onConfirm={handleDeleteConfirm}
-        userId={selectedUser?._id}
-        currentPage={currentPage}
-        entriesToShow={entriesToShow}
-      />
+      {selectedUser && (
+        <>
+          <AccountStatus
+            isOpen={accountStatus}
+            onClose={handleDeleteModalClose}
+            // onConfirm={handleDeleteConfirm}
+            userId={selectedUser?._id}
+            currentPage={currentPage}
+            entriesToShow={entriesToShow}
+            user={selectedUser}
+          />
+        </>
+      )}
       {isExposureModalOpen && selectedExposureUser && (
         <>
           <EditExposureLimitModal

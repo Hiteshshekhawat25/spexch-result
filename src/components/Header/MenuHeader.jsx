@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
-import { IoLogOutOutline } from "react-icons/io5"; // Import the logout icon
-import { TbTriangleInvertedFilled } from "react-icons/tb"; // Import the triangle icon
+import { IoLogOutOutline } from "react-icons/io5"; 
+import { TbTriangleInvertedFilled } from "react-icons/tb"; 
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
