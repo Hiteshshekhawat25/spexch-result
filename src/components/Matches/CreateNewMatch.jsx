@@ -176,8 +176,12 @@ const CreateNewMatch = () => {
   };
   
   return (
-    <form onSubmit={handleSubmit} className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded">
-      <div className="grid grid-cols-4 gap-4">
+    <>
+    <h1 className="text-center text-2xl font-bold mb-4">Create New Match</h1>
+    <div className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded border border-gray-300">
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-4 gap-4">
+    
         {/* Dynamic Fields */}
         <div>
           <label className="block text-gray-700 text-lg font-bold mb-1">Select Sport</label>
@@ -306,21 +310,23 @@ const CreateNewMatch = () => {
         </div>
       </div>
     </form>
+    </div>
+    </>
   );
 };
 
 export default CreateNewMatch;
 
 
+
 // import React, { useEffect, useState } from "react";
 // import { useSelector, useDispatch } from "react-redux";
 // import { updateField, resetForm } from "../../Store/Slice/createMatchSlice";
-// import { createNewMatchAPIAuth, getCreateNewMatchAPIAuth } from "../../Services/Newmatchapi"; 
-// import { ToastContainer, toast } from 'react-toastify';
-//   import 'react-toastify/dist/ReactToastify.css';
+// import { createNewMatchAPIAuth, getCreateNewMatchAPIAuth,putUpdateMatchAPIAuth} from "../../Services/Newmatchapi";
+// import {toast } from 'react-toastify';
+// import 'react-toastify/dist/ReactToastify.css';
 
 // const CreateNewMatch = () => {
-
 //   const formState = useSelector((state) => state.createMatch);
 //   const dispatch = useDispatch();
 
@@ -332,7 +338,7 @@ export default CreateNewMatch;
 //     // Fetch sports options
 //     const fetchSports = async () => {
 //       try {
-//         const response = await getCreateNewMatchAPIAuth("admin/v1/games/getgames");
+//         const response = await getCreateNewMatchAPIAuth("games/getgames");
 //         if (response.status === 200) {
 //           setSportsOptions(response.data.data || []); // Adjust based on API response
 //         }
@@ -340,7 +346,6 @@ export default CreateNewMatch;
 //         console.error("Error fetching sports:", error);
 //       }
 //     };
-
 //     fetchSports();
 //   }, []);
 
@@ -350,7 +355,7 @@ export default CreateNewMatch;
 //       const fetchLeagues = async () => {
 //         try {
 //           console.log("Fetching leagues for sport:", formState.sport); // Debug log
-//           const response = await getCreateNewMatchAPIAuth(`admin/v1/series/getseries/${String(formState.sport)}`);
+//           const response = await getCreateNewMatchAPIAuth(`series/getseries/${String(formState.sport)}`);
 //           console.log("Leagues response:", response); // Debug log
 //           if (response.status === 200) {
 //             setLeagueOptions(response.data.data || []);
@@ -359,20 +364,19 @@ export default CreateNewMatch;
 //           console.error("Error fetching leagues:", error);
 //         }
 //       };
-  
 //       fetchLeagues();
 //     } else {
 //       setLeagueOptions([]);
 //     }
 //   }, [formState.sport]); // Re-fetch leagues when sport changes
-  
+
 //   useEffect(() => {
 //     if (formState.league) {
 //       // Fetch matches based on selected league
 //       const fetchMatches = async () => {
 //         try {
 //           console.log("Fetching matches for league:", formState.league); // Debug log
-//           const response = await getCreateNewMatchAPIAuth(`admin/v1/match/getmatches/${String(formState.league)}`);
+//           const response = await getCreateNewMatchAPIAuth(`match/getmatches/${String(formState.league)}`);
 //           console.log("Matches response:", response); // Debug log
 //           if (response.status === 200) {
 //             setMatchOptions(response.data.data || []);
@@ -381,13 +385,58 @@ export default CreateNewMatch;
 //           console.error("Error fetching matches:", error);
 //         }
 //       };
-  
 //       fetchMatches();
 //     } else {
 //       setMatchOptions([]);
 //     }
 //   }, [formState.league]); // Re-fetch matches when league changes
-  
+
+//   useEffect(() => {
+//     if (formState.match) {
+//       // Fetch match details based on selected match
+//       const fetchMatchDetails = async () => {
+//         try {
+//           const response = await getCreateNewMatchAPIAuth(`match/getmatchdetails/${String(formState.match)}`);
+//           if (response.status === 200) {
+//             console.log(response)
+//             const matchDetails = response.data;
+//             console.log(matchDetails)
+//             const marketType = matchDetails[0]?.marketType; 
+//             console.log("hiii",marketType)
+            
+            
+//             // Auto-fill form fields with match details
+//             dispatch(updateField({ field: "marketType", value: matchDetails[0]?.marketType }));
+//             dispatch(updateField({ field: "marketID", value: matchDetails[0]?.marketID }));
+//             dispatch(updateField({ field: "team1", value: matchDetails[0]?.team1 })); // Ensure matchDetails[0]
+//             dispatch(updateField({ field: "team2", value: matchDetails[0]?.team2 })); // Ensure matchDetails[0]
+//             dispatch(updateField({ field: "runners", value: matchDetails[0]?.runners })); // Ensure matchDetails[0]
+//             dispatch(updateField({ field: "oddsDelay", value: matchDetails[0]?.oddsDelay }));
+//             dispatch(updateField({ field: "sessionDelay", value: matchDetails[0]?.sessionDelay }));
+//             dispatch(updateField({ field: "bookDelay", value: matchDetails[0]?.bookDelay }));
+//             dispatch(updateField({ field: "tossDelay", value: matchDetails[0]?.tossDelay }));
+//             dispatch(updateField({ field: "oddsMinStake", value: matchDetails[0]?.oddsMinStake }));
+//             dispatch(updateField({ field: "oddsMaxStake", value: matchDetails[0]?.oddsMaxStake }));
+//             dispatch(updateField({ field: "sessionMinStake", value: matchDetails[0]?.sessionMinStake }));
+//             dispatch(updateField({ field: "sessionMaxStake", value: matchDetails[0]?.sessionMaxStake }));
+//             dispatch(updateField({ field: "bookMinStake", value: matchDetails[0]?.bookMinStake }));
+//             dispatch(updateField({ field: "bookMaxStake", value: matchDetails[0]?.bookMaxStake }));
+//             dispatch(updateField({ field: "tossMinStake", value: matchDetails[0]?.tossMinStake }));
+//             dispatch(updateField({ field: "tossMaxStake", value: matchDetails[0]?.tossMaxStake }));
+//             dispatch(updateField({ field: "matchStatus", value: matchDetails[0]?.matchStatus }));
+//             dispatch(updateField({ field: "sessionStatus", value: matchDetails[0]?.sessionStatus }));
+//             dispatch(updateField({ field: "bookmakerStatus", value: matchDetails[0]?.bookmakerStatus }));
+//             dispatch(updateField({ field: "tossStatus", value: matchDetails[0]?.tossStatus }));
+//             dispatch(updateField({ field: "oddsStatus", value: matchDetails[0]?.oddsStatus }));
+            
+//           }
+//         } catch (error) {
+//           console.error("Error fetching match details:", error);
+//         }
+//       };
+//       fetchMatchDetails();
+//     }
+//   }, [formState.match, dispatch]); // Fetch match details when match changes
 
 //   const handleInputChange = (field, value) => {
 //     dispatch(updateField({ field, value }));
@@ -405,35 +454,53 @@ export default CreateNewMatch;
 //   //   try {
 //   //     const response = await createNewMatchAPIAuth("admin/v1/match/creatematch", formState);
 //   //     if (response.status === 200) {
-//   //       alert("Form submitted successfully!");
+//   //       toast.success("Form submitted successfully!");
 //   //       dispatch(resetForm()); // Reset form on success
 //   //     } else {
-//   //       alert("Failed to submit the form. Please try again.");
+//   //       toast.error("Failed to submit the form. Please try again.");
 //   //     }
 //   //   } catch (error) {
 //   //     console.error("Error submitting form:", error);
-//   //     alert("An error occurred. Please try again later.");
+//   //     toast.error("An error occurred. Please try again later.");
 //   //   }
 //   // };
 
 //   const handleSubmit = async (e) => {
 //     e.preventDefault();
+  
 //     try {
-//       const response = await createNewMatchAPIAuth("admin/v1/match/creatematch", formState);
-//       if (response.status === 200) {
-//         toast.success("Form submitted successfully!");
-//         dispatch(resetForm()); // Reset form on success
+//       let response;
+//       if (formState.match) {
+//         // Update the match if formState.match is not empty (i.e., an existing match is selected)
+//         response = await putUpdateMatchAPIAuth(
+//           `match/updatematch/${formState.match}`,
+//           formState
+//         );
+//         if (response.status === 200) {
+//           toast.success("Form updated successfully!");
+//         }
 //       } else {
-//         toast.error("Failed to submit the form. Please try again.");
+//         // Create a new match if formState.match is empty (i.e., no match selected)
+//         response = await createNewMatchAPIAuth(
+//           "match/creatematch",
+//           formState
+//         );
+//         if (response.status === 200) {
+//           toast.success("Form submitted successfully!");
+//           dispatch(resetForm()); // Reset form on success
+//         }
 //       }
 //     } catch (error) {
 //       console.error("Error submitting form:", error);
 //       toast.error("An error occurred. Please try again later.");
 //     }
 //   };
+  
 //   return (
-//     <form onSubmit={handleSubmit} className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded">
-//       <div className="grid grid-cols-4 gap-4">
+//     <div className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded border border-gray-300">
+//           <form onSubmit={handleSubmit} className="space-y-6">
+//         <div className="grid grid-cols-4 gap-4">
+    
 //         {/* Dynamic Fields */}
 //         <div>
 //           <label className="block text-gray-700 text-lg font-bold mb-1">Select Sport</label>
@@ -476,7 +543,7 @@ export default CreateNewMatch;
 //           >
 //             <option value="">Select Match</option>
 //             {matchOptions.map((match) => (
-//               <option key={match.id} value={match.Match}>
+//               <option key={match.id} value={match._id}>
 //                 {match.Match}
 //               </option>
 //             ))}
@@ -562,8 +629,10 @@ export default CreateNewMatch;
 //         </div>
 //       </div>
 //     </form>
+//     </div>
 //   );
 // };
 
 // export default CreateNewMatch;
+
 
