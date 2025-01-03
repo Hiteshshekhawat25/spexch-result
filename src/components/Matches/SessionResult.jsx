@@ -3,24 +3,40 @@ import { ImBook } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSessions, selectSessions } from "../../Store/Slice/SessionSlice";
 import { FaEdit } from "react-icons/fa";
-import { getMatchList } from "../../Services/Newmatchapi";
+import { getMatchList, updateSessionResult } from "../../Services/Newmatchapi";
 
 const SessionResult = () => {
   const dispatch = useDispatch();
   const { sessions, loading, error } = useSelector((state) => state);
   const [editingRow, setEditingRow] = useState(null);
   const [tempResult, setTempResult] = useState("");
-  const [matchList, setMatchList] = useState([]); // Store the match list here
-  const [matchLoading, setMatchLoading] = useState(false); // State for loading match list
-  const [matchError, setMatchError] = useState(""); // State for error in match fetching
+  const [matchList, setMatchList] = useState([]);
+  const [matchLoading, setMatchLoading] = useState(false);
+  const [matchError, setMatchError] = useState("");
+  const [selectedMatch, setSelectedMatch] = useState("");
+  const [filteredSessions, setFilteredSessions] = useState([]);
+  const [selectedSession, setSelectedSession] = useState("");
+
+
+
+  useEffect(()=>{
+    dispatch(fetchSessions());
+  },[dispatch])
+
 
   useEffect(() => {
-    dispatch(fetchSessions());
-  }, [dispatch]);
-
-  const handleEditClick = (index, currentResult) => {
-    setEditingRow(index);
-    setTempResult(currentResult);
+    if (selectedMatch) {
+      const match = matchList.find((match) => match._id === selectedMatch);
+      const matchSessions = match?.Fancy?.Fancy || [];
+      console.log("matchSessions",matchSessions);
+      setFilteredSessions(matchSessions);
+    } else {
+      setFilteredSessions([]); 
+    }
+  }, [selectedMatch, matchList]);
+  
+  const handleMatchChange = (e) => {
+    setSelectedMatch(e.target.value);
   };
 
   const handleResultChange = (e) => {
@@ -28,7 +44,7 @@ const SessionResult = () => {
   };
 
   const handleSaveResult = (id) => {
-    setEditingRow(null); // Exit edit mode
+    setEditingRow(null);
   };
 
   const handleMatchSelectFocus = async () => {
@@ -37,13 +53,32 @@ const SessionResult = () => {
     setMatchError("");
     try {
       const response = await getMatchList();
-      console.log("responseresponseresponse",response)
       setMatchList(response || []);
     } catch (error) {
       console.error("Error fetching match list:", error);
       setMatchError("Error fetching match list.");
     } finally {
       setMatchLoading(false);
+    }
+  };
+
+  const handleEditClick = (index, result) => {
+    setEditingRow(index);
+    setTempResult(result);
+  };
+  const handleSubmit = async () => {
+    console.log("selectedSession",selectedSession)
+    if (!selectedSession || !tempResult) {
+      alert("Please select a session and enter a result.");
+      return;
+    }
+
+    try {
+      await updateSessionResult(selectedSession, tempResult);
+      alert("Result updated successfully!");
+      dispatch(fetchSessions());
+    } catch (error) {
+      alert("Failed to update the session result. Please try again.");
     }
   };
 
@@ -71,8 +106,9 @@ const SessionResult = () => {
           <select
             id="match"
             className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
-            onFocus={handleMatchSelectFocus} // Trigger API call on focus
-            disabled={matchLoading} // Disable dropdown when loading
+            onFocus={handleMatchSelectFocus}
+            onChange={handleMatchChange}
+            disabled={matchLoading}
           >
             <option value="">Select Match</option>
             {matchLoading ? (
@@ -90,6 +126,7 @@ const SessionResult = () => {
         </div>
 
         {/* Select Session Dropdown */}
+        {console.log("matchhhhhhh",matchList)}
         <div className="w-1/4">
           <label
             htmlFor="session"
@@ -102,9 +139,11 @@ const SessionResult = () => {
             className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
           >
             <option value="">Select Session</option>
-            <option value="session1">Session 1</option>
-            <option value="session2">Session 2</option>
-            <option value="session3">Session 3</option>
+            {filteredSessions.map((session, index) => (
+              <option key={index} value={session.marketId}>
+                {session.marketName}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -123,7 +162,7 @@ const SessionResult = () => {
               className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
             />
           </div>
-          <button className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600">
+          <button className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600" onClick={handleSubmit}>
             Submit
           </button>
         </div>

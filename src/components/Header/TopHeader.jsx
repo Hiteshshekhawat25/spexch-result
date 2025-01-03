@@ -15,7 +15,6 @@ const TopHeader = () => {
   const dispatch = useDispatch();
   const { userData, loading, error } = useSelector((state) => state.user);
   const location = useLocation();
-  console.log("userData", userData);
 
   useEffect(() => {
     const fetchData = async () => {

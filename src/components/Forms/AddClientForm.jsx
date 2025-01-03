@@ -172,8 +172,6 @@ export const AddClientForm = ({ closeModal }) => {
       window.location.reload();
   
       // Call setDownline API to update the downline data
-      
-  
       setTimeout(() => {
         handleCloseModal();
       }, 2000);
