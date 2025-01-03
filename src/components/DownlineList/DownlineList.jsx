@@ -530,11 +530,11 @@ const DownlineList = () => {
                     </Link>
                     <div
                       onClick={() => handleOpenSettings(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                     >
                       <BsBuildingFillLock className="text-darkgray" />
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
                       <MdDelete
                         className="text-"
                         onClick={() => handleDeleteClick(item)}
