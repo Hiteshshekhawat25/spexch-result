@@ -46,7 +46,7 @@ const AccountStatement = () => {
       />
 
       <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="text-xl bg-gradient-blue text-white font-bold">Account Statement</h1>
+        <h1 className="text-xl bg-gradient-seablue text-white font-bold">Account Statement</h1>
 
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
@@ -87,9 +87,9 @@ const AccountStatement = () => {
                 statementData.map((item, index) => (
                   <tr key={index} className="border-b border-gray-400">
                     <td className="px-4 py-3 text-sm text-center">{item.createdAt}</td>
-                    <td className="px-4 py-3 text-sm text-center">{item.deposit}</td>
-                    <td className="px-4 py-3 text-sm text-center">{item.withdraw}</td>
-                    <td className="px-4 py-3 text-sm text-center">{item.balance}</td>
+                    <td className="px-4 py-3 text-sm text-center">{item.amount}</td>
+                    <td className="px-4 py-3 text-sm text-center">{item.amount}</td>
+                    <td className="px-4 py-3 text-sm text-center">{item.currentMainWallet}</td>
                     <td className="px-4 py-3 text-sm text-center">{item.description}</td>
                     <td className="px-4 py-3 text-sm text-center">{item.from_To}</td>
                   </tr>
@@ -204,7 +204,7 @@ export default AccountStatement;
 //       />
 
 //       <div className="border border-gray-300 rounded-md bg-white">
-//         <h1 className="text-xl bg-gradient-blue text-white font-bold">Account Statement</h1>
+//         <h1 className="text-xl bg-gradient-seablue text-white font-bold">Account Statement</h1>
 
 //         <div className="flex justify-between items-center mb-4 p-4">
 //           <div className="flex items-center">
