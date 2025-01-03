@@ -89,7 +89,7 @@ const AccountStatementFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From Date</label>
+        <label className="text-sm font-medium text-black mb-1">From </label>
         <input
           type="date"
           value={fromDate}
@@ -102,7 +102,7 @@ const AccountStatementFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To Date</label>
+        <label className="text-sm font-medium text-black mb-1">To </label>
         <input
           type="date"
           value={toDate}
