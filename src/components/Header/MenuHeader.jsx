@@ -123,7 +123,7 @@ const MenuHeader = () => {
               )}
             </Link>
             {item.subMenu && (
-              <ul className="absolute left-0 top-full hidden bg-gradient-blue-hover group-hover:block shadow-lg z-10">
+              <ul className="absolute left-0 top-full hidden bg-gradient-blue-hover group-hover:block shadow-lg z-10 flex whitespace-nowrap">
                 {item.subMenu.map((subItem, subIndex) => (
                   <li key={subIndex}>
                     <Link
