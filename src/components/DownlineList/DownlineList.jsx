@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { FaSortUp, FaSortDown, FaEdit, FaEye } from "react-icons/fa";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { RiArrowUpDownFill } from "react-icons/ri";
-import { MdSettings, MdDelete } from "react-icons/md";
+import { MdSettings, MdDelete, MdManageHistory } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
 import { BsBuildingFillLock } from "react-icons/bs";
 import CreditEditReferenceModal from "../Modal/CreditEditReferanceModal";
@@ -523,6 +523,9 @@ const DownlineList = () => {
                     >
                       <MdSettings className="text-darkgray" />
                     </div>
+                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                      <MdManageHistory className="text-darkgray" />
+                    </div>
                     <Link to={ROUTES_CONST.MyAccount}>
                       <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
                         <FaUserAlt className="text-darkgray" />
@@ -534,11 +537,11 @@ const DownlineList = () => {
                     >
                       <BsBuildingFillLock className="text-darkgray" />
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
-                      <MdDelete
-                        className="text-"
-                        onClick={() => handleDeleteClick(item)}
-                      />
+                    <div
+                      onClick={() => handleDeleteClick(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                    >
+                      <MdDelete className="text-" />
                     </div>
                   </div>
                 </td>

@@ -100,7 +100,7 @@ const DeleteConfirmationModal = ({
       <div className="bg-white rounded-lg shadow-lg w-1/3 mt-16 ">
         {" "}
         {/* Add margin-top */}
-        <div className="flex justify-between items-center bg-black text-white p-4 rounded-t-lg">
+        <div className="flex justify-between items-center bg-gradient-blue text-white p-4 rounded-t-lg">
           <h3 className="text-lg font-semibold">Confirmation</h3>
           <button onClick={onClose} className="text-white">
             <MdClose size={24} />
