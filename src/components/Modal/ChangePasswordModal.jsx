@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IoClose } from 'react-icons/io5';
+import { IoClose, IoEye, IoEyeOff } from 'react-icons/io5'; // Import eye icons
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setChangePasswordLoading,
@@ -17,6 +17,9 @@ const ChangePasswordModal = ({ onCancel }) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false); // Toggle state for current password
+  const [showNewPassword, setShowNewPassword] = useState(false); // Toggle state for new password
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Toggle state for confirm password
 
   const dispatch = useDispatch();
   const changePasswordStatus = useSelector(selectChangePasswordStatus);
@@ -55,7 +58,7 @@ const ChangePasswordModal = ({ onCancel }) => {
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-20">
-        <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-2">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-2">
           <span>Change Password</span>
           <IoClose
             onClick={onCancel}
@@ -68,39 +71,63 @@ const ChangePasswordModal = ({ onCancel }) => {
             <label className="text-sm font-medium text-gray-700">
               Your Password <span className="text-red-600">*</span>
             </label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-              placeholder="Enter your current password"
-            />
+            <div className="relative">
+              <input
+                type={showCurrentPassword ? 'text' : 'password'}
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                placeholder="Enter your current password"
+              />
+              <span
+                onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
+              >
+                {showCurrentPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+              </span>
+            </div>
           </div>
 
           <div>
             <label className="text-sm font-medium text-gray-700">
               New Password <span className="text-red-600">*</span>
             </label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-              placeholder="Enter your new password"
-            />
+            <div className="relative">
+              <input
+                type={showNewPassword ? 'text' : 'password'}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                placeholder="Enter your new password"
+              />
+              <span
+                onClick={() => setShowNewPassword(!showNewPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
+              >
+                {showNewPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+              </span>
+            </div>
           </div>
 
           <div>
             <label className="text-sm font-medium text-gray-700">
               Confirm Password <span className="text-red-600">*</span>
             </label>
-            <input
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-              placeholder="Confirm your new password"
-            />
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? 'text' : 'password'}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+                placeholder="Confirm your new password"
+              />
+              <span
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
+              >
+                {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+              </span>
+            </div>
           </div>
 
           {(error || changePasswordError) && (
@@ -109,13 +136,13 @@ const ChangePasswordModal = ({ onCancel }) => {
             </div>
           )}
 
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-end mt-4 space-x-2">
             <button
               onClick={handleSubmit}
-              className="bg-gradient-blue text-white px-4 py-2 rounded mr-2"
+              className="bg-customGray  text-white px-4 py-2 rounded"
               disabled={changePasswordStatus === 'loading'}
             >
-              {changePasswordStatus === 'loading' ? 'Processing...' : 'Yes'}
+              {changePasswordStatus === 'loading' ? 'Processing...' : 'Confirm'}
             </button>
             <button
               onClick={onCancel}
@@ -132,5 +159,3 @@ const ChangePasswordModal = ({ onCancel }) => {
 };
 
 export default ChangePasswordModal;
-
-
