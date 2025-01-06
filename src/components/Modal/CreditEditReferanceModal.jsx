@@ -137,7 +137,12 @@ const CreditEditReferenceModal = ({
               <input
                 type="number"
                 value={newCreditRef}
-                onChange={(e) => setNewCreditRef(Number(e.target.value))}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length <= 8) {
+                    setNewCreditRef(Number(value));
+                  }
+                }}
                 placeholder="New Credit Reference"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />

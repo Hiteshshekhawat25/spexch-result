@@ -31,6 +31,7 @@ import accountStatusReducer from '../Store/Slice/accountStatusSlice';
 import eventProfitLossReducer from './Slice/eventProfitLossSlice'; 
 import eventFilterReducer from './Slice/eventPLFilterSlice'; 
 import sessionReducer from '../Store/Slice/SessionSlice';
+import partnershipReducer from '../Store/Slice/updatePartnershipSlice'
 
 
 export const store = configureStore({
@@ -65,6 +66,7 @@ export const store = configureStore({
     eventProfitLoss: eventProfitLossReducer, 
     eventFilter: eventFilterReducer,  
     sessions: sessionReducer,
+    partnership: partnershipReducer,
   },
 });
 

@@ -1,31 +1,29 @@
-import React, { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5"; // Importing the close icon
-import { useDispatch } from "react-redux";
-import { updateExposure } from "../../Store/Slice/editExposureSlice"; // Import the update exposure thunk
-import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 import {
   setDownlineData,
   setError,
   setLoading,
 } from "../../Store/Slice/downlineSlice";
-import { toast } from "react-toastify";
 import { fetchRoles } from "../../Utils/LoginApi";
+import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import { updateCreditReference } from "../../Store/Slice/creditReferenceslice";
+import { IoClose } from "react-icons/io5";
+import { updatePartnership } from "../../Store/Slice/updatePartnershipSlice";
 
-const EditExposureLimitModal = ({
+const UpdatePartnershipModal = ({
   username,
-  currentExposureLimit,
   onCancel,
+  currentPartnership,
   onSubmit = () => {},
-  user,
   userId,
-  fetchDownline,
   currentPage,
   entriesToShow,
 }) => {
-  // console.log("currentExposureLimit", currentExposureLimit);
   const dispatch = useDispatch();
 
-  const [newExposureLimit, setNewExposureLimit] = useState("");
+  const [newPartnership, setNewPartnership] = useState("");
   const [password, setPassword] = useState("");
   const [roles, setRoles] = useState([]);
 
@@ -33,6 +31,11 @@ const EditExposureLimitModal = ({
     e.preventDefault();
     setLoading(true);
 
+    if (newPartnership <= 0 || isNaN(newPartnership) || newPartnership > 100) {
+      toast.error("Please enter a valid partnership value between 1 and 100.");
+      setLoading(false);
+      return;
+    }
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -40,9 +43,6 @@ const EditExposureLimitModal = ({
         setLoading(false);
         return;
       }
-
-      // Dispatch exposure limit update
-      dispatch(updateExposure({ newExposureLimit, password, userId }));
 
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
@@ -74,9 +74,8 @@ const EditExposureLimitModal = ({
         return;
       }
 
-      console.log("roleId:", roleId);
+      dispatch(updatePartnership({ newPartnership, password, userId }));
 
-      // Fetch downline data with roleId
       const result = await fetchDownlineData(
         currentPage,
         entriesToShow,
@@ -84,23 +83,24 @@ const EditExposureLimitModal = ({
       );
       if (result && result.data) {
         dispatch(setDownlineData(result.data));
-        setNewExposureLimit(0);
+
+        setNewPartnership(0);
         setPassword("");
         onCancel();
         toast.success(
-          result.message ||
-            "Exposure limit updated and downline data fetched successfully."
+          result.message || "Partnership data updated successfully."
         );
       } else {
         toast.warning("Unable to fetch updated downline data.");
       }
     } catch (error) {
-      console.error("Error fetching downline data:", error);
+      console.error("Error updating partnership:", error);
       dispatch(setError(error.message || "Failed to fetch the downline data."));
       toast.error(
-        error.message || "An error occurred while fetching the downline data."
+        error.message || "An error occurred while updating the partnership."
       );
     } finally {
+      // Reset loading state
       setLoading(false);
     }
   };
@@ -110,7 +110,7 @@ const EditExposureLimitModal = ({
       <div className="bg-white rounded-lg w-[500px] mt-20">
         {/* Header */}
         <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-2">
-          <span>Edit Exposure Limit - {username}</span>
+          <span>Update Partnership - {username}</span>
           <IoClose
             onClick={onCancel}
             className="cursor-pointer text-white text-2xl"
@@ -119,17 +119,15 @@ const EditExposureLimitModal = ({
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4 p-5">
-          {/* Current Exposure Limit */}
+          {/* Current Partnership */}
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">
               Current
             </label>
-            <p className="w-2/3 text-black font-medium">
-              {currentExposureLimit}
-            </p>
+            <p className="w-2/3 text-black font-medium">{currentPartnership}</p>
           </div>
 
-          {/* New Exposure Limit */}
+          {/* New Partnership */}
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">
               New
@@ -137,14 +135,14 @@ const EditExposureLimitModal = ({
             <div className="w-2/3 flex items-center space-x-2">
               <input
                 type="number"
-                value={newExposureLimit}
+                value={newPartnership}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (value.length <= 8) {
-                    setNewExposureLimit(Number(value));
+                  if (value.length <= 3) {
+                    setNewPartnership(Number(value));
                   }
                 }}
-                placeholder="New Exposure Limit"
+                placeholder="New Partnership"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -189,4 +187,4 @@ const EditExposureLimitModal = ({
   );
 };
 
-export default EditExposureLimitModal;
+export default UpdatePartnershipModal;

@@ -306,11 +306,6 @@ export const getGameActionStatus = async (token, userId) => {
   try {
     const response = await axios.get(
       `${BASE_URL}/user/user-game-status${userId}`,
-      // {
-      //   userId,
-      //   gameId,
-      //   active,
-      // },
       {
         headers: {
           "Content-Type": "application/json",
@@ -325,3 +320,29 @@ export const getGameActionStatus = async (token, userId) => {
     );
   }
 };
+
+// export const updatePartnership = async ({ userId, newPartnership, password }) => {
+//   try {
+//     const token = localStorage.getItem("authToken");
+//     const response = await axios.put(
+//       `${BASE_URL}/user/update-partnership`,
+//       {
+//         newPartnership,
+//         password,
+//         userId,
+//       },
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     return response.data;
+//   } catch (error) {
+//     throw new Error(
+//       error.response ? error.response.data.message : "Failed to update partnership"
+//     );
+//   }
+// };
+
