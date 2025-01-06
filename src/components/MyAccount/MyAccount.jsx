@@ -32,42 +32,56 @@ const MyAccount = () => {
   return (
     <div className="flex justify-center mt-6">
       {/* Sidebar */}
-      <div className="w-1/4 border border-gray-400 rounded-lg  mr-8 ml-4 bg-white">
-        <h2 className="text-xl text-white bg-gradient-blue py-2 px-4 rounded-t-md">
-          My Account
-        </h2>
-        <table className="w-full mt-2 border-collapse">
-          <tbody>
-            <tr
-              className={`cursor-pointer text-center border border-gray-300 ${
-                selectedPage === 'myProfile' ? 'font-bold bg-gray-200' : ''
-              }`}
-              onClick={() => handleSelection('myProfile')}
-            >
-              <td className="py-2 px-4">My Profile</td>
-            </tr>
-            <tr
-              className={`cursor-pointer text-center border border-gray-300 ${
-                selectedPage === 'accountStatement' ? 'font-bold bg-gray-200' : ''
-              }`}
-              onClick={() => handleSelection('accountStatement')}
-            >
-              <td className="py-2 px-4">Account Statement</td>
-            </tr>
-            <tr
-              className={`cursor-pointer text-center border border-gray-300 ${
-                selectedPage === 'activityLog' ? 'font-bold bg-gray-200' : ''
-              }`}
-              onClick={() => handleSelection('activityLog')}
-            >
-              <td className="py-2 px-4">Activity Log</td>
-            </tr>
-          </tbody>
-        </table>
+      <div className="w-full sm:w-1/4 border border-gray-400 mx-4 sm:mx-8 bg-white max-h-[calc(3.5*2.6rem)] sm:max-h-[calc(3.5*2.6rem)] overflow-hidden">
+  <h2 className="text-sm text-white bg-gradient-seablue font-bold py-2 px-4">
+    My Account
+  </h2>
+  
+  <div className="w-full border-collapse">
+    <div
+      className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${
+        selectedPage === 'myProfile' ? 'font-bold bg-bluehover' : ''
+      }`}
+      onClick={() => handleSelection('myProfile')}
+    >
+      <div className="flex justify-between py-2 px-4 text-sm">
+        <span>My Profile</span>
       </div>
+    </div>
+    
+    <div
+      className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${
+        selectedPage === 'accountStatement' ? 'font-bold bg-bluehover' : ''
+      }`}
+      onClick={() => handleSelection('accountStatement')}
+    >
+      <div className="flex justify-between py-2 px-4 text-sm">
+        <span>Account Statement</span>
+      </div>
+    </div>
+    
+    <div
+      className={`cursor-pointer text-left border-gray-300 hover:bg-lime ${
+        selectedPage === 'activityLog' ? 'font-bold bg-bluehover' : ''
+      }`}
+      onClick={() => handleSelection('activityLog')}
+    >
+      <div className="flex justify-between py-2 px-4 text-sm">
+        <span>Activity Log</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
 
       {/* Content */}
-      <div className="w-3/4 border border-gray-400 rounded-lg mr-4 bg-gray-100 shadow-sm">
+      <div className="w-3/4">
         {content}
       </div>
     </div>

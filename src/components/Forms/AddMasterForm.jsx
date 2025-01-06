@@ -197,9 +197,11 @@ export const AddMasterForm = ({ closeModal }) => {
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white p-6 rounded shadow-lg">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Add Master</h2>
-      <form onSubmit={handleSubmit}>
+    <div className=" bg-white rounded shadow-lg ">
+      <h2 className="text-white font-semibold mb-4 py-2 px-2 bg-gradient-blue">
+        Add Master
+      </h2>
+      <form onSubmit={handleSubmit} className="px-4">
         <table className="w-full">
           <tbody>
             {/* Username */}
@@ -449,7 +451,7 @@ export const AddMasterForm = ({ closeModal }) => {
             {formData.rollingCommissionChecked && (
               <tr>
                 <td colSpan="2">
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     <div className="flex justify-between">
                       <label className="w-1/3">Fancy</label>
                       <input
@@ -535,7 +537,7 @@ export const AddMasterForm = ({ closeModal }) => {
             {formData.agentRollingCommissionChecked && (
               <tr>
                 <td colSpan="2">
-                  <div className="space-y-4">
+                  <div className="space-y-2">
                     <div className="flex justify-between">
                       <label className="w-1/3">Fancy</label>
                       <input
@@ -622,13 +624,15 @@ export const AddMasterForm = ({ closeModal }) => {
             </tr>
           </tbody>
         </table>
-        <button
-          type="submit"
-          className="w-full py-2 bg-NavyBlue text-white rounded mt-4"
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </button>
+        <div className="flex justify-center mt-4">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-NavyBlue text-white rounded mb-2"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </button>
+        </div>
       </form>
       <ToastContainer autoClose={2000} draggable={true} />
     </div>

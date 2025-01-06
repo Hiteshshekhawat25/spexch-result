@@ -10,6 +10,7 @@ module.exports = {
         lightGray:'#e5e7eb',
         black: '#000000',
         blue: '#00008B',
+        lime:'#ecfccb',
         customGray: '#2d2d2d',
         darkgray: "#404040",
         whiteGray: "#d7dede",
@@ -18,6 +19,7 @@ module.exports = {
         LightGreen: '#4d7c0f',
         darkGreen: '#365314',
         NavyBlue: '#1b186e',
+        bluehover:'#d1ddef',
         lightblue: '#38bdf8',
         cream:'#fffbeb',
         success: '#4CAF50', // Custom success color
@@ -35,6 +37,7 @@ module.exports = {
         'gradient-green-hover': 'linear-gradient(#4f9f21 0%, #a4dc60 100%)',
         'gradient-blue' : 'linear-gradient(-180deg, #315195 0%, #14213d 100%)',
         'gradient-blue-hover' : 'linear-gradient(#14213d 0%, #315195 100%)',
+        'gradient-seablue':'linear-gradient(-180deg, #2E4B5E 0%, #243A48 82%) ',
         'gradient-green2' : 'linear-gradient(180deg,#0a92a5 15%,#076875 100%)',
       },
       // Custom spacing for positioning toasts
@@ -52,7 +55,7 @@ module.exports = {
         light: '300',
         // normal: '400',
         medium: '500',
-        // semibold: '600',
+        semibold: '600',
         bold: '700',
         // extrabold: '800',
         // 'extra-bold': '800',

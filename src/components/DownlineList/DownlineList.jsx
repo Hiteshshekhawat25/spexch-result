@@ -2,7 +2,7 @@ import React, { useState, useEffect, useMemo } from "react";
 import { FaSortUp, FaSortDown, FaEdit, FaEye } from "react-icons/fa";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { RiArrowUpDownFill } from "react-icons/ri";
-import { MdSettings, MdDelete } from "react-icons/md";
+import { MdSettings, MdDelete, MdManageHistory } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
 import { BsBuildingFillLock } from "react-icons/bs";
 import CreditEditReferenceModal from "../Modal/CreditEditReferanceModal";
@@ -31,7 +31,8 @@ import DepositModal from "../Modal/DepositModal";
 import SportsSettingsModal from "../Modal/SportsSettings";
 import AccountStatus from "../Modal/AccountStatus";
 import { toast } from "react-toastify";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { ROUTES_CONST } from "../../Constant/routesConstant";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -80,14 +81,25 @@ const DownlineList = () => {
     const fetchData = async () => {
       try {
         dispatch(setLoading(true));
-        const token = localStorage.getItem("authToken");
 
+        const token = localStorage.getItem("authToken");
         if (!token) {
           console.error("Token not found. Please log in again.");
           return;
         }
 
-        const result = await fetchDownlineData(currentPage, entriesToShow);
+        if (!roleId) {
+          console.error(
+            "Invalid role ID. Cannot fetch data without a valid role."
+          );
+          return;
+        }
+
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
 
         if (result && result.data) {
           dispatch(setDownlineData(result.data));
@@ -95,13 +107,14 @@ const DownlineList = () => {
         }
       } catch (err) {
         console.error("Error fetching data:", err.message);
+        dispatch(setError(err.message));
       } finally {
         dispatch(setLoading(false));
       }
     };
 
     fetchData();
-  }, [dispatch, currentPage, entriesToShow]);
+  }, [dispatch, currentPage, entriesToShow, roleId]);
 
   useEffect(() => {
     if (token) {
@@ -449,15 +462,17 @@ const DownlineList = () => {
                 <td className="px-4 py-2 text-sm">
                   {" "}
                   <span
-                    className="bg-green-500 text-white px-2 py-2 mr-1 rounded font-bold text-l"
+                    className="bg-green-500 text-white px-2 py-2 mr-1 rounded font-semibold text-l"
                     onClick={() => handleUsernameList(item)}
                   >
                     {item.role_name.toUpperCase()}
                   </span>
-                  <span className="text-black">{item.username}</span>
+                  <span className="text-black font-semibold">
+                    {item.username}
+                  </span>
                 </td>
-                <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700">
-                  {item.creditReference}
+                <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.creditReference)}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
                       className="text-blue cursor-pointer"
@@ -469,12 +484,14 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">
-                  {item.openingBalance}
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">0</td>
-                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900">
-                  {item.exposureLimit}
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  0
+                </td>
+                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.exposureLimit)}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
                       className="text-blue cursor-pointer"
@@ -482,10 +499,17 @@ const DownlineList = () => {
                     />
                   </div>
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">
-                  {item.totalBalance}
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(
+                    item.totalBalance || 0
+                  )}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm">{}</td>
+                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
+                </td>
+                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.partnership)}
+                </td>
                 <td className="border border-gray-400 px-4 py-2 font-bold text-l">
                   <span
                     className={`p-1 rounded border ${
@@ -513,26 +537,32 @@ const DownlineList = () => {
                     <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
                       <RiArrowUpDownFill className="text-darkgray" />
                     </div>
+
                     <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdSettings className="text-darkgray" />
+                      <MdManageHistory className="text-darkgray" />
                     </div>
                     <div
                       onClick={() => statushandlechange(item)}
                       className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                     >
-                      <FaUserAlt className="text-darkgray" />
+                      <MdSettings className="text-darkgray" />
                     </div>
+                    <Link to={ROUTES_CONST.MyAccount}>
+                      <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
+                        <FaUserAlt className="text-darkgray" />
+                      </div>
+                    </Link>
                     <div
                       onClick={() => handleOpenSettings(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                     >
                       <BsBuildingFillLock className="text-darkgray" />
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdDelete
-                        className="text-"
-                        onClick={() => handleDeleteClick(item)}
-                      />
+                    <div
+                      onClick={() => handleDeleteClick(item)}
+                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                    >
+                      <MdDelete className="text-" />
                     </div>
                   </div>
                 </td>
@@ -767,18 +797,18 @@ const DownlineList = () => {
         onClose={handleDeleteModalClose}
         onConfirm={handleDeleteConfirm}
         userId={userToDelete?._id}
+        currentPage={currentPage}
+        entriesToShow={entriesToShow}
       />
-      {selectedUser && (
-        <>
-          <DepositModal
-            isOpen={depositModal}
-            onClose={handleDeleteModalClose}
-            // onConfirm={handleDeleteConfirm}
-            userId={selectedUser?._id}
-            currentPage={currentPage}
-            entriesToShow={entriesToShow}
-          />
-        </>
+      {selectedUser && depositModal && (
+        <DepositModal
+          isOpen={depositModal}
+          onClose={handleDeleteModalClose}
+          userId={selectedUser?._id}
+          currentPage={currentPage}
+          entriesToShow={entriesToShow}
+          user={selectedUser}
+        />
       )}
       {selectedUser && (
         <>
@@ -792,15 +822,19 @@ const DownlineList = () => {
           />
         </>
       )}
-      {/* {selectedUser && <> */}
-      <AccountStatus
-        isOpen={accountStatus}
-        onClose={handleDeleteModalClose}
-        // onConfirm={handleDeleteConfirm}
-        userId={selectedUser?._id}
-        currentPage={currentPage}
-        entriesToShow={entriesToShow}
-      />
+      {selectedUser && (
+        <>
+          <AccountStatus
+            isOpen={accountStatus}
+            onClose={handleDeleteModalClose}
+            // onConfirm={handleDeleteConfirm}
+            userId={selectedUser?._id}
+            currentPage={currentPage}
+            entriesToShow={entriesToShow}
+            user={selectedUser}
+          />
+        </>
+      )}
       {isExposureModalOpen && selectedExposureUser && (
         <>
           <EditExposureLimitModal

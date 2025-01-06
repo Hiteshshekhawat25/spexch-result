@@ -131,3 +131,28 @@ export const getMatchList = async ( ) => {
     throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }
 };
+
+
+export const updateSessionResult = async (selectionId, result) => {
+  try {
+    const token = localStorage.getItem("authToken");
+
+    const response = await axios.post(
+      `${BASE_URL}/user/update-session-result`,
+      {
+        selectionId,
+        result,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating session result:", error);
+    throw error;
+  }
+};

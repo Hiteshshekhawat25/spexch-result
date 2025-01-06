@@ -23,7 +23,7 @@ const Login = () => {
     password: "",
   });
 
-  const [message, setMessage] = useState(""); // For success or error messages
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -55,7 +55,7 @@ const Login = () => {
       dispatch(loginSuccess(data));
   
       toast.success("Login successful!");
-      setTimeout(() => navigate("/dashboard"), 1500);
+      setTimeout(() => navigate("/dashboardPage"), 1500);
     } catch (error) {
       dispatch(loginFailure(error.message));
       setMessage("Invalid username or password!");

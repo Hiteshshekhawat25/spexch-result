@@ -19,6 +19,7 @@ const AccountStatus = ({
   onClose,
   currentPage,
   entriesToShow,
+  user
 }) => {
   const [status, setStatus] = useState("active");
   const [password, setPassword] = useState("");
@@ -135,7 +136,7 @@ const AccountStatus = ({
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-12">
-        <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
           <span>Change Status</span>
           <IoClose
             onClick={onClose}
@@ -146,12 +147,24 @@ const AccountStatus = ({
         {/* User Info */}
         <div className="space-y-4 p-5">
           <div className="flex justify-between items-center mb-4">
-            <div className="font-medium text-lg font-bold">
+            {/* Amount Field */}
+          <div className="flex justify-between">
+            <div>
+              <span
+                className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-bold text-l"
+                // onClick={() => handleUsernameList(item)}
+              >
+                {user.role_name.toUpperCase()}
+              </span>
+              {user.username}
+            </div>
+          </div>
+            {/* <div className="font-medium text-lg font-bold">
               <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
                 User
               </span>
               {userName}
-            </div>
+            </div> */}
             <div
               className={`text-${
                 status === "active"

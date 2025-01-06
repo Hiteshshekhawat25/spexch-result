@@ -61,12 +61,9 @@ export const AddClientForm = ({ closeModal }) => {
     if (token) {
       const fetchRoles = async () => {
         try {
-          const response = await axios.get(
-            `${BASE_URL}/user/get-role`,
-            {
-              headers: { Authorization: `Bearer ${token}` },
-            }
-          );
+          const response = await axios.get(`${BASE_URL}/user/get-role`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
           const rolesArray = response.data.data;
           const userRole = rolesArray.find((role) => role.role_name === "user");
           setUserRoleId(userRole?._id || null);
@@ -129,11 +126,11 @@ export const AddClientForm = ({ closeModal }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const errors = validateForm();
     setFormErrors(errors);
     if (Object.keys(errors).length > 0) return;
-  
+
     if (!token) {
       setError("Token is missing. Please login again.");
       return;
@@ -142,14 +139,14 @@ export const AddClientForm = ({ closeModal }) => {
       setError("User role ID is not available. Please try again later.");
       return;
     }
-  
+
     setIsSubmitting(true);
     setError(null);
     setSuccessMessage("");
-  
+
     const { confirmPassword, rollingCommissionChecked, ...dataToSubmit } =
       formData;
-  
+
     if (dataToSubmit.rollingCommissionChecked) {
       dataToSubmit.rollingCommission = Object.fromEntries(
         Object.entries(dataToSubmit.rollingCommission).map(([key, value]) => [
@@ -158,22 +155,19 @@ export const AddClientForm = ({ closeModal }) => {
         ])
       );
     }
-  
+
     const dataWithAccountType = { ...dataToSubmit, role: userRoleId };
-  
+
     try {
       const response = await saveClientApi(
         `${BASE_URL}/user/create-user`,
         dataWithAccountType,
         token
       );
-  
+
       toast.success(response.data.message || "Client created successfully!");
       window.location.reload();
-  
-      // Call setDownline API to update the downline data
-      
-  
+
       setTimeout(() => {
         handleCloseModal();
       }, 2000);
@@ -185,14 +179,13 @@ export const AddClientForm = ({ closeModal }) => {
       toast.error("Cannot create duplicate username");
     } finally {
       setIsSubmitting(false);
-     
+
       // dispatch(
       //   fetchDownlineData({
       //   })
       // );
     }
   };
-  
 
   const handleCloseModal = () => {
     setFormData(initialFormData);
@@ -203,11 +196,16 @@ export const AddClientForm = ({ closeModal }) => {
   };
 
   return (
-    <div className="max-w-lg mx-auto bg-white p-6 rounded-lg relative">
-      <h2 className="text-2xl font-semibold mb-4 text-center">Add Client</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex justify-between">
-          <label className="w-1/3">Username</label>
+    <div className="bg-white shadow-lg">
+      <h2 className=" text-white font-semibold mb-4 py-2 px-2 bg-gradient-blue">
+        Add User
+      </h2>
+      <form onSubmit={handleSubmit} className="space-y-2 px-4">
+        <div className="w-full flex justify-between">
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Username<span className="text-red-500">*</span>
+          </label>
+
           <input
             type="text"
             name="username"
@@ -221,7 +219,9 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.username}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3">Name</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Name<span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
             name="name"
@@ -231,9 +231,11 @@ export const AddClientForm = ({ closeModal }) => {
             required
           />
         </div>
-       
+
         <div className="flex justify-between">
-          <label className="w-1/3">Commission(%)</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Commission(%)<span className="text-red-500">*</span>
+          </label>
           <input
             type="number"
             name="commission"
@@ -247,7 +249,9 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.commission}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3">Opening Balance</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Opening Balance<span className="text-red-500">*</span>
+          </label>
           <input
             type="number"
             name="openingBalance"
@@ -261,7 +265,9 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.openingBalance}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3">Credit Reference</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Credit Reference<span className="text-red-500">*</span>
+          </label>
           <input
             type="number"
             name="creditReference"
@@ -275,7 +281,9 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.creditReference}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3">Mobile Number</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Mobile Number<span className="text-red-500">*</span>
+          </label>
           <input
             type="text"
             name="mobileNumber"
@@ -289,7 +297,9 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.mobileNumber}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3">Exposure Limit</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Exposure Limit<span className="text-red-500">*</span>
+          </label>
           <input
             type="number"
             name="exposureLimit"
@@ -303,7 +313,9 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.exposureLimit}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3">Password</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Password<span className="text-red-500">*</span>
+          </label>
           <input
             type="password"
             name="password"
@@ -317,7 +329,9 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.password}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3">Confirm Password</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Confirm Password<span className="text-red-500">*</span>
+          </label>
           <input
             type="password"
             name="confirmPassword"
@@ -331,7 +345,9 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.confirmPassword}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3">Master Password</label>
+          <label className="w-1/3 text-left py-2 font-semibold">
+            Master Password<span className="text-red-500">*</span>
+          </label>
           <input
             type="password"
             name="masterPassword"
@@ -357,7 +373,7 @@ export const AddClientForm = ({ closeModal }) => {
         {formData.rollingCommissionChecked && (
           <div className="space-y-4">
             <div className="flex justify-between">
-              <label className="w-1/3">Fancy</label>
+              <label className="w-1/3 text-left py-2 font-semibold">Fancy</label>
               <input
                 type="number"
                 name="rollingCommission.fancy"
@@ -367,7 +383,7 @@ export const AddClientForm = ({ closeModal }) => {
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3">Matka</label>
+              <label className="w-1/3 text-left py-2 font-semibold">Matka</label>
               <input
                 type="number"
                 name="rollingCommission.matka"
@@ -377,7 +393,7 @@ export const AddClientForm = ({ closeModal }) => {
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3">Casino</label>
+              <label className="w-1/3 text-left py-2 font-semibold">Casino</label>
               <input
                 type="number"
                 name="rollingCommission.casino"
@@ -387,7 +403,7 @@ export const AddClientForm = ({ closeModal }) => {
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3">Binary</label>
+              <label className="w-1/3 text-left py-2 font-semibold">Binary</label>
               <input
                 type="number"
                 name="rollingCommission.binary"
@@ -397,7 +413,7 @@ export const AddClientForm = ({ closeModal }) => {
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3">Sportsbook</label>
+              <label className="w-1/3 text-left py-2 font-semibold">Sportsbook</label>
               <input
                 type="number"
                 name="rollingCommission.sportsbook"
@@ -407,7 +423,7 @@ export const AddClientForm = ({ closeModal }) => {
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3">Bookmaker</label>
+              <label className="w-1/3 text-left py-2 font-semibold">Bookmaker</label>
               <input
                 type="number"
                 name="rollingCommission.bookmaker"
@@ -418,18 +434,17 @@ export const AddClientForm = ({ closeModal }) => {
             </div>
           </div>
         )}
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="w-full bg-NavyBlue text-white p-1 mt-4"
-        >
-          {isSubmitting ? "Submitting..." : "Submit"}
-        </button>
-        {/* {error && <div className="text-red-500 mt-4">{error}</div>}
-        {successMessage && (
-          <div className="text-green-500 mt-4">{successMessage}</div>
-        )} */}
+        <div className="flex justify-center mt-4">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-4 py-2 bg-NavyBlue text-white rounded mb-2"
+          >
+            {isSubmitting ? "Submitting..." : "Submit"}
+          </button>
+        </div>
       </form>
+
       <ToastContainer autoClose={2000} draggable={true} />
     </div>
   );

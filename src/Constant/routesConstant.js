@@ -19,6 +19,7 @@ export const ROUTES_CONST = {
     SessionPreBook:"/SessionPreBook",
     SessionResult:"/SessionResult",
     ProfitLoss:"/ProfitLoss",
+    EventProfitLoss:"/EventProfitLoss",
     BetList:"/BetList",
     MyAccount:"/MyAccount"    
   };
