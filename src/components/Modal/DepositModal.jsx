@@ -166,7 +166,12 @@ const DepositModal = ({
               <input
                 type="number"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length <= 8) {
+                    setAmount(Number(value));
+                  }
+                }}
                 placeholder="Enter Amount"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />

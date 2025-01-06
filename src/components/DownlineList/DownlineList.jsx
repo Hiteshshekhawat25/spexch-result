@@ -77,44 +77,40 @@ const DownlineList = () => {
       }
     }
   };
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch(setLoading(true));
-
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("Token not found. Please log in again.");
-          return;
-        }
-
-        if (!roleId) {
-          console.error(
-            "Invalid role ID. Cannot fetch data without a valid role."
-          );
-          return;
-        }
-
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow,
-          roleId
-        );
-
-        if (result && result.data) {
-          dispatch(setDownlineData(result.data));
-          setTotalUsers(result.pagination?.totalUsers || 0);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err.message);
-        dispatch(setError(err.message));
-      } finally {
-        dispatch(setLoading(false));
+  const fetchData = async () => {
+    try {
+      if (!roleId) {
+        console.error("Invalid role ID. Cannot fetch data without a valid role.");
+        return;
       }
-    };
 
-    fetchData();
-  }, [dispatch, currentPage, entriesToShow, roleId]);
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("Token not found. Please log in again.");
+        return;
+      }
+
+      dispatch(setLoading(true));
+
+      const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
+
+      if (result && result.data) {
+        dispatch(setDownlineData(result.data));
+        setTotalUsers(result.pagination?.totalUsers || 0);
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err.message);
+      dispatch(setError(err.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  fetchData();
+}, [dispatch, currentPage, entriesToShow, roleId]);
+
 
   useEffect(() => {
     if (token) {

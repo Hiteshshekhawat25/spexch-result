@@ -138,7 +138,12 @@ const EditExposureLimitModal = ({
               <input
                 type="number"
                 value={newExposureLimit}
-                onChange={(e) => setNewExposureLimit(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length <= 8) {
+                    setNewExposureLimit(Number(value));
+                  }
+                }}
                 placeholder="New Exposure Limit"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
