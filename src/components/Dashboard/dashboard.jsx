@@ -32,10 +32,10 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex justify-around p-6 gap-x-6 mx-4 border border-gray-400 mt-4">
+    <div className="flex flex-col lg:flex-row gap-6 w-full">
       {/* Live Sports Profit */}
-      <div className="w-1/2 p-6 bg-white rounded-lg text-gray-800 shadow-lg">
-        <h2 className="text-lg bg-gray-800 text-white font-bold mb-4 p-2 rounded">
+      <div className="flex-1 mt-4 ml-4 bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px]">
+        <h2 className="text-lg bg-gradient-seablue text-white font-bold mb-4 p-2 rounded">
           Live Sports Profit
         </h2>
         <div className="w-64 h-64 mx-auto">
@@ -44,8 +44,8 @@ const Dashboard = () => {
       </div>
 
       {/* Backup Sports Profit */}
-      <div className="w-1/2 p-6 bg-white rounded-lg text-gray-800 shadow-lg">
-        <h2 className="text-lg bg-gray-800 text-white font-bold mb-4 p-2 rounded">
+      <div className="flex-1 mt-4 mr-4  bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px] ">
+        <h2 className="text-lg bg-gradient-seablue text-white font-bold mb-4 p-2 rounded">
           Backup Sports Profit
         </h2>
         <div className="w-64 h-64 mx-auto">
