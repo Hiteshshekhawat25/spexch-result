@@ -106,7 +106,15 @@ try {
 const response = await axios.get(`${BASE_URL}/user/get-user-hierarchy/${userId}?page=1&limit=3`, {
 headers: { Authorization: `Bearer ${token}` },
 });
-console.log(response.data.data)
+
+if(response?.data?.pagination?.totalUsers === 0) {
+  toast.error("No users availabe for this user", {
+    autoClose: 2000,
+  });
+  return response.data.data
+}
+
+console.log('get-user-hierarchy', response?.data?.pagination?.totalUsers)
 
 // Return the user details if the request is successful
 return response.data.data;
