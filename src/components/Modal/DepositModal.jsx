@@ -14,6 +14,7 @@ const DepositModal = ({
   userId,
   currentPage,
   entriesToShow,
+  user,
 }) => {
   const [amount, setAmount] = useState("");
   const [remark, setRemark] = useState("");
@@ -24,6 +25,7 @@ const DepositModal = ({
   const dispatch = useDispatch();
 
   const token = localStorage.getItem("authToken");
+  console.log("userdeposiut", user);
 
   if (!isOpen) return null;
 
@@ -124,7 +126,7 @@ const DepositModal = ({
       <div className="bg-white rounded-lg w-[500px] mt-12">
         {/* Modal Header */}
         <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
-          <span>Banking - Master -{userData?.data?.name}</span>
+          <span>Banking - Master- {userData?.data?.name}</span>
           <button
             onClick={() => {
               resetState();
@@ -139,6 +141,23 @@ const DepositModal = ({
         {/* Modal Body */}
         <form className="space-y-4 p-5">
           {/* Amount Field */}
+          <div className="flex justify-between">
+            <div>
+              <span
+                className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-bold text-l"
+                // onClick={() => handleUsernameList(item)}
+              >
+                {user.role_name.toUpperCase()}
+              </span>
+              {user.username}
+            </div>
+            <div>
+              Client Bal:{" "}
+              <span className="font-bold">
+                {new Intl.NumberFormat("en-IN").format(user.totalBalance || 0 )}
+              </span>
+            </div>
+          </div>
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">
               Balance

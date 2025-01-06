@@ -1,13 +1,25 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
-import { IoLogOutOutline } from "react-icons/io5"; // Import the logout icon
-import { TbTriangleInvertedFilled } from "react-icons/tb"; // Import the triangle icon
+import { IoLogOutOutline } from "react-icons/io5"; 
+import { TbTriangleInvertedFilled } from "react-icons/tb"; 
+import { useDispatch } from "react-redux"; // Import useDispatch from Redux
+import {
+  clearUserData,
+
+} from "../../Store/Slice/userInfoSlice";
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
+  const dispatch = useDispatch();
 
   const userData = JSON.parse(localStorage.getItem("userData"));
+
+  const handleLogout = () => {
+    dispatch(clearUserData());
+    localStorage.clear();
+    window.location.reload();
+  };
 
   const menuItems = [
     { name: "Dashboard", link: "/dashboardPage" },
@@ -44,10 +56,10 @@ const MenuHeader = () => {
     {
       name: "Logout",
       link: "#",
+      onClick: handleLogout, // Attach logout handler here
     }, // Logout item
   ];
 
-  // Additional menu items for super-master role
   if (userData && userData.data.role_name === "super-master") {
     menuItems.push(
       {
@@ -78,7 +90,7 @@ const MenuHeader = () => {
             >
               <Link
                 to={item.link}
-                onClick={() => setActiveMenu(item.name)}
+                onClick={item.onClick || (() => setActiveMenu(item.name))}
                 className={`block py-1 px-2 hover:bg-gradient-blue-hover border-b-2 border-transparent ${
                   activeMenu === item.name
                     ? "bg-gradient-blue-hover text-white"
@@ -107,7 +119,7 @@ const MenuHeader = () => {
           >
             <Link
               to={item.link}
-              onClick={() => setActiveMenu(item.name)}
+              onClick={item.onClick || (() => setActiveMenu(item.name))}
               className={`py-1 px-2 block hover:bg-gradient-blue-hover border-b-2 border-transparent ${
                 activeMenu === item.name
                   ? "bg-gradient-blue-hover text-white"
@@ -144,7 +156,3 @@ const MenuHeader = () => {
 };
 
 export default MenuHeader;
-
-
-
-

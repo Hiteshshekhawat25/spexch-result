@@ -114,7 +114,7 @@ const AccountStatementFilter = ({
         />
       </div>
 
-      <div className="flex space-x-2 items-center ml-auto">
+      <div className="flex space-x-1 items-center ml-4">
         <button
           onClick={handleGetStatement}
           className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
