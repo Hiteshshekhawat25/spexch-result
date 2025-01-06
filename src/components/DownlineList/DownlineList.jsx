@@ -81,14 +81,25 @@ const DownlineList = () => {
     const fetchData = async () => {
       try {
         dispatch(setLoading(true));
-        const token = localStorage.getItem("authToken");
 
+        const token = localStorage.getItem("authToken");
         if (!token) {
           console.error("Token not found. Please log in again.");
           return;
         }
 
-        const result = await fetchDownlineData(currentPage, entriesToShow);
+        if (!roleId) {
+          console.error(
+            "Invalid role ID. Cannot fetch data without a valid role."
+          );
+          return;
+        }
+
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
 
         if (result && result.data) {
           dispatch(setDownlineData(result.data));
@@ -96,13 +107,14 @@ const DownlineList = () => {
         }
       } catch (err) {
         console.error("Error fetching data:", err.message);
+        dispatch(setError(err.message));
       } finally {
         dispatch(setLoading(false));
       }
     };
 
     fetchData();
-  }, [dispatch, currentPage, entriesToShow]);
+  }, [dispatch, currentPage, entriesToShow, roleId]);
 
   useEffect(() => {
     if (token) {
@@ -460,7 +472,7 @@ const DownlineList = () => {
                   </span>
                 </td>
                 <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-                  {item.creditReference}
+                  {new Intl.NumberFormat("en-IN").format(item.creditReference)}
                   <div className="ml-2 inline-flex space-x-2">
                     <FaEdit
                       className="text-blue cursor-pointer"
@@ -495,8 +507,8 @@ const DownlineList = () => {
                 <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                   {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                  {}
+                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                  {new Intl.NumberFormat("en-IN").format(item.partnership)}
                 </td>
                 <td className="border border-gray-400 px-4 py-2 font-bold text-l">
                   <span
