@@ -33,6 +33,7 @@ import AccountStatus from "../Modal/AccountStatus";
 import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
+import UpdatePartnershipModal from "../Modal/UpdatePartnershipModal";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const DownlineList = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [isExposureModalOpen, setIsExposureModalOpen] = useState(false);
   const [selectedExposureUser, setSelectedExposureUser] = useState(null);
+  const [updatePartnershipModal, setUpdatePartnershipModal] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
@@ -63,6 +65,9 @@ const DownlineList = () => {
   const downlineData = useSelector(selectDownlineData);
   const loading = useSelector(selectDownlineLoading);
   const error = useSelector(selectDownlineError);
+  const isMasterDownlineList = location.pathname.includes(
+    "master-downline-list"
+  );
 
   const handlePageChange = (direction) => {
     if (totalPages > 0) {
@@ -79,38 +84,36 @@ const DownlineList = () => {
   };
 
   useEffect(() => {
-  const fetchData = async () => {
-    try {
-      if (!roleId) {
-        console.error("Invalid role ID. Cannot fetch data without a valid role.");
-        return;
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("Token not found. Please log in again.");
+          return;
+        }
+
+        dispatch(setLoading(true));
+
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
+
+        if (result && result.data) {
+          dispatch(setDownlineData(result.data));
+          setTotalUsers(result.pagination?.totalUsers || 0);
+        }
+      } catch (err) {
+        console.error("Error fetching data:", err.message);
+        dispatch(setError(err.message));
+      } finally {
+        dispatch(setLoading(false));
       }
+    };
 
-      const token = localStorage.getItem("authToken");
-      if (!token) {
-        console.error("Token not found. Please log in again.");
-        return;
-      }
-
-      dispatch(setLoading(true));
-
-      const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
-
-      if (result && result.data) {
-        dispatch(setDownlineData(result.data));
-        setTotalUsers(result.pagination?.totalUsers || 0);
-      }
-    } catch (err) {
-      console.error("Error fetching data:", err.message);
-      dispatch(setError(err.message));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
-  fetchData();
-}, [dispatch, currentPage, entriesToShow, roleId]);
-
+    fetchData();
+  }, [dispatch, currentPage, entriesToShow, roleId]);
 
   useEffect(() => {
     if (token) {
@@ -249,6 +252,7 @@ const DownlineList = () => {
   }, [dispatch, roleId, currentPage, entriesToShow]);
 
   const sortedData = useMemo(() => {
+    console.log("filteredData", filteredData);
     if (!sortConfig.key) return filteredData;
 
     return [...filteredData].sort((a, b) => {
@@ -330,6 +334,7 @@ const DownlineList = () => {
     setAccountStatus(false);
     setCreditReferenceTransactionList(false);
     setIsModalOpen(false);
+    setUpdatePartnershipModal(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -343,6 +348,11 @@ const DownlineList = () => {
   const handleExposureEditClick = (user) => {
     setSelectedExposureUser(user);
     setIsExposureModalOpen(true);
+  };
+
+  const handleUpdatePartnership = (item) => {
+    setSelectedUser(item);
+    setUpdatePartnershipModal(true);
   };
 
   const handleExposureModalClose = () => {
@@ -412,7 +422,10 @@ const DownlineList = () => {
               { key: "creditRef", label: "CreditRef" },
               { key: "balance", label: "Balance" },
               { key: "exposures", label: "Exposures" },
-              { key: "exposure", label: "Exposure Limit" },
+              ...(!isMasterDownlineList
+                ? [{ key: "exposure", label: "Exposure Limit" }]
+                : []),
+              // { key: "exposure", label: "Exposure Limit" },
               { key: "availableBalance", label: "Avail. Bal" },
               { key: "refPL", label: "Ref. P/L" },
               { key: "partnership", label: "Partnership" },
@@ -486,15 +499,17 @@ const DownlineList = () => {
                 <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                   0
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                  {new Intl.NumberFormat("en-IN").format(item.exposureLimit)}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleExposureEditClick(item)}
-                    />
-                  </div>
-                </td>
+                {!isMasterDownlineList && (
+                  <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                    {new Intl.NumberFormat("en-IN").format(item.exposureLimit)}
+                    <div className="ml-2 inline-flex space-x-2">
+                      <FaEdit
+                        className="text-blue cursor-pointer"
+                        onClick={() => handleExposureEditClick(item)}
+                      />
+                    </div>
+                  </td>
+                )}
                 <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                   {new Intl.NumberFormat("en-IN").format(
                     item.totalBalance || 0
@@ -505,6 +520,14 @@ const DownlineList = () => {
                 </td>
                 <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
                   {new Intl.NumberFormat("en-IN").format(item.partnership)}
+                  {isMasterDownlineList && (
+                    <div className="ml-2 inline-flex space-x-2">
+                      <FaEdit
+                        className="text-blue cursor-pointer"
+                        onClick={() => handleUpdatePartnership(item)}
+                      />
+                    </div>
+                  )}
                 </td>
                 <td className="border border-gray-400 px-4 py-2 font-bold text-l">
                   <span
@@ -530,13 +553,16 @@ const DownlineList = () => {
                     >
                       <AiFillDollarCircle className="text-darkgray" />
                     </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <RiArrowUpDownFill className="text-darkgray" />
-                    </div>
-
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdManageHistory className="text-darkgray" />
-                    </div>
+                    {!isMasterDownlineList && (
+                      <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                        <RiArrowUpDownFill className="text-darkgray" />
+                      </div>
+                    )}
+                    {!isMasterDownlineList && (
+                      <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                        <MdManageHistory className="text-darkgray" />
+                      </div>
+                    )}
                     <div
                       onClick={() => statushandlechange(item)}
                       className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
@@ -565,161 +591,6 @@ const DownlineList = () => {
               </tr>
             )
           )}
-          {/* {location.pathname === "/master-downline-list" &&
-            userFetchList.length === 0 &&
-            downlineData?.data?.map((item, index) => (
-              <tr key={index} className="border border-gray-300 bg-white">
-                <td className="px-4 py-3 text-sm">
-                  <span
-                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
-                    onClick={() => handleUsernameList(item)}
-                  >
-                    {item.role_name}
-                  </span>
-                  {item.username}
-                </td>
-                <td className="px-4 py-3 text-sm text-blue-900">
-                  {item.creditReference}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleEditClick(item)}
-                    />
-                    <FaEye
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleListView(item)}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm text-blue-900">
-                  {item.exposureLimit}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleExposureEditClick(item)}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm"></td>
-                <td className="x-4 py-3 font-bold text-green-600 text-l">
-                  {item.status}
-                </td>
-                <td className="px-4 py-3 text-sm">
-                  <div className="flex space-x-2">
-                    <div
-                      onClick={() => handleIconClick(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
-                    >
-                      <AiFillDollarCircle className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <RiArrowUpDownFill className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdSettings className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => statushandlechange(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <FaUserAlt className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => handleOpenSettings(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <BsBuildingFillLock className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdDelete
-                        className="text-darkgray"
-                        onClick={() => handleDeleteClick(item)}
-                      />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))} */}
-          {/* {location.pathname === "/user-downline-list" &&
-            downlineData?.data?.map((item, index) => (
-              <tr key={index} className="border border-gray-300 bg-white">
-                <td className="px-4 py-3 text-sm">
-                  <span
-                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
-                    onClick={() => handleUsernameList(item)}
-                  >
-                    {item.role_name}
-                  </span>
-                  {item.username}
-                </td>
-                <td className="px-4 py-3 text-sm text-blue-900">
-                  {item.creditReference}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleEditClick(item)}
-                    />
-                    <FaEye
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleListView(item)}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm text-blue-900">
-                  {item.exposureLimit}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleExposureEditClick(item)}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm"></td>
-                <td className="x-4 py-3 font-bold text-green-600 text-l">
-                  {item.status}
-                </td>
-                <td className="px-4 py-3 text-sm">
-                  <div className="flex space-x-2">
-                    <div
-                      onClick={() => handleIconClick(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
-                    >
-                      <AiFillDollarCircle className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <RiArrowUpDownFill className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdSettings className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => statushandlechange(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <FaUserAlt className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => handleOpenSettings(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <BsBuildingFillLock className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdDelete
-                        className="text-darkgray"
-                        onClick={() => handleDeleteClick(item)}
-                      />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))} */}
         </tbody>
       </table>
       <div className="flex justify-between items-center mt-4">
@@ -766,6 +637,22 @@ const DownlineList = () => {
             onCancel={handleModalClose}
             username={selectedUser.username}
             currentCreditRef={selectedUser.creditReference}
+            onSubmit={handleSubmitFunction}
+            user={selectedUser}
+            userId={selectedUser?._id}
+            currentPage={currentPage}
+            entriesToShow={entriesToShow}
+          />
+        </>
+      )}
+      {selectedUser && updatePartnershipModal && (
+        <>
+          <UpdatePartnershipModal
+            isOpen={updatePartnershipModal}
+            onClose={handleDeleteModalClose}
+            onCancel={handleModalClose}
+            username={selectedUser.username}
+            currentPartnership={selectedUser.partnership}
             onSubmit={handleSubmitFunction}
             user={selectedUser}
             userId={selectedUser?._id}

@@ -17,7 +17,7 @@ export const updateCreditReference = createAsyncThunk(
         `${BASE_URL}/user/update-credit-reference`,
         { 
           username, 
-          newCreditReference: newCreditRef, // Use the correct key here
+          newCreditReference: newCreditRef, 
           password,
           userId
         },
