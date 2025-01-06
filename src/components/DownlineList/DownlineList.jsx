@@ -425,7 +425,6 @@ const DownlineList = () => {
               ...(!isMasterDownlineList
                 ? [{ key: "exposure", label: "Exposure Limit" }]
                 : []),
-              // { key: "exposure", label: "Exposure Limit" },
               { key: "availableBalance", label: "Avail. Bal" },
               { key: "refPL", label: "Ref. P/L" },
               { key: "partnership", label: "Partnership" },
@@ -515,8 +514,16 @@ const DownlineList = () => {
                     item.totalBalance || 0
                   )}
                 </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                  {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
+                <td
+                  className={`border border-gray-400 px-4 py-2 text-sm font-semibold ${
+                    item.profit_loss < 0 ? "text-red-500" : ""
+                  }`}
+                >
+                  {item.profit_loss < 0
+                    ? `(${new Intl.NumberFormat("en-IN").format(
+                        Math.abs(item.profit_loss)
+                      )})`
+                    : new Intl.NumberFormat("en-IN").format(item.profit_loss)}
                 </td>
                 <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
                   {new Intl.NumberFormat("en-IN").format(item.partnership)}
