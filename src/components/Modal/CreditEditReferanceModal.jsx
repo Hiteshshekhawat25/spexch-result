@@ -6,6 +6,7 @@ import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import { setDownlineData, setLoading } from "../../Store/Slice/downlineSlice";
 import { toast } from "react-toastify";
 import { fetchRoles } from "../../Utils/LoginApi";
+import { useLocation } from "react-router-dom";
 
 const CreditEditReferenceModal = ({
   username,
@@ -24,6 +25,7 @@ const CreditEditReferenceModal = ({
   const [error, setError] = useState(null);
   const { creditReference } = useSelector((state) => state);
   const [roles, setRoles] = useState([]);
+  const location = useLocation()
 
   const dispatch = useDispatch();
   const handleIncrease = () => {
@@ -62,6 +64,7 @@ const CreditEditReferenceModal = ({
         role_id: role._id,
       }));
       setRoles(rolesData);
+
   
       let roleId = null;
       if (location.pathname === "/user-downline-list") {

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { fetchRoles, saveClientApi } from "../../Utils/LoginApi";
 import { BASE_URL } from "../../Constant/Api";
 import { toast, ToastContainer } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setStartFetchData } from "../../Store/Slice/downlineSlice";
 
 export const AddMasterForm = ({ closeModal }) => {
   const [formData, setFormData] = useState({
@@ -42,6 +43,7 @@ export const AddMasterForm = ({ closeModal }) => {
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
   const { userData, loading, error } = useSelector((state) => state.user);
+  const dispatch = useDispatch()
   console.log("userData", userData?.data?.role_name);
 
   // Handle input changes
@@ -148,7 +150,7 @@ export const AddMasterForm = ({ closeModal }) => {
         token
       );
 
-      if (response.data.success) {
+      if (response?.data?.success) {
         setFormData({
           username: "",
           name: "",
@@ -178,21 +180,24 @@ export const AddMasterForm = ({ closeModal }) => {
           masterPassword: "",
         });
         toast.success(response?.data?.message || "Master created Successfully");
-        setTimeout(() => {
+        // setTimeout(() => {
           closeModal();
-        }, 2000);
+          dispatch(setStartFetchData())
+        // }, 2000);
       } else {
-        toast.error(response.data.message || "Failed to save master.");
+        toast.error(response?.response?.data?.message || "Failed to save master.");
       }
     } catch (error) {
+      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', error)
+
       toast.error(
-        error.message || "An error occurred while saving the master."
+        error?.message || "An error occurred while saving the master."
       );
     } finally {
       setIsSubmitting(false);
-      setTimeout(() => {
-        window.location.reload();
-      }, 2000);
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 2000);
     }
   };
 

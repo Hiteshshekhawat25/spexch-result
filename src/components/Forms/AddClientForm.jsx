@@ -5,7 +5,7 @@ import axios from "axios"; // For making API calls
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import the styles
 import { useDispatch } from "react-redux";
-import { setDownlineData } from "../../Store/Slice/downlineSlice";
+import { setDownlineData, setStartFetchData } from "../../Store/Slice/downlineSlice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 
 export const AddClientForm = ({ closeModal }) => {
@@ -166,11 +166,12 @@ export const AddClientForm = ({ closeModal }) => {
       );
 
       toast.success(response.data.message || "Client created successfully!");
-      window.location.reload();
+      // window.location.reload();
 
-      setTimeout(() => {
+      // setTimeout(() => {
         handleCloseModal();
-      }, 2000);
+        dispatch(setStartFetchData())
+      // }, 2000);
     } catch (error) {
       setError(
         error.response?.data?.message ||

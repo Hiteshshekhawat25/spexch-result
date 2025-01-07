@@ -10,6 +10,7 @@ import {
 } from "../../Store/Slice/downlineSlice";
 import { toast } from "react-toastify";
 import { fetchRoles } from "../../Utils/LoginApi";
+import { useLocation } from "react-router-dom";
 
 const EditExposureLimitModal = ({
   username,
@@ -28,6 +29,7 @@ const EditExposureLimitModal = ({
   const [newExposureLimit, setNewExposureLimit] = useState("");
   const [password, setPassword] = useState("");
   const [roles, setRoles] = useState([]);
+  const location = useLocation()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
