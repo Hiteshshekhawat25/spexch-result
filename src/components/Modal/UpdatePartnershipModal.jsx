@@ -26,13 +26,12 @@ const UpdatePartnershipModal = ({
   const [newPartnership, setNewPartnership] = useState("");
   const [password, setPassword] = useState("");
   const [roles, setRoles] = useState([]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
   
     // Validate individual fields and throw specific errors
-    if (!newPartnership) {
+    if (newPartnership === "" || newPartnership === null || newPartnership === undefined) {
       toast.error("Partnership value is required.");
       setLoading(false);
       return;
@@ -45,8 +44,8 @@ const UpdatePartnershipModal = ({
     }
   
     // Validate newPartnership value
-    if (newPartnership <= 0 || isNaN(newPartnership) || newPartnership > 100) {
-      toast.error("Please enter a valid partnership value between 1 and 100.");
+    if (newPartnership < 0 || isNaN(newPartnership) || newPartnership > 100) {
+      toast.error("Please enter a valid partnership value between 0 and 100.");
       setLoading(false);
       return;
     }
@@ -118,7 +117,6 @@ const UpdatePartnershipModal = ({
       setLoading(false);
     }
   };
-  
   
 
   return (

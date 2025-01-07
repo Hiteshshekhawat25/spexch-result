@@ -28,33 +28,33 @@ const CreditEditReferenceModal = ({
   const location = useLocation();
 
   const dispatch = useDispatch();
-  
+
   const handleIncrease = () => {
     setNewCreditRef((prev) => prev + 1);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Validate fields
     if (!newCreditRef) {
       toast.error("New Credit Reference is required.");
       return;
     }
-  
+
     if (!password) {
       toast.error("Password is required.");
       return;
     }
-  
+
     if (newCreditRef <= 0 || isNaN(newCreditRef)) {
       toast.error("Please enter a valid credit reference greater than 0.");
       return;
     }
-  
+
     // Start loading state
     dispatch(setLoading(true));
-  
+
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -62,7 +62,7 @@ const CreditEditReferenceModal = ({
         dispatch(setLoading(false));
         return;
       }
-  
+
       // Fetch roles
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
@@ -70,13 +70,13 @@ const CreditEditReferenceModal = ({
         dispatch(setLoading(false));
         return;
       }
-  
+
       const rolesData = rolesArray.map((role) => ({
         role_name: role.role_name,
         role_id: role._id,
       }));
       setRoles(rolesData);
-  
+
       let roleId = null;
       if (location.pathname === "/user-downline-list") {
         const userRole = rolesData.find((role) => role.role_name === "user");
@@ -91,24 +91,34 @@ const CreditEditReferenceModal = ({
         dispatch(setLoading(false));
         return;
       }
-  
+
       const fetchResult = await dispatch(
         updateCreditReference({ newCreditRef, password, userId })
       );
       console.log("fetchResult", fetchResult);
-  
+
       if (fetchResult.error) {
         // If there's an error returned from the action, display it in a toast
-        toast.error(fetchResult.payload || "An error occurred while updating the partnership.");
+        toast.error(
+          fetchResult.payload ||
+            "An error occurred while updating the partnership."
+        );
       } else {
-        const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
         if (result && result.data) {
+          console.log("result",result);
           dispatch(setDownlineData(result.data));
-  
+
           setNewCreditRef(0);
           setPassword("");
-          toast.success(result.message || "Partnership data updated successfully.");
-          
+          toast.success(
+            result.message || "data updated successfully."
+          );
+
           // Close the modal only after successful submission
           onCancel();
         } else {
@@ -125,7 +135,6 @@ const CreditEditReferenceModal = ({
       dispatch(setLoading(false));
     }
   };
-  
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
@@ -163,12 +172,7 @@ const CreditEditReferenceModal = ({
               <input
                 type="text"
                 value={newCreditRef}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value.length <= 8) {
-                    setNewCreditRef(Number(value));
-                  }
-                }}
+                onChange={(e) => setNewCreditRef(e.target.value)}
                 placeholder="New Credit Reference"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
