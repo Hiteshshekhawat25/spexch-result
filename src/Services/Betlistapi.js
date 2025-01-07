@@ -18,7 +18,7 @@ export const getBetlistData  = async (url) => {
     } catch (error) {
       // Handle specific token expiry case
       if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
-        localStorage.clear(); // Clear localStorage if token is invalid
+        localStorage.clear(); 
         toast.error("Session expired. Please log in again.");
       }
       // Handle other API errors

@@ -80,30 +80,6 @@ const Banking = () => {
     console.log("New Credit Ref:", newCreditRef, "Password:", password);
   };
 
-//   const sortedData = useMemo(() => {
-//     if (!sortConfig.key) return filteredData;
-
-//     return [...filteredData].sort((a, b) => {
-//       const aValue = a[sortConfig.key] || "";
-//       const bValue = b[sortConfig.key] || "";
-
-//       if (["balance", "exposure"].includes(sortConfig.key)) {
-//         const numA = parseFloat(aValue) || 0;
-//         const numB = parseFloat(bValue) || 0;
-//         return sortConfig.direction === "ascending" ? numA - numB : numB - numA;
-//       }
-
-//       if (sortConfig.key === "status") {
-//         return sortConfig.direction === "ascending"
-//           ? aValue.localeCompare(bValue)
-//           : bValue.localeCompare(aValue);
-//       }
-
-//       return sortConfig.direction === "ascending"
-//         ? aValue.localeCompare(bValue)
-//         : bValue.localeCompare(aValue);
-//     });
-//   }, [filteredData, sortConfig]);
 
 const sortedData = useMemo(() => {
     if (!sortConfig.key) return filteredData;
@@ -304,18 +280,9 @@ const handleSort = (key) => {
                         
       </td>
       <td className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-        {/* You can add other content here */}
+       
       </td>
-      
-      {/* <td className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-        <input
-          type="text"
 
-          value={editedData[index]?.depositwithdraw || item.depositwithdraw}
-          onChange={(e) => handleInputChange(e, 'depositwithdraw', index)}
-          className="border border-gray-300 px-2 py-1 text-sm"
-        />
-      </td> */}
       <td className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
   <div className="flex items-center space-x-2">
     {/* D Button */}
