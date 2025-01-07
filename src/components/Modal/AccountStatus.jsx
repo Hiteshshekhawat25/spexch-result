@@ -92,11 +92,11 @@ const AccountStatus = ({
       setRoles(rolesData);
 
       let roleId = null;
-      if (location.pathname === "/user-downline-list") {
+      if (location.pathname === "/admin/user-downline-list") {
         console.log("Inside user-downline-list");
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
+      } else if (location.pathname === "/admin/master-downline-list") {
         console.log("Inside master-downline-list");
         const masterRole = rolesData.find(
           (role) => role.role_name === "master"

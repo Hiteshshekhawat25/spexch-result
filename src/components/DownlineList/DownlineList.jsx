@@ -36,7 +36,7 @@ import AccountStatus from "../Modal/AccountStatus";
 import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
-import UpdatePartnershipModal from "../Modal/UpdatePartnershipModal";
+import UpdatePartnershipModal from '../Modal/UpdatePartnershipModal';
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -53,7 +53,7 @@ const DownlineList = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [isExposureModalOpen, setIsExposureModalOpen] = useState(false);
   const [selectedExposureUser, setSelectedExposureUser] = useState(null);
-  const [updatePartnershipModal, setUpdatePartnershipModal] = useState(false);
+  const [updatePartnership, setUpdatePartnership] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
@@ -193,7 +193,7 @@ const DownlineList = () => {
   // }, [token]);
 
   useEffect(() => {
-    if (location.pathname === "/master-downline-list") {
+    if (location.pathname === "/admin/master-downline-list") {
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
@@ -224,7 +224,7 @@ const DownlineList = () => {
   }, [token, location.pathname]);
 
   useEffect(() => {
-    if (location.pathname === "/user-downline-list") {
+    if (location.pathname === "/admin/user-downline-list") {
       console.log("tttttttttttttttttttttttttttttttt", location);
       const fetchUserRoles = async () => {
         try {
@@ -342,7 +342,7 @@ const DownlineList = () => {
     setAccountStatus(false);
     setCreditReferenceTransactionList(false);
     setIsModalOpen(false);
-    setUpdatePartnershipModal(false);
+    setUpdatePartnership(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -359,8 +359,9 @@ const DownlineList = () => {
   };
 
   const handleUpdatePartnership = (item) => {
+    console.log("hie");
+    setUpdatePartnership(true);
     setSelectedUser(item);
-    setUpdatePartnershipModal(true);
   };
 
   const handleExposureModalClose = () => {
@@ -703,6 +704,21 @@ const DownlineList = () => {
               onCancel={handleModalClose}
               username={selectedUser.username}
               currentCreditRef={selectedUser.creditReference}
+              onSubmit={handleSubmitFunction}
+              user={selectedUser}
+              userId={selectedUser?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+            />
+          </>
+        )}
+        {selectedUser && updatePartnership && (
+          <>
+            <UpdatePartnershipModal
+              isOpen={updatePartnership}
+              onCancel={handleDeleteModalClose}
+              username={selectedUser.username}
+              currentPartnership={selectedUser.partnership}
               onSubmit={handleSubmitFunction}
               user={selectedUser}
               userId={selectedUser?._id}
