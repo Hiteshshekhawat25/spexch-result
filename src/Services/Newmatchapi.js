@@ -135,22 +135,19 @@ export const getMatchList = async ( ) => {
 
 export const updateSessionResult = async (selectionId, result) => {
   try {
-    const token = localStorage.getItem("authToken");
-
-    const response = await axios.post(
-      `${BASE_URL}/user/update-session-result`,
-      {
-        selectionId,
-        result,
+    const token = localStorage.getItem("authToken"); // Get the token from local storage
+    const response = await fetch(`${BASE_URL}/user/update-session-result`, {
+      method: "POST", // Use the correct HTTP method (PUT for updates)
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`, // Add the Authorization header
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
+      body: JSON.stringify({ selectionId, result }), // Pass selectionId and result
+    });
+    if (!response.ok) {
+      throw new Error("Failed to update session result");
+    }
+    return await response.json(); // Parse and return the response JSON
   } catch (error) {
     console.error("Error updating session result:", error);
     throw error;

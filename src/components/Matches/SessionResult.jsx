@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ImBook } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSessions, selectSessions } from "../../Store/Slice/SessionSlice";
+import { fetchSessions, selectSessions,updateSession } from "../../Store/Slice/SessionSlice";
 import { FaEdit } from "react-icons/fa";
 import { getMatchList, updateSessionResult } from "../../Services/Newmatchapi";
 
@@ -15,7 +15,7 @@ const SessionResult = () => {
   const [matchError, setMatchError] = useState("");
   const [selectedMatch, setSelectedMatch] = useState("");
   const [filteredSessions, setFilteredSessions] = useState([]);
-  const [selectedSession, setSelectedSession] = useState("");
+  
 
 
 
@@ -43,9 +43,39 @@ const SessionResult = () => {
     setTempResult(e.target.value);
   };
 
-  const handleSaveResult = (id) => {
+  const handleSaveResult = (sessionId) => {
+    if (!tempResult.trim()) {
+      console.warn("No result provided for the update.");
+      return;
+    }
+  
+    console.log("Updating session result...");
+
+    console.log("New Result:", tempResult);
+  
+    // Dispatch the action to update the Redux store
+    dispatch(updateSession({ sessionId,  result: tempResult }));
+  
+    // Send the updated result to the server
+    updateSessionResult(sessionId,  tempResult)
+      .then(() => {
+        console.log(`Session result updated successfully.`);
+      
+        console.log("Updated Result:", tempResult);
+        alert("Session result updated successfully!");
+      })
+      .catch((error) => {
+        console.error("Failed to update session result:", error);
+        alert("Failed to update session result on the server.");
+      });
+  
+    // Reset editing state
     setEditingRow(null);
+    setTempResult("");
   };
+  
+  
+  
 
   const handleMatchSelectFocus = async () => {
     if (matchList.length > 0) return;
@@ -68,10 +98,10 @@ const SessionResult = () => {
   };
   const handleSubmit = async () => {
     console.log("selectedSession",selectedSession)
-    if (!selectedSession || !tempResult) {
-      alert("Please select a session and enter a result.");
-      return;
-    }
+    // if (!selectedSession || !tempResult) {
+    //   alert("Please select a session and enter a result.");
+    //   return;
+    // }
 
     try {
       await updateSessionResult(selectedSession, tempResult);
@@ -210,13 +240,14 @@ const SessionResult = () => {
                 <td className="px-4 py-2">
                   {editingRow === index ? (
                     <input
-                      type="text"
-                      value={tempResult}
-                      onChange={handleResultChange}
-                      onBlur={() => handleSaveResult(session.id)}
-                      className="px-2 py-1 border rounded"
-                      autoFocus
-                    />
+                    type="text"
+                    value={tempResult}
+                    onChange={handleResultChange}
+                    onBlur={() => handleSaveResult(session.marketId)} // Pass selectionId here
+                    className="px-2 py-1 border rounded"
+                    autoFocus
+                  />                 
+
                   ) : (
                     session.result
                   )}
