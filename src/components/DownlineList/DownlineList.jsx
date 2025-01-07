@@ -259,29 +259,6 @@ const DownlineList = () => {
     }
   }, [token, location.pathname]);
 
-  // useEffect(() => {
-  //   if (roleId) {
-  //     const fetchUserByRole = async () => {
-  //       try {
-  //         dispatch(setLoading(true));
-  //         const data = await fetchDownlineData(
-  //           currentPage,
-  //           entriesToShow,
-  //           roleId
-  //         );
-  //         dispatch(setDownlineData(data?.data));
-  //       } catch (error) {
-  //         console.error("Error fetching users by role:", error);
-  //         dispatch(setError(error.message));
-  //       } finally {
-  //         dispatch(setLoading(false));
-  //       }
-  //     };
-
-  //     fetchUserByRole();
-  //   }
-  // }, [dispatch, roleId, currentPage, entriesToShow, startFetchData]);
-
   const sortedData = useMemo(() => {
     console.log("filteredData", filteredData);
     if (!sortConfig.key) return filteredData;
@@ -590,11 +567,12 @@ const DownlineList = () => {
                     }`}
                   >
                     {item.profit_loss < 0
-                      ? `(${new Intl.NumberFormat("en-IN").format(
+                      ? `(-${new Intl.NumberFormat("en-IN").format(
                           Math.abs(item.profit_loss)
                         )})`
                       : new Intl.NumberFormat("en-IN").format(item.profit_loss)}
                   </td>
+
                   <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
                     {new Intl.NumberFormat("en-IN").format(item.partnership)}
                     {isMasterDownlineList && (
