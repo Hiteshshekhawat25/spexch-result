@@ -95,7 +95,7 @@ const CreditEditReferenceModal = ({
       const fetchResult = await dispatch(
         updateCreditReference({ newCreditRef, password, userId })
       );
-      console.log("fetchResult", fetchResult);
+      console.log("fetchResult-------", fetchResult);
 
       if (fetchResult.error) {
         // If there's an error returned from the action, display it in a toast
@@ -110,13 +110,13 @@ const CreditEditReferenceModal = ({
           roleId
         );
         if (result && result.data) {
-          console.log("result",result);
+          console.log("result", result.data);
           dispatch(setDownlineData(result.data));
 
           setNewCreditRef(0);
           setPassword("");
           toast.success(
-            result.message || "data updated successfully."
+            fetchResult.payload?.message || "Data updated successfully."
           );
 
           // Close the modal only after successful submission

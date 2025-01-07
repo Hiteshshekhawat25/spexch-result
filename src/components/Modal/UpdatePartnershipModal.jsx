@@ -29,27 +29,31 @@ const UpdatePartnershipModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-  
+
     // Validate individual fields and throw specific errors
-    if (newPartnership === "" || newPartnership === null || newPartnership === undefined) {
+    if (
+      newPartnership === "" ||
+      newPartnership === null ||
+      newPartnership === undefined
+    ) {
       toast.error("Partnership value is required.");
       setLoading(false);
       return;
     }
-  
+
     if (!password) {
       toast.error("Password is required.");
       setLoading(false);
       return;
     }
-  
+
     // Validate newPartnership value
     if (newPartnership < 0 || isNaN(newPartnership) || newPartnership > 100) {
       toast.error("Please enter a valid partnership value between 0 and 100.");
       setLoading(false);
       return;
     }
-  
+
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -57,20 +61,20 @@ const UpdatePartnershipModal = ({
         setLoading(false);
         return;
       }
-  
+
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
         toast.warning("No roles found. Please check your configuration.");
         setLoading(false);
         return;
       }
-  
+
       const rolesData = rolesArray.map((role) => ({
         role_name: role.role_name,
         role_id: role._id,
       }));
       setRoles(rolesData);
-  
+
       let roleId = null;
       if (location.pathname === "/admin/user-downline-list") {
         console.log("Inside user-downline-list");
@@ -87,23 +91,34 @@ const UpdatePartnershipModal = ({
         setLoading(false);
         return;
       }
-  
+
       // Dispatch the update action and handle result
-      const fetchResult = await dispatch(updatePartnership({ newPartnership, password, userId }));
+      const fetchResult = await dispatch(
+        updatePartnership({ newPartnership, password, userId })
+      );
       console.log("fetchResult", fetchResult);
-  
+
       if (fetchResult.error) {
         // If there's an error returned from the action, display it in a toast
-        toast.error(fetchResult.payload || "An error occurred while updating the partnership.");
+        toast.error(
+          fetchResult.payload ||
+            "An error occurred while updating the partnership."
+        );
       } else {
-        const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
         if (result && result.data) {
           dispatch(setDownlineData(result.data));
-  
+
           setNewPartnership(0);
           setPassword("");
           onCancel();
-          toast.success(result.message || "Partnership data updated successfully.");
+          toast.success(
+            fetchResult.payload?.message || "Data updated successfully."
+          );
         } else {
           toast.warning("Unable to fetch updated downline data.");
         }
@@ -111,13 +126,14 @@ const UpdatePartnershipModal = ({
     } catch (error) {
       console.error("Error updating partnership:", error);
       dispatch(setError(error.message || "Failed to fetch the downline data."));
-      toast.error(error.message || "An error occurred while updating the partnership.");
+      toast.error(
+        error.message || "An error occurred while updating the partnership."
+      );
     } finally {
       // Reset loading state
       setLoading(false);
     }
   };
-  
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
