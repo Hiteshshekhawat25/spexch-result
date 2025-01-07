@@ -150,7 +150,7 @@ const UpdatePartnershipModal = ({
             </label>
             <div className="w-2/3 flex items-center space-x-2">
               <input
-                type="number"
+                type="text"
                 value={newPartnership}
                 onChange={(e) => {
                   const value = e.target.value;
