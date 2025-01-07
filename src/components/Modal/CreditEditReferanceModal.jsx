@@ -25,9 +25,10 @@ const CreditEditReferenceModal = ({
   const [error, setError] = useState(null);
   const { creditReference } = useSelector((state) => state);
   const [roles, setRoles] = useState([]);
-  const location = useLocation()
+  const location = useLocation();
 
   const dispatch = useDispatch();
+  
   const handleIncrease = () => {
     setNewCreditRef((prev) => prev + 1);
   };
@@ -35,6 +36,7 @@ const CreditEditReferenceModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    // Validate fields
     if (!newCreditRef) {
       toast.error("New Credit Reference is required.");
       return;
@@ -50,22 +52,22 @@ const CreditEditReferenceModal = ({
       return;
     }
   
-    dispatch(updateCreditReference({ newCreditRef, password, userId }));
-    
-    setLoading(true);
+    // Start loading state
+    dispatch(setLoading(true));
   
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         toast.error("Authentication token not found. Please log in again.");
-        setLoading(false);
+        dispatch(setLoading(false));
         return;
       }
   
+      // Fetch roles
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
         toast.warning("No roles found. Please check your configuration.");
-        setLoading(false);
+        dispatch(setLoading(false));
         return;
       }
   
@@ -80,34 +82,51 @@ const CreditEditReferenceModal = ({
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
       } else if (location.pathname === "/master-downline-list") {
-        const masterRole = rolesData.find((role) => role.role_name === "master");
+        const masterRole = rolesData.find(
+          (role) => role.role_name === "master"
+        );
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
       } else {
         toast.warning("Invalid location path. Unable to determine action.");
-        setLoading(false);
+        dispatch(setLoading(false));
         return;
       }
   
-      const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
-      if (result && result.data) {
-        dispatch(setDownlineData(result.data));
-        setNewCreditRef(0);
-        setPassword("");
-        toast.success("Credit Reference data updated successfully.");
+      const fetchResult = await dispatch(
+        updateCreditReference({ newCreditRef, password, userId })
+      );
+      console.log("fetchResult", fetchResult);
+  
+      if (fetchResult.error) {
+        // If there's an error returned from the action, display it in a toast
+        toast.error(fetchResult.payload || "An error occurred while updating the partnership.");
       } else {
-        toast.warning("Unable to fetch updated downline data.");
+        const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
+        if (result && result.data) {
+          dispatch(setDownlineData(result.data));
+  
+          setNewCreditRef(0);
+          setPassword("");
+          toast.success(result.message || "Partnership data updated successfully.");
+          
+          // Close the modal only after successful submission
+          onCancel();
+        } else {
+          toast.warning("Unable to fetch updated downline data.");
+        }
       }
     } catch (error) {
-      console.error("Error fetching downline data:", error);
-      toast.error(error.message || "An error occurred while fetching the downline data.");
+      console.error("Error:", error);
+      toast.error(
+        error.message || "An error occurred while processing the request."
+      );
     } finally {
-      setLoading(false);
+      // Ensure loading state is reset
+      dispatch(setLoading(false));
     }
-  
-    onCancel();
   };
   
-  
+
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-12">

@@ -75,7 +75,7 @@ const DownlineList = () => {
 
   console.log("roleIdroleIdroleId", roleId);
   const isMasterDownlineList = location.pathname.includes(
-    "master-downline-list"
+    "/master-downline-list"
   );
 
   const handlePageChange = (direction) => {
@@ -145,55 +145,12 @@ const DownlineList = () => {
     fetchData();
   }, [dispatch, currentPage, entriesToShow, roleId, startFetchData]);
 
-  // useEffect(() => {
-  //   if (token) {
-  //     const fetchUserRoles = async () => {
-  //       try {
-  //         const rolesArray = await fetchRoles(token);
-
-  //         if (Array.isArray(rolesArray)) {
-  //           const rolesData = rolesArray.map((role) => ({
-  //             role_name: role.role_name,
-  //             role_id: role._id,
-  //           }));
-  //           setRole(rolesData);
-  //         } else {
-  //           setError("Roles data is not an array.");
-  //         }
-  //       } catch (error) {
-  //         setError(error.message || "Failed to fetch roles.");
-  //       }
-  //     };
-  //     fetchUserRoles();
-  //   }
-  // }, [token]);
-
-  // const filteredData = Array.isArray(data)
-  //   ? data.filter((item) =>
-  //       item.username.toLowerCase().includes(searchTerm.toLowerCase())
-  //     )
-  //   : [];
-
   const filteredData = downlineData.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // useEffect(() => {
-  //   if (token) {
-  //     const fetchRolesData = async () => {
-  //       try {
-  //         const rolesArray = await fetchRoles(token);
-  //         setRoles(rolesArray || []);
-  //       } catch {
-  //         toast.error("Failed to fetch roles.");
-  //       }
-  //     };
-  //     fetchRolesData();
-  //   }
-  // }, [token]);
-
   useEffect(() => {
-    if (location.pathname === "/admin/master-downline-list") {
+    if (location.pathname === "/master-downline-list") {
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
@@ -224,7 +181,8 @@ const DownlineList = () => {
   }, [token, location.pathname]);
 
   useEffect(() => {
-    if (location.pathname === "/admin/user-downline-list") {
+    console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyy", location.pathname);
+    if (location.pathname === "/user-downline-list") {
       console.log("tttttttttttttttttttttttttttttttt", location);
       const fetchUserRoles = async () => {
         try {

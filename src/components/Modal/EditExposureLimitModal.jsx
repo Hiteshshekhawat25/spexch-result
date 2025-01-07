@@ -78,10 +78,10 @@ const EditExposureLimitModal = ({
       setRoles(rolesData);
   
       let roleId = null;
-      if (location.pathname === "/admin/user-downline-list") {
+      if (location.pathname === "/user-downline-list") {
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/admin/master-downline-list") {
+      } else if (location.pathname === "/master-downline-list") {
         const masterRole = rolesData.find((role) => role.role_name === "master");
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
       } else {
@@ -89,25 +89,42 @@ const EditExposureLimitModal = ({
         setLoading(false);
         return;
       }
-  
+   const fetchResult = await dispatch(updateExposure({ newExposureLimit, password, userId }));
+        console.log("fetchResult", fetchResult);
       // Fetch downline data with roleId
-      const result = await fetchDownlineData(
-        currentPage,
-        entriesToShow,
-        roleId
-      );
-      if (result && result.data) {
-        dispatch(setDownlineData(result.data));
-        setNewExposureLimit(0);
-        setPassword("");
-        onCancel(); // Close the modal only on success
-        toast.success(
-          result.message ||
-            "Exposure limit updated and downline data fetched successfully."
-        );
-      } else {
-        toast.warning("Unable to fetch updated downline data.");
-      }
+      // const result = await fetchDownlineData(
+      //   currentPage,
+      //   entriesToShow,
+      //   roleId
+      // );
+      // if (result && result.data) {
+      //   dispatch(setDownlineData(result.data));
+      //   setNewExposureLimit(0);
+      //   setPassword("");
+      //   onCancel(); // Close the modal only on success
+      //   toast.success(
+      //     result.message ||
+      //       "Exposure limit updated and downline data fetched successfully."
+      //   );
+      // } else {
+      //   toast.warning("Unable to fetch updated downline data.");
+      // }
+      if (fetchResult.error) {
+              // If there's an error returned from the action, display it in a toast
+              toast.error(fetchResult.payload || "An error occurred while updating the partnership.");
+            } else {
+              const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
+              if (result && result.data) {
+                dispatch(setDownlineData(result.data));
+        
+                setNewExposureLimit(0);
+                setPassword("");
+                onCancel();
+                toast.success(result.message || "Partnership data updated successfully.");
+              } else {
+                toast.warning("Unable to fetch updated downline data.");
+              }
+            }
     } catch (error) {
       console.error("Error fetching downline data:", error);
       dispatch(setError(error.message || "Failed to fetch the downline data."));
