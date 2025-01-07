@@ -35,13 +35,23 @@ const CreditEditReferenceModal = ({
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    if (!newCreditRef) {
+      toast.error("New Credit Reference is required.");
+      return;
+    }
+  
+    if (!password) {
+      toast.error("Password is required.");
+      return;
+    }
+  
     if (newCreditRef <= 0 || isNaN(newCreditRef)) {
       toast.error("Please enter a valid credit reference greater than 0.");
       return;
     }
   
     dispatch(updateCreditReference({ newCreditRef, password, userId }));
-  
+    
     setLoading(true);
   
     try {
@@ -64,15 +74,12 @@ const CreditEditReferenceModal = ({
         role_id: role._id,
       }));
       setRoles(rolesData);
-
   
       let roleId = null;
       if (location.pathname === "/user-downline-list") {
-        console.log("Inside user-downline-list");
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
       } else if (location.pathname === "/master-downline-list") {
-        console.log("Inside master-downline-list");
         const masterRole = rolesData.find((role) => role.role_name === "master");
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
       } else {
@@ -81,28 +88,25 @@ const CreditEditReferenceModal = ({
         return;
       }
   
-      console.log("roleId:", roleId);
-  
       const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
       if (result && result.data) {
         dispatch(setDownlineData(result.data));
         setNewCreditRef(0);
         setPassword("");
-        onCancel();
         toast.success("Credit Reference data updated successfully.");
       } else {
         toast.warning("Unable to fetch updated downline data.");
       }
     } catch (error) {
       console.error("Error fetching downline data:", error);
-      setError(error.message || "Failed to fetch the downline data.");
-      toast.error(
-        error.message || "An error occurred while fetching the downline data."
-      );
+      toast.error(error.message || "An error occurred while fetching the downline data.");
     } finally {
       setLoading(false);
     }
+  
+    onCancel();
   };
+  
   
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">

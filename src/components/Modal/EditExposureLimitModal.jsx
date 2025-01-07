@@ -33,8 +33,26 @@ const EditExposureLimitModal = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Validation checks for empty fields
+    if (!newExposureLimit) {
+      toast.error("New Exposure Limit is required.");
+      return; // Do not proceed if validation fails
+    }
+  
+    if (!password) {
+      toast.error("Password is required.");
+      return; // Do not proceed if validation fails
+    }
+  
+    // Validation for invalid exposure limit value
+    if (newExposureLimit <= 0 || isNaN(newExposureLimit)) {
+      toast.error("Please enter a valid exposure limit greater than 0.");
+      return; // Do not proceed if validation fails
+    }
+  
     setLoading(true);
-
+  
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -42,42 +60,36 @@ const EditExposureLimitModal = ({
         setLoading(false);
         return;
       }
-
+  
       // Dispatch exposure limit update
       dispatch(updateExposure({ newExposureLimit, password, userId }));
-
+  
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
         toast.warning("No roles found. Please check your configuration.");
         setLoading(false);
         return;
       }
-
+  
       const rolesData = rolesArray.map((role) => ({
         role_name: role.role_name,
         role_id: role._id,
       }));
       setRoles(rolesData);
-
+  
       let roleId = null;
       if (location.pathname === "/user-downline-list") {
-        console.log("Inside user-downline-list");
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
       } else if (location.pathname === "/master-downline-list") {
-        console.log("Inside master-downline-list");
-        const masterRole = rolesData.find(
-          (role) => role.role_name === "master"
-        );
+        const masterRole = rolesData.find((role) => role.role_name === "master");
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
       } else {
         toast.warning("Invalid location path. Unable to determine action.");
         setLoading(false);
         return;
       }
-
-      console.log("roleId:", roleId);
-
+  
       // Fetch downline data with roleId
       const result = await fetchDownlineData(
         currentPage,
@@ -88,7 +100,7 @@ const EditExposureLimitModal = ({
         dispatch(setDownlineData(result.data));
         setNewExposureLimit(0);
         setPassword("");
-        onCancel();
+        onCancel(); // Close the modal only on success
         toast.success(
           result.message ||
             "Exposure limit updated and downline data fetched successfully."
@@ -106,6 +118,7 @@ const EditExposureLimitModal = ({
       setLoading(false);
     }
   };
+  
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
