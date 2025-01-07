@@ -5,6 +5,7 @@ const initialState = {
   data: [],
   loading: false,
   error: null,
+  startFetchData : false
 };
 
 const downlineSlice = createSlice({
@@ -20,10 +21,13 @@ const downlineSlice = createSlice({
     setError: (state, action) => {
       state.error = action.payload;
     },
+    setStartFetchData : (state) => {
+      state.startFetchData = true
+    }
   },
 });
 
-export const { setDownlineData, setLoading, setError } = downlineSlice.actions;
+export const { setDownlineData, setLoading, setError , setStartFetchData} = downlineSlice.actions;
 
 export const selectDownlineData = (state) => state.downline.data;
 export const selectDownlineLoading = (state) => state.downline.loading;

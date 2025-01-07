@@ -62,6 +62,7 @@ export const saveClientApi = async (endpoint, body, token, role) => {
 
   } catch (error) {
     console.log(error);
+    return error
   }
 };
 
@@ -108,9 +109,8 @@ headers: { Authorization: `Bearer ${token}` },
 });
 
 if(response?.data?.pagination?.totalUsers === 0) {
-  toast.error("No users availabe for this user", {
-    autoClose: 2000,
-  });
+  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa aaa', response)
+  toast.error("No users availabe for this user");
   return response.data.data
 }
 
