@@ -27,6 +27,7 @@ import BetList from "../components/BetList/BetList";
 import MyAccount from "../components/MyAccount/MyAccount";
 import EventProfitLoss  from "../components/MyReport/EventProfitLoss";
 import Dashboard from "../components/Dashboard/dashboard";
+import Banking from "../components/Banking/Banking";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -62,6 +63,26 @@ const RoutesComp = ({ socket }) => {
             <Layout>
               <DownlineList />
             </Layout>
+          </ProtectedRoutes>
+        }
+      />
+         <Route
+        path={ROUTES_CONST.userbanking}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <Banking />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={ROUTES_CONST.masterbanking}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <Banking />
+            </LayoutHeader>
           </ProtectedRoutes>
         }
       />

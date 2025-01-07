@@ -46,8 +46,8 @@ const MenuHeader = () => {
       name: "Banking",
       link: "#",
       subMenu: [
-        { name: "Deposit", link: "/deposit" },
-        { name: "Withdraw", link: "/withdraw" },
+        { name: "User Banking", link: "/user-banking" },
+        { name: "Master Banking", link: "/master-banking" },
       ],
     },
     { name: "Commission", link: "#" },
