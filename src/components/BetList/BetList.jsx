@@ -134,68 +134,71 @@ const BetList = () => {
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full table-auto border-collapse border border-gray-400 p-2">
-              <thead className="border border-gray-400 bg-gray-300 text-black text-center">
-                <tr className="text-center">
-                  {[ 
-                    "username",
-                    "sportName",
-                    "event",
-                    "market",
-                    "selectionType",
-                    "odds",
-                    "reqPL",
-                    "result",
-                    "placeTime",
-                    "settleTime",
-                  ].map((key) => (
-                    <th
-                      key={key}
-                      className="border border-gray-300 px-4 py-3 text-sm font-medium text-center cursor-pointer"
-                      onClick={() => handleSort(key)}
-                    >
-                      <div className="flex justify-between items-center">
-                        <span>
-                          {key === "username"
-                            ? "Username"
-                            : key === "sportName"
-                            ? "Sport Name"
-                            : key === "event"
-                            ? "Event"
-                            : key === "market"
-                            ? "Market"
-                            : key === "selectionType"
-                            ? "Selection Type"
-                            : key === "odds"
-                            ? "Odds"
-                            : key === "reqPL"
-                            ? "Required P&L"
-                            : key === "result"
-                            ? "Result"
-                            : key === "placeTime"
-                            ? "Place Time"
-                            : "Settle Time"}
-                        </span>
-                        <div className="flex flex-col items-center space-y-0.5 ml-2">
-                          <FaSortUp
-                            className={`text-sm ${
-                              sortConfig.key === key && sortConfig.direction === "ascending"
-                                ? "text-black"
-                                : "text-gray-400"
-                            }`}
-                          />
-                          <FaSortDown
-                            className={`text-sm ${
-                              sortConfig.key === key && sortConfig.direction === "descending"
-                                ? "text-black"
-                                : "text-gray-400"
-                            }`}
-                          />
-                        </div>
-                      </div>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
+            <thead className="border border-gray-400 bg-gray-300 text-black text-center">
+  <tr className="text-center">
+    {[
+      "username",
+      "sportName",
+      "event",
+      "market",
+      "selection",
+      "Type",
+      "oddsReq",
+      "stack",
+      "placeTime",
+      "settleTime", 
+    ].map((key) => (
+      <th
+        key={key}
+        className="border border-gray-300 px-4 py-3 text-sm font-medium text-center cursor-pointer"
+        onClick={() => handleSort(key)}
+      >
+        <div className="flex justify-between items-center">
+          <span>
+            {key === "username"
+              ? "Username"
+              : key === "sportName"
+              ? "Sport Name"
+              : key === "event"
+              ? "Event"
+              : key === "market"
+              ? "Market"
+              : key === "selection"
+              ? "Selection"
+              : key === "Type"
+              ? "Type"
+              : key === "oddsReq"
+              ? "Odds Req"
+              : key === "stack"
+              ? "Stack"
+              : key === "placeTime"
+              ? "Place Time"
+              : key === "settleTime"
+              ? "Settle Time" 
+              : key}
+          </span>
+          <div className="flex flex-col items-center space-y-0.5 ml-2">
+            <FaSortUp
+              className={`text-sm ${
+                sortConfig.key === key && sortConfig.direction === "ascending"
+                  ? "text-black"
+                  : "text-gray-400"
+              }`}
+            />
+            <FaSortDown
+              className={`text-sm ${
+                sortConfig.key === key && sortConfig.direction === "descending"
+                  ? "text-black"
+                  : "text-gray-400"
+              }`}
+            />
+          </div>
+        </div>
+      </th>
+    ))}
+  </tr>
+</thead>
+
               <tbody className="text-center">
                 {sortedData.length > 0 ? (
                   sortedData.map((item, index) => (
@@ -204,10 +207,10 @@ const BetList = () => {
                       <td className="border border-gray-400 px-4 py-3">{item.sportName}</td>
                       <td className="border border-gray-400 px-4 py-3">{item.event}</td>
                       <td className="border border-gray-400 px-4 py-3">{item.market}</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.selectionType}</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.odds}</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.reqPL}</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.result}</td>
+                      <td className="border border-gray-400 px-4 py-3">{item.selection}</td>
+                      <td className="border border-gray-400 px-4 py-3">{item.Type}</td>
+                      <td className="border border-gray-400 px-4 py-3">{item.oddsReq}</td>                      
+                      <td className="border border-gray-400 px-4 py-3">{item.stack}</td>
                       <td className="border border-gray-400 px-4 py-3">{item.placeTime}</td>
                       <td className="border border-gray-400 px-4 py-3">{item.settleTime}</td>
                     </tr>
@@ -222,7 +225,6 @@ const BetList = () => {
           </div>
         )}
 
-        {/* Pagination */}
         {/* Pagination */}
 <div className="flex justify-end items-center py-2 space-x-2">
   <button
