@@ -30,15 +30,15 @@ const Banking = () => {
 
   const columns = [
     { key: "username", label: "UID" },
-    { key: "balance", label: "Balance" },
+    { key: "openingBalance", label: "Balance" },  // This can stay as 'balance' for user clarity
     { key: "availableBalance", label: "Available D/W" },
     { key: "exposure", label: "Exposure" },
-    { key: "creditRef", label: "Credit Referance" },
+    { key: "creditReference", label: "Credit Referance" },
     { key: "referance", label: "Referance P/L" },
     { key: "depositwithdraw", label: "Deposit/Withdraw" },
-    
     { key: "remark", label: "Remark" },
   ];
+  
 
   const filteredData = downlineData.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
@@ -83,38 +83,24 @@ const Banking = () => {
     console.log("New Credit Ref:", newCreditRef, "Password:", password);
   };
 
-
-const sortedData = useMemo(() => {
-    if (!sortConfig.key) return filteredData;
   
-    return [...filteredData].sort((a, b) => {
-      const aValue = a[sortConfig.key] !== undefined ? a[sortConfig.key] : "";
-      const bValue = b[sortConfig.key] !== undefined ? b[sortConfig.key] : "";
-  
-      // Handle numeric fields like balance, availableBalance, creditReference
-      if (["balance", "availableBalance", "exposure", "creditReference"].includes(sortConfig.key)) {
-        const numA = parseFloat(aValue) || 0;  // Ensure it's parsed as a float
-        const numB = parseFloat(bValue) || 0;  // Ensure it's parsed as a float
-        return sortConfig.direction === "ascending" ? numA - numB : numB - numA;
-      }
-  
-      // Handle string fields
-      return sortConfig.direction === "ascending"
-        ? aValue.toString().localeCompare(bValue.toString())
-        : bValue.toString().localeCompare(aValue.toString());
-    });
-  }, [filteredData, sortConfig]);
-  
-    
-
-const handleSort = (key) => {
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
+  const handleSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
     }
-
     setSortConfig({ key, direction });
   };
+
+  const sortedData = [...filteredData].sort((a, b) => {
+    const aValue = a[sortConfig.key] || '';
+    const bValue = b[sortConfig.key] || '';
+    if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
+    return 0;
+  });
+ 
+  
 
   const handleEntriesChange = (e) => {
     setEntriesToShow(Number(e.target.value));
@@ -435,11 +421,11 @@ const handleSort = (key) => {
           />
         </>
       )}
-    </div>
-    
+    </div>   
           
   );
 };
 
 export default Banking;
+
 
