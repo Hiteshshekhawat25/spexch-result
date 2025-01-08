@@ -36,7 +36,7 @@ import AccountStatus from "../Modal/AccountStatus";
 import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
-import UpdatePartnershipModal from '../Modal/UpdatePartnershipModal';
+import UpdatePartnershipModal from "../Modal/UpdatePartnershipModal";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -105,7 +105,6 @@ const DownlineList = () => {
         const res = await searchDownline(
           `user/get-user?page=1&limit=10&search=${searchTerm}&role=${roleId}`
         );
-        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^", res);
         setSearchData(res?.data?.data);
       } catch (error) {
         console.log(error);
@@ -346,7 +345,7 @@ const DownlineList = () => {
     if (item.role_name === "master") {
       try {
         const data = await fetchallUsers(item._id);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa", data);
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaa", data);
         setUserFetchList(data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -404,6 +403,9 @@ const DownlineList = () => {
               {[
                 { key: "username", label: "Username" },
                 { key: "creditRef", label: "CreditRef" },
+                ...(isMasterDownlineList
+                  ? [{ key: "partnership", label: "Partnership" }]
+                  : []),
                 { key: "balance", label: "Balance" },
                 { key: "exposures", label: "Exposures" },
                 ...(!isMasterDownlineList
@@ -411,7 +413,9 @@ const DownlineList = () => {
                   : []),
                 { key: "availableBalance", label: "Avail. Bal" },
                 { key: "refPL", label: "Ref. P/L" },
-                { key: "partnership", label: "Partnership" },
+                ...(!isMasterDownlineList
+                  ? [{ key: "partnership", label: "Partnership" }]
+                  : []),
                 { key: "status", label: "Status" },
               ].map(({ key, label }) => (
                 <th
@@ -459,7 +463,7 @@ const DownlineList = () => {
                 : userFetchList.length > 0
                 ? userFetchList
                 : downlineData
-              ).map((item, index) => (
+              ).map((item) => (
                 <tr key={item?._id} className="border border-gray-400 bg-white">
                   <td className="px-4 py-2 text-sm">
                     {" "}
@@ -496,9 +500,31 @@ const DownlineList = () => {
                       />
                     </div>
                   </td>
-                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
-                  </td>
+                  {!isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(
+                        item.openingBalance
+                      )}
+                    </td>
+                  )}
+                  {isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(item.partnership)}
+                      <div className="ml-2 inline-flex space-x-2">
+                        <FaEdit
+                          className="text-blue cursor-pointer"
+                          onClick={() => handleUpdatePartnership(item)}
+                        />
+                      </div>
+                    </td>
+                  )}
+                  {isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(
+                        item.openingBalance
+                      )}
+                    </td>
+                  )}
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                     0
                   </td>
@@ -515,6 +541,7 @@ const DownlineList = () => {
                       </div>
                     </td>
                   )}
+
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                     {new Intl.NumberFormat("en-IN").format(
                       item.totalBalance || 0
@@ -531,18 +558,12 @@ const DownlineList = () => {
                         )})`
                       : new Intl.NumberFormat("en-IN").format(item.profit_loss)}
                   </td>
+                  {!isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(100)}
+                    </td>
+                  )}
 
-                  <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(item.partnership)}
-                    {isMasterDownlineList && (
-                      <div className="ml-2 inline-flex space-x-2">
-                        <FaEdit
-                          className="text-blue cursor-pointer"
-                          onClick={() => handleUpdatePartnership(item)}
-                        />
-                      </div>
-                    )}
-                  </td>
                   <td className="border border-gray-400 px-4 py-2 font-bold text-l">
                     <span
                       className={`p-1 rounded border ${
