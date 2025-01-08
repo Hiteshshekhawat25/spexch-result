@@ -153,22 +153,30 @@ const PasswordHistory = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredData.map((item, index) => (
-                  <tr
-                    key={index}
-                    className="even:bg-gray-100 odd:bg-white text-gray-700"
-                  >
-                    <td className="border border-gray-300 p-2 text-center">
-                      {item.username}
-                    </td>
-                    <td className="border border-gray-300 p-2 text-center">
-                      {item.remarks}
-                    </td>
-                    <td className="border border-gray-300 p-2 text-center">
-                      {formatDateTime(item.date)}
+                {filteredData.length > 0 ? (
+                  filteredData.map((item, index) => (
+                    <tr
+                      key={index}
+                      className="even:bg-gray-100 odd:bg-white text-gray-700"
+                    >
+                      <td className="border border-gray-300 p-2 text-center">
+                        {item.username}
+                      </td>
+                      <td className="border border-gray-300 p-2 text-center">
+                        {item.remarks}
+                      </td>
+                      <td className="border border-gray-300 p-2 text-center">
+                        {formatDateTime(item.date)}
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3" className="text-center text-gray-600 py-4">
+                      No user found
                     </td>
                   </tr>
-                ))}
+                )}
               </tbody>
             </table>
           </div>
