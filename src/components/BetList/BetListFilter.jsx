@@ -33,10 +33,10 @@ const BetListFilter = ({
     fetchSports();
   }, []);
 
-  // Fetch Bet History data
+ 
   const handleGetHistory = async () => {
     if (!fromDate || !toDate || !type || !sport) {
-      return; // Simply return without making the API call if any required field is missing
+      return; 
     }
   
     try {
@@ -51,7 +51,7 @@ const BetListFilter = ({
         const { pagination, data } = response.data;
 
         setBetlistData(data); // Set the fetched data to the Parent state
-        setTotalBets(pagination?.totalTransactions || 0); // Update total transactions
+        setTotalBets(pagination?.totalBets || 0); // Update total transactions
         setTotalPages(pagination?.totalPages || 1); // Update total pages
         setIsDataFetched(true); // Mark that data has been fetched
       } else {
@@ -106,7 +106,7 @@ const BetListFilter = ({
           <option value="">Select Sport</option>
           {sportsOptions.map((sport) => (
             <option key={sport._id} value={sport.name}>
-              {sport.name} {/* Display the name here */}
+              {sport.name} 
             </option>
           ))}
         </select>
