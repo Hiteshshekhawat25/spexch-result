@@ -6,11 +6,11 @@ const PasswordHistory = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [passwordHistory, setPasswordHistory] = useState([]);
-  const [totalPages, setTotalPages] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [totalRecords, setTotalRecords] = useState(0);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     const fetchPasswordHistory = async () => {
@@ -39,6 +39,10 @@ const PasswordHistory = () => {
           setPasswordHistory(data?.data || []);
           setTotalCount(data?.pagination.totalRecords);
           setTotalRecords(data?.pagination.totalRecords);
+          // Calculate totalPages after fetching the data
+          setTotalPages(
+            Math.ceil(data?.pagination.totalRecords / entriesToShow)
+          );
         } else {
           console.error("Failed to fetch password history.");
         }
@@ -53,7 +57,7 @@ const PasswordHistory = () => {
     };
 
     fetchPasswordHistory();
-  }, [currentPage, entriesToShow]);
+  }, [currentPage, entriesToShow, totalRecords]);
 
   const filteredData = passwordHistory.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
@@ -149,7 +153,7 @@ const PasswordHistory = () => {
                 </tr>
               </thead>
               <tbody>
-                {paginatedData.map((item, index) => (
+                {filteredData.map((item, index) => (
                   <tr
                     key={index}
                     className="even:bg-gray-100 odd:bg-white text-gray-700"
