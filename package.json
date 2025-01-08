@@ -1,5 +1,6 @@
 {
   "name": "spexch",
+  "homepage": "http://165.22.212.175/admin",
   "private": true,
   "version": "0.0.0",
   "type": "module",

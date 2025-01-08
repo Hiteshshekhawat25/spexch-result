@@ -62,6 +62,7 @@ export const saveClientApi = async (endpoint, body, token, role) => {
 
   } catch (error) {
     console.log(error);
+    return error
   }
 };
 
@@ -106,7 +107,14 @@ try {
 const response = await axios.get(`${BASE_URL}/user/get-user-hierarchy/${userId}?page=1&limit=3`, {
 headers: { Authorization: `Bearer ${token}` },
 });
-console.log(response.data.data)
+
+if(response?.data?.pagination?.totalUsers === 0) {
+  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa aaa', response)
+  toast.error("No users availabe for this user");
+  return response.data.data
+}
+
+console.log('get-user-hierarchy', response?.data?.pagination?.totalUsers)
 
 // Return the user details if the request is successful
 return response.data.data;

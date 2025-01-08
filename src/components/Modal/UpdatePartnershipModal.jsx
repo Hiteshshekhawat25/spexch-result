@@ -1,73 +1,71 @@
-import React, { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5"; // Importing the close icon
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { updateCreditReference } from "../../Store/Slice/creditReferenceslice";
-import { fetchDownlineData } from "../../Services/Downlinelistapi";
-import { setDownlineData, setLoading } from "../../Store/Slice/downlineSlice";
 import { toast } from "react-toastify";
+import {
+  setDownlineData,
+  setError,
+  setLoading,
+} from "../../Store/Slice/downlineSlice";
 import { fetchRoles } from "../../Utils/LoginApi";
-import { useLocation } from "react-router-dom";
+import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import { updateCreditReference } from "../../Store/Slice/creditReferenceslice";
+import { IoClose } from "react-icons/io5";
+import { updatePartnership } from "../../Store/Slice/updatePartnershipSlice";
 
-const CreditEditReferenceModal = ({
+const UpdatePartnershipModal = ({
   username,
-  currentCreditRef,
-  onSubmit = () => {},
   onCancel,
-  user,
+  currentPartnership,
+  onSubmit = () => {},
   userId,
-  fetchDownline,
   currentPage,
   entriesToShow,
 }) => {
-  const [newCreditRef, setNewCreditRef] = useState("");
-  const [password, setPassword] = useState("");
-  const [token, setToken] = useState(null);
-  const [error, setError] = useState(null);
-  const { creditReference } = useSelector((state) => state);
-  const [roles, setRoles] = useState([]);
-  const location = useLocation();
-
   const dispatch = useDispatch();
 
-  const handleIncrease = () => {
-    setNewCreditRef((prev) => prev + 1);
-  };
-
+  const [newPartnership, setNewPartnership] = useState("");
+  const [password, setPassword] = useState("");
+  const [roles, setRoles] = useState([]);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    // Validate fields
-    if (!newCreditRef) {
-      toast.error("New Credit Reference is required.");
+    // Validate individual fields and throw specific errors
+    if (
+      newPartnership === "" ||
+      newPartnership === null ||
+      newPartnership === undefined
+    ) {
+      toast.error("Partnership value is required.");
+      setLoading(false);
       return;
     }
 
     if (!password) {
       toast.error("Password is required.");
+      setLoading(false);
       return;
     }
 
-    if (newCreditRef <= 0 || isNaN(newCreditRef)) {
-      toast.error("Please enter a valid credit reference greater than 0.");
+    // Validate newPartnership value
+    if (newPartnership < 0 || isNaN(newPartnership) || newPartnership > 100) {
+      toast.error("Please enter a valid partnership value between 0 and 100.");
+      setLoading(false);
       return;
     }
-
-    // Start loading state
-    dispatch(setLoading(true));
 
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         toast.error("Authentication token not found. Please log in again.");
-        dispatch(setLoading(false));
+        setLoading(false);
         return;
       }
 
-      // Fetch roles
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
         toast.warning("No roles found. Please check your configuration.");
-        dispatch(setLoading(false));
+        setLoading(false);
         return;
       }
 
@@ -78,24 +76,27 @@ const CreditEditReferenceModal = ({
       setRoles(rolesData);
 
       let roleId = null;
-      if (location.pathname === "/user-downline-list") {
+      if (location.pathname === "/admin/user-downline-list") {
+        console.log("Inside user-downline-list");
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
+      } else if (location.pathname === "/admin/master-downline-list") {
+        console.log("Inside master-downline-list");
         const masterRole = rolesData.find(
           (role) => role.role_name === "master"
         );
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
       } else {
         toast.warning("Invalid location path. Unable to determine action.");
-        dispatch(setLoading(false));
+        setLoading(false);
         return;
       }
 
+      // Dispatch the update action and handle result
       const fetchResult = await dispatch(
-        updateCreditReference({ newCreditRef, password, userId })
+        updatePartnership({ newPartnership, password, userId })
       );
-      console.log("fetchResult-------", fetchResult);
+      console.log("fetchResult", fetchResult);
 
       if (fetchResult.error) {
         // If there's an error returned from the action, display it in a toast
@@ -110,60 +111,53 @@ const CreditEditReferenceModal = ({
           roleId
         );
         if (result && result.data) {
-          console.log("result", result.data);
           dispatch(setDownlineData(result.data));
 
-          setNewCreditRef(0);
+          setNewPartnership(0);
           setPassword("");
+          onCancel();
           toast.success(
             fetchResult.payload?.message || "Data updated successfully."
           );
-
-          // Close the modal only after successful submission
-          onCancel();
         } else {
           toast.warning("Unable to fetch updated downline data.");
         }
       }
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Error updating partnership:", error);
+      dispatch(setError(error.message || "Failed to fetch the downline data."));
       toast.error(
-        error.message || "An error occurred while processing the request."
+        error.message || "An error occurred while updating the partnership."
       );
     } finally {
-      // Ensure loading state is reset
-      dispatch(setLoading(false));
+      // Reset loading state
+      setLoading(false);
     }
   };
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[500px] mt-12">
-        {" "}
-        {/* Reduced margin-top */}
+      <div className="bg-white rounded-lg w-[500px] mt-20">
         {/* Header */}
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
-          {" "}
-          {/* Reduced padding */}
-          <span>Edit Credit Reference - {username}</span>
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-2">
+          <span>Update Partnership - {username}</span>
           <IoClose
-            onClick={onCancel} // Close the modal
+            onClick={onCancel}
             className="cursor-pointer text-white text-2xl"
           />
         </div>
+
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4 p-5">
-          {" "}
-          {/* Increased padding */}
-          {/* Current Credit Reference */}
+          {/* Current Partnership */}
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">
               Current
             </label>
-            <p className="w-2/3 text-black font-medium">{currentCreditRef}</p>{" "}
-            {/* Display as text */}
+            <p className="w-2/3 text-black font-medium">{currentPartnership}</p>
           </div>
-          {/* New Credit Reference */}
+
+          {/* New Partnership */}
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">
               New
@@ -171,13 +165,19 @@ const CreditEditReferenceModal = ({
             <div className="w-2/3 flex items-center space-x-2">
               <input
                 type="text"
-                value={newCreditRef}
-                onChange={(e) => setNewCreditRef(e.target.value)}
-                placeholder="New Credit Reference"
+                value={newPartnership}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length <= 3) {
+                    setNewPartnership(Number(value));
+                  }
+                }}
+                placeholder="New Partnership"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
           </div>
+
           {/* Password Field */}
           <div className="flex justify-between items-center">
             <label className="block text-sm font-medium text-gray-700 w-1/3">
@@ -191,6 +191,7 @@ const CreditEditReferenceModal = ({
               placeholder="Enter your password"
             />
           </div>
+
           {/* Buttons */}
           <div className="flex justify-end space-x-4 mt-4">
             {/* Submit Button */}
@@ -216,4 +217,4 @@ const CreditEditReferenceModal = ({
   );
 };
 
-export default CreditEditReferenceModal;
+export default UpdatePartnershipModal;

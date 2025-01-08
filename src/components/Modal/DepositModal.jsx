@@ -77,10 +77,10 @@ const DepositModal = ({
         setRoles(rolesData);
 
         let roleId = null;
-        if (location.pathname === "/user-downline-list") {
+        if (location.pathname === "/admin/user-downline-list") {
           const userRole = rolesData.find((role) => role.role_name === "user");
           roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-        } else if (location.pathname === "/master-downline-list") {
+        } else if (location.pathname === "/admin/master-downline-list") {
           const masterRole = rolesData.find(
             (role) => role.role_name === "master"
           );
@@ -164,9 +164,14 @@ const DepositModal = ({
             </label>
             <div className="w-2/3 flex items-center space-x-2">
               <input
-                type="number"
+                type="text"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value.length <= 8) {
+                    setAmount(Number(value));
+                  }
+                }}
                 placeholder="Enter Amount"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />

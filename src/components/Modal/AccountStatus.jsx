@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { BASE_URL } from "../../Constant/Api";
 import { getUserDatabyId } from "../../Services/UserInfoApi";
-import { setDownlineData, setError } from "../../Store/Slice/downlineSlice";
+import { setDownlineData, setError, setLoading } from "../../Store/Slice/downlineSlice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import { fetchRoles } from "../../Utils/LoginApi";
 
@@ -19,16 +19,14 @@ const AccountStatus = ({
   onClose,
   currentPage,
   entriesToShow,
-  user
+  user,
 }) => {
   const [status, setStatus] = useState("active");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
   const [roles, setRoles] = useState([]);
   const dispatch = useDispatch();
-  const { loading, error, successMessage } = useSelector(
-    (state) => state.accountStatus
-  );
+  const { error, successMessage } = useSelector((state) => state.accountStatus);
 
   console.log("userID", userId);
   useEffect(() => {
@@ -70,33 +68,32 @@ const AccountStatus = ({
 
   const handleSubmit = async () => {
     console.log("Inside handleSubmit");
-    dispatch(updateUserStatusThunk({ userId, newStatus: status, password }));
-
+      dispatch(setLoading(true));
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         toast.error("Authentication token not found. Please log in again.");
         return;
       }
-
+  
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
         toast.warning("No roles found. Please check your configuration.");
         return;
       }
-
+  
       const rolesData = rolesArray.map((role) => ({
         role_name: role.role_name,
         role_id: role._id,
       }));
       setRoles(rolesData);
-
+  
       let roleId = null;
-      if (location.pathname === "/user-downline-list") {
+      if (location.pathname === "/admin/user-downline-list") {
         console.log("Inside user-downline-list");
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
+      } else if (location.pathname === "/admin/master-downline-list") {
         console.log("Inside master-downline-list");
         const masterRole = rolesData.find(
           (role) => role.role_name === "master"
@@ -106,32 +103,41 @@ const AccountStatus = ({
         toast.warning("Invalid location path. Unable to determine action.");
         return;
       }
-
-      console.log("roleId:", roleId);
-
-      // Fetch downline data with roleId
-      const result = await fetchDownlineData(
-        currentPage,
-        entriesToShow,
-        roleId
+  
+      const fetchResult = await dispatch(
+        updateUserStatusThunk({ userId, newStatus: status, password })
       );
-
-      if (result && result.data) {
-        dispatch(setDownlineData(result.data));
-        setPassword("");
-        onClose();
-        toast.success("Status updated successfully");
+      console.log("fetchResult", fetchResult);
+  
+      if (fetchResult.message) {
+        toast.error(
+          fetchResult.payload ||
+            "An error occurred while updating the credit reference."
+        );
       } else {
-        toast.warning("Unable to fetch updated downline data.");
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
+        if (result && result.data) {
+          dispatch(setDownlineData(result.data));
+          setPassword("");
+          toast.success("Status updated successfully.");
+        } else {
+          toast.warning("Unable to fetch updated downline data.");
+        }
       }
     } catch (error) {
       console.error("Error fetching downline data:", error);
       dispatch(setError(error.message || "Failed to fetch the downline data."));
-      toast.error(
-        error.message || "An error occurred while fetching the downline data."
-      );
+      toast.error(error.message || "An error occurred while fetching the downline data.");
+    } finally {
+      setLoading(false);
     }
   };
+  
+  
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
@@ -148,17 +154,17 @@ const AccountStatus = ({
         <div className="space-y-4 p-5">
           <div className="flex justify-between items-center mb-4">
             {/* Amount Field */}
-          <div className="flex justify-between">
-            <div>
-              <span
-                className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-bold text-l"
-                // onClick={() => handleUsernameList(item)}
-              >
-                {user.role_name.toUpperCase()}
-              </span>
-              {user.username}
+            <div className="flex justify-between">
+              <div>
+                <span
+                  className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-bold text-l"
+                  // onClick={() => handleUsernameList(item)}
+                >
+                  {user.role_name.toUpperCase()}
+                </span>
+                {user.username}
+              </div>
             </div>
-          </div>
             {/* <div className="font-medium text-lg font-bold">
               <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
                 User
@@ -262,12 +268,9 @@ const AccountStatus = ({
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              disabled={loading}
-              className={`py-2 px-4 bg-NavyBlue text-white font-medium rounded-lg mt-5 ${
-                loading ? "opacity-70 cursor-not-allowed" : ""
-              }`}
+              className="py-2 px-4 bg-NavyBlue text-white font-medium rounded-lg mt-5"
             >
-              {loading ? "Changing..." : "Change Status"}
+              Change Status
             </button>
           </div>
         </div>

@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/admin/">
       <RoutesComp />
       <ToastContainer /> 
     </BrowserRouter>

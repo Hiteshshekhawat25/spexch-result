@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setDataSource,
   setFromDate,
   setToDate,
   selectAccountStatementFilter,
-} from '../../Store/Slice/accountStatementFilterSlice';
-import { getAccountStatementData } from '../../Services/Downlinelistapi';
+} from "../../Store/Slice/accountStatementFilterSlice";
+import { getAccountStatementData } from "../../Services/Downlinelistapi";
 
 const AccountStatementFilter = ({
   setTotalTransactions,
@@ -18,103 +18,111 @@ const AccountStatementFilter = ({
   setCurrentPage,
 }) => {
   const dispatch = useDispatch();
-  const { dataSource, fromDate, toDate } = useSelector(selectAccountStatementFilter);
+  const { dataSource, fromDate, toDate } = useSelector(
+    selectAccountStatementFilter
+  );
 
-  // Whenever the entriesToShow changes (like from 25 to 10), reset currentPage to 1
+  const today = new Date().toISOString().split("T")[0];
+
+  const calculateDate = (months) => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - months);
+    return date.toISOString().split("T")[0];
+  };
+
   useEffect(() => {
-    setCurrentPage(1); // Reset to the first page when entriesToShow changes
+    switch (dataSource) {
+      case "live":
+        dispatch(setFromDate(today));
+        dispatch(setToDate(today));
+        break;
+      case "backup":
+        dispatch(setFromDate(calculateDate(3)));
+        dispatch(setToDate(today));
+        break;
+      case "old":
+        dispatch(setFromDate(calculateDate(12)));
+        dispatch(setToDate(today));
+        break;
+      default:
+        break;
+    }
+  }, [dataSource, dispatch, today]);
+
+  useEffect(() => {
+    setCurrentPage(1);
   }, [entriesToShow, setCurrentPage]);
 
-  // Whenever currentPage, fromDate, toDate, or dataSource changes, fetch the statement
   useEffect(() => {
-    // Trigger API call whenever one of the necessary filter values changes
     if (fromDate && toDate) {
-      console.log('Fetching data due to filter change or page change');
-      handleGetStatement(); // Trigger API call on filter change or page change
+      handleGetStatement();
     }
-  }, [currentPage, fromDate, toDate, dataSource, entriesToShow]); // Re-run the effect if any of these change
+  }, [currentPage, fromDate, toDate, dataSource, entriesToShow]);
 
   const handleGetStatement = async () => {
-    // Ensure fromDate and toDate are selected before fetching data
     if (!fromDate || !toDate) {
-      alert('Please select both From Date and To Date');
+      alert("Please select both From Date and To Date");
       return;
     }
 
     try {
-      // Construct the URL based on the filters
-      const url = `user/get-transaction?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate || ''}&toDate=${toDate || ''}&dataSource=${dataSource || ''}`;
-      console.log('Fetching data with URL:', url);
-
-      // Call the API
+      const url = `user/get-transaction?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&dataSource=${dataSource}`;
       const response = await getAccountStatementData(url);
 
-      if (response && response.data) {
-        console.log('Fetched data:', response.data);
-
-        const { pagination, data } = response.data; // Destructure pagination and data
-
-        setTransactions(data); // Set the fetched data to the Parent state
+      if (response?.data) {
+        const { pagination, data } = response.data;
+        setTransactions(data);
         setTotalTransactions(pagination?.totalTransactions || 0);
         setTotalPages(pagination?.totalPages || 1);
-        setIsDataFetched(true); // Mark that data has been fetched
+        setIsDataFetched(true);
       } else {
-        console.error('No data found in response');
         setIsDataFetched(false);
       }
     } catch (error) {
-      console.error('Error fetching account statement data:', error);
+      console.error("Error fetching account statement data:", error);
       setIsDataFetched(false);
     }
   };
 
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-      {/* Filter UI */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">Data Source</label>
+        <label className="text-sm font-medium text-black mb-2">
+          Data Source
+        </label>
         <select
           value={dataSource}
-          onChange={(e) => {
-            dispatch(setDataSource(e.target.value));
-            console.log('Data Source selected:', e.target.value);
-          }}
-          className="border rounded px-2 py-1 text-sm"
+          onChange={(e) => dispatch(setDataSource(e.target.value))}
+          className="border rounded px-10 py-2 "
         >
-          <option value="">Select Data Source</option>
-          <option value="api1">API 1</option>
-          <option value="api2">API 2</option>
-          <option value="api3">API 3</option>
+          <option value="">Data Source</option>
+          <option value="live">LIVE DATA</option>
+          <option value="backup">BACKUP DATA</option>
+          <option value="old">OLD DATA</option>
         </select>
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From </label>
+        <label className="text-sm font-medium text-black mb-1">From</label>
         <input
           type="date"
-          value={fromDate}
-          onChange={(e) => {
-            dispatch(setFromDate(e.target.value));
-            console.log('From Date selected:', e.target.value);
-          }}
-          className="border rounded px-2 py-1 text-sm"
+          value={fromDate || today}
+          onChange={(e) => dispatch(setFromDate(e.target.value))}
+          className="border rounded px-8 py-2"
         />
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To </label>
+        <label className="text-sm font-medium text-black mb-1">To</label>
         <input
           type="date"
-          value={toDate}
-          onChange={(e) => {
-            dispatch(setToDate(e.target.value));
-            console.log('To Date selected:', e.target.value);
-          }}
-          className="border rounded px-2 py-1 text-sm"
+          value={toDate || today}
+          onChange={(e) => dispatch(setToDate(e.target.value))}
+          className="border rounded px-8 py-2"
         />
       </div>
 
-      <div className="flex space-x-1 items-center ml-4">
+      <div className="flex space-x-1 items-center ml-12 mt-4">
         <button
           onClick={handleGetStatement}
           className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
@@ -127,4 +135,3 @@ const AccountStatementFilter = ({
 };
 
 export default AccountStatementFilter;
-

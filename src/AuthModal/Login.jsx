@@ -5,7 +5,7 @@ import {
   loginSuccess,
   loginFailure,
 } from "../Store/Slice/loginSlice";
-import { FaUser, FaLock } from "react-icons/fa";
+import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa"; // Add eye icons
 import { loginUser } from "../Utils/LoginApi";
 import { useNavigate } from "react-router-dom";
 import React from "react";
@@ -24,6 +24,7 @@ const Login = () => {
   });
 
   const [message, setMessage] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false); // State for password visibility
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,32 +34,40 @@ const Login = () => {
     }));
   };
 
+  const handlePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev); // Toggle password visibility
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(loginStart());
-  
+
     try {
       const data = await loginUser(formData.username, formData.password);
       console.log("username", data?.data?.userId);
       const { userId, token } = data?.data || {};
-  
+
       console.log("username", userId);
-  
+
       // Save token and userId
       localStorage.setItem("authToken", token);
       localStorage.setItem("userId", userId);
-  
+
       // Save full user data
       const userData = await getUserData();
       localStorage.setItem("userData", JSON.stringify(userData));
-  
+
       dispatch(loginSuccess(data));
-  
+
       toast.success("Login successful!");
       setTimeout(() => navigate("/dashboardPage"), 1500);
     } catch (error) {
       dispatch(loginFailure(error.message));
-      setMessage("Invalid username or password!");
+      const errorMessage =
+        error.response?.data?.message || error.message || "Login failed!";
+        console.log("errorMessage",errorMessage);
+      setMessage(errorMessage);
+      toast.error(errorMessage); // Show the error message in a toast
     }
   };
 
@@ -101,7 +110,7 @@ const Login = () => {
               Password
             </label>
             <input
-              type="password"
+              type={passwordVisible ? "text" : "password"} // Toggle input type
               id="password"
               name="password"
               className="w-full px-4 py-2 mt-1 text-black rounded-lg border border-gray-600 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none pr-12"
@@ -110,13 +119,16 @@ const Login = () => {
               placeholder="Enter your password"
               required
             />
-            <div className="absolute right-4 top-2/3 transform -translate-y-1/2 text-gray-400">
-              <FaLock />
+            <div
+              className="absolute right-4 top-2/3 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+              onClick={handlePasswordVisibility} // Toggle visibility on icon click
+            >
+              {passwordVisible ? <FaEyeSlash /> : <FaEye />} {/* Toggle eye icon */}
             </div>
           </div>
 
           {/* Display error or success message */}
-          {message && <p className="text-sm text-red-500">{message}</p>}
+          {/* {message && <p className="text-sm text-red-500">{message}</p>} */}
 
           {/* Submit button */}
           <button

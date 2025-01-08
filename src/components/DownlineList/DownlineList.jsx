@@ -20,7 +20,10 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../Constant/Api";
-import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import {
+  fetchDownlineData,
+  searchDownline,
+} from "../../Services/Downlinelistapi";
 import {
   fetchallUsers,
   fetchRoles,
@@ -33,6 +36,7 @@ import AccountStatus from "../Modal/AccountStatus";
 import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
+import UpdatePartnershipModal from "../Modal/UpdatePartnershipModal";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -49,6 +53,7 @@ const DownlineList = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [isExposureModalOpen, setIsExposureModalOpen] = useState(false);
   const [selectedExposureUser, setSelectedExposureUser] = useState(null);
+  const [updatePartnership, setUpdatePartnership] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
@@ -60,9 +65,18 @@ const DownlineList = () => {
   const location = useLocation();
   const [roleId, setRoleId] = useState("");
   const [userFetchList, setUserFetchList] = useState([]);
+  const [searchData, setSearchData] = useState([]);
   const downlineData = useSelector(selectDownlineData);
   const loading = useSelector(selectDownlineLoading);
   const error = useSelector(selectDownlineError);
+  const { startFetchData } = useSelector((state) => state.downline);
+
+  console.log("startFetchDatastartFetchData", startFetchData);
+
+  console.log("roleIdroleIdroleId", roleId);
+  const isMasterDownlineList = location.pathname.includes(
+    "/master-downline-list"
+  );
 
   const handlePageChange = (direction) => {
     if (totalPages > 0) {
@@ -77,23 +91,37 @@ const DownlineList = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSearch();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const handleSearch = async () => {
+    if (searchTerm?.length) {
+      try {
+        const res = await searchDownline(
+          `user/get-user?page=1&limit=10&search=${searchTerm}&role=${roleId}`
+        );
+        setSearchData(res?.data?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        dispatch(setLoading(true));
-
         const token = localStorage.getItem("authToken");
         if (!token) {
           console.error("Token not found. Please log in again.");
           return;
         }
 
-        if (!roleId) {
-          console.error(
-            "Invalid role ID. Cannot fetch data without a valid role."
-          );
-          return;
-        }
+        dispatch(setLoading(true));
 
         const result = await fetchDownlineData(
           currentPage,
@@ -114,54 +142,11 @@ const DownlineList = () => {
     };
 
     fetchData();
-  }, [dispatch, currentPage, entriesToShow, roleId]);
-
-  useEffect(() => {
-    if (token) {
-      const fetchUserRoles = async () => {
-        try {
-          const rolesArray = await fetchRoles(token);
-
-          if (Array.isArray(rolesArray)) {
-            const rolesData = rolesArray.map((role) => ({
-              role_name: role.role_name,
-              role_id: role._id,
-            }));
-            setRole(rolesData);
-          } else {
-            setError("Roles data is not an array.");
-          }
-        } catch (error) {
-          setError(error.message || "Failed to fetch roles.");
-        }
-      };
-      fetchUserRoles();
-    }
-  }, [token]);
-
-  // const filteredData = Array.isArray(data)
-  //   ? data.filter((item) =>
-  //       item.username.toLowerCase().includes(searchTerm.toLowerCase())
-  //     )
-  //   : [];
+  }, [dispatch, currentPage, entriesToShow, roleId, startFetchData]);
 
   const filteredData = downlineData.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  useEffect(() => {
-    if (token) {
-      const fetchRolesData = async () => {
-        try {
-          const rolesArray = await fetchRoles(token);
-          setRoles(rolesArray || []);
-        } catch {
-          toast.error("Failed to fetch roles.");
-        }
-      };
-      fetchRolesData();
-    }
-  }, [token]);
 
   useEffect(() => {
     if (location.pathname === "/master-downline-list") {
@@ -195,7 +180,9 @@ const DownlineList = () => {
   }, [token, location.pathname]);
 
   useEffect(() => {
+    console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyy", location.pathname);
     if (location.pathname === "/user-downline-list") {
+      console.log("tttttttttttttttttttttttttttttttt", location);
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
@@ -229,30 +216,8 @@ const DownlineList = () => {
     }
   }, [token, location.pathname]);
 
-  useEffect(() => {
-    if (roleId) {
-      const fetchUserByRole = async () => {
-        try {
-          dispatch(setLoading(true));
-          const data = await fetchDownlineData(
-            currentPage,
-            entriesToShow,
-            roleId
-          );
-          dispatch(setDownlineData(data?.data));
-        } catch (error) {
-          console.error("Error fetching users by role:", error);
-          dispatch(setError(error.message));
-        } finally {
-          dispatch(setLoading(false));
-        }
-      };
-
-      fetchUserByRole();
-    }
-  }, [dispatch, roleId, currentPage, entriesToShow]);
-
   const sortedData = useMemo(() => {
+    console.log("filteredData", filteredData);
     if (!sortConfig.key) return filteredData;
 
     return [...filteredData].sort((a, b) => {
@@ -334,6 +299,7 @@ const DownlineList = () => {
     setAccountStatus(false);
     setCreditReferenceTransactionList(false);
     setIsModalOpen(false);
+    setUpdatePartnership(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -347,6 +313,12 @@ const DownlineList = () => {
   const handleExposureEditClick = (user) => {
     setSelectedExposureUser(user);
     setIsExposureModalOpen(true);
+  };
+
+  const handleUpdatePartnership = (item) => {
+    console.log("hie");
+    setUpdatePartnership(true);
+    setSelectedUser(item);
   };
 
   const handleExposureModalClose = () => {
@@ -373,6 +345,7 @@ const DownlineList = () => {
     if (item.role_name === "master") {
       try {
         const data = await fetchallUsers(item._id);
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaa", data);
         setUserFetchList(data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -381,481 +354,437 @@ const DownlineList = () => {
   };
 
   return (
-    <div className="p-4 border border-gray-200 rounded-md bg-white">
-      <div className="flex justify-between items-center mb-4">
-        <div className="border border-gray-300 p-2 rounded-md">
-          <label className="mr-2 text-sm font-medium">Show</label>
-          <select
-            value={entriesToShow}
-            onChange={handleEntriesChange}
-            className="border border-gray-300 rounded px-2 py-1 text-sm"
+    <>
+      {userFetchList.length ? (
+        <>
+          <div
+            className="border rounded p-2 mb-3 w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-semibold"
+            onClick={() => setUserFetchList([])}
           >
-            {[10, 25, 50, 100].map((number) => (
-              <option key={number} value={number}>
-                {number}
-              </option>
-            ))}
-          </select>
-          <label className="ml-2 text-sm font-medium">entries</label>
+            <div className="bg-green-500 text-white px-2 py-1 mr-2  rounded font-semibold text-xs w-14">
+              Master
+            </div>
+            {userFetchList?.[0]?.username}
+          </div>
+        </>
+      ) : (
+        ""
+      )}
+      <div className="p-4 border border-gray-200 rounded-md bg-white">
+        <div className="flex justify-between items-center mb-4">
+          <div className="border border-gray-300 p-2 rounded-md">
+            <label className="mr-2 text-sm font-medium">Show</label>
+            <select
+              value={entriesToShow}
+              onChange={handleEntriesChange}
+              className="border border-gray-300 rounded px-2 py-1 text-sm"
+            >
+              {[10, 25, 50, 100].map((number) => (
+                <option key={number} value={number}>
+                  {number}
+                </option>
+              ))}
+            </select>
+            <label className="ml-2 text-sm font-medium">entries</label>
+          </div>
+          <div className="border border-gray-300 p-2 rounded-md">
+            <input
+              type="text"
+              placeholder="Search"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="border border-gray-300 rounded px-2 py-1 text-sm"
+            />
+          </div>
         </div>
-        <div className="border border-gray-300 p-2 rounded-md">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="border border-gray-300 rounded px-2 py-1 text-sm"
-          />
-        </div>
-      </div>
-      <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead className="border border-gray-300">
-          <tr className="bg-gray-300">
-            {[
-              { key: "username", label: "Username" },
-              { key: "creditRef", label: "CreditRef" },
-              { key: "balance", label: "Balance" },
-              { key: "exposures", label: "Exposures" },
-              { key: "exposure", label: "Exposure Limit" },
-              { key: "availableBalance", label: "Avail. Bal" },
-              { key: "refPL", label: "Ref. P/L" },
-              { key: "partnership", label: "Partnership" },
-              { key: "status", label: "Status" },
-            ].map(({ key, label }) => (
-              <th
-                key={key}
-                className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
-                onClick={() => handleSort(key)}
-              >
-                <div className="flex justify-between items-center">
-                  {label}
-                  <div className="flex flex-col items-center ml-2">
-                    <FaSortUp
-                      className={`${
-                        sortConfig.key === key &&
-                        sortConfig.direction === "ascending"
-                          ? "text-black"
-                          : "text-gray-400"
-                      }`}
-                    />
-                    <FaSortDown
-                      className={`${
-                        sortConfig.key === key &&
-                        sortConfig.direction === "descending"
-                          ? "text-black"
-                          : "text-gray-400"
-                      }`}
-                    />
+        <table className="w-full table-auto border-collapse border border-gray-300">
+          <thead className="border border-gray-300">
+            <tr className="bg-gray-300">
+              {[
+                { key: "username", label: "Username" },
+                { key: "creditRef", label: "CreditRef" },
+                ...(isMasterDownlineList
+                  ? [{ key: "partnership", label: "Partnership" }]
+                  : []),
+                { key: "balance", label: "Balance" },
+                { key: "exposures", label: "Exposures" },
+                ...(!isMasterDownlineList
+                  ? [{ key: "exposure", label: "Exposure Limit" }]
+                  : []),
+                { key: "availableBalance", label: "Avail. Bal" },
+                { key: "refPL", label: "Ref. P/L" },
+                ...(!isMasterDownlineList
+                  ? [{ key: "partnership", label: "Partnership" }]
+                  : []),
+                { key: "status", label: "Status" },
+              ].map(({ key, label }) => (
+                <th
+                  key={key}
+                  className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
+                  onClick={() => handleSort(key)}
+                >
+                  <div className="flex justify-between items-center">
+                    {label}
+                    <div className="flex flex-col items-center ml-2">
+                      <FaSortUp
+                        className={`${
+                          sortConfig.key === key &&
+                          sortConfig.direction === "ascending"
+                            ? "text-black"
+                            : "text-gray-400"
+                        }`}
+                      />
+                      <FaSortDown
+                        className={`${
+                          sortConfig.key === key &&
+                          sortConfig.direction === "descending"
+                            ? "text-black"
+                            : "text-gray-400"
+                        }`}
+                      />
+                    </div>
                   </div>
-                </div>
+                </th>
+              ))}
+              <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
+                Actions
               </th>
-            ))}
-            <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
-              Actions
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {(userFetchList.length > 0 ? userFetchList : downlineData).map(
-            (item, index) => (
-              <tr key={index} className="border border-gray-400 bg-white">
-                <td className="px-4 py-2 text-sm">
-                  {" "}
-                  <span
-                    className="bg-green-500 text-white px-2 py-2 mr-1 rounded font-semibold text-l"
-                    onClick={() => handleUsernameList(item)}
-                  >
-                    {item.role_name.toUpperCase()}
-                  </span>
-                  <span className="text-black font-semibold">
-                    {item.username}
-                  </span>
-                </td>
-                <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-                  {new Intl.NumberFormat("en-IN").format(item.creditReference)}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleEditClick(item)}
-                    />
-                    <FaEye
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleListView(item)}
-                    />
-                  </div>
-                </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                  {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
-                </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                  0
-                </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                  {new Intl.NumberFormat("en-IN").format(item.exposureLimit)}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleExposureEditClick(item)}
-                    />
-                  </div>
-                </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                  {new Intl.NumberFormat("en-IN").format(
-                    item.totalBalance || 0
+            </tr>
+          </thead>
+          <tbody>
+            {(searchTerm?.length
+              ? searchData
+              : userFetchList.length > 0
+              ? userFetchList
+              : downlineData
+            )?.length ? (
+              (searchTerm?.length
+                ? searchData
+                : userFetchList.length > 0
+                ? userFetchList
+                : downlineData
+              ).map((item) => (
+                <tr key={item?._id} className="border border-gray-400 bg-white">
+                  <td className="px-4 py-2 text-sm">
+                    {" "}
+                    <div
+                      onClick={() => handleUsernameList(item)}
+                      className={`${
+                        item.role_name === "master" ? "cursor-pointer" : ""
+                      }`}
+                    >
+                      <span
+                        className={`bg-green-500 text-white px-2 py-1 text-xs mr-1 rounded font-semibold text-l ${
+                          item.role_name === "master" ? "cursor-pointer" : ""
+                        }`}
+                      >
+                        {item.role_name.toUpperCase()}
+                      </span>
+                      <span className="text-black font-semibold">
+                        {item.username}
+                      </span>
+                    </div>
+                  </td>
+                  <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
+                    {new Intl.NumberFormat("en-IN").format(
+                      item.creditReference
+                    )}
+                    <div className="ml-2 inline-flex space-x-2">
+                      <FaEdit
+                        className="text-blue cursor-pointer"
+                        onClick={() => handleEditClick(item)}
+                      />
+                      <FaEye
+                        className="text-blue cursor-pointer"
+                        onClick={() => handleListView(item)}
+                      />
+                    </div>
+                  </td>
+                  {!isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(
+                        item.openingBalance
+                      )}
+                    </td>
                   )}
-                </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                  {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
-                </td>
-                <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                  {new Intl.NumberFormat("en-IN").format(item.partnership)}
-                </td>
-                <td className="border border-gray-400 px-4 py-2 font-bold text-l">
-                  <span
-                    className={`p-1 rounded border ${
-                      item.status === "active"
-                        ? "text-green-600 border-green-600 bg-green-100"
-                        : item.status === "suspended"
-                        ? "text-red-600 border-red-600 bg-red-100"
-                        : item.status === "locked"
-                        ? "text-red-600 border-red-600 bg-red-100"
-                        : "text-gray-600 border-gray-600 bg-gray-100"
+                  {isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(item.partnership)}
+                      <div className="ml-2 inline-flex space-x-2">
+                        <FaEdit
+                          className="text-blue cursor-pointer"
+                          onClick={() => handleUpdatePartnership(item)}
+                        />
+                      </div>
+                    </td>
+                  )}
+                  {isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(
+                        item.openingBalance
+                      )}
+                    </td>
+                  )}
+                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                    0
+                  </td>
+                  {!isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(
+                        item.exposureLimit
+                      )}
+                      <div className="ml-2 inline-flex space-x-2">
+                        <FaEdit
+                          className="text-blue cursor-pointer"
+                          onClick={() => handleExposureEditClick(item)}
+                        />
+                      </div>
+                    </td>
+                  )}
+
+                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                    {new Intl.NumberFormat("en-IN").format(
+                      item.totalBalance || 0
+                    )}
+                  </td>
+                  <td
+                    className={`border border-gray-400 px-4 py-2 text-sm font-semibold ${
+                      item.profit_loss < 0 ? "text-red-500" : ""
                     }`}
                   >
-                    {item.status}
-                  </span>
-                </td>
+                    {item.profit_loss < 0
+                      ? `(-${new Intl.NumberFormat("en-IN").format(
+                          Math.abs(item.profit_loss)
+                        )})`
+                      : new Intl.NumberFormat("en-IN").format(item.profit_loss)}
+                  </td>
+                  {!isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(100)}
+                    </td>
+                  )}
 
-                <td className="px-4 py-2 text-sm">
-                  <div className="flex space-x-2">
-                    <div
-                      onClick={() => handleIconClick(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                  <td className="border border-gray-400 px-4 py-2 font-bold text-l">
+                    <span
+                      className={`p-1 rounded border ${
+                        item.status === "active"
+                          ? "text-green-600 border-green-600 bg-green-100"
+                          : item.status === "suspended"
+                          ? "text-red-600 border-red-600 bg-red-100"
+                          : item.status === "locked"
+                          ? "text-red-600 border-red-600 bg-red-100"
+                          : "text-gray-600 border-gray-600 bg-gray-100"
+                      }`}
                     >
-                      <AiFillDollarCircle className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <RiArrowUpDownFill className="text-darkgray" />
-                    </div>
+                      {item.status}
+                    </span>
+                  </td>
 
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdManageHistory className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => statushandlechange(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <MdSettings className="text-darkgray" />
-                    </div>
-                    <Link to={ROUTES_CONST.MyAccount}>
-                      <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
-                        <FaUserAlt className="text-darkgray" />
+                  <td className="px-4 py-2 text-sm">
+                    <div className="flex space-x-2">
+                      <div
+                        onClick={() => handleIconClick(item)}
+                        title="Banking"
+                        className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                      >
+                        <AiFillDollarCircle className="text-darkgray" />
                       </div>
-                    </Link>
-                    <div
-                      onClick={() => handleOpenSettings(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
-                    >
-                      <BsBuildingFillLock className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => handleDeleteClick(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
-                    >
-                      <MdDelete className="text-" />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            )
-          )}
-          {/* {location.pathname === "/master-downline-list" &&
-            userFetchList.length === 0 &&
-            downlineData?.data?.map((item, index) => (
-              <tr key={index} className="border border-gray-300 bg-white">
-                <td className="px-4 py-3 text-sm">
-                  <span
-                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
-                    onClick={() => handleUsernameList(item)}
-                  >
-                    {item.role_name}
-                  </span>
-                  {item.username}
-                </td>
-                <td className="px-4 py-3 text-sm text-blue-900">
-                  {item.creditReference}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleEditClick(item)}
-                    />
-                    <FaEye
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleListView(item)}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm text-blue-900">
-                  {item.exposureLimit}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleExposureEditClick(item)}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm"></td>
-                <td className="x-4 py-3 font-bold text-green-600 text-l">
-                  {item.status}
-                </td>
-                <td className="px-4 py-3 text-sm">
-                  <div className="flex space-x-2">
-                    <div
-                      onClick={() => handleIconClick(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
-                    >
-                      <AiFillDollarCircle className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <RiArrowUpDownFill className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdSettings className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => statushandlechange(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <FaUserAlt className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => handleOpenSettings(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <BsBuildingFillLock className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdDelete
-                        className="text-darkgray"
+                      {!isMasterDownlineList && (
+                        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                          <RiArrowUpDownFill className="text-darkgray" />
+                        </div>
+                      )}
+                      {!isMasterDownlineList && (
+                        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                          <MdManageHistory className="text-darkgray" />
+                        </div>
+                      )}
+                      <div
+                        onClick={() => statushandlechange(item)}
+                        title="Change status"
+                        className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                      >
+                        <MdSettings className="text-darkgray" />
+                      </div>
+                      <Link title="Account Setting" to={ROUTES_CONST.MyAccount}>
+                        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
+                          <FaUserAlt className="text-darkgray" />
+                        </div>
+                      </Link>
+                      <div
+                        onClick={() => handleOpenSettings(item)}
+                        title="Sports Settings"
+                        className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                      >
+                        <BsBuildingFillLock className="text-darkgray" />
+                      </div>
+                      <div
                         onClick={() => handleDeleteClick(item)}
-                      />
+                        title="Delete"
+                        className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                      >
+                        <MdDelete className="text-" />
+                      </div>
                     </div>
-                  </div>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={10} className="text-center p-6">
+                  No Data Available
                 </td>
               </tr>
-            ))} */}
-          {/* {location.pathname === "/user-downline-list" &&
-            downlineData?.data?.map((item, index) => (
-              <tr key={index} className="border border-gray-300 bg-white">
-                <td className="px-4 py-3 text-sm">
-                  <span
-                    className="bg-green-500 text-white px-2 py-1 mr-1 rounded font-bold text-l"
-                    onClick={() => handleUsernameList(item)}
-                  >
-                    {item.role_name}
-                  </span>
-                  {item.username}
-                </td>
-                <td className="px-4 py-3 text-sm text-blue-900">
-                  {item.creditReference}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleEditClick(item)}
-                    />
-                    <FaEye
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleListView(item)}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm">{item.partnership}%</td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm text-blue-900">
-                  {item.exposureLimit}
-                  <div className="ml-2 inline-flex space-x-2">
-                    <FaEdit
-                      className="text-blue cursor-pointer"
-                      onClick={() => handleExposureEditClick(item)}
-                    />
-                  </div>
-                </td>
-                <td className="px-4 py-3 text-sm">{item.openingBalance}</td>
-                <td className="px-4 py-3 text-sm"></td>
-                <td className="x-4 py-3 font-bold text-green-600 text-l">
-                  {item.status}
-                </td>
-                <td className="px-4 py-3 text-sm">
-                  <div className="flex space-x-2">
-                    <div
-                      onClick={() => handleIconClick(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
-                    >
-                      <AiFillDollarCircle className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <RiArrowUpDownFill className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdSettings className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => statushandlechange(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <FaUserAlt className="text-darkgray" />
-                    </div>
-                    <div
-                      onClick={() => handleOpenSettings(item)}
-                      className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                    >
-                      <BsBuildingFillLock className="text-darkgray" />
-                    </div>
-                    <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                      <MdDelete
-                        className="text-darkgray"
-                        onClick={() => handleDeleteClick(item)}
-                      />
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))} */}
-        </tbody>
-      </table>
-      <div className="flex justify-between items-center mt-4">
-        <div className="text-sm text-gray-600">
-          Showing {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
-          to {Math.min(currentPage * entriesToShow, totalUsers)} of {totalUsers}{" "}
-          entries
+            )}
+          </tbody>
+        </table>
+        <div className="flex justify-between items-center mt-4">
+          <div className="text-sm text-gray-600">
+            Showing{" "}
+            {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+            {Math.min(currentPage * entriesToShow, totalUsers)} of {totalUsers}{" "}
+            entries
+          </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => handlePageChange("first")}
+              className="px-3 py-1 text-gray-600 rounded text-sm"
+              disabled={currentPage === 1}
+            >
+              First
+            </button>
+            <button
+              onClick={() => handlePageChange("prev")}
+              className="px-3 py-1 text-gray-600 rounded text-sm"
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => handlePageChange("next")}
+              className="px-3 py-1 text-gray-600 rounded text-sm"
+              disabled={currentPage === totalPages}
+            >
+              Next
+            </button>
+            <button
+              onClick={() => handlePageChange("last")}
+              className="px-3 py-1 text-gray-600 rounded text-sm"
+              disabled={currentPage === totalPages}
+            >
+              Last
+            </button>
+          </div>
         </div>
-        <div className="flex space-x-2">
-          <button
-            onClick={() => handlePageChange("first")}
-            className="px-3 py-1 text-gray-600 rounded text-sm"
-            disabled={currentPage === 1}
-          >
-            First
-          </button>
-          <button
-            onClick={() => handlePageChange("prev")}
-            className="px-3 py-1 text-gray-600 rounded text-sm"
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => handlePageChange("next")}
-            className="px-3 py-1 text-gray-600 rounded text-sm"
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-          <button
-            onClick={() => handlePageChange("last")}
-            className="px-3 py-1 text-gray-600 rounded text-sm"
-            disabled={currentPage === totalPages}
-          >
-            Last
-          </button>
-        </div>
-      </div>
-      {isModalOpen && selectedUser && (
-        <>
-          <CreditEditReferenceModal
-            isOpen={isModalOpen}
-            onCancel={handleModalClose}
-            username={selectedUser.username}
-            currentCreditRef={selectedUser.creditReference}
-            onSubmit={handleSubmitFunction}
-            user={selectedUser}
-            userId={selectedUser?._id}
-            currentPage={currentPage}
-            entriesToShow={entriesToShow}
-          />
-        </>
-      )}
-      {/* Log userId */}
-      {creditReferenceTransactionList && (
-        <>
-          <CreditReferenceTransactionModel
-            username={creditReferenceTransactionList.username}
-            isOpen={creditReferenceTransactionList}
-            onClose={handleDeleteModalClose}
-            // onConfirm={handleDeleteConfirm}
-            userId={creditReferenceTransactionList?._id}
-            currentPage={currentPage}
-            entriesToShow={entriesToShow}
-          />
-        </>
-      )}
-      <DeleteConfirmationModal
-        isOpen={isDeleteModalOpen}
-        onClose={handleDeleteModalClose}
-        onConfirm={handleDeleteConfirm}
-        userId={userToDelete?._id}
-        currentPage={currentPage}
-        entriesToShow={entriesToShow}
-      />
-      {selectedUser && depositModal && (
-        <DepositModal
-          isOpen={depositModal}
+        {isModalOpen && selectedUser && (
+          <>
+            <CreditEditReferenceModal
+              isOpen={isModalOpen}
+              onCancel={handleModalClose}
+              username={selectedUser.username}
+              currentCreditRef={selectedUser.creditReference}
+              onSubmit={handleSubmitFunction}
+              user={selectedUser}
+              userId={selectedUser?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+            />
+          </>
+        )}
+        {selectedUser && updatePartnership && (
+          <>
+            <UpdatePartnershipModal
+              isOpen={updatePartnership}
+              onCancel={handleDeleteModalClose}
+              username={selectedUser.username}
+              currentPartnership={selectedUser.partnership}
+              onSubmit={handleSubmitFunction}
+              user={selectedUser}
+              userId={selectedUser?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+            />
+          </>
+        )}
+        {/* Log userId */}
+        {creditReferenceTransactionList && (
+          <>
+            <CreditReferenceTransactionModel
+              username={creditReferenceTransactionList.username}
+              isOpen={creditReferenceTransactionList}
+              onClose={handleDeleteModalClose}
+              // onConfirm={handleDeleteConfirm}
+              userId={creditReferenceTransactionList?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+            />
+          </>
+        )}
+        <DeleteConfirmationModal
+          isOpen={isDeleteModalOpen}
           onClose={handleDeleteModalClose}
-          userId={selectedUser?._id}
+          onConfirm={handleDeleteConfirm}
+          userId={userToDelete?._id}
           currentPage={currentPage}
           entriesToShow={entriesToShow}
-          user={selectedUser}
         />
-      )}
-      {selectedUser && (
-        <>
-          <SportsSettingsModal
-            isOpen={settingsModal}
+        {selectedUser && depositModal && (
+          <DepositModal
+            isOpen={depositModal}
             onClose={handleDeleteModalClose}
-            // onConfirm={handleDeleteConfirm}
-            userId={selectedUser?._id}
-            currentPage={currentPage}
-            entriesToShow={entriesToShow}
-          />
-        </>
-      )}
-      {selectedUser && (
-        <>
-          <AccountStatus
-            isOpen={accountStatus}
-            onClose={handleDeleteModalClose}
-            // onConfirm={handleDeleteConfirm}
             userId={selectedUser?._id}
             currentPage={currentPage}
             entriesToShow={entriesToShow}
             user={selectedUser}
           />
-        </>
-      )}
-      {isExposureModalOpen && selectedExposureUser && (
-        <>
-          <EditExposureLimitModal
-            username={selectedExposureUser.username}
-            currentExposureLimit={selectedExposureUser.exposureLimit}
-            onSubmit={(newExposureLimit, password) => {
-              console.log(
-                `Updated exposure limit for ${selectedExposureUser.username}: ${newExposureLimit} (Password: ${password})`
-              );
-              handleExposureModalClose();
-            }}
-            onCancel={handleExposureModalClose}
-            // onSubmit={handleSubmitFunction}
-            user={selectedExposureUser}
-            userId={selectedExposureUser?._id}
-            currentPage={currentPage}
-            entriesToShow={entriesToShow}
-          />
-        </>
-      )}
-    </div>
+        )}
+        {selectedUser && (
+          <>
+            <SportsSettingsModal
+              isOpen={settingsModal}
+              onClose={handleDeleteModalClose}
+              // onConfirm={handleDeleteConfirm}
+              userId={selectedUser?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+            />
+          </>
+        )}
+        {selectedUser && (
+          <>
+            <AccountStatus
+              isOpen={accountStatus}
+              onClose={handleDeleteModalClose}
+              // onConfirm={handleDeleteConfirm}
+              userId={selectedUser?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+              user={selectedUser}
+            />
+          </>
+        )}
+        {isExposureModalOpen && selectedExposureUser && (
+          <>
+            <EditExposureLimitModal
+              username={selectedExposureUser.username}
+              currentExposureLimit={selectedExposureUser.exposureLimit}
+              onSubmit={(newExposureLimit, password) => {
+                console.log(
+                  `Updated exposure limit for ${selectedExposureUser.username}: ${newExposureLimit} (Password: ${password})`
+                );
+                handleExposureModalClose();
+              }}
+              onCancel={handleExposureModalClose}
+              // onSubmit={handleSubmitFunction}
+              user={selectedExposureUser}
+              userId={selectedExposureUser?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+            />
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

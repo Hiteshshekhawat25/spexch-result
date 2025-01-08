@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
-import { IoLogOutOutline } from "react-icons/io5"; 
-import { TbTriangleInvertedFilled } from "react-icons/tb"; 
+import { IoLogOutOutline } from "react-icons/io5";
+import { TbTriangleInvertedFilled } from "react-icons/tb";
 import { useDispatch } from "react-redux"; // Import useDispatch from Redux
-import {
-  clearUserData,
-
-} from "../../Store/Slice/userInfoSlice";
+import { clearUserData } from "../../Store/Slice/userInfoSlice";
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
