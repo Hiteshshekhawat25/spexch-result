@@ -180,9 +180,7 @@ const DownlineList = () => {
   }, [token, location.pathname]);
 
   useEffect(() => {
-    console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyy", location.pathname);
     if (location.pathname === "/user-downline-list") {
-      console.log("tttttttttttttttttttttttttttttttt", location);
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");

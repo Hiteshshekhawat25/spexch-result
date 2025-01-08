@@ -1,12 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { BASE_URL } from '../../Constant/Api';
+import { toast } from 'react-toastify';
 
-// Thunk to update credit reference
 export const updateCreditReference = createAsyncThunk(
   'credit/updateCreditReference',
   async ({ username, newCreditRef, password, userId }, { rejectWithValue }) => {
     try {
+      console.log("hello");
       const token = localStorage.getItem('authToken');
 
       if (!token) {
@@ -15,9 +16,9 @@ export const updateCreditReference = createAsyncThunk(
 
       const response = await axios.put(
         `${BASE_URL}/user/update-credit-reference`,
-        { 
-          username, 
-          newCreditReference: newCreditRef, 
+        {
+          username,
+          newCreditReference: newCreditRef,
           password,
           userId
         },
@@ -27,18 +28,16 @@ export const updateCreditReference = createAsyncThunk(
           },
         }
       );
-
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        throw new Error('Failed to update the credit reference');
-      }
+      return response.data;
     } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      }
+      console.error("Error:", error.message);
       return rejectWithValue(error.message);
     }
   }
 );
-
 
 // Create slice
 const creditSlice = createSlice({
@@ -53,11 +52,12 @@ const creditSlice = createSlice({
     builder
       .addCase(updateCreditReference.pending, (state) => {
         state.loading = true;
+        state.error = null;
       })
       .addCase(updateCreditReference.fulfilled, (state, action) => {
         state.loading = false;
         state.creditRef = action.payload;
-      })      
+      })
       .addCase(updateCreditReference.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;

@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { BASE_URL } from '../../Constant/Api';
+import { toast } from 'react-toastify';
 
 // Thunk to update partnership
 export const updatePartnership = createAsyncThunk(
@@ -15,8 +16,8 @@ export const updatePartnership = createAsyncThunk(
 
       const response = await axios.put(
         `${BASE_URL}/user/update-partnership`,
-        { 
-          newPartnership, 
+        {
+          newPartnership,
           password,
           userId,
         },
@@ -27,13 +28,13 @@ export const updatePartnership = createAsyncThunk(
         }
       );
 
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        throw new Error('Failed to update the partnership');
-      }
+      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message || error.message);
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      }
+      console.error("Error:", error.message);
+      return rejectWithValue(error.message);
     }
   }
 );

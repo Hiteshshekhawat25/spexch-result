@@ -96,14 +96,8 @@ const UpdatePartnershipModal = ({
       const fetchResult = await dispatch(
         updatePartnership({ newPartnership, password, userId })
       );
-      console.log("fetchResult", fetchResult);
-
       if (fetchResult.error) {
-        // If there's an error returned from the action, display it in a toast
-        toast.error(
-          fetchResult.payload ||
-            "An error occurred while updating the partnership."
-        );
+        toast.error(fetchResult.error);
       } else {
         const result = await fetchDownlineData(
           currentPage,
@@ -111,27 +105,29 @@ const UpdatePartnershipModal = ({
           roleId
         );
         if (result && result.data) {
+          console.log("result", result.data);
           dispatch(setDownlineData(result.data));
 
           setNewPartnership(0);
           setPassword("");
-          onCancel();
           toast.success(
             fetchResult.payload?.message || "Data updated successfully."
           );
+
+          // Close the modal only after successful submission
+          onCancel();
         } else {
           toast.warning("Unable to fetch updated downline data.");
         }
       }
     } catch (error) {
-      console.error("Error updating partnership:", error);
-      dispatch(setError(error.message || "Failed to fetch the downline data."));
+      console.error("Error:", error);
       toast.error(
-        error.message || "An error occurred while updating the partnership."
+        error.message || "An error occurred while processing the request."
       );
     } finally {
-      // Reset loading state
-      setLoading(false);
+      // Ensure loading state is reset
+      dispatch(setLoading(false));
     }
   };
 

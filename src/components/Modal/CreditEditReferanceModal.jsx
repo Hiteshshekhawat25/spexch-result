@@ -95,14 +95,9 @@ const CreditEditReferenceModal = ({
       const fetchResult = await dispatch(
         updateCreditReference({ newCreditRef, password, userId })
       );
-      console.log("fetchResult-------", fetchResult);
 
       if (fetchResult.error) {
-        // If there's an error returned from the action, display it in a toast
-        toast.error(
-          fetchResult.payload ||
-            "An error occurred while updating the partnership."
-        );
+        toast.error(fetchResult.error);
       } else {
         const result = await fetchDownlineData(
           currentPage,

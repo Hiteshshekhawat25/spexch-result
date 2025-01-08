@@ -1,11 +1,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { BASE_URL } from '../../Constant/Api';
+import { toast } from 'react-toastify';
 
 // Thunk to update exposure
 export const updateExposure = createAsyncThunk(
   'exposure/updateExposure',
-  async ({ userId, newExposureLimit,password }, { rejectWithValue }) => {
+  async ({ userId, newExposureLimit, password }, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem('authToken');
 
@@ -15,8 +16,8 @@ export const updateExposure = createAsyncThunk(
 
       const response = await axios.put(
         `${BASE_URL}/user/update-exposure-limit`,
-        { 
-          userId, 
+        {
+          userId,
           newExposureLimit,
           password
         },
@@ -27,12 +28,12 @@ export const updateExposure = createAsyncThunk(
         }
       );
 
-      if (response.status === 200) {
-        return response.data;
-      } else {
-        throw new Error('Failed to update the exposure');
-      }
+      return response.data;
     } catch (error) {
+      if (error.response && error.response.data) {
+        toast.error(error.response.data.message);
+      }
+      console.error("Error:", error.message);
       return rejectWithValue(error.message);
     }
   }
@@ -41,9 +42,9 @@ export const updateExposure = createAsyncThunk(
 const exposureSlice = createSlice({
   name: 'exposure',
   initialState: {
-    exposure: null, 
+    exposure: null,
     loading: false,
-    error: null, 
+    error: null,
   },
   reducers: {},
   extraReducers: (builder) => {
@@ -58,7 +59,7 @@ const exposureSlice = createSlice({
       })
       .addCase(updateExposure.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload; 
+        state.error = action.payload;
       });
   },
 });
