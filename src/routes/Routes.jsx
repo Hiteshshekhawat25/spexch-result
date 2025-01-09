@@ -107,7 +107,7 @@ const RoutesComp = ({ socket }) => {
       />
 
       <Route
-        path={ROUTES_CONST.TransferMatchCoins}
+        path={`${ROUTES_CONST.TransferMatchCoins}/:matchId`}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
