@@ -250,14 +250,14 @@ const handleFilterChange = (data) => {
                       <td className="border border-gray-400 px-4 py-3">{item.oddsRequested}</td>                      
                       <td className="border border-gray-400 px-4 py-3 font-bold">{item.stake}</td>
                       <td className="border border-gray-400 px-4 py-3">
-                        {new Date(item.placeTime).toLocaleDateString('en-GB', {
-                          day: '2-digit',
-                          month: '2-digit',
-                          year: 'numeric',
-                        })}{' '}
-                        {new Date(item.placeTime).toLocaleTimeString('en-US', {
-                          hour: '2-digit',
-                          minute: '2-digit',
+                        {new Date(item.placeTime).toLocaleDateString("en-GB", {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                        })}{" "}
+                        {new Date(item.placeTime).toLocaleTimeString("en-US", {
+                          hour: "2-digit",
+                          minute: "2-digit",
                           hour12: true,
                         })}
                       </td>
