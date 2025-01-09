@@ -388,7 +388,7 @@ const DownlineList = () => {
           <div className="border border-gray-300 p-2 rounded-md">
             <input
               type="text"
-              placeholder="Search"
+              // placeholder="Search"
               value={searchTerm}
               onChange={handleSearchChange}
               className="border border-gray-300 rounded px-2 py-1 text-sm"

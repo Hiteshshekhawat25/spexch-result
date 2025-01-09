@@ -225,7 +225,7 @@ console.log("Matches",matches);
     <input
       type="text"
       className="border p-2 rounded w-1/3"
-      placeholder="Search by EventID, MatchID..."
+      // placeholder="Search by EventID, MatchID..."
       value={searchTerm}
       onChange={(e) => dispatch(setSearchTerm(e.target.value))}
     />

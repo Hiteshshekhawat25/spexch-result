@@ -130,7 +130,7 @@ const PasswordHistory = () => {
             <div>
               <input
                 type="text"
-                placeholder="Search"
+                // placeholder="Search"
                 className="border border-gray-300 rounded-md p-2"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

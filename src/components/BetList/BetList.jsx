@@ -136,7 +136,7 @@ const BetList = () => {
             <p>Search:</p>
             <input
               type="text"
-              placeholder="Search by username"
+              // placeholder="Search by username"
               value={searchTerm}
               onChange={handleSearchChange}
               className="border rounded px-2 py-1 text-sm"

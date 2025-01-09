@@ -168,7 +168,7 @@ const UpdatePartnershipModal = ({
                     setNewPartnership(Number(value));
                   }
                 }}
-                placeholder="New Partnership"
+                // placeholder="New Partnership"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -184,7 +184,7 @@ const UpdatePartnershipModal = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              placeholder="Enter your password"
+              // placeholder="Enter your password"
             />
           </div>
 

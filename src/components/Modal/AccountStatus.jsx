@@ -261,7 +261,7 @@ const AccountStatus = ({
                 value={password}
                 onChange={handlePasswordChange}
                 className="w-full p-2 border border-gray-300 rounded-lg"
-                placeholder="Enter Password"
+                // placeholder="Enter Password"
               />
             </div>
 
