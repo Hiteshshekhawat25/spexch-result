@@ -28,6 +28,7 @@ import MyAccount from "../components/MyAccount/MyAccount";
 import EventProfitLoss  from "../components/MyReport/EventProfitLoss";
 import Dashboard from "../components/Dashboard/dashboard";
 import Banking from "../components/Banking/Banking";
+import PasswordHistory from "../components/PasswordHistory/Passwordhistory";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -128,7 +129,7 @@ const RoutesComp = ({ socket }) => {
       />
 
       <Route
-        path={ROUTES_CONST.TransferMatchCoins}
+        path={`${ROUTES_CONST.TransferMatchCoins}/:matchId`}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
@@ -285,6 +286,16 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <Dashboard />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+       path={ROUTES_CONST.passwordHistory}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <PasswordHistory />
             </LayoutHeader>
           </ProtectedRoutes>
         }

@@ -172,7 +172,7 @@ const DepositModal = ({
                     setAmount(Number(value));
                   }
                 }}
-                placeholder="Enter Amount"
+                // placeholder="Enter Amount"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -186,7 +186,7 @@ const DepositModal = ({
                 type="text"
                 value={remark}
                 onChange={(e) => setRemark(e.target.value)}
-                placeholder="Enter Remark"
+                // placeholder="Enter Remark"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -200,7 +200,7 @@ const DepositModal = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              placeholder="Enter your password"
+              // placeholder="Enter your password"
             />
           </div>
 

@@ -48,7 +48,7 @@ const MenuHeader = () => {
       ],
     },
     { name: "Commission", link: "#" },
-    { name: "Password History", link: "#" },
+    { name: "Password History", link: "/password-history" },
     { name: "Restore User", link: "#" },
     {
       name: "Logout",

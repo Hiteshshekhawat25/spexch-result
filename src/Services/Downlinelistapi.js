@@ -397,3 +397,23 @@ export const getProfitLossData = async (url) => {
     throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }
 };
+
+export const fetchUsersByStatus = async (status) => {
+  const token = localStorage.getItem("authToken");
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/user/get-user?page=1&limit=10&status=${status}`,
+      {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("repsonse in filter",response)
+    return response.data.data; 
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+};

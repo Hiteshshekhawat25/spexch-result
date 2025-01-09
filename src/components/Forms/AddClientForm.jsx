@@ -5,7 +5,10 @@ import axios from "axios"; // For making API calls
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; // Import the styles
 import { useDispatch } from "react-redux";
-import { setDownlineData, setStartFetchData } from "../../Store/Slice/downlineSlice";
+import {
+  setDownlineData,
+  setStartFetchData,
+} from "../../Store/Slice/downlineSlice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 
 export const AddClientForm = ({ closeModal }) => {
@@ -27,12 +30,12 @@ export const AddClientForm = ({ closeModal }) => {
     password: "",
     confirmPassword: "",
     rollingCommission: {
-      fancy: 0,
-      matka: 0,
-      casino: 0,
-      binary: 0,
-      sportbook: 0,
-      bookmaker: 0,
+      fancy: " ",
+      matka: " ",
+      casino: " ",
+      binary: " ",
+      sportbook: " ",
+      bookmaker: " ",
     },
     masterPassword: "",
   };
@@ -146,13 +149,11 @@ export const AddClientForm = ({ closeModal }) => {
 
     const { confirmPassword, rollingCommissionChecked, ...dataToSubmit } =
       formData;
-
-    if (dataToSubmit.rollingCommissionChecked) {
+    if (rollingCommissionChecked) {
       dataToSubmit.rollingCommission = Object.fromEntries(
-        Object.entries(dataToSubmit.rollingCommission).map(([key, value]) => [
-          key,
-          value ? Number(value) : 0,
-        ])
+        Object.entries(dataToSubmit.rollingCommission || {}).map(
+          ([key, value]) => [key, value ? Number(value) : 0]
+        )
       );
     }
 
@@ -169,8 +170,8 @@ export const AddClientForm = ({ closeModal }) => {
       // window.location.reload();
 
       // setTimeout(() => {
-        handleCloseModal();
-        dispatch(setStartFetchData())
+      handleCloseModal();
+      dispatch(setStartFetchData());
       // }, 2000);
     } catch (error) {
       setError(
@@ -201,9 +202,9 @@ export const AddClientForm = ({ closeModal }) => {
       <h2 className=" text-white font-semibold mb-4 py-2 px-2 bg-gradient-blue">
         Add User
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-2 px-4">
+      <form onSubmit={handleSubmit} className="space-y-2 px-6">
         <div className="w-full flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Username<span className="text-red-500">*</span>
           </label>
 
@@ -212,7 +213,8 @@ export const AddClientForm = ({ closeModal }) => {
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            // className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -220,7 +222,7 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.username}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Name<span className="text-red-500">*</span>
           </label>
           <input
@@ -228,21 +230,21 @@ export const AddClientForm = ({ closeModal }) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
 
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Commission(%)<span className="text-red-500">*</span>
           </label>
           <input
-            type="number"
+            type="text"
             name="commission"
             value={formData.commission}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -250,15 +252,15 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.commission}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Opening Balance<span className="text-red-500">*</span>
           </label>
           <input
-            type="number"
+            type="text"
             name="openingBalance"
             value={formData.openingBalance}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -266,15 +268,15 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.openingBalance}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Credit Reference<span className="text-red-500">*</span>
           </label>
           <input
-            type="number"
+            type="text"
             name="creditReference"
             value={formData.creditReference}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -282,7 +284,7 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.creditReference}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Mobile Number<span className="text-red-500">*</span>
           </label>
           <input
@@ -290,7 +292,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="mobileNumber"
             value={formData.mobileNumber}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -298,15 +300,15 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.mobileNumber}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Exposure Limit<span className="text-red-500">*</span>
           </label>
           <input
-            type="number"
+            type="text"
             name="exposureLimit"
             value={formData.exposureLimit}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -314,7 +316,7 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.exposureLimit}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Password<span className="text-red-500">*</span>
           </label>
           <input
@@ -322,7 +324,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="password"
             value={formData.password}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -330,7 +332,7 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.password}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Confirm Password<span className="text-red-500">*</span>
           </label>
           <input
@@ -338,7 +340,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="confirmPassword"
             value={formData.confirmPassword}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -346,7 +348,7 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.confirmPassword}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left py-2 font-semibold">
+          <label className="w-1/3 text-left font-semibold">
             Master Password<span className="text-red-500">*</span>
           </label>
           <input
@@ -354,7 +356,7 @@ export const AddClientForm = ({ closeModal }) => {
             name="masterPassword"
             value={formData.masterPassword}
             onChange={handleChange}
-            className="w-2/3 border p-1"
+            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -372,65 +374,67 @@ export const AddClientForm = ({ closeModal }) => {
         </div>
 
         {formData.rollingCommissionChecked && (
-          <div className="space-y-4">
+          <div className="space-y-2">
             <div className="flex justify-between">
-              <label className="w-1/3 text-left py-2 font-semibold">Fancy</label>
+              <label className="w-1/3 text-left font-semibold">Fancy</label>
               <input
-                type="number"
+                type="text"
                 name="rollingCommission.fancy"
-                value={formData.rollingCommission.fancy || 0}
+                value={formData.rollingCommission.fancy}
                 onChange={handleChange}
-                className="w-2/3 border p-1"
+                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left py-2 font-semibold">Matka</label>
+              <label className="w-1/3 text-left font-semibold">Matka</label>
               <input
-                type="number"
+                type="text"
                 name="rollingCommission.matka"
-                value={formData.rollingCommission.matka || 0}
+                value={formData.rollingCommission.matka}
                 onChange={handleChange}
-                className="w-2/3 border p-1"
+                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left py-2 font-semibold">Casino</label>
+              <label className="w-1/3 text-left font-semibold">Casino</label>
               <input
-                type="number"
+                type="text"
                 name="rollingCommission.casino"
-                value={formData.rollingCommission.casino || 0}
+                value={formData.rollingCommission.casino}
                 onChange={handleChange}
-                className="w-2/3 border p-1"
+                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left py-2 font-semibold">Binary</label>
+              <label className="w-1/3 text-left font-semibold">Binary</label>
               <input
-                type="number"
+                type="text"
                 name="rollingCommission.binary"
-                value={formData.rollingCommission.binary || 0}
+                value={formData.rollingCommission.binary}
                 onChange={handleChange}
-                className="w-2/3 border p-1"
+                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left py-2 font-semibold">Sportsbook</label>
+              <label className="w-1/3 text-left font-semibold">
+                Sportbook
+              </label>
               <input
-                type="number"
-                name="rollingCommission.sportsbook"
-                value={formData.rollingCommission.sportsbook || 0}
+                type="text"
+                name="rollingCommission.sportbook"
+                value={formData.rollingCommission.sportbook}
                 onChange={handleChange}
-                className="w-2/3 border p-1"
+                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left py-2 font-semibold">Bookmaker</label>
+              <label className="w-1/3 text-left font-semibold">Bookmaker</label>
               <input
-                type="number"
+                type="text"
                 name="rollingCommission.bookmaker"
-                value={formData.rollingCommission.bookmaker || 0}
+                value={formData.rollingCommission.bookmaker}
                 onChange={handleChange}
-                className="w-2/3 border p-1"
+                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
           </div>

@@ -130,7 +130,7 @@ const EventProfitLoss = () => {
               <p>Search:</p>
               <input
                 type="text"
-                placeholder="Search by sport name"
+                // placeholder="Search by sport name"
                 value={searchTerm}
                 onChange={handleSearchChange}
                 className="border rounded px-2 py-1 text-sm"

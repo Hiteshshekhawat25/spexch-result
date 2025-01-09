@@ -77,7 +77,7 @@ const ChangePasswordModal = ({ onCancel }) => {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                placeholder="Enter your current password"
+                // placeholder="Enter your current password"
               />
               <span
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
@@ -98,7 +98,7 @@ const ChangePasswordModal = ({ onCancel }) => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                placeholder="Enter your new password"
+                // placeholder="Enter your new password"
               />
               <span
                 onClick={() => setShowNewPassword(!showNewPassword)}
@@ -119,7 +119,7 @@ const ChangePasswordModal = ({ onCancel }) => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                placeholder="Confirm your new password"
+                // placeholder="Confirm your new password"
               />
               <span
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}

@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import { BASE_URL } from "../../Constant/Api";
 import {
   fetchDownlineData,
+  fetchUsersByStatus,
   searchDownline,
 } from "../../Services/Downlinelistapi";
 import {
@@ -60,6 +61,9 @@ const DownlineList = () => {
   const [depositModal, setDepositModal] = useState(false);
   const [settingsModal, setSettingsModal] = useState(false);
   const [accountStatus, setAccountStatus] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState("");
+  const [users, setUsers] = useState([]);
+
   const [roles, setRoles] = useState([]);
   const [userList, setUserList] = useState([]);
   const location = useLocation();
@@ -180,9 +184,7 @@ const DownlineList = () => {
   }, [token, location.pathname]);
 
   useEffect(() => {
-    console.log("yyyyyyyyyyyyyyyyyyyyyyyyyyy", location.pathname);
     if (location.pathname === "/user-downline-list") {
-      console.log("tttttttttttttttttttttttttttttttt", location);
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
@@ -353,6 +355,28 @@ const DownlineList = () => {
     }
   };
 
+  const fetchUsers = async () => {
+    if (!selectedFilter) return; // Prevent fetching if no filter is selected
+    try {
+      const fetchedUsers = await fetchUsersByStatus(selectedFilter);
+      console.log("fetcheedddddddd", fetchedUsers);
+      setUserList(fetchedUsers);
+      console.log("usersssss", userList);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+    }
+  };
+
+  // Handle dropdown change
+  const handleFilterChange = (e) => {
+    setSelectedFilter(e.target.value);
+  };
+
+  // Fetch users whenever selectedFilter changes
+  useEffect(() => {
+    fetchUsers();
+  }, [selectedFilter]);
+
   return (
     <>
       {userFetchList.length ? (
@@ -387,15 +411,31 @@ const DownlineList = () => {
             </select>
             <label className="ml-2 text-sm font-medium">entries</label>
           </div>
-          <div className="border border-gray-300 p-2 rounded-md">
-            <input
-              type="text"
-              placeholder="Search"
-              value={searchTerm}
-              onChange={handleSearchChange}
-              className="border border-gray-300 rounded px-2 py-1 text-sm"
-            />
-          </div>
+          <div className="flex items-center space-x-6">
+          <div className="rounded-md w-28 px-3">
+  <select
+    value={selectedFilter}
+    onChange={handleFilterChange}
+    className="border rounded py-1 px-2 text-sm w-full bg-gray-200 text-black border-gray-400"
+  >
+    <option value="">Status</option>
+    <option value="active">Active</option>
+    <option value="suspended">Suspended</option>
+    <option value="locked">Locked</option>
+  </select>
+</div>
+
+  <label className="text-sm">Search:</label>
+  <div className="rounded-md w-28">
+    <input
+      type="text"
+      value={searchTerm}
+      onChange={handleSearchChange}
+      className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
+    />
+  </div>
+</div>
+
         </div>
         <table className="w-full table-auto border-collapse border border-gray-300">
           <thead className="border border-gray-300">
@@ -423,8 +463,8 @@ const DownlineList = () => {
                   className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
                   onClick={() => handleSort(key)}
                 >
-                  <div className="flex justify-between items-center">
-                    {label}
+                  <div className="flex justify-between">
+                    <div className="flex items-center">{label}</div>
                     <div className="flex flex-col items-center ml-2">
                       <FaSortUp
                         className={`${
@@ -433,6 +473,9 @@ const DownlineList = () => {
                             ? "text-black"
                             : "text-gray-400"
                         }`}
+                        style={{
+                          marginBottom: "-6px",
+                        }} /* Adjust to overlap tightly */
                       />
                       <FaSortDown
                         className={`${
@@ -441,6 +484,9 @@ const DownlineList = () => {
                             ? "text-black"
                             : "text-gray-400"
                         }`}
+                        style={{
+                          marginTop: "-6px",
+                        }} /* Ensures they touch tightly */
                       />
                     </div>
                   </div>
@@ -452,16 +498,21 @@ const DownlineList = () => {
             </tr>
           </thead>
           <tbody>
+            {/* {userList.length > 0 ? (userList */}
             {(searchTerm?.length
               ? searchData
               : userFetchList.length > 0
               ? userFetchList
+              : userList.length > 0
+              ? userList
               : downlineData
             )?.length ? (
               (searchTerm?.length
                 ? searchData
                 : userFetchList.length > 0
                 ? userFetchList
+                : userList.length > 0
+                ? userList
                 : downlineData
               ).map((item) => (
                 <tr key={item?._id} className="border border-gray-400 bg-white">

@@ -23,6 +23,7 @@ export const ROUTES_CONST = {
     BetList:"/BetList",
     MyAccount:"/MyAccount",
     userbanking:"user-banking",
-    masterbanking:"/master-banking"
+    masterbanking:"/master-banking",
+    passwordHistory: "/password-history"
   };
   

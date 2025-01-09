@@ -8,23 +8,22 @@ const UserHierarchyModal = ({ userId, closeModal }) => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!userId) return; // Exit early if no userId is provided
-
+    if (!userId) return; 
     const fetchUserData = async () => {
       try {
-        setLoading(true); // Set loading to true before the request
-        const response = await getUserHierarchyData(userId); // API call with userId
+        setLoading(true); 
+        const response = await getUserHierarchyData(userId); 
         console.log(response.data)
-        setUserData(response.data); // Set user data from the API response
-        setLoading(false); // Set loading to false after data is fetched
+        setUserData(response.data); 
+        setLoading(false); 
       } catch (error) {
-        setError(error.message); // Set error message if there's an issue
-        setLoading(false); // Set loading to false after error
+        setError(error.message); 
+        setLoading(false); 
       }
     };
 
-    fetchUserData(); // Trigger API call when the modal opens
-  }, [userId]); // Re-run the effect when userId changes
+    fetchUserData(); 
+  }, [userId]); 
 
   return (
     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">

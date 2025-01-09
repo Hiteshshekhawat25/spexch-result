@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSport, setSearchTerm, setMatches } from '../../Store/Slice/allMatchSlice';
 import { getCreateNewMatchAPIAuth, putUpdateMatchAPIAuth } from '../../Services/Newmatchapi';
@@ -10,10 +10,12 @@ import { FaEdit } from "react-icons/fa";
 import EditStakeModal from '../Modal/EditStakeModal';
 import EditMatchModal from '../Modal/EditMatchModal';
 import ScoreModal from '../Modal/ScoreModal';
+import { toast } from 'react-toastify';
 
 
 const AllMatches = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate()
   const { sport, searchTerm, matches, totalMatches,totalPages } = useSelector((state) => state.allMatch);
 
   const [sportsOptions, setSportsOptions] = useState([]);
@@ -36,7 +38,7 @@ const AllMatches = () => {
         if (response.status === 200) {
           setSportsOptions(response.data.data || []);
           if (!sport) {
-            const defaultSport = response.data.data.find((sport) => sport.gameId === '1');
+            const defaultSport = response.data.data.find((sport) => sport.gameId === '4');
             if (defaultSport) {
               dispatch(setSport(defaultSport.gameId));
             }
@@ -70,16 +72,14 @@ const AllMatches = () => {
         break;
     }
   };
-  
-  
-useEffect(() => {
+
   const fetchMatches = async () => {
     if (!sport) return;
     setLoading(true);
 
     try {
       const response = await getCreateNewMatchAPIAuth(
-        `match/getmatchesviagameid/${sport}?page=${currentPage}&limit=${entriesToShow}`
+        `match/getmatchesviagameid/${sport}?page=${currentPage}&limit=${entriesToShow}&search=${searchTerm}`
       );
 
       if (response.data?.data) {
@@ -98,6 +98,15 @@ useEffect(() => {
     }
   };
 
+  useEffect(()=> {
+    const timer = setTimeout(() => {
+      fetchMatches()
+    }, 500);
+    return ()=> clearTimeout(timer)
+  }, [searchTerm])
+  
+  
+useEffect(() => {
   fetchMatches();
 }, [dispatch, sport, currentPage, entriesToShow]);
 
@@ -136,15 +145,19 @@ console.log("Matches",matches);
 
       const response = await putUpdateMatchAPIAuth(`match/updatematch/${matchId}`, payload);
 
-      if (response.status === 200) {
-        dispatch(setMatches(
-          matches.map((match) =>
-            match._id === matchId ? { ...match, [field]: updatedStatus } : match
-          )
-        ));
-      } else {
-        console.error(`Failed to update status for matchId: ${matchId}, field: ${field}`);
-      }
+      console.log('>>>>>>>>>>>>>>>>>', response)
+
+      if(response?.data?.success) {fetchMatches()}
+
+      // if (response.status === 200) {
+      //   dispatch(setMatches(
+      //     matches.map((match) =>
+      //       match._id === matchId ? { ...match, [field]: updatedStatus } : match
+      //     )
+      //   ));
+      // } else {
+      //   console.error(`Failed to update status for matchId: ${matchId}, field: ${field}`);
+      // }
     } catch (error) {
       console.error(`Error updating ${field} status for matchId: ${matchId}:`, error);
     }
@@ -171,6 +184,15 @@ console.log("Matches",matches);
     setIsScoreModalOpen(false); // Close the Score Modal
     setSelectedMatch(null);
   };
+
+  const handleSetResult = (match)=> {
+    if(match?.oddsResult === 1 && match?.bookMakerResult === 1) {
+      toast.error('Odss and Bookmaker Results are already declared for this match')
+      return
+    } else {
+      navigate(`/TransferMatchCoins/${match.eventId}`)
+    }
+  }
 
   return (
 <div className="p-4">
@@ -203,7 +225,7 @@ console.log("Matches",matches);
     <input
       type="text"
       className="border p-2 rounded w-1/3"
-      placeholder="Search by EventID, MatchID..."
+      // placeholder="Search by EventID, MatchID..."
       value={searchTerm}
       onChange={(e) => dispatch(setSearchTerm(e.target.value))}
     />
@@ -230,7 +252,7 @@ console.log("Matches",matches);
     <div className="overflow-x-auto">
       <table className="table-auto w-full border-collapse border">
         <thead>
-          <tr className="bg-black text-white">
+          <tr className="bg-black text-white text-nowrap">
             <th className="px-4 py-2">ID</th>
             <th className="px-4 py-2">Match Name</th>
             <th className="px-4 py-2">Open Date</th>
@@ -247,21 +269,26 @@ console.log("Matches",matches);
         <tbody>
           {matches?.length > 0 ? (
             matches.map((match) => (
-              <tr key={match._id}>
-                <td className="py-2 border border-gray-300">{match.event?.id}</td>
-                <td className="px-2 py-2 border border-gray-300">
-                  <div className="flex space-x-2 items-center">
-                    {match.event?.name}
-                    <MdModeEdit onClick={() => openStakeModal(match)} className="text-white bg-lightblue p-1 rounded-full cursor-pointer size-7" />
-                    <BiPlusMedical onClick={() => openScoreModal(match)} className="text-white bg-LightGreen p-1 rounded-full cursor-pointer size-7" />
-                    <PiTelevisionBold className="text-yellow-400 cursor-pointer size-7" />
-                    <FaEdit onClick={() => openMatchModal(match)} className="text-white bg-lightblue p-1 rounded-full cursor-pointer size-7" />
+              <tr key={match?._id}>
+                <td className="py-2 border border-gray-300 px-4">{match.event?.id}</td>
+                <td className="px-4 py-2 border border-gray-300">
+                  <div className="flex space-2 flex-col">
+                    <div className="min-w-52 mb-1">
+                      {match.event?.name}
+                      {match?.inPlay ? <span className='ml-2 text-white bg-red-500 py-0.5 px-3 rounded-full text-xs font-medium'>In Play</span>: ''}
+                    </div>
+                    <div className="flex space-x-2">
+                      <MdModeEdit onClick={() => openStakeModal(match)} className="text-white bg-lightblue p-1 rounded-full cursor-pointer size-7" />
+                      <BiPlusMedical onClick={() => openScoreModal(match)} className="text-white bg-LightGreen p-1 rounded-full cursor-pointer size-7" />
+                      <PiTelevisionBold className="text-yellow-400 cursor-pointer size-7" />
+                      <FaEdit onClick={() => openMatchModal(match)} className="text-white bg-lightblue p-1 rounded-full cursor-pointer size-7" />
+                    </div>
                   </div>
                 </td>
-                <td className="px-2 py-2 border border-gray-300">{new Date(match.event?.openDate).toLocaleString()}</td>
-                <td className="px-2 py-2 border border-gray-300">
+                <td className="px-4 py-2 border border-gray-300">{new Date(match.event?.openDate).toLocaleString()}</td>
+                <td className="px-4 py-2 border border-gray-300">
                   <button
-                    className={`py-1 px-3 rounded-full text-white bg-lightblue hover:bg-green-500 ${match.oddsStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
+                    className={`py-1 px-3 rounded-full text-white hover:bg-green-500 ${match.oddsStatus === 'active' ? 'bg-lightblue' : 'bg-gray-400'} whitespace-nowrap`}
                     onClick={() => handleStatusToggle(match._id, 'oddsStatus', match.oddsStatus)}
                   >
                     {match.oddsStatus === 'active' ? 'Odds Opened' : 'Odds Closed'}
@@ -269,23 +296,23 @@ console.log("Matches",matches);
                 </td>
                 <td className="px-4 py-2 border border-gray-300">
                   <button
-                    className={`py-1 px-2 rounded-full text-white bg-lightblue hover:bg-green-500 ${match.bookMakerStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
+                    className={`py-1 px-2 rounded-full text-white hover:bg-green-500 ${match.bookMakerStatus === 'active' ? 'bg-lightblue' : 'bg-gray-400'} whitespace-nowrap`}
                     onClick={() => handleStatusToggle(match._id, 'bookMakerStatus', match.bookMakerStatus)}
                   >
                     {match.bookMakerStatus === 'active' ? 'Bookmaker Opened' : 'Bookmaker Closed'}
                   </button>
                 </td>
-                <td className="px-2 py-2 border border-gray-300">
+                <td className="px-4 py-2 border border-gray-300">
                   <button
-                    className={`py-1 px-3 rounded-full text-white bg-lightblue hover:bg-green-500 ${match.sessionStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
+                    className={`py-1 px-3 rounded-full text-white  hover:bg-green-500 ${match.sessionStatus === 'active' ? 'bg-lightblue' : 'bg-gray-400'} whitespace-nowrap`}
                     onClick={() => handleStatusToggle(match._id, 'sessionStatus', match.sessionStatus)}
                   >
                     {match.sessionStatus === 'active' ? 'Session Opened' : 'Session Closed'}
                   </button>
                 </td>
-                <td className="px-2 py-2 border border-gray-300">
+                <td className="px-4 py-2 border border-gray-300">
                   <button
-                    className={`py-1 px-3 rounded-full text-white bg-lightblue hover:bg-green-500 ${match.tossStatus === 'active' ? 'bg-blue-500' : 'bg-gray-400'} whitespace-nowrap`}
+                    className={`py-1 px-3 rounded-full text-white hover:bg-green-500 ${match.tossStatus === 'active' ? 'bg-lightblue' : 'bg-gray-400'} whitespace-nowrap`}
                     onClick={() => handleStatusToggle(match._id, 'tossStatus', match.tossStatus)}
                   >
                     {match.tossStatus === 'active' ? 'Toss Opened' : 'Toss Closed'}
@@ -293,9 +320,9 @@ console.log("Matches",matches);
                 </td>
                 <td className="px-4 py-2 border border-gray-300">
                   <div className="space-y-2">
-                    <Link to={`/TransferMatchCoins`} className="py-1 px-3 rounded-full text-white bg-lightblue bg-blue-500 whitespace-nowrap inline-block">
+                    <button onClick={()=> handleSetResult(match)} className="py-1 px-3 rounded-full text-white bg-lightblue bg-blue-500 whitespace-nowrap inline-block">
                       Set Result
-                    </Link>
+                    </button>
                     <Link to={`/CoinLog`} className="py-1 px-3 rounded-full text-white bg-lightblue bg-blue-500 whitespace-nowrap inline-block">
                       Coin Log
                     </Link>

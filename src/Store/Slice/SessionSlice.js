@@ -4,11 +4,11 @@ import { BASE_URL } from '../../Constant/Api';
 // Async Thunk for API Call
 export const fetchSessions = createAsyncThunk(
   'sessions/fetchSessions',
-  async (_, { rejectWithValue }) => {
+  async (matchId, { rejectWithValue }) => {
     try {
       const token = localStorage.getItem("authToken");
       const response = await fetch(
-        `${BASE_URL}/user/get-match-session?matchId=676b8b7555d4dcc59cf0680b`,
+        `${BASE_URL}/user/get-match-session?matchId=${matchId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

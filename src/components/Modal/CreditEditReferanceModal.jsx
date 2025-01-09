@@ -78,10 +78,10 @@ const CreditEditReferenceModal = ({
       setRoles(rolesData);
 
       let roleId = null;
-      if (location.pathname === "/user-downline-list") {
+      if (location.pathname === "/user-downline-list" || location.pathname === "/user-banking") {
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
+      } else if (location.pathname === "/master-downline-list"|| location.pathname === "/user-banking") {
         const masterRole = rolesData.find(
           (role) => role.role_name === "master"
         );
@@ -95,14 +95,9 @@ const CreditEditReferenceModal = ({
       const fetchResult = await dispatch(
         updateCreditReference({ newCreditRef, password, userId })
       );
-      console.log("fetchResult-------", fetchResult);
 
       if (fetchResult.error) {
-        // If there's an error returned from the action, display it in a toast
-        toast.error(
-          fetchResult.payload ||
-            "An error occurred while updating the partnership."
-        );
+        toast.error(fetchResult.error);
       } else {
         const result = await fetchDownlineData(
           currentPage,
@@ -173,7 +168,7 @@ const CreditEditReferenceModal = ({
                 type="text"
                 value={newCreditRef}
                 onChange={(e) => setNewCreditRef(e.target.value)}
-                placeholder="New Credit Reference"
+                // placeholder="New Credit Reference"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -188,7 +183,7 @@ const CreditEditReferenceModal = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              placeholder="Enter your password"
+              // placeholder="Enter your password"
             />
           </div>
           {/* Buttons */}

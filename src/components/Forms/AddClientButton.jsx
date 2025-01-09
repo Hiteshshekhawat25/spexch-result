@@ -71,7 +71,6 @@ const AddClientButton = () => {
 
       <button className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200">
         <RiResetLeftLine />
-        Reset
       </button>
 
       {isDialogOpen && (

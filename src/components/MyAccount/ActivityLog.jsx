@@ -87,6 +87,20 @@ const ActivityLog = () => {
   if (activityLogsStatus === "failed") {
     return <div>Error: {activityLogsError}</div>;
   }
+  const formatDateTime = (date) => {
+    const formattedDate = new Date(date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+    const formattedTime = new Date(date).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return `${formattedDate} ${formattedTime}`;
+  };
 
   return (
     <div className="border border-gray-400 rounded-lg bg-white shadow-sm">
@@ -136,7 +150,7 @@ const ActivityLog = () => {
               {logs.map((log, index) => (
                 <tr key={index} className="hover:bg-gray-100">
                   <td className="border border-gray-400 px-4 py-2">
-                    {log.loginDateTime}
+                    {formatDateTime(log.loginDateTime)}
                   </td>
                   <td
                     className={`border border-gray-400 px-4 py-2 font-semibold ${

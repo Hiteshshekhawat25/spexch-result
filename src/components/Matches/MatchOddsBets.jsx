@@ -23,7 +23,7 @@ const MatchOddsBets = () => {
         {/* Input Box */}
         <input
           type="text"
-          placeholder="Enter search term"
+          // placeholder="Enter search term"
           className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
         />
 

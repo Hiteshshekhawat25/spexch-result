@@ -61,9 +61,6 @@ const EditExposureLimitModal = ({
         return;
       }
 
-      // Dispatch exposure limit update
-      dispatch(updateExposure({ newExposureLimit, password, userId }));
-
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
         toast.warning("No roles found. Please check your configuration.");
@@ -94,31 +91,9 @@ const EditExposureLimitModal = ({
       const fetchResult = await dispatch(
         updateExposure({ newExposureLimit, password, userId })
       );
-      console.log("fetchResult", fetchResult);
-      // Fetch downline data with roleId
-      // const result = await fetchDownlineData(
-      //   currentPage,
-      //   entriesToShow,
-      //   roleId
-      // );
-      // if (result && result.data) {
-      //   dispatch(setDownlineData(result.data));
-      //   setNewExposureLimit(0);
-      //   setPassword("");
-      //   onCancel(); // Close the modal only on success
-      //   toast.success(
-      //     result.message ||
-      //       "Exposure limit updated and downline data fetched successfully."
-      //   );
-      // } else {
-      //   toast.warning("Unable to fetch updated downline data.");
-      // }
+
       if (fetchResult.error) {
-        // If there's an error returned from the action, display it in a toast
-        toast.error(
-          fetchResult.payload ||
-            "An error occurred while updating the partnership."
-        );
+        // toast.error(fetchResult.error);
       } else {
         const result = await fetchDownlineData(
           currentPage,
@@ -126,6 +101,7 @@ const EditExposureLimitModal = ({
           roleId
         );
         if (result && result.data) {
+          console.log("result", result.data);
           dispatch(setDownlineData(result.data));
 
           setNewExposureLimit(0);
@@ -134,18 +110,20 @@ const EditExposureLimitModal = ({
           toast.success(
             fetchResult.payload?.message || "Data updated successfully."
           );
+
+          onCancel();
         } else {
           toast.warning("Unable to fetch updated downline data.");
         }
       }
     } catch (error) {
-      console.error("Error fetching downline data:", error);
-      dispatch(setError(error.message || "Failed to fetch the downline data."));
+      console.error("Error:", error);
       toast.error(
-        error.message || "An error occurred while fetching the downline data."
+        error.message || "An error occurred while processing the request."
       );
     } finally {
-      setLoading(false);
+      // Ensure loading state is reset
+      dispatch(setLoading(false));
     }
   };
 
@@ -178,26 +156,12 @@ const EditExposureLimitModal = ({
             <label className="block text-sm font-medium text-gray-700 w-1/3">
               New
             </label>
-            {/* <div className="w-2/3 flex items-center space-x-2">
-              <input
-                type="text"
-                value={newExposureLimit}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value.length <= 8) {
-                    setNewExposureLimit(Number(value));
-                  }
-                }}
-                placeholder="New Exposure Limit"
-                className="w-full p-2 border border-black rounded-lg text-gray-700"
-              />
-            </div> */}
             <div className="w-2/3 flex items-center space-x-2">
               <input
                 type="text"
                 value={newExposureLimit}
                 onChange={(e) => setNewExposureLimit(e.target.value)}
-                placeholder="New Credit Reference"
+                // placeholder="New Credit Reference"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -213,7 +177,7 @@ const EditExposureLimitModal = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              placeholder="Enter your password"
+              // placeholder="Enter your password"
             />
           </div>
 

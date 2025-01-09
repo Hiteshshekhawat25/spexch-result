@@ -111,7 +111,7 @@ export const getMatchList = async ( ) => {
   const token = localStorage.getItem("authToken");
 
   try {
-    const response = await axios.get(`${BASE_URL}/match/getAllMatchesSeries?page=1&limit=2`, {
+    const response = await axios.get(`${BASE_URL}/match/getAllMatchesSession?page=1&limit=2`, {
       headers: {
         
         Accept: "application/json",
@@ -133,23 +133,52 @@ export const getMatchList = async ( ) => {
 };
 
 
-export const updateSessionResult = async (selectionId, result) => {
+export const updateSessionResult = async (matchId , selectionId, result) => {
   try {
-    const token = localStorage.getItem("authToken"); // Get the token from local storage
-    const response = await fetch(`${BASE_URL}/user/update-session-result`, {
-      method: "POST", // Use the correct HTTP method (PUT for updates)
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // Add the Authorization header
+    const token = localStorage.getItem("authToken");
+
+    const response = await axios.post(
+      `${BASE_URL}/user/update-session-result`,
+      {
+        matchId ,
+        selectionId,
+        result,
       },
-      body: JSON.stringify({ selectionId, result }), // Pass selectionId and result
-    });
-    if (!response.ok) {
-      throw new Error("Failed to update session result");
-    }
-    return await response.json(); // Parse and return the response JSON
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
   } catch (error) {
     console.error("Error updating session result:", error);
     throw error;
+  }
+};
+
+// GET single Match data Api
+export const getSingleMatch = async (id) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const response = await axios.get(`${BASE_URL}/match/getmatches/${id}`, {
+      headers: {
+        
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }
 };
