@@ -238,11 +238,37 @@ export const updateUserStatus = async (userId, newStatus, password) => {
 
 //to call withdraw or deposit api
 
+// export const performTransaction = async (transactionType, data, token) => {
+//   const apiUrl =
+//     transactionType === "deposit"
+//       ? `${BASE_URL}/user/deposit-amount`
+//       : `${BASE_URL}/user/withdraw-amount`;
+
+//   try {
+//     const response = await axios.post(apiUrl, data, {
+//       headers: {
+//         "Content-Type": "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+
+//     return response.data; // Return API response data
+//   } catch (error) {
+//     // Return error message
+//     throw error.response?.data?.message || "An error occurred while processing the transaction.";
+//   }
+// };
 export const performTransaction = async (transactionType, data, token) => {
   const apiUrl =
-    transactionType === "deposit"
+    transactionType === "D"
       ? `${BASE_URL}/user/deposit-amount`
-      : `${BASE_URL}/user/withdraw-amount`;
+      : transactionType === "W"
+      ? `${BASE_URL}/user/withdraw-amount`
+      : null;
+
+  if (!apiUrl) {
+    throw new Error("Invalid transaction type.");
+  }
 
   try {
     const response = await axios.post(apiUrl, data, {
@@ -258,6 +284,7 @@ export const performTransaction = async (transactionType, data, token) => {
     throw error.response?.data?.message || "An error occurred while processing the transaction.";
   }
 };
+
 
 //api to get sports list 
 export const getGamesList = async (token) => {
