@@ -67,7 +67,7 @@ const Login = () => {
         error.response?.data?.message || error.message || "Login failed!";
         console.log("errorMessage",errorMessage);
       setMessage(errorMessage);
-      toast.error(errorMessage); // Show the error message in a toast
+      toast.error(errorMessage); 
     }
   };
 

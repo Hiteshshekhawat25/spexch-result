@@ -7,10 +7,21 @@ const App = () => {
   return (
     <BrowserRouter basename="/admin/">
       <RoutesComp />
-      <ToastContainer /> 
+      <ToastContainer
+        position="top-right"
+        autoClose={1000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable
+        pauseOnHover={false}
+        theme="colored"
+        // transition={Slide}
+      />
     </BrowserRouter>
   );
 };
 
 export default App;
-
