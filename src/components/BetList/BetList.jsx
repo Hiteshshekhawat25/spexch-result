@@ -26,7 +26,7 @@ const BetList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
-    const [isDataFetched, setIsDataFetched] = useState(false);
+  const [isDataFetched, setIsDataFetched] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "username",
     direction: "ascending",
@@ -107,14 +107,13 @@ const BetList = () => {
 
   return (
     <div className="p-4">
-  
-      <BetListFilter 
-        setTotalBets={(total) => setTotalBets(total)} 
-        setTotalPages={(total) => setTotalPages(total)} 
-        setBetlistData={handleBetlistUpdate} 
+      <BetListFilter
+        setTotalBets={(total) => setTotalBets(total)}
+        setTotalPages={(total) => setTotalPages(total)}
+        setBetlistData={handleBetlistUpdate}
         entriesToShow={entriesToShow}
         currentPage={currentPage}
-        setIsDataFetched={(isFetched) => console.log(isFetched)} 
+        setIsDataFetched={(isFetched) => console.log(isFetched)}
         setCurrentPage={setCurrentPage}
       />
 
@@ -123,7 +122,6 @@ const BetList = () => {
           Bet List
         </h1>
 
-   
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
             <label className="mr-2 text-sm font-medium text-black">Show</label>
@@ -234,27 +232,42 @@ const BetList = () => {
                   sortedData.map((item, index) => (
                     <tr key={index}>
                       <td
-  onClick={() => {
-    console.log("Selected User ID:", item.userId); 
-    setSelectedUserId(item.userId);
-    setIsModalOpen(true); 
-  }}
-  className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
->
-  {item.username}{item.userId}
-</td>
+                        onClick={() => {
+                          console.log("Selected User ID:", item.userId);
+                          setSelectedUserId(item.userId);
+                          setIsModalOpen(true);
+                        }}
+                        className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+                      >
+                        {item.username}
+                        {/* {item.userId} */}
+                      </td>
 
-                      <td className="border border-gray-400 px-4 py-3">{item.sport}</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.event}</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.market}</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.selection}</td>
+                      <td className="border border-gray-400 px-4 py-3">
+                        {item.sport}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-3">
+                        {item.event}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-3">
+                        {item.market}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-3">
+                        {item.selection}
+                      </td>
                       <td
-  className={`border border-gray-400 px-4 py-3 font-bold ${item.type === "no" ? "text-red-600" : "text-blue"}`}
->
-  {item.type === "no" ? "Lay" : "Back"}
-</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.oddsRequested}</td>                      
-                      <td className="border border-gray-400 px-4 py-3 font-bold">{item.stake}</td>
+                        className={`border border-gray-400 px-4 py-3 font-bold ${
+                          item.type === "no" ? "text-red-600" : "text-blue"
+                        }`}
+                      >
+                        {item.type === "no" ? "Lay" : "Back"}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-3">
+                        {item.oddsRequested}
+                      </td>
+                      <td className="border border-gray-400 px-4 py-3 font-bold">
+                        {item.stake}
+                      </td>
                       <td className="border border-gray-400 px-4 py-3">
                         {new Date(item.placeTime).toLocaleDateString("en-GB", {
                           day: "2-digit",
@@ -296,10 +309,7 @@ const BetList = () => {
           </div>
         )}
 
-      
-
         <div className="flex justify-between items-center mt-4">
-          
           <div className="text-sm text-gray-600">
             Showing{" "}
             {totalBets === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
@@ -307,7 +317,6 @@ const BetList = () => {
             entries
           </div>
 
-          
           <div className="flex space-x-2">
             <button
               onClick={() => handlePageChange("first")}
