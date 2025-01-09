@@ -53,7 +53,7 @@ const DownlineList = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [isExposureModalOpen, setIsExposureModalOpen] = useState(false);
   const [selectedExposureUser, setSelectedExposureUser] = useState(null);
-  const [updatePartnershipModal, setUpdatePartnershipModal] = useState(false);
+  const [updatePartnership, setUpdatePartnership] = useState(false);
   const [totalUsers, setTotalUsers] = useState(0);
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
@@ -75,7 +75,7 @@ const DownlineList = () => {
 
   console.log("roleIdroleIdroleId", roleId);
   const isMasterDownlineList = location.pathname.includes(
-    "master-downline-list"
+    "/master-downline-list"
   );
 
   const handlePageChange = (direction) => {
@@ -105,7 +105,6 @@ const DownlineList = () => {
         const res = await searchDownline(
           `user/get-user?page=1&limit=10&search=${searchTerm}&role=${roleId}`
         );
-        console.log("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^", res);
         setSearchData(res?.data?.data);
       } catch (error) {
         console.log(error);
@@ -145,52 +144,9 @@ const DownlineList = () => {
     fetchData();
   }, [dispatch, currentPage, entriesToShow, roleId, startFetchData]);
 
-  // useEffect(() => {
-  //   if (token) {
-  //     const fetchUserRoles = async () => {
-  //       try {
-  //         const rolesArray = await fetchRoles(token);
-
-  //         if (Array.isArray(rolesArray)) {
-  //           const rolesData = rolesArray.map((role) => ({
-  //             role_name: role.role_name,
-  //             role_id: role._id,
-  //           }));
-  //           setRole(rolesData);
-  //         } else {
-  //           setError("Roles data is not an array.");
-  //         }
-  //       } catch (error) {
-  //         setError(error.message || "Failed to fetch roles.");
-  //       }
-  //     };
-  //     fetchUserRoles();
-  //   }
-  // }, [token]);
-
-  // const filteredData = Array.isArray(data)
-  //   ? data.filter((item) =>
-  //       item.username.toLowerCase().includes(searchTerm.toLowerCase())
-  //     )
-  //   : [];
-
   const filteredData = downlineData.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
-
-  // useEffect(() => {
-  //   if (token) {
-  //     const fetchRolesData = async () => {
-  //       try {
-  //         const rolesArray = await fetchRoles(token);
-  //         setRoles(rolesArray || []);
-  //       } catch {
-  //         toast.error("Failed to fetch roles.");
-  //       }
-  //     };
-  //     fetchRolesData();
-  //   }
-  // }, [token]);
 
   useEffect(() => {
     if (location.pathname === "/master-downline-list") {
@@ -225,7 +181,6 @@ const DownlineList = () => {
 
   useEffect(() => {
     if (location.pathname === "/user-downline-list") {
-      console.log("tttttttttttttttttttttttttttttttt", location);
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
@@ -342,7 +297,7 @@ const DownlineList = () => {
     setAccountStatus(false);
     setCreditReferenceTransactionList(false);
     setIsModalOpen(false);
-    setUpdatePartnershipModal(false);
+    setUpdatePartnership(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -359,8 +314,9 @@ const DownlineList = () => {
   };
 
   const handleUpdatePartnership = (item) => {
+    console.log("hie");
+    setUpdatePartnership(true);
     setSelectedUser(item);
-    setUpdatePartnershipModal(true);
   };
 
   const handleExposureModalClose = () => {
@@ -387,7 +343,7 @@ const DownlineList = () => {
     if (item.role_name === "master") {
       try {
         const data = await fetchallUsers(item._id);
-        console.log("aaaaaaaaaaaaaaaaaaaaaaaa", data);
+        // console.log("aaaaaaaaaaaaaaaaaaaaaaaa", data);
         setUserFetchList(data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -445,6 +401,9 @@ const DownlineList = () => {
               {[
                 { key: "username", label: "Username" },
                 { key: "creditRef", label: "CreditRef" },
+                ...(isMasterDownlineList
+                  ? [{ key: "partnership", label: "Partnership" }]
+                  : []),
                 { key: "balance", label: "Balance" },
                 { key: "exposures", label: "Exposures" },
                 ...(!isMasterDownlineList
@@ -452,7 +411,9 @@ const DownlineList = () => {
                   : []),
                 { key: "availableBalance", label: "Avail. Bal" },
                 { key: "refPL", label: "Ref. P/L" },
-                { key: "partnership", label: "Partnership" },
+                ...(!isMasterDownlineList
+                  ? [{ key: "partnership", label: "Partnership" }]
+                  : []),
                 { key: "status", label: "Status" },
               ].map(({ key, label }) => (
                 <th
@@ -500,7 +461,7 @@ const DownlineList = () => {
                 : userFetchList.length > 0
                 ? userFetchList
                 : downlineData
-              ).map((item, index) => (
+              ).map((item) => (
                 <tr key={item?._id} className="border border-gray-400 bg-white">
                   <td className="px-4 py-2 text-sm">
                     {" "}
@@ -537,9 +498,31 @@ const DownlineList = () => {
                       />
                     </div>
                   </td>
-                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
-                  </td>
+                  {!isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(
+                        item.openingBalance
+                      )}
+                    </td>
+                  )}
+                  {isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(item.partnership)}
+                      <div className="ml-2 inline-flex space-x-2">
+                        <FaEdit
+                          className="text-blue cursor-pointer"
+                          onClick={() => handleUpdatePartnership(item)}
+                        />
+                      </div>
+                    </td>
+                  )}
+                  {isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(
+                        item.openingBalance
+                      )}
+                    </td>
+                  )}
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                     0
                   </td>
@@ -556,6 +539,7 @@ const DownlineList = () => {
                       </div>
                     </td>
                   )}
+
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                     {new Intl.NumberFormat("en-IN").format(
                       item.totalBalance || 0
@@ -572,18 +556,12 @@ const DownlineList = () => {
                         )})`
                       : new Intl.NumberFormat("en-IN").format(item.profit_loss)}
                   </td>
+                  {!isMasterDownlineList && (
+                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(100)}
+                    </td>
+                  )}
 
-                  <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(item.partnership)}
-                    {isMasterDownlineList && (
-                      <div className="ml-2 inline-flex space-x-2">
-                        <FaEdit
-                          className="text-blue cursor-pointer"
-                          onClick={() => handleUpdatePartnership(item)}
-                        />
-                      </div>
-                    )}
-                  </td>
                   <td className="border border-gray-400 px-4 py-2 font-bold text-l">
                     <span
                       className={`p-1 rounded border ${
@@ -703,6 +681,21 @@ const DownlineList = () => {
               onCancel={handleModalClose}
               username={selectedUser.username}
               currentCreditRef={selectedUser.creditReference}
+              onSubmit={handleSubmitFunction}
+              user={selectedUser}
+              userId={selectedUser?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+            />
+          </>
+        )}
+        {selectedUser && updatePartnership && (
+          <>
+            <UpdatePartnershipModal
+              isOpen={updatePartnership}
+              onCancel={handleDeleteModalClose}
+              username={selectedUser.username}
+              currentPartnership={selectedUser.partnership}
               onSubmit={handleSubmitFunction}
               user={selectedUser}
               userId={selectedUser?._id}

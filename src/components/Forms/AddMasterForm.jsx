@@ -43,7 +43,7 @@ export const AddMasterForm = ({ closeModal }) => {
   const [token, setToken] = useState(null);
   const [role, setRole] = useState(null);
   const { userData, loading, error } = useSelector((state) => state.user);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   console.log("userData", userData?.data?.role_name);
 
   // Handle input changes
@@ -163,33 +163,33 @@ export const AddMasterForm = ({ closeModal }) => {
           password: "",
           confirmPassword: "",
           rollingCommission: {
-            fancy: 0,
-            matka: 0,
-            casino: 0,
-            binary: 0,
-            bookmaker: 0,
+            fancy: " ",
+            matka: " ",
+            casino: " ",
+            binary: " ",
+            bookmaker: " ",
           },
           agentRollingCommission: {
-            fancy: 0,
-            matka: 0,
-            casino: 0,
-            binary: 0,
-            sportsbook: 0,
-            bookmaker: 0,
+            fancy: " ",
+            matka: " ",
+            casino: " ",
+            binary: " ",
+            sportsbook: " ",
+            bookmaker: " ",
           },
           masterPassword: "",
         });
         toast.success(response?.data?.message || "Master created Successfully");
         // setTimeout(() => {
-          closeModal();
-          dispatch(setStartFetchData())
+        closeModal();
+        dispatch(setStartFetchData());
         // }, 2000);
       } else {
-        toast.error(response?.response?.data?.message || "Failed to save master.");
+        toast.error(
+          response?.response?.data?.message || "Failed to save master."
+        );
       }
     } catch (error) {
-      console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', error)
-
       toast.error(
         error?.message || "An error occurred while saving the master."
       );
@@ -219,7 +219,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.username}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.username && (
                   <div className="text-red-500 text-sm">{errors.username}</div>
@@ -237,7 +237,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.username && (
                   <div className="text-red-500 text-sm">{errors.username}</div>
@@ -274,7 +274,7 @@ export const AddMasterForm = ({ closeModal }) => {
                     handleChange(e);
                     handleRoleSelection(e.target.value); // Pass the selected role_id
                   }}
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 >
                   <option value="" disabled>
                     Select Role
@@ -303,12 +303,12 @@ export const AddMasterForm = ({ closeModal }) => {
               <td className="text-left py-2 font-semibold">Commission (%)</td>
               <td>
                 <input
-                  type="number"
+                  type="text"
                   name="commission"
                   value={formData.commission}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.commission && (
                   <div className="text-red-500 text-sm">
@@ -323,12 +323,12 @@ export const AddMasterForm = ({ closeModal }) => {
               <td className="text-left py-2 font-semibold">Opening Balance</td>
               <td>
                 <input
-                  type="number"
+                  type="text"
                   name="openingBalance"
                   value={formData.openingBalance}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.openingBalance && (
                   <div className="text-red-500 text-sm">
@@ -348,7 +348,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.creditReference}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.creditReference && (
                   <div className="text-red-500 text-sm">
@@ -368,7 +368,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.mobileNumber}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.mobileNumber && (
                   <div className="text-red-500 text-sm">
@@ -383,12 +383,12 @@ export const AddMasterForm = ({ closeModal }) => {
               <td className="text-left py-2 font-semibold">Partnership</td>
               <td>
                 <input
-                  type="number"
+                  type="text"
                   name="partnership"
                   value={formData.partnership}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.partnership && (
                   <div className="text-red-500 text-sm">
@@ -408,7 +408,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.password}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.password && (
                   <div className="text-red-500 text-sm">{errors.password}</div>
@@ -426,7 +426,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.confirmPassword && (
                   <div className="text-red-500 text-sm">
@@ -460,61 +460,62 @@ export const AddMasterForm = ({ closeModal }) => {
                     <div className="flex justify-between">
                       <label className="w-1/3">Fancy</label>
                       <input
-                        type="number"
+                        type="text"
                         name="rollingCommission.fancy"
-                        value={formData.rollingCommission.fancy || 0}
+                        value={formData.rollingCommission.fancy || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        // className="w-2/3 border p-1 "
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Matka</label>
                       <input
-                        type="number"
+                        type="text"
                         name="rollingCommission.matka"
-                        value={formData.rollingCommission.matka || 0}
+                        value={formData.rollingCommission.matka || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Casino</label>
                       <input
-                        type="number"
+                        type="text"
                         name="rollingCommission.casino"
-                        value={formData.rollingCommission.casino || 0}
+                        value={formData.rollingCommission.casino || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Binary</label>
                       <input
-                        type="number"
+                        type="text"
                         name="rollingCommission.binary"
-                        value={formData.rollingCommission.binary || 0}
+                        value={formData.rollingCommission.binary || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">sportbook</label>
                       <input
-                        type="number"
+                        type="text"
                         name="rollingCommission.sportbook"
-                        value={formData.rollingCommission.sportbook || 0}
+                        value={formData.rollingCommission.sportbook || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Bookmaker</label>
                       <input
-                        type="number"
+                        type="text"
                         name="rollingCommission.bookmaker"
-                        value={formData.rollingCommission.bookmaker || 0}
+                        value={formData.rollingCommission.bookmaker || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                   </div>
@@ -546,61 +547,61 @@ export const AddMasterForm = ({ closeModal }) => {
                     <div className="flex justify-between">
                       <label className="w-1/3">Fancy</label>
                       <input
-                        type="number"
+                        type="text"
                         name="agentRollingCommission.fancy"
-                        value={formData.agentRollingCommission.fancy || 0}
+                        value={formData.agentRollingCommission.fancy || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Matka</label>
                       <input
-                        type="number"
+                        type="text"
                         name="agentRollingCommission.matka"
-                        value={formData.agentRollingCommission.matka || 0}
+                        value={formData.agentRollingCommission.matka || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Casino</label>
                       <input
-                        type="number"
+                        type="text"
                         name="agentRollingCommission.casino"
-                        value={formData.agentRollingCommission.casino || 0}
+                        value={formData.agentRollingCommission.casino || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Binary</label>
                       <input
-                        type="number"
+                        type="text"
                         name="agentRollingCommission.binary"
-                        value={formData.agentRollingCommission.binary || 0}
+                        value={formData.agentRollingCommission.binary || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Sportbook</label>
                       <input
-                        type="number"
+                        type="text"
                         name="agentRollingCommission.sportbook"
-                        value={formData.agentRollingCommission.sportbook || 0}
+                        value={formData.agentRollingCommission.sportbook || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                     <div className="flex justify-between">
                       <label className="w-1/3">Bookmaker</label>
                       <input
-                        type="number"
+                        type="text"
                         name="agentRollingCommission.bookmaker"
-                        value={formData.agentRollingCommission.bookmaker || 0}
+                        value={formData.agentRollingCommission.bookmaker || " "}
                         onChange={handleChange}
-                        className="w-2/3 border p-1"
+                        className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                       />
                     </div>
                   </div>
@@ -618,7 +619,7 @@ export const AddMasterForm = ({ closeModal }) => {
                   value={formData.masterPassword}
                   onChange={handleChange}
                   required
-                  className="w-full p-1 border rounded"
+                  className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 />
                 {errors.masterPassword && (
                   <div className="text-red-500 text-sm">

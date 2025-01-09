@@ -1,13 +1,10 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
-import { IoLogOutOutline } from "react-icons/io5"; 
-import { TbTriangleInvertedFilled } from "react-icons/tb"; 
+import { IoLogOutOutline } from "react-icons/io5";
+import { TbTriangleInvertedFilled } from "react-icons/tb";
 import { useDispatch } from "react-redux"; // Import useDispatch from Redux
-import {
-  clearUserData,
-
-} from "../../Store/Slice/userInfoSlice";
+import { clearUserData } from "../../Store/Slice/userInfoSlice";
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -46,12 +43,12 @@ const MenuHeader = () => {
       name: "Banking",
       link: "#",
       subMenu: [
-        { name: "Deposit", link: "/deposit" },
-        { name: "Withdraw", link: "/withdraw" },
+        { name: "User Banking", link: "/user-banking" },
+        { name: "Master Banking", link: "/master-banking" },
       ],
     },
     { name: "Commission", link: "#" },
-    { name: "Password History", link: "#" },
+    { name: "Password History", link: "/password-history" },
     { name: "Restore User", link: "#" },
     {
       name: "Logout",

@@ -25,89 +25,112 @@ const CreditEditReferenceModal = ({
   const [error, setError] = useState(null);
   const { creditReference } = useSelector((state) => state);
   const [roles, setRoles] = useState([]);
-  const location = useLocation()
+  const location = useLocation();
 
   const dispatch = useDispatch();
+
   const handleIncrease = () => {
     setNewCreditRef((prev) => prev + 1);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
+    // Validate fields
     if (!newCreditRef) {
       toast.error("New Credit Reference is required.");
       return;
     }
-  
+
     if (!password) {
       toast.error("Password is required.");
       return;
     }
-  
+
     if (newCreditRef <= 0 || isNaN(newCreditRef)) {
       toast.error("Please enter a valid credit reference greater than 0.");
       return;
     }
-  
-    dispatch(updateCreditReference({ newCreditRef, password, userId }));
-    
-    setLoading(true);
-  
+
+    // Start loading state
+    dispatch(setLoading(true));
+
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         toast.error("Authentication token not found. Please log in again.");
-        setLoading(false);
+        dispatch(setLoading(false));
         return;
       }
-  
+
+      // Fetch roles
       const rolesArray = await fetchRoles(token);
       if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
         toast.warning("No roles found. Please check your configuration.");
-        setLoading(false);
+        dispatch(setLoading(false));
         return;
       }
-  
+
       const rolesData = rolesArray.map((role) => ({
         role_name: role.role_name,
         role_id: role._id,
       }));
       setRoles(rolesData);
-  
+
       let roleId = null;
-      if (location.pathname === "/user-downline-list") {
+      if (location.pathname === "/user-downline-list" || location.pathname === "/user-banking") {
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
-        const masterRole = rolesData.find((role) => role.role_name === "master");
+      } else if (location.pathname === "/master-downline-list"|| location.pathname === "/user-banking") {
+        const masterRole = rolesData.find(
+          (role) => role.role_name === "master"
+        );
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
       } else {
         toast.warning("Invalid location path. Unable to determine action.");
-        setLoading(false);
+        dispatch(setLoading(false));
         return;
       }
-  
-      const result = await fetchDownlineData(currentPage, entriesToShow, roleId);
-      if (result && result.data) {
-        dispatch(setDownlineData(result.data));
-        setNewCreditRef(0);
-        setPassword("");
-        toast.success("Credit Reference data updated successfully.");
+
+      const fetchResult = await dispatch(
+        updateCreditReference({ newCreditRef, password, userId })
+      );
+
+      if (fetchResult.error) {
+        toast.error(fetchResult.error);
       } else {
-        toast.warning("Unable to fetch updated downline data.");
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
+        if (result && result.data) {
+          console.log("result", result.data);
+          dispatch(setDownlineData(result.data));
+
+          setNewCreditRef(0);
+          setPassword("");
+          toast.success(
+            fetchResult.payload?.message || "Data updated successfully."
+          );
+
+          // Close the modal only after successful submission
+          onCancel();
+        } else {
+          toast.warning("Unable to fetch updated downline data.");
+        }
       }
     } catch (error) {
-      console.error("Error fetching downline data:", error);
-      toast.error(error.message || "An error occurred while fetching the downline data.");
+      console.error("Error:", error);
+      toast.error(
+        error.message || "An error occurred while processing the request."
+      );
     } finally {
-      setLoading(false);
+      // Ensure loading state is reset
+      dispatch(setLoading(false));
     }
-  
-    onCancel();
   };
-  
-  
+
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-12">
@@ -142,14 +165,9 @@ const CreditEditReferenceModal = ({
             </label>
             <div className="w-2/3 flex items-center space-x-2">
               <input
-                type="number"
+                type="text"
                 value={newCreditRef}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value.length <= 8) {
-                    setNewCreditRef(Number(value));
-                  }
-                }}
+                onChange={(e) => setNewCreditRef(e.target.value)}
                 placeholder="New Credit Reference"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />

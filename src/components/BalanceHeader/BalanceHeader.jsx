@@ -12,6 +12,7 @@ const BalanceHeader = () => {
     const fetchData = async () => {
       try {
         const response = await getBalanceData("user/user-data-summary");
+        console.log(response)
         if (response?.data?.success) {
           dispatch(setBalanceData(response.data.data));
         } else {

@@ -1,10 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+
+const currentDate = new Date().toISOString().split('T')[0];
+
 const initialState = {
   type: '',
   sport: '',
-  fromDate: '',
-  toDate: '',
+  fromDate: currentDate,  
+  toDate: currentDate,    
 };
 
 const betListFilterSlice = createSlice({
@@ -26,8 +29,8 @@ const betListFilterSlice = createSlice({
     resetBetFilters: (state) => {
       state.type = '';
       state.sport = '';
-      state.fromDate = '';
-      state.toDate = '';
+      state.fromDate = currentDate; // Reset to current date
+      state.toDate = currentDate;   // Reset to current date
     },
   },
 });

@@ -21,6 +21,9 @@ export const ROUTES_CONST = {
     ProfitLoss:"/ProfitLoss",
     EventProfitLoss:"/EventProfitLoss",
     BetList:"/BetList",
-    MyAccount:"/MyAccount"    
+    MyAccount:"/MyAccount",
+    userbanking:"user-banking",
+    masterbanking:"/master-banking",
+    passwordHistory: "/password-history"
   };
   

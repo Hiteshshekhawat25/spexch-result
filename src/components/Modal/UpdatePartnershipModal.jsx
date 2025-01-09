@@ -26,16 +26,34 @@ const UpdatePartnershipModal = ({
   const [newPartnership, setNewPartnership] = useState("");
   const [password, setPassword] = useState("");
   const [roles, setRoles] = useState([]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    if (newPartnership <= 0 || isNaN(newPartnership) || newPartnership > 100) {
-      toast.error("Please enter a valid partnership value between 1 and 100.");
+    // Validate individual fields and throw specific errors
+    if (
+      newPartnership === "" ||
+      newPartnership === null ||
+      newPartnership === undefined
+    ) {
+      toast.error("Partnership value is required.");
       setLoading(false);
       return;
     }
+
+    if (!password) {
+      toast.error("Password is required.");
+      setLoading(false);
+      return;
+    }
+
+    // Validate newPartnership value
+    if (newPartnership < 0 || isNaN(newPartnership) || newPartnership > 100) {
+      toast.error("Please enter a valid partnership value between 0 and 100.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
@@ -58,11 +76,11 @@ const UpdatePartnershipModal = ({
       setRoles(rolesData);
 
       let roleId = null;
-      if (location.pathname === "/user-downline-list") {
+      if (location.pathname === "/admin/user-downline-list") {
         console.log("Inside user-downline-list");
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
+      } else if (location.pathname === "/admin/master-downline-list") {
         console.log("Inside master-downline-list");
         const masterRole = rolesData.find(
           (role) => role.role_name === "master"
@@ -74,34 +92,42 @@ const UpdatePartnershipModal = ({
         return;
       }
 
-      dispatch(updatePartnership({ newPartnership, password, userId }));
-
-      const result = await fetchDownlineData(
-        currentPage,
-        entriesToShow,
-        roleId
+      // Dispatch the update action and handle result
+      const fetchResult = await dispatch(
+        updatePartnership({ newPartnership, password, userId })
       );
-      if (result && result.data) {
-        dispatch(setDownlineData(result.data));
-
-        setNewPartnership(0);
-        setPassword("");
-        onCancel();
-        toast.success(
-          result.message || "Partnership data updated successfully."
-        );
+      if (fetchResult.error) {
+        toast.error(fetchResult.error);
       } else {
-        toast.warning("Unable to fetch updated downline data.");
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
+        if (result && result.data) {
+          console.log("result", result.data);
+          dispatch(setDownlineData(result.data));
+
+          setNewPartnership(0);
+          setPassword("");
+          toast.success(
+            fetchResult.payload?.message || "Data updated successfully."
+          );
+
+          // Close the modal only after successful submission
+          onCancel();
+        } else {
+          toast.warning("Unable to fetch updated downline data.");
+        }
       }
     } catch (error) {
-      console.error("Error updating partnership:", error);
-      dispatch(setError(error.message || "Failed to fetch the downline data."));
+      console.error("Error:", error);
       toast.error(
-        error.message || "An error occurred while updating the partnership."
+        error.message || "An error occurred while processing the request."
       );
     } finally {
-      // Reset loading state
-      setLoading(false);
+      // Ensure loading state is reset
+      dispatch(setLoading(false));
     }
   };
 
@@ -134,7 +160,7 @@ const UpdatePartnershipModal = ({
             </label>
             <div className="w-2/3 flex items-center space-x-2">
               <input
-                type="number"
+                type="text"
                 value={newPartnership}
                 onChange={(e) => {
                   const value = e.target.value;
