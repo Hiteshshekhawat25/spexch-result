@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectProfileData, selectProfileStatus, selectProfileError, updateProfile, setProfileLoading, setProfileError, setRollingCommission, setAgentRollingCommission } from '../../Store/Slice/profileSlice';
 import { FaEye, FaRegEdit } from 'react-icons/fa';
-import { getUserData } from '../../Services/Downlinelistapi'; // Adjust the import path if needed
+import { getUserData } from '../../Services/Downlinelistapi'; 
 import RollingCommisionModal from '../Modal/RollingCommisionModal';
 import AgentRollingCommisionModal from '../Modal/AgentRollingCommisionModal';
-import ChangePasswordModal from '../Modal/ChangePasswordModal'; // Import the change password modal
+import ChangePasswordModal from '../Modal/ChangePasswordModal'; 
 
 const MyProfile = () => {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ const MyProfile = () => {
   // State to control modal visibility and data
   const [isRollingModalOpen, setIsRollingModalOpen] = useState(false);
   const [isAgentRollingModalOpen, setIsAgentRollingModalOpen] = useState(false);
-  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false); // State for change password modal
+  const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false); 
   const [modalData, setModalData] = useState(null);
 
   const userData = JSON.parse(localStorage.getItem('userData'));
@@ -33,17 +33,17 @@ const MyProfile = () => {
           const response = await getUserData(`user/get-user/${userId}`);
           console.log('API Response:', response.data);
 
-          // Store the profile data in Redux and the modalData state
+          
           dispatch(updateProfile(response.data.data));
 
-          // Dispatch the rolling and agent rolling commission data to Redux
+          
           dispatch(setRollingCommission(response.data.rollingCommission));
           dispatch(setAgentRollingCommission({
             username: response.data.data.name,
             commissionRates: response.data.agentRollingCommission,
           }));
 
-          setModalData(response.data.data); // Store the entire response data for modals
+          setModalData(response.data.data); 
         } catch (error) {
           console.error('Fetch Profile Error:', error);
           dispatch(setProfileError(error.message || 'Failed to fetch profile data'));
@@ -52,8 +52,7 @@ const MyProfile = () => {
 
       fetchProfileData();
     }
-  }, [profileStatus, dispatch, userId]); // Add userId as a dependency
-
+  }, [profileStatus, dispatch, userId]); 
   // Handle loading and error states
   if (profileStatus === 'loading') {
     return <div>Loading...</div>;
@@ -93,11 +92,11 @@ const MyProfile = () => {
   <div className="mt-4 text-sm">
     <div className="flex border-b py-3 px-4">
       <span className="font-medium w-48">Name</span>
-      <span className="text-left ml-4">{profile.name}</span> {/* Added margin-left */}
+      <span className="text-left ml-4">{profile.name}</span> 
     </div>
     <div className="flex border-b py-3 px-4">
       <span className="font-medium w-48">Commission</span>
-      <span className="text-left ml-4">{profile.commission}%</span> {/* Added margin-left */}
+      <span className="text-left ml-4">{profile.commission}%</span> 
     </div>
     <div className="flex border-b py-3 px-4">
       <span className="font-medium w-48">Rolling Commission</span>
@@ -119,15 +118,15 @@ const MyProfile = () => {
     </div>
     <div className="flex border-b py-3 px-4">
       <span className="font-medium w-48">Currency</span>
-      <span className="text-left ml-4">{profile.currency}</span> {/* Added margin-left */}
+      <span className="text-left ml-4">{profile.currency}</span> 
     </div>
     <div className="flex border-b py-3 px-4">
       <span className="font-medium w-48">Partnership</span>
-      <span className="text-left ml-4">{profile.partnership}</span> {/* Added margin-left */}
+      <span className="text-left ml-4">{profile.partnership}</span> 
     </div>
     <div className="flex border-b py-3 px-4">
       <span className="font-medium w-48">Mobile Number</span>
-      <span className="text-left ml-4">{profile.mobileNumber}</span> {/* Added margin-left */}
+      <span className="text-left ml-4">{profile.mobileNumber}</span> 
     </div>
     <div className="flex py-3 px-4">
       <span className="font-medium w-48">Password</span>
