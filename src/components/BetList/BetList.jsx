@@ -235,7 +235,7 @@ const handleFilterChange = (data) => {
   }}
   className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
 >
-  {item.username}{item.userId}
+  {item.username}
 </td>
 
                       <td className="border border-gray-400 px-4 py-3">{item.sport}</td>

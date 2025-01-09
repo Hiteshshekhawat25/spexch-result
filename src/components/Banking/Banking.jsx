@@ -109,31 +109,146 @@ const Banking = () => {
       return;
     }
   
+    // Check for insufficient balance
+    const user = downlineData.find((item) => item._id === data.userId);
+    if (data.depositwithdrawStatus === "W" && user.totalBalance < Number(data.depositwithdraw)) {
+      toast.error("Insufficient balance. Withdrawal amount exceeds total balance.");
+      return;
+    }
+  
     // Submit the transaction
-    performTransaction(data.depositwithdrawStatus, {
-      userId: data.userId,
-      amount: Number(data.depositwithdraw),
-      password: data.password,
-      description: data.remark,
-    }, token)
+    performTransaction(
+      data.depositwithdrawStatus,
+      {
+        userId: data.userId,
+        amount: Number(data.depositwithdraw),
+        password: data.password,
+        description: data.remark,
+      },
+      token
+    )
       .then(() => {
         toast.success(`Transaction for ${data.userId} (${data.depositwithdrawStatus}) was successful.`);
-
-        const updatedDownlineData = [...downlineData];  
-      const userIndex = updatedDownlineData.findIndex((item) => item._id === data.userId);
-      if (userIndex !== -1) {
-        updatedDownlineData[userIndex].totalBalance += Number(data.depositwithdraw);
-        updatedDownlineData[userIndex].depositwithdraw = data.depositwithdraw;
-      }
-      
-      dispatch(setDownlineData(updatedDownlineData));  
+  
+        // Clear the fields (remark, password, depositwithdraw)
+        setPassword(""); // Clear the password field
+        setEditedData((prevState) => {
+          const updatedData = [...prevState];
+          updatedData[selectedRowIndex] = {
+            ...updatedData[selectedRowIndex],
+            depositwithdraw: "",  // Clear deposit/withdraw value
+            remark: "",  // Clear remark
+          };
+          return updatedData;
+        });
+  
+        // Clear downline data or update it as needed
+        const updatedDownlineData = [...downlineData];
+        const userIndex = updatedDownlineData.findIndex((item) => item._id === data.userId);
+        if (userIndex !== -1) {
+          updatedDownlineData[userIndex].totalBalance += Number(data.depositwithdraw);
+          updatedDownlineData[userIndex].depositwithdraw = "";
+        }
+  
+        dispatch(setDownlineData(updatedDownlineData)); // Update the global downline data
       })
       .catch((error) => {
         toast.error(error.message || `Error processing transaction for ${data.userId}.`);
       });
   };
   
+  //   if (!password) {
+  //     toast.error("Please enter the password.");
+  //     return;
+  //   }
+  
+  //   if (!data.userId || !data.depositwithdraw || !data.depositwithdrawStatus) {
+  //     toast.error("Invalid data. Ensure all fields are filled correctly.");
+  //     return;
+  //   }
+  
+  //   const token = localStorage.getItem("authToken");
+  //   if (!token) {
+  //     toast.error("Token not found. Please log in again.");
+  //     return;
+  //   }
+  
+  //   // Submit the transaction
+  //   performTransaction(data.depositwithdrawStatus, {
+  //     userId: data.userId,
+  //     amount: Number(data.depositwithdraw),
+  //     password: data.password,
+  //     description: data.remark,
+  //   }, token)
+  //     .then(() => {
+  //       toast.success(`Transaction for ${data.userId} (${data.depositwithdrawStatus}) was successful.`);
 
+  //       const updatedDownlineData = [...downlineData];  
+  //     const userIndex = updatedDownlineData.findIndex((item) => item._id === data.userId);
+  //     if (userIndex !== -1) {
+  //       updatedDownlineData[userIndex].totalBalance += Number(data.depositwithdraw);
+  //       updatedDownlineData[userIndex].depositwithdraw = data.depositwithdraw;
+  //     }
+      
+  //     dispatch(setDownlineData(updatedDownlineData));  
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error.message || `Error processing transaction for ${data.userId}.`);
+  //     });
+  // };
+  
+  // const handleSubmitPaymentFunction = (data) => {
+  //   if (!password) {
+  //     toast.error("Please enter the password.");
+  //     return;
+  //   }
+  
+  //   if (!data.userId || !data.depositwithdraw || !data.depositwithdrawStatus) {
+  //     toast.error("Invalid data. Ensure all fields are filled correctly.");
+  //     return;
+  //   }
+  
+  //   const token = localStorage.getItem("authToken");
+  //   if (!token) {
+  //     toast.error("Token not found. Please log in again.");
+  //     return;
+  //   }
+  
+  //   // Check for insufficient balance
+  //   const user = downlineData.find((item) => item._id === data.userId);
+  //   if (data.depositwithdrawStatus === "W" && user.totalBalance < Number(data.depositwithdraw)) {
+  //     toast.error("Insufficient balance. Withdrawal amount exceeds total balance.");
+  //     return;
+  //   }
+  
+  //   // Submit the transaction
+  //   performTransaction(
+  //     data.depositwithdrawStatus,
+  //     {
+  //       userId: data.userId,
+  //       amount: Number(data.depositwithdraw),
+  //       password: data.password,
+  //       description: data.remark,
+  //     },
+  //     token
+  //   )
+  //     .then(() => {
+  //       toast.success(`Transaction for ${data.userId} (${data.depositwithdrawStatus}) was successful.`);
+  
+  //       const updatedDownlineData = [...downlineData];
+  //       const userIndex = updatedDownlineData.findIndex((item) => item._id === data.userId);
+  //       if (userIndex !== -1) {
+  //         updatedDownlineData[userIndex].totalBalance += Number(data.depositwithdraw);
+  //         updatedDownlineData[userIndex].depositwithdraw = data.depositwithdraw;
+  //       }
+  
+  //       dispatch(setDownlineData(updatedDownlineData));
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error.message || `Error processing transaction for ${data.userId}.`);
+  //     });
+  // };
+  
 
   const handleButtonClick = (status, index) => {
     setEditedData((prevState) => {
@@ -384,14 +499,13 @@ const Banking = () => {
       <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
         {/* {new Intl.NumberFormat("en-IN").format(item.exposure)} */}{'(0)'}
       </td>
-      <td className="border border-gray-400 px-4 py-2 text-md text-blue font-semibold">
-        {new Intl.NumberFormat("en-IN").format(item.creditReference)}
-        <FaEdit
-          className="text-blue cursor-pointer ml-2"
-          onClick={() => handleEditClick(item)}
-        />
-      </td>
-      <td></td>
+      <td className=" px-4 py-2 text-md text-blue font-semibold flex items-center">
+  {new Intl.NumberFormat("en-IN").format(item.creditReference)}
+  <FaEdit className="text-blue cursor-pointer ml-2" onClick={() => handleEditClick(item)} />
+</td>
+
+
+      <td className="border border-gray-400 px-4 py-2 text-sm font-bold">{new Intl.NumberFormat("en-IN").format(item.profit_loss)} </td>
       <td className="border border-gray-400 px-4 py-2 text-md">
         <div className="flex items-center space-x-2">
           
@@ -436,15 +550,16 @@ const Banking = () => {
       
         </div>
       </td>
+      
       <td className="border border-gray-400 px-4 py-2 text-md">
+      <input
+  type="text"
+  value={editedData[index]?.remark || ""}
+  onChange={(e) => handleInputChange(e, "remark", index)}
+  placeholder="Remark"
+  className="border border-gray-300 px-2 py-1 text-sm"
+/>
         
-        <input
-          type="text"
-          value={editedData[index]?.remark || item.remark || ""}
-          onChange={(e) => handleInputChange(e, "remark", index)}
-          placeholder="Remark"
-          className="border border-gray-300 px-2 py-1 text-sm"
-        />
       </td>
       
     </tr>
@@ -496,12 +611,12 @@ const Banking = () => {
     Clear All
   </button>
   <input
-     type="password"
-     placeholder="Password"
-     value={password} // Controlled input
-     onChange={(e) => setPassword(e.target.value)} 
-    className="border border-gray-300 px-4 py-1 text-md rounded-md w-72"
-  />
+  type="password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  placeholder="Enter password"
+  className="border border-gray-300 px-2 py-1 text-sm"
+/>
 <button
   onClick={() => handleSubmitPaymentForRow()}
   className="px-3 py-1 bg-gradient-seablue text-white text-sm font-medium rounded-md"
@@ -530,3 +645,4 @@ const Banking = () => {
 };
 
 export default Banking;
+
