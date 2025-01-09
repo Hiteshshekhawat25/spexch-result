@@ -417,12 +417,12 @@ export const AddClientForm = ({ closeModal }) => {
             </div>
             <div className="flex justify-between">
               <label className="w-1/3 text-left font-semibold">
-                Sportsbook
+                Sportbook
               </label>
               <input
                 type="text"
-                name="rollingCommission.sportsbook"
-                value={formData.rollingCommission.sportsbook}
+                name="rollingCommission.sportbook"
+                value={formData.rollingCommission.sportbook}
                 onChange={handleChange}
                 className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
