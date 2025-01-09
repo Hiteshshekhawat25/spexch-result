@@ -363,8 +363,8 @@ const Banking = () => {
       <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
         {new Intl.NumberFormat("en-IN").format(item.totalBalance)}
       </td>
-      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-        {new Intl.NumberFormat("en-IN").format(item.exposure)}
+      <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
+        {/* {new Intl.NumberFormat("en-IN").format(item.exposure)} */}{'(0)'}
       </td>
       <td className="border border-gray-400 px-4 py-2 text-md text-blue font-semibold">
         {new Intl.NumberFormat("en-IN").format(item.creditReference)}
@@ -377,43 +377,45 @@ const Banking = () => {
       <td className="border border-gray-400 px-4 py-2 text-md">
         <div className="flex items-center space-x-2">
           
+        <button
+  onClick={() => handleButtonClick("D", index)}
+  className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
+    editedData[index]?.depositwithdrawStatus === "D"
+      ? "bg-green-600 text-white"
+      : "bg-gray-400 text-white"
+  } border border-black`}
+>
+  D
+</button>
+
           <button
-            onClick={() => handleButtonClick("D", index)}
-            className={`px-3 py-1 text-sm font-medium rounded-md ${
-              editedData[index]?.depositwithdrawStatus === "D"
-                ? "bg-green-600 text-white"
-                : "bg-gray-400 text-white"
-            }`}
-          >
-            D
-          </button>
-          <button
-            onClick={() => handleButtonClick("W", index)}
-            className={`px-3 py-1 text-sm font-medium rounded-md ${
-              editedData[index]?.depositwithdrawStatus === "W"
-                ? "bg-red-600 text-white"
-                : "bg-gray-400 text-white"
-            }`}
-          >
-            W
-          </button>
-          <button
-            onClick={() => handleButtonClick("Full", index)}
-            className={`px-3 py-1 text-sm font-medium rounded-md ${
-              editedData[index]?.depositwithdrawStatus === "Full"
-                ? "bg-gradient-seablue text-white"
-                : "bg-gray-400 text-white"
-            }`}
-          >
-            Full
-          </button>
-      
+  onClick={() => handleButtonClick("W", index)}
+  className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
+    editedData[index]?.depositwithdrawStatus === "W"
+      ? "bg-red-600 text-white"
+      : "bg-gray-400 text-white"
+  } border border-black`}
+>
+  W
+</button>
           <input
             type="text"
             value={editedData[index]?.depositwithdraw || item.depositwithdraw || ""}
             onChange={(e) => handleInputChange(e, "depositwithdraw", index)}
             className="border border-gray-300 px-2 py-1 text-sm"
           />
+          <button
+  onClick={() => handleButtonClick("Full", index)}
+  className={`px-3 py-1 text-sm font-medium rounded-md ${
+    editedData[index]?.depositwithdrawStatus === "Full"
+      ? "bg-gradient-seablue text-white"
+      : "bg-gray-400 text-white"
+  } border border-black`}
+>
+  Full
+</button>
+
+      
         </div>
       </td>
       <td className="border border-gray-400 px-4 py-2 text-md">

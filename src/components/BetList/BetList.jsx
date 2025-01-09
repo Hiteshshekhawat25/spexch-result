@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectBetListData, selectBetListLoading, selectBetListError } from "../../Store/Slice/betListSlice";
 import { selectBetListFilter } from "../../Store/Slice/betListFilterSlice"; // Filter slice
 import { FaSearch, FaSortUp, FaSortDown } from "react-icons/fa";
+import UserHierarchyModal from "../Modal/UserHierarchyModal";
+
 import BetListFilter from "./BetListFilter";
 
 const BetList = () => {
@@ -19,6 +21,8 @@ const BetList = () => {
   const [betlistData, setBetlistData] = useState([]); // Initialize betlistData with empty array
   const [totalBets, setTotalBets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
     const [isDataFetched, setIsDataFetched] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "username",
@@ -28,6 +32,11 @@ const BetList = () => {
   // Handle BetListFilter data update
   const handleBetlistUpdate = (newData) => {
     setBetlistData(newData);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedUserId(null);
   };
 
   useEffect(() => {
@@ -98,21 +107,21 @@ const handleFilterChange = (data) => {
 
   return (
     <div className="p-4">
-      {/* Pass necessary state management functions to BetListFilter */}
+  
       <BetListFilter 
         setTotalBets={(total) => setTotalBets(total)} 
         setTotalPages={(total) => setTotalPages(total)} 
         setBetlistData={handleBetlistUpdate} 
         entriesToShow={entriesToShow}
         currentPage={currentPage}
-        setIsDataFetched={(isFetched) => console.log(isFetched)} // Just an example, replace with the actual logic
+        setIsDataFetched={(isFetched) => console.log(isFetched)} 
         setCurrentPage={setCurrentPage}
       />
 
       <div className="border border-gray-300 rounded-md bg-white">
         <h1 className="text-xl bg-gradient-blue text-white font-bold">Bet List</h1>
 
-        {/* Search and Entries Per Page */}
+   
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
             <label className="mr-2 text-sm font-medium text-black">Show</label>
@@ -218,14 +227,28 @@ const handleFilterChange = (data) => {
                 {sortedData.length > 0 ? (
                   sortedData.map((item, index) => (
                     <tr key={index}>
-                      <td className="border border-gray-400 px-4 py-3">{item.username}</td>
+                      <td
+  onClick={() => {
+    console.log("Selected User ID:", item.userId); 
+    setSelectedUserId(item.userId);
+    setIsModalOpen(true); 
+  }}
+  className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+>
+  {item.username}{item.userId}
+</td>
+
                       <td className="border border-gray-400 px-4 py-3">{item.sport}</td>
                       <td className="border border-gray-400 px-4 py-3">{item.event}</td>
                       <td className="border border-gray-400 px-4 py-3">{item.market}</td>
                       <td className="border border-gray-400 px-4 py-3">{item.selection}</td>
-                      <td className="border border-gray-400 px-4 py-3">{item.type}</td>
+                      <td
+  className={`border border-gray-400 px-4 py-3 font-bold ${item.type === "no" ? "text-red-600" : "text-blue"}`}
+>
+  {item.type === "no" ? "Lay" : "Back"}
+</td>
                       <td className="border border-gray-400 px-4 py-3">{item.oddsRequested}</td>                      
-                      <td className="border border-gray-400 px-4 py-3">{item.stake}</td>
+                      <td className="border border-gray-400 px-4 py-3 font-bold">{item.stake}</td>
                       <td className="border border-gray-400 px-4 py-3">
                         {new Date(item.placeTime).toLocaleDateString('en-GB', {
                           day: '2-digit',
@@ -262,16 +285,16 @@ const handleFilterChange = (data) => {
           </div>
         )}
 
-        {/* Pagination */}
+      
 
         <div className="flex justify-between items-center mt-4">
-          {/* Left Side: Showing Entries Info */}
+          
           <div className="text-sm text-gray-600">
             Showing {totalBets === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
             {Math.min(currentPage * entriesToShow, totalBets)} of {totalBets} entries
           </div>
 
-          {/* Right Side: Pagination Buttons */}
+          
           <div className="flex space-x-2">
             <button
               onClick={() => handlePageChange("first")}
@@ -304,6 +327,9 @@ const handleFilterChange = (data) => {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <UserHierarchyModal userId={selectedUserId} closeModal={closeModal} />
+      )}
     </div>
   );
 };
