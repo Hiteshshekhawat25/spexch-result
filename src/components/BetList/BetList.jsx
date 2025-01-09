@@ -23,6 +23,8 @@ const BetList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUsername, setSelectedUsername] = useState(null);
+
     const [isDataFetched, setIsDataFetched] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "username",
@@ -229,8 +231,10 @@ const handleFilterChange = (data) => {
                     <tr key={index}>
                       <td
   onClick={() => {
-    console.log("Selected User ID:", item.userId); 
-    setSelectedUserId(item.userId);
+    console.log("Selected User ID:", item.createdBy); 
+    setSelectedUserId(item.createdBy);
+    setSelectedUsername(item.username);
+    console.log("Selected User Name:", item.username); 
     setIsModalOpen(true); 
   }}
   className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
@@ -328,7 +332,7 @@ const handleFilterChange = (data) => {
         </div>
       </div>
       {isModalOpen && (
-        <UserHierarchyModal userId={selectedUserId} closeModal={closeModal} />
+        <UserHierarchyModal userId={selectedUserId} username={selectedUsername}  closeModal={closeModal} />
       )}
     </div>
   );
