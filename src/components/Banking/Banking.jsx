@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import { fetchDownlineData,performTransaction } from "../../Services/Downlinelistapi";
 import { setLoading, setError, setDownlineData } from "../../Store/Slice/downlineSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -25,13 +25,15 @@ const Banking = () => {
     const [selectedUser, setSelectedUser] = useState(null);
     const [totalUsers, setTotalUsers] = useState(0);
       const { startFetchData } = useSelector((state) => state.downline);
+      const [password, setPassword] = useState("");
+      const [selectedRowIndex, setSelectedRowIndex] = useState(null);
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   const columns = [
     { key: "username", label: "UID" },
     { key: "openingBalance", label: "Balance" },  // This can stay as 'balance' for user clarity
-    { key: "availableBalance", label: "Available D/W" },
+    { key: "totalBalance", label: "Available D/W" },
     { key: "exposure", label: "Exposure" },
     { key: "creditReference", label: "Credit Referance" },
     { key: "referance", label: "Referance P/L" },
@@ -44,24 +46,36 @@ const Banking = () => {
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-
+  const handleRowClick = (index) => {
+    setSelectedRowIndex(index);
+  };
+  
   const handleEditClick = (user) => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };
 
-  const handleButtonClick = (status, index) => {
-    setEditedData((prevState) => {
-      const updatedData = [...prevState];
-      updatedData[index] = {
-        ...updatedData[index],
-        depositwithdrawStatus: status,  // Add the status to the row
-      };
-      return updatedData;
-    });
+  const handleSubmitPaymentForRow = () => {
+    if (selectedRowIndex === null) {
+      toast.error("No row selected for payment.");
+      return;
+    }
+  
+    const item = filteredData[selectedRowIndex];
+    const currentData = {
+      userId: item._id,
+      depositwithdraw: editedData[selectedRowIndex]?.depositwithdraw || item.depositwithdraw,
+      depositwithdrawStatus: editedData[selectedRowIndex]?.depositwithdrawStatus,
+      remark: editedData[selectedRowIndex]?.remark || item.remark || "",
+      password
+    };
+  
+    handleSubmitPaymentFunction(currentData);
   };
   
-
+  
+  
+  
   const handleInputChange = (e, key, index) => {
     const { value } = e.target;
     setEditedData((prevState) => {
@@ -73,6 +87,63 @@ const Banking = () => {
       return updatedData;
     });
   };
+  
+  
+  const handleSubmitPaymentFunction = (data) => {
+    if (!password) {
+      toast.error("Please enter the password.");
+      return;
+    }
+  
+    if (!data.userId || !data.depositwithdraw || !data.depositwithdrawStatus) {
+      toast.error("Invalid data. Ensure all fields are filled correctly.");
+      return;
+    }
+  
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      toast.error("Token not found. Please log in again.");
+      return;
+    }
+  
+    // Submit the transaction
+    performTransaction(data.depositwithdrawStatus, {
+      userId: data.userId,
+      amount: Number(data.depositwithdraw),
+      password: data.password,
+      description: data.remark,
+    }, token)
+      .then(() => {
+        toast.success(`Transaction for ${data.userId} (${data.depositwithdrawStatus}) was successful.`);
+
+        const updatedDownlineData = [...downlineData];  
+      const userIndex = updatedDownlineData.findIndex((item) => item._id === data.userId);
+      if (userIndex !== -1) {
+        updatedDownlineData[userIndex].totalBalance += Number(data.depositwithdraw);
+        updatedDownlineData[userIndex].depositwithdraw = data.depositwithdraw;
+      }
+      
+      dispatch(setDownlineData(updatedDownlineData));  
+      })
+      .catch((error) => {
+        toast.error(error.message || `Error processing transaction for ${data.userId}.`);
+      });
+  };
+  
+
+
+  const handleButtonClick = (status, index) => {
+    setEditedData((prevState) => {
+      const updatedData = [...prevState];
+      updatedData[index] = {
+        ...updatedData[index],
+        depositwithdrawStatus: status,  
+      };
+      return updatedData;
+    });
+  };
+  
+
   
   const handleModalClose = () => {
     setIsModalOpen(false);
@@ -128,6 +199,7 @@ const Banking = () => {
 
         if (result && result.data) {
           dispatch(setDownlineData(result.data));
+           console.log("Fetched downline data:", result.data); 
           setTotalUsers(result.pagination?.totalUsers || 0);
         }
       } catch (err) {
@@ -277,7 +349,11 @@ const Banking = () => {
         </thead>
         <tbody>
   {sortedData.map((item, index) => (
-    <tr key={index} className="border border-gray-400 bg-white">
+ <tr
+ key={item._id}
+ className="border border-gray-400 bg-white"
+ onClick={() => handleRowClick(index)}
+>
       <td className="px-4 py-2 text-sm">
         <span className="text-black font-semibold">{item.username}</span>
       </td>
@@ -285,73 +361,76 @@ const Banking = () => {
         {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
       </td>
       <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-        {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
+        {new Intl.NumberFormat("en-IN").format(item.totalBalance)}
       </td>
       <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
         {new Intl.NumberFormat("en-IN").format(item.exposure)}
       </td>
       <td className="border border-gray-400 px-4 py-2 text-md text-blue font-semibold">
         {new Intl.NumberFormat("en-IN").format(item.creditReference)}
-        <div className="ml-2 inline-flex space-x-2">
-                            <FaEdit
-                              className="text-blue cursor-pointer"
-                              onClick={() => handleEditClick(item)}
-                            />
-                           
-                          </div>
-                        
+        <FaEdit
+          className="text-blue cursor-pointer ml-2"
+          onClick={() => handleEditClick(item)}
+        />
       </td>
-      <td className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-       
+      <td></td>
+      <td className="border border-gray-400 px-4 py-2 text-md">
+        <div className="flex items-center space-x-2">
+          
+          <button
+            onClick={() => handleButtonClick("D", index)}
+            className={`px-3 py-1 text-sm font-medium rounded-md ${
+              editedData[index]?.depositwithdrawStatus === "D"
+                ? "bg-green-600 text-white"
+                : "bg-gray-400 text-white"
+            }`}
+          >
+            D
+          </button>
+          <button
+            onClick={() => handleButtonClick("W", index)}
+            className={`px-3 py-1 text-sm font-medium rounded-md ${
+              editedData[index]?.depositwithdrawStatus === "W"
+                ? "bg-red-600 text-white"
+                : "bg-gray-400 text-white"
+            }`}
+          >
+            W
+          </button>
+          <button
+            onClick={() => handleButtonClick("Full", index)}
+            className={`px-3 py-1 text-sm font-medium rounded-md ${
+              editedData[index]?.depositwithdrawStatus === "Full"
+                ? "bg-gradient-seablue text-white"
+                : "bg-gray-400 text-white"
+            }`}
+          >
+            Full
+          </button>
+      
+          <input
+            type="text"
+            value={editedData[index]?.depositwithdraw || item.depositwithdraw || ""}
+            onChange={(e) => handleInputChange(e, "depositwithdraw", index)}
+            className="border border-gray-300 px-2 py-1 text-sm"
+          />
+        </div>
       </td>
-
-      <td className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-  <div className="flex items-center space-x-2">
-    {/* D Button */}
-    <button
-      onClick={() => handleButtonClick('D', index)}
-      className={`px-3 py-1 text-sm font-medium rounded-md ${editedData[index]?.depositwithdrawStatus === 'D' ? 'bg-green-600 text-white' : 'bg-gray-400 text-white'}`}
-    >
-      D
-    </button>
-
-    {/* W Button */}
-    <button
-      onClick={() => handleButtonClick('W', index)}
-      className={`px-3 py-1 text-sm font-medium rounded-md ${editedData[index]?.depositwithdrawStatus === 'W' ? 'bg-red-600 text-white' : 'bg-gray-400 text-white'}`}
-    >
-      W
-    </button>
-
-    <input
-      type="text"
-      value={editedData[index]?.depositwithdraw || item.depositwithdraw}
-      onChange={(e) => handleInputChange(e, 'depositwithdraw', index)}
-      className="border border-gray-300 px-2 py-1 text-sm ml-2"
-    />
-
-    {/* Full Button */}
-    <button
-      onClick={() => handleButtonClick('Full', index)}
-      className={`px-3 py-1 text-sm font-medium rounded-md ${editedData[index]?.depositwithdrawStatus === 'Full' ? 'bg-gradient-seablue text-white' : 'bg-gray-400 text-white'}`}
-    >
-      Full
-    </button>   
-  </div>
-</td>
-
-      <td className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
+      <td className="border border-gray-400 px-4 py-2 text-md">
+        
         <input
           type="text"
-          value={editedData[index]?.remark || item.remark}
-              placeholder="Remark"          
-          onChange={(e) => handleInputChange(e, 'remark', index)}
+          value={editedData[index]?.remark || item.remark || ""}
+          onChange={(e) => handleInputChange(e, "remark", index)}
+          placeholder="Remark"
           className="border border-gray-300 px-2 py-1 text-sm"
         />
       </td>
+      
     </tr>
   ))}
 </tbody>
+
 
       </table>
       <div className="flex justify-between items-center mt-4">
@@ -398,13 +477,19 @@ const Banking = () => {
     Clear All
   </button>
   <input
-    type="password"
-    placeholder="Password"
+     type="password"
+     placeholder="Password"
+     value={password} // Controlled input
+     onChange={(e) => setPassword(e.target.value)} 
     className="border border-gray-300 px-4 py-1 text-md rounded-md w-72"
   />
-  <button className="px-8 py-1 bg-gradient-seablue text-white text-md rounded-md w-72 mt-2 sm:mt-0 sm:w-auto">
-    Submit Payment
-  </button>
+<button
+  onClick={() => handleSubmitPaymentForRow()}
+  className="px-3 py-1 bg-gradient-seablue text-white text-sm font-medium rounded-md"
+>
+  Submit Payment
+</button>
+
 </div>
 {isModalOpen && selectedUser && (
         <>
