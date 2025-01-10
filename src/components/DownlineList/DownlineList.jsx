@@ -201,6 +201,7 @@ const DownlineList = () => {
                 setRoleId(userRole.role_id);
               } else if (rolesData.length > 0) {
                 setRoleId(rolesData[0].role_id);
+                window.location.reload();
               }
             } else {
               setError("Roles data is not an array.");
@@ -213,6 +214,7 @@ const DownlineList = () => {
 
       fetchUserRoles();
     }
+   
   }, [token, location.pathname]);
 
   useEffect(() => {
