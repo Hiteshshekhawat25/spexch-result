@@ -128,6 +128,7 @@ const PasswordHistory = () => {
               </label>
             </div>
             <div>
+              <label>Search: </label> 
               <input
                 type="text"
                 // placeholder="Search"

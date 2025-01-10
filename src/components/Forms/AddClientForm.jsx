@@ -30,12 +30,12 @@ export const AddClientForm = ({ closeModal }) => {
     password: "",
     confirmPassword: "",
     rollingCommission: {
-      fancy: " ",
-      matka: " ",
-      casino: " ",
-      binary: " ",
-      sportbook: " ",
-      bookmaker: " ",
+      fancy: 0,
+      matka: 0,
+      casino: 0,
+      binary: 0,
+      sportbook: 0,
+      bookmaker: 0,
     },
     masterPassword: "",
   };

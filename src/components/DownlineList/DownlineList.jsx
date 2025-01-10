@@ -153,7 +153,35 @@ const DownlineList = () => {
   );
 
   useEffect(() => {
-    if (location.pathname === "/master-downline-list") {
+    // if (location.pathname === "/master-downline-list") {
+    //   const fetchUserRoles = async () => {
+    //     try {
+    //       const token = localStorage.getItem("authToken");
+    //       if (token) {
+    //         const rolesArray = await fetchRoles(token);
+
+    //         if (Array.isArray(rolesArray)) {
+    //           const rolesData = rolesArray.map((role) => ({
+    //             role_name: role.role_name,
+    //             role_id: role._id,
+    //           }));
+
+    //           setRoles(rolesData);
+    //           if (rolesData.length > 0) {
+    //             setRoleId(rolesData[0].role_id);
+    //           }
+    //         } else {
+    //           setError("Roles data is not an array.");
+    //         }
+    //       }
+    //     } catch (error) {
+    //       setError(error.message || "Failed to fetch roles.");
+    //     }
+    //   };
+
+    //   fetchUserRoles();
+    // }
+    if (location.pathname === "/user-downline-list") {
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
@@ -165,9 +193,13 @@ const DownlineList = () => {
                 role_name: role.role_name,
                 role_id: role._id,
               }));
-
               setRoles(rolesData);
-              if (rolesData.length > 0) {
+              const userRole = rolesData.find(
+                (role) => role.role_name === "master" || role.role_name === "agent"
+              );
+              if (userRole) {
+                setRoleId(userRole.role_id);
+              } else if (rolesData.length > 0) {
                 setRoleId(rolesData[0].role_id);
               }
             } else {
@@ -412,30 +444,29 @@ const DownlineList = () => {
             <label className="ml-2 text-sm font-medium">entries</label>
           </div>
           <div className="flex items-center space-x-6">
-          <div className="rounded-md w-28 px-3">
-  <select
-    value={selectedFilter}
-    onChange={handleFilterChange}
-    className="border rounded py-1 px-2 text-sm w-full bg-gray-200 text-black border-gray-400"
-  >
-    <option value="">Status</option>
-    <option value="active">Active</option>
-    <option value="suspended">Suspended</option>
-    <option value="locked">Locked</option>
-  </select>
-</div>
+            <div className="rounded-md w-28 px-3">
+              <select
+                value={selectedFilter}
+                onChange={handleFilterChange}
+                className="border rounded py-1 px-2 text-sm w-full bg-gray-200 text-black border-gray-400"
+              >
+                <option value="">Status</option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+                <option value="locked">Locked</option>
+              </select>
+            </div>
 
-  <label className="text-sm">Search:</label>
-  <div className="rounded-md w-28">
-    <input
-      type="text"
-      value={searchTerm}
-      onChange={handleSearchChange}
-      className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
-    />
-  </div>
-</div>
-
+            <label className="text-sm">Search:</label>
+            <div className="rounded-md w-28">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
+              />
+            </div>
+          </div>
         </div>
         <table className="w-full table-auto border-collapse border border-gray-300">
           <thead className="border border-gray-300">

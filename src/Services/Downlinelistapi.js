@@ -236,28 +236,40 @@ export const updateUserStatus = async (userId, newStatus, password) => {
   }
 };
 
-//to call withdraw or deposit api
+//to call withdraw or deposit api for downlinelist 
 
-// export const performTransaction = async (transactionType, data, token) => {
-//   const apiUrl =
-//     transactionType === "deposit"
-//       ? `${BASE_URL}/user/deposit-amount`
-//       : `${BASE_URL}/user/withdraw-amount`;
+export const performTransactionDownline = async (transactionType, data, token) => {
+  const apiUrl =
+    transactionType === "deposit"
+      ? `${BASE_URL}/user/deposit-amount`
+      : `${BASE_URL}/user/withdraw-amount`;
 
-//   try {
-//     const response = await axios.post(apiUrl, data, {
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
+  try {
+    console.log("Starting API request...");
+    console.log("Transaction Type:", transactionType);
+    console.log("API URL:", apiUrl);
+    console.log("Data being sent:", data);
+    console.log("Token:", token);
 
-//     return response.data; // Return API response data
-//   } catch (error) {
-//     // Return error message
-//     throw error.response?.data?.message || "An error occurred while processing the transaction.";
-//   }
-// };
+    const response = await axios.post(apiUrl, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data; // Return only the data portion of the response
+  } catch (error) {
+    // console.error("Error occurred during the transaction:");
+    // console.error("Full error object:", error);
+    if (error.response) {
+      toast.error(error.response.data.message);
+    }
+
+    // Throw user-friendly error message
+    throw error.response?.data?.message || "An error occurred while processing the transaction.";
+  }
+};
+
 export const performTransaction = async (transactionType, data, token) => {
   const apiUrl =
     transactionType === "D"
@@ -277,7 +289,6 @@ export const performTransaction = async (transactionType, data, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     return response.data; // Return API response data
   } catch (error) {
     // Return error message
