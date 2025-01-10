@@ -1,58 +1,68 @@
+
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  selectBetListData,
-  selectBetListLoading,
-  selectBetListError,
-} from "../../Store/Slice/betListSlice";
+import { selectBetListData, selectBetListLoading, selectBetListError } from "../../Store/Slice/betListSlice";
 import { selectBetListFilter } from "../../Store/Slice/betListFilterSlice"; // Filter slice
 import { FaSearch, FaSortUp, FaSortDown } from "react-icons/fa";
+import UserHierarchyModal from "../Modal/UserHierarchyModal";
+
 import BetListFilter from "./BetListFilter";
 
 const BetList = () => {
   const dispatch = useDispatch();
-  const data = useSelector(selectBetListData); // Data fetched from Redux store
+  const data = useSelector(selectBetListData); 
   const loading = useSelector(selectBetListLoading);
   const error = useSelector(selectBetListError);
-  const filters = useSelector(selectBetListFilter); // Access filters from Redux
+  const filters = useSelector(selectBetListFilter); 
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
-  const [betlistData, setBetlistData] = useState([]);
+  const [betlistData, setBetlistData] = useState([]); 
   const [totalBets, setTotalBets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [isDataFetched, setIsDataFetched] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectedUsername, setSelectedUsername] = useState(null);
+
+    const [isDataFetched, setIsDataFetched] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "username",
     direction: "ascending",
   });
 
+  
   const handleBetlistUpdate = (newData) => {
     setBetlistData(newData);
   };
 
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedUserId(null);
+  };
+
   useEffect(() => {
+    
     setBetlistData(data);
-    setCurrentPage(1);
+    setCurrentPage(1); 
   }, [data, filters]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1);
+    setCurrentPage(1); 
   };
 
   const handleEntriesChange = (e) => {
     setEntriesToShow(Number(e.target.value));
-    setCurrentPage(1);
+    setCurrentPage(1); 
   };
 
   const handlePageChange = (direction) => {
     let newPage = currentPage;
-    if (direction === "next" && currentPage < totalPages) newPage++;
-    else if (direction === "prev" && currentPage > 1) newPage--;
-    else if (direction === "first") newPage = 1;
-    else if (direction === "last") newPage = totalPages;
+    if (direction === 'next' && currentPage < totalPages) newPage++;
+    else if (direction === 'prev' && currentPage > 1) newPage--;
+    else if (direction === 'first') newPage = 1;
+    else if (direction === 'last') newPage = totalPages;
 
     setCurrentPage(newPage);
   };
@@ -60,37 +70,37 @@ const BetList = () => {
     (currentPage - 1) * entriesToShow,
     currentPage * entriesToShow
   );
-
-  console.log("Paginated Data:", paginatedData); // Log the paginated data
-
-  const handleFilterChange = (data) => {
+  
+  console.log("Paginated Data:", paginatedData);   
+const handleFilterChange = (data) => {
     setTotalBets(data.pagination.totalTransactions || 0);
     setTotalPages(data.pagination.totalPages || 1);
     setBetlistData(data.data || []);
   };
 
   const handleSort = (key) => {
-    let direction = "ascending";
-    if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
     }
     setSortConfig({ key, direction });
   };
 
   const sortedData = [...betlistData].sort((a, b) => {
-    const aValue = a[sortConfig.key] || "";
-    const bValue = b[sortConfig.key] || "";
-    if (aValue < bValue) return sortConfig.direction === "ascending" ? -1 : 1;
-    if (aValue > bValue) return sortConfig.direction === "ascending" ? 1 : -1;
+    const aValue = a[sortConfig.key] || '';
+    const bValue = b[sortConfig.key] || '';
+    if (aValue < bValue) return sortConfig.direction === 'ascending' ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === 'ascending' ? 1 : -1;
     return 0;
   });
 
   useEffect(() => {
-    // Handle actions when currentPage changes
+ 
   }, [currentPage]);
 
-  console.log("Sorted Data:", sortedData); // Log sorted data
-
+  
+  console.log("Sorted Data:", sortedData); 
+  
   console.log("Current Page:", currentPage);
   console.log("Entries to Show:", entriesToShow);
   console.log("Total Bets:", totalBets);
@@ -104,16 +114,14 @@ const BetList = () => {
         setBetlistData={handleBetlistUpdate}
         entriesToShow={entriesToShow}
         currentPage={currentPage}
-        setIsDataFetched={(isFetched) => console.log(isFetched)} // Just an example, replace with the actual logic
+        setIsDataFetched={(isFetched) => console.log(isFetched)}
         setCurrentPage={setCurrentPage}
       />
 
       <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="text-xl bg-gradient-blue text-white font-bold">
-          Bet List
-        </h1>
+        <h1 className="text-xl bg-gradient-blue text-white font-bold">Bet List</h1>
 
-        {/* Search and Entries Per Page */}
+   
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
             <label className="mr-2 text-sm font-medium text-black">Show</label>
@@ -128,9 +136,7 @@ const BetList = () => {
                 </option>
               ))}
             </select>
-            <label className="ml-2 text-sm font-medium text-black">
-              entries
-            </label>
+            <label className="ml-2 text-sm font-medium text-black">entries</label>
           </div>
           <div className="flex items-center">
             <p>Search:</p>
@@ -144,7 +150,7 @@ const BetList = () => {
           </div>
         </div>
 
-        {/* Table */}
+       
         {loading ? (
           <div>Loading...</div>
         ) : error ? (
@@ -164,7 +170,7 @@ const BetList = () => {
                     "oddsReq",
                     "stack",
                     "placeTime",
-                    "settleTime",
+                    "settleTime", 
                   ].map((key) => (
                     <th
                       key={key}
@@ -192,27 +198,34 @@ const BetList = () => {
                             : key === "placeTime"
                             ? "Place Time"
                             : key === "settleTime"
-                            ? "Settle Time"
+                            ? "Settle Time" 
                             : key}
                         </span>
-                        <div className="flex flex-col items-center space-y-0.5 ml-2">
-                          <FaSortUp
-                            className={`text-sm ${
-                              sortConfig.key === key &&
-                              sortConfig.direction === "ascending"
-                                ? "text-black"
-                                : "text-gray-400"
-                            }`}
-                          />
-                          <FaSortDown
-                            className={`text-sm ${
-                              sortConfig.key === key &&
-                              sortConfig.direction === "descending"
-                                ? "text-black"
-                                : "text-gray-400"
-                            }`}
-                          />
-                        </div>
+                       
+                        <div className="flex flex-col items-center ml-2">
+                                              <FaSortUp
+                                                className={`${
+                                                  sortConfig.key === key &&
+                                                  sortConfig.direction === "ascending"
+                                                    ? "text-black"
+                                                    : "text-gray-400"
+                                                }`}
+                                                style={{
+                                                  marginBottom: "-6px",
+                                                }} 
+                                              />
+                                              <FaSortDown
+                                                className={`${
+                                                  sortConfig.key === key &&
+                                                  sortConfig.direction === "descending"
+                                                    ? "text-black"
+                                                    : "text-gray-400"
+                                                }`}
+                                                style={{
+                                                  marginTop: "-6px",
+                                                }} 
+                                              />
+                                            </div>
                       </div>
                     </th>
                   ))}
@@ -223,28 +236,37 @@ const BetList = () => {
                 {sortedData.length > 0 ? (
                   sortedData.map((item, index) => (
                     <tr key={index}>
-                      <td className="border border-gray-400 px-4 py-3">
-                        {item.username}
-                      </td>
-                      <td className="border border-gray-400 px-4 py-3">
-                        {item.sport}
-                      </td>
-                      <td className="border border-gray-400 px-4 py-3">
-                        {item.event}
-                      </td>
-                      <td className="border border-gray-400 px-4 py-3">
-                        {item.market}
-                      </td>
-                      <td className="border border-gray-400 px-4 py-3">
-                        {item.selection}
-                      </td>
-                      <td className="border border-gray-400 px-4 py-3">
-                        {item.type}
+                     
+<td
+  onClick={() => {
+    console.log("Clicked Item:", item); // Log the entire item object
+    console.log("Selected User ID:", item.createdBy); 
+    console.log("Selected User Name:", item.username); 
+    setSelectedUserId(item.createdBy);
+    setSelectedUsername(item.username);
+    setIsModalOpen(true);
+  }}
+  className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+>
+  {item.username}
+</td>
+
+
+                      <td className="border border-gray-400 px-4 py-3">{item.sport}</td>
+                      <td className="border border-gray-400 px-4 py-3">{item.event}</td>
+                      <td className="border border-gray-400 px-4 py-3">{item.market}</td>
+                      <td className="border border-gray-400 px-4 py-3">{item.selection}</td>
+                      <td
+                        className={`border border-gray-400 px-4 py-3 font-bold ${
+                          item.type === "no" ? "text-red-600" : "text-blue"
+                        }`}
+                      >
+                        {item.type === "no" ? "Lay" : "Back"}
                       </td>
                       <td className="border border-gray-400 px-4 py-3">
                         {item.oddsRequested}
                       </td>
-                      <td className="border border-gray-400 px-4 py-3">
+                      <td className="border border-gray-400 px-4 py-3 font-bold">
                         {item.stake}
                       </td>
                       <td className="border border-gray-400 px-4 py-3">
@@ -260,14 +282,14 @@ const BetList = () => {
                         })}
                       </td>
                       <td className="border border-gray-400 px-4 py-3">
-                        {new Date(item.settleTime).toLocaleDateString("en-GB", {
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                        })}{" "}
-                        {new Date(item.settleTime).toLocaleTimeString("en-US", {
-                          hour: "2-digit",
-                          minute: "2-digit",
+                        {new Date(item.settleTime).toLocaleDateString('en-GB', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                        })}{' '}
+                        {new Date(item.settleTime).toLocaleTimeString('en-US', {
+                          hour: '2-digit',
+                          minute: '2-digit',
                           hour12: true,
                         })}
                       </td>
@@ -275,12 +297,7 @@ const BetList = () => {
                   ))
                 ) : (
                   <tr>
-                    <td
-                      colSpan="10"
-                      className="border border-gray-400 px-4 py-3"
-                    >
-                      No data found
-                    </td>
+                    <td colSpan="10" className="border border-gray-400 px-4 py-3">No data found</td>
                   </tr>
                 )}
               </tbody>
@@ -290,10 +307,8 @@ const BetList = () => {
 
         <div className="flex justify-between items-center mt-4">
           <div className="text-sm text-gray-600">
-            Showing{" "}
-            {totalBets === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
-            {Math.min(currentPage * entriesToShow, totalBets)} of {totalBets}{" "}
-            entries
+            Showing {totalBets === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+            {Math.min(currentPage * entriesToShow, totalBets)} of {totalBets} entries
           </div>
 
           <div className="flex space-x-2">
@@ -328,8 +343,14 @@ const BetList = () => {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <UserHierarchyModal userId={selectedUserId} username={selectedUsername}  closeModal={closeModal} />
+      )}
     </div>
   );
 };
 
+
 export default BetList;
+
+

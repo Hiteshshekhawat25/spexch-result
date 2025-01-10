@@ -236,13 +236,51 @@ export const updateUserStatus = async (userId, newStatus, password) => {
   }
 };
 
-//to call withdraw or deposit api
+//to call withdraw or deposit api for downlinelist 
 
-export const performTransaction = async (transactionType, data, token) => {
+export const performTransactionDownline = async (transactionType, data, token) => {
   const apiUrl =
     transactionType === "deposit"
       ? `${BASE_URL}/user/deposit-amount`
       : `${BASE_URL}/user/withdraw-amount`;
+
+  try {
+    console.log("Starting API request...");
+    console.log("Transaction Type:", transactionType);
+    console.log("API URL:", apiUrl);
+    console.log("Data being sent:", data);
+    console.log("Token:", token);
+
+    const response = await axios.post(apiUrl, data, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data; // Return only the data portion of the response
+  } catch (error) {
+    // console.error("Error occurred during the transaction:");
+    // console.error("Full error object:", error);
+    if (error.response) {
+      toast.error(error.response.data.message);
+    }
+
+    // Throw user-friendly error message
+    throw error.response?.data?.message || "An error occurred while processing the transaction.";
+  }
+};
+
+export const performTransaction = async (transactionType, data, token) => {
+  const apiUrl =
+    transactionType === "D"
+      ? `${BASE_URL}/user/deposit-amount`
+      : transactionType === "W"
+      ? `${BASE_URL}/user/withdraw-amount`
+      : null;
+
+  if (!apiUrl) {
+    throw new Error("Invalid transaction type.");
+  }
 
   try {
     const response = await axios.post(apiUrl, data, {
@@ -251,13 +289,13 @@ export const performTransaction = async (transactionType, data, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-
     return response.data; // Return API response data
   } catch (error) {
     // Return error message
     throw error.response?.data?.message || "An error occurred while processing the transaction.";
   }
 };
+
 
 //api to get sports list 
 export const getGamesList = async (token) => {
@@ -368,5 +406,25 @@ export const getProfitLossData = async (url) => {
     // Handle other API errors
     console.error("API error:", error.response?.data || error.message);
     throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+  }
+};
+
+export const fetchUsersByStatus = async (status) => {
+  const token = localStorage.getItem("authToken");
+  try {
+    const response = await axios.get(
+      `${BASE_URL}/user/get-user?page=1&limit=10&status=${status}`,
+      {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("repsonse in filter",response)
+    return response.data.data; 
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
   }
 };

@@ -128,9 +128,10 @@ const PasswordHistory = () => {
               </label>
             </div>
             <div>
+              <label>Search: </label> 
               <input
                 type="text"
-                placeholder="Search"
+                // placeholder="Search"
                 className="border border-gray-300 rounded-md p-2"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}

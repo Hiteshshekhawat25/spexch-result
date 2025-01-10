@@ -161,7 +161,7 @@ const EditExposureLimitModal = ({
                 type="text"
                 value={newExposureLimit}
                 onChange={(e) => setNewExposureLimit(e.target.value)}
-                placeholder="New Credit Reference"
+                // placeholder="New Credit Reference"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -177,7 +177,7 @@ const EditExposureLimitModal = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              placeholder="Enter your password"
+              // placeholder="Enter your password"
             />
           </div>
 

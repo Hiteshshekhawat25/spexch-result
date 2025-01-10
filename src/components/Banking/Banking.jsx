@@ -1,11 +1,7 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchDownlineData } from "../../Services/Downlinelistapi";
-import {
-  setLoading,
-  setError,
-  setDownlineData,
-} from "../../Store/Slice/downlineSlice";
+import { fetchDownlineData,performTransaction } from "../../Services/Downlinelistapi";
+import { setLoading, setError, setDownlineData } from "../../Store/Slice/downlineSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import {
@@ -29,17 +25,19 @@ const Banking = () => {
   const loading = useSelector(selectDownlineLoading);
   const error = useSelector(selectDownlineError);
   const [editedData, setEditedData] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const { startFetchData } = useSelector((state) => state.downline);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [totalUsers, setTotalUsers] = useState(0);
+      const { startFetchData } = useSelector((state) => state.downline);
+      const [password, setPassword] = useState("");
+      const [selectedRowIndex, setSelectedRowIndex] = useState(null);
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   const columns = [
     { key: "username", label: "UID" },
-    { key: "openingBalance", label: "Balance" }, // This can stay as 'balance' for user clarity
-    { key: "availableBalance", label: "Available D/W" },
+    { key: "openingBalance", label: "Balance" },  // This can stay as 'balance' for user clarity
+    { key: "totalBalance", label: "Available D/W" },
     { key: "exposure", label: "Exposure" },
     { key: "creditReference", label: "Credit Referance" },
     { key: "referance", label: "Referance P/L" },
@@ -51,22 +49,26 @@ const Banking = () => {
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleClearAll = () => {
+        setEditedData([]);
+    setPassword("");
+    setSelectedRowIndex(null);
+    setSearchTerm("");
+    
+
+    setIsModalOpen(false);
+    setSelectedUser(null);
+  };
+
+  const handleRowClick = (index) => {
+    setSelectedRowIndex(index);
+  };
+  
   const handleEditClick = (user) => {
     setSelectedUser(user);
     setIsModalOpen(true);
-  };
-
-  const handleButtonClick = (status, index) => {
-    setEditedData((prevState) => {
-      const updatedData = [...prevState];
-      updatedData[index] = {
-        ...updatedData[index],
-        depositwithdrawStatus: status, // Add the status to the row
-      };
-      return updatedData;
-    });
-  };
-
+  }; 
+  
   const handleInputChange = (e, key, index) => {
     const { value } = e.target;
     setEditedData((prevState) => {
@@ -79,6 +81,120 @@ const Banking = () => {
     });
   };
 
+  const handleButtonClick = (status, index) => {
+    setEditedData((prevState) => {
+      const updatedData = [...prevState];
+      if (status === "Full") {
+        updatedData[index] = {
+          ...updatedData[index],
+          depositwithdraw: filteredData[index]?.totalBalance || "",
+          highlightFull: true, 
+        };
+      } else {
+        updatedData[index] = {
+          ...updatedData[index],
+          depositwithdrawStatus: status,
+          highlightFull: status === "W" ? true : updatedData[index]?.highlightFull,
+        };
+      }
+      
+      return updatedData;
+    });
+  };
+  
+   
+  
+  const handleSubmitPaymentFunction = (data) => {
+    if (!password) {
+      toast.error("Please enter the password.");
+      return;
+    }
+  
+    if (!data.userId || !data.depositwithdraw || !data.depositwithdrawStatus) {
+      toast.error("Invalid data. Ensure all fields are filled correctly.");
+      return;
+    }
+  
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      toast.error("Token not found. Please log in again.");
+      return;
+    }
+  
+    const user = downlineData.find((item) => item._id === data.userId);
+    if (data.depositwithdrawStatus === "W" && user.totalBalance < Number(data.depositwithdraw)) {
+      toast.error("Insufficient balance. Withdrawal amount exceeds total balance.");
+      return;
+    }
+  
+    performTransaction(
+      data.depositwithdrawStatus,
+      {
+        userId: data.userId,
+        amount: Number(data.depositwithdraw),
+        password: data.password,
+        description: data.remark,
+      },
+      token
+    )
+      .then(() => {
+        toast.success(`Transaction was successful.`);
+  
+        // Update local edited data state
+        setEditedData((prevState) => {
+          const updatedData = [...prevState];
+          updatedData[selectedRowIndex] = {
+            ...updatedData[selectedRowIndex],
+            depositwithdraw: "",
+            remark: "",
+            depositwithdrawStatus: "",
+            highlightFull: false,
+          };
+          return updatedData;
+        });
+  
+        // Update the global downline data
+        const updatedDownlineData = downlineData.map((item) =>
+          item._id === data.userId
+            ? {
+                ...item,
+                totalBalance:
+                  data.depositwithdrawStatus === "D"
+                    ? item.totalBalance + Number(data.depositwithdraw)
+                    : item.totalBalance - Number(data.depositwithdraw),
+                depositwithdraw: "",
+              }
+            : item
+        );
+  
+        dispatch(setDownlineData(updatedDownlineData)); // Automatically update Redux store
+      })
+      .catch((error) => {
+        toast.error(error.message || `Error processing transaction for ${data.userId}.`);
+      });
+  };
+  
+const handleSubmitPaymentForRow = () => {
+  if (selectedRowIndex === null) {
+    toast.error("No row selected for payment.");
+    return;
+  }
+
+  const item = filteredData[selectedRowIndex];
+  const currentData = {
+    userId: item._id,
+    depositwithdraw: editedData[selectedRowIndex]?.depositwithdraw || item.depositwithdraw,
+    depositwithdrawStatus: editedData[selectedRowIndex]?.depositwithdrawStatus,
+    remark: editedData[selectedRowIndex]?.remark || item.remark || "",
+    password
+  };
+
+  console.log("Submit Payment Data:", currentData);  // Debugging log
+
+  handleSubmitPaymentFunction(currentData);
+};
+
+  
   const handleModalClose = () => {
     setIsModalOpen(false);
     setSelectedUser(null);
@@ -130,6 +246,7 @@ const Banking = () => {
 
         if (result && result.data) {
           dispatch(setDownlineData(result.data));
+           console.log("Fetched downline data:", result.data); 
           setTotalUsers(result.pagination?.totalUsers || 0);
         }
       } catch (err) {
@@ -208,7 +325,7 @@ const Banking = () => {
     }
   }, [dispatch, roleId, currentPage, entriesToShow]);
 
-  // const totalUsers = filteredData.length
+  
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
   const handlePageChange = (direction) => {
@@ -272,130 +389,124 @@ const Banking = () => {
               >
                 <div className="flex justify-between items-center">
                   {label}
-                  <div className="flex flex-col items-center ml-2">
-                    <FaSortUp
-                      className={`${
-                        sortConfig.key === key &&
-                        sortConfig.direction === "ascending"
-                          ? "text-black"
-                          : "text-gray-400"
-                      }`}
-                    />
-                    <FaSortDown
-                      className={`${
-                        sortConfig.key === key &&
-                        sortConfig.direction === "descending"
-                          ? "text-black"
-                          : "text-gray-400"
-                      }`}
-                    />
-                  </div>
+                 <div className="flex flex-col items-center ml-2">
+                                      <FaSortUp
+                                        className={`${
+                                          sortConfig.key === key &&
+                                          sortConfig.direction === "ascending"
+                                            ? "text-black"
+                                            : "text-gray-400"
+                                        }`}
+                                        style={{
+                                          marginBottom: "-6px",
+                                        }} 
+                                      />
+                                      <FaSortDown
+                                        className={`${
+                                          sortConfig.key === key &&
+                                          sortConfig.direction === "descending"
+                                            ? "text-black"
+                                            : "text-gray-400"
+                                        }`}
+                                        style={{
+                                          marginTop: "-6px",
+                                        }} 
+                                      />
+                                    </div>
                 </div>
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {sortedData.map((item, index) => (
-            <tr key={index} className="border border-gray-400 bg-white">
-              <td className="px-4 py-2 text-sm">
-                <span className="text-black font-semibold">
-                  {item.username}
-                </span>
-              </td>
-              <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
-              </td>
-              <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
-              </td>
-              <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                {new Intl.NumberFormat("en-IN").format(item.exposure)}
-              </td>
-              <td className="border border-gray-400 px-4 py-2 text-md text-blue font-semibold">
-                {new Intl.NumberFormat("en-IN").format(item.creditReference)}
-                <div className="ml-2 inline-flex space-x-2">
-                  <FaEdit
-                    className="text-blue cursor-pointer"
-                    onClick={() => handleEditClick(item)}
-                  />
-                </div>
-              </td>
-              <td
-                className={`border border-gray-400 px-4 py-2 text-sm font-semibold ${
-                  item.profit_loss < 0 ? "text-red-500" : ""
-                }`}
-              >
-                {item.profit_loss < 0
-                  ? `(-${new Intl.NumberFormat("en-IN").format(
-                      Math.abs(item.profit_loss)
-                    )})`
-                  : new Intl.NumberFormat("en-IN").format(item.profit_loss)}
-              </td>
+  {sortedData.map((item, index) => (
+ <tr
+ key={item._id}
+ className="border border-gray-400 bg-white"
+ onClick={() => handleRowClick(index)}
+>
+      <td className="px-4 py-2 text-sm">
+        <span className="text-black font-semibold">{item.username}</span>
+      </td>
+      <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+        {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
+      </td>
+      <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+        {new Intl.NumberFormat("en-IN").format(item.totalBalance)}
+      </td>
+      <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
+        {/* {new Intl.NumberFormat("en-IN").format(item.exposure)} */}{'(0)'}
+      </td>
+      <td className=" px-4 py-2 text-md text-blue font-semibold flex items-center">
+  {new Intl.NumberFormat("en-IN").format(item.creditReference)}
+  <FaEdit className="text-blue cursor-pointer ml-2" onClick={() => handleEditClick(item)} />
+</td>
 
-              <td className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-                <div className="flex items-center space-x-2">
-                  {/* D Button */}
-                  <button
-                    onClick={() => handleButtonClick("D", index)}
-                    className={`px-3 py-1 text-sm font-medium rounded-md ${
-                      editedData[index]?.depositwithdrawStatus === "D"
-                        ? "bg-green-600 text-white"
-                        : "bg-gray-400 text-white"
-                    }`}
-                  >
-                    D
-                  </button>
 
-                  {/* W Button */}
-                  <button
-                    onClick={() => handleButtonClick("W", index)}
-                    className={`px-3 py-1 text-sm font-medium rounded-md ${
-                      editedData[index]?.depositwithdrawStatus === "W"
-                        ? "bg-red-600 text-white"
-                        : "bg-gray-400 text-white"
-                    }`}
-                  >
-                    W
-                  </button>
+      <td className="border border-gray-400 px-4 py-2 text-sm font-bold">{new Intl.NumberFormat("en-IN").format(item.profit_loss)} </td>
+      <td className="border border-gray-400 px-4 py-2 text-md">
+       
+        <div className="flex items-center space-x-2">
+ 
 
-                  <input
-                    type="text"
-                    value={
-                      editedData[index]?.depositwithdraw || item.depositwithdraw
-                    }
-                    onChange={(e) =>
-                      handleInputChange(e, "depositwithdraw", index)
-                    }
-                    className="border border-gray-300 px-2 py-1 text-sm ml-2"
-                  />
+<button
+  onClick={() => handleButtonClick("D", index)}
+  className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
+    editedData[index]?.depositwithdrawStatus === "D"
+      ? "bg-green-600 text-white"
+      : "bg-gray-400 text-white"
+  } border border-black`}
+>
+  D
+</button>
 
-                  {/* Full Button */}
-                  <button
-                    onClick={() => handleButtonClick("Full", index)}
-                    className={`px-3 py-1 text-sm font-medium rounded-md ${
-                      editedData[index]?.depositwithdrawStatus === "Full"
-                        ? "bg-gradient-seablue text-white"
-                        : "bg-gray-400 text-white"
-                    }`}
-                  >
-                    Full
-                  </button>
-                </div>
-              </td>
+<button
+  onClick={() => handleButtonClick("W", index)}
+  className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
+    editedData[index]?.depositwithdrawStatus === "W" || editedData[index]?.highlightFull
+      ? "bg-red-600 text-white"
+      : "bg-gray-400 text-white"
+  } border border-black`}
+>
+  W
+</button>
 
-              <td className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-                <input
-                  type="text"
-                  value={editedData[index]?.remark || item.remark}
-                  placeholder="Remark"
-                  onChange={(e) => handleInputChange(e, "remark", index)}
-                  className="border border-gray-300 px-2 py-1 text-sm"
-                />
-              </td>
-            </tr>
-          ))}
-        </tbody>
+<input
+  type="text"
+  value={editedData[index]?.depositwithdraw || item.depositwithdraw || ""}
+  onChange={(e) => handleInputChange(e, "depositwithdraw", index)}
+  className="border border-gray-300 px-2 py-1 text-sm"
+/>
+
+<button
+  onClick={() => handleButtonClick("Full", index)}
+  className={`px-3 py-1 text-sm font-medium rounded-md ${
+    editedData[index]?.highlightFull ? "bg-gradient-blue text-white" : "bg-gray-400 text-white"
+  } border border-black`}
+>
+  Full
+</button>
+
+</div>
+
+      </td>
+      
+      <td className="border border-gray-400 px-4 py-2 text-md">
+      <input
+  type="text"
+  value={editedData[index]?.remark || ""}
+  onChange={(e) => handleInputChange(e, "remark", index)}
+  placeholder="Remark"
+  className="border border-gray-300 px-2 py-1 text-sm"
+/>
+        
+      </td>
+      
+    </tr>
+  ))}
+</tbody>
+
+
       </table>
       <div className="flex justify-between items-center mt-4">
         <div className="text-sm text-gray-600">
@@ -434,21 +545,27 @@ const Banking = () => {
           </button>
         </div>
       </div>
+     
+<div className="flex items-center mt-4 space-x-4 w-full flex-wrap">
+  <button  onClick={handleClearAll} className="px-8 py-1 bg-lightred text-white font-bold text-md rounded-md w-72">
+    Clear All
+  </button>
+  <input
+  type="password"
+  value={password}
+  onChange={(e) => setPassword(e.target.value)}
+  placeholder="Enter password"
+  className="border border-gray-300 px-2 py-1 text-sm"
+/>
+<button
+  onClick={() => handleSubmitPaymentForRow()}
+  className="px-3 py-1 bg-gradient-seablue text-white text-sm font-medium rounded-md"
+>
+  Submit Payment
+</button>
 
-      <div className="flex items-center mt-4 space-x-4 w-full flex-wrap">
-        <button className="px-8 py-1 bg-lightred text-white font-bold text-md rounded-md w-72">
-          Clear All
-        </button>
-        <input
-          type="password"
-          placeholder="Password"
-          className="border border-gray-300 px-4 py-1 text-md rounded-md w-72"
-        />
-        <button className="px-8 py-1 bg-gradient-seablue text-white text-md rounded-md w-72 mt-2 sm:mt-0 sm:w-auto">
-          Submit Payment
-        </button>
-      </div>
-      {isModalOpen && selectedUser && (
+</div>
+{isModalOpen && selectedUser && (
         <>
           <CreditEditReferenceModal
             isOpen={isModalOpen}
@@ -468,3 +585,5 @@ const Banking = () => {
 };
 
 export default Banking;
+
+

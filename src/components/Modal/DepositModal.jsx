@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {
   fetchDownlineData,
-  performTransaction,
+  performTransactionDownline,
 } from "../../Services/DownlineListApi";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
@@ -58,7 +58,8 @@ const DepositModal = ({
         description: remark,
       };
 
-      const response = await performTransaction(type, requestData, token);
+      const response = await performTransactionDownline(type, requestData, token);
+      console.log("response",response);
 
       if (response.success) {
         toast.success(response.message || "Transaction Successful");
@@ -113,9 +114,6 @@ const DepositModal = ({
       }
     } catch (err) {
       console.error("Error processing transaction:", err);
-      toast.error(
-        err.message || "An error occurred while processing the transaction."
-      );
     } finally {
       setLoading(false);
     }
@@ -172,7 +170,7 @@ const DepositModal = ({
                     setAmount(Number(value));
                   }
                 }}
-                placeholder="Enter Amount"
+                // placeholder="Enter Amount"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -186,7 +184,7 @@ const DepositModal = ({
                 type="text"
                 value={remark}
                 onChange={(e) => setRemark(e.target.value)}
-                placeholder="Enter Remark"
+                // placeholder="Enter Remark"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -200,7 +198,7 @@ const DepositModal = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              placeholder="Enter your password"
+              // placeholder="Enter your password"
             />
           </div>
 

@@ -4,6 +4,7 @@ import {
   setDataSource,
   setFromDate,
   setToDate,
+
   selectAccountStatementFilter,
 } from "../../Store/Slice/accountStatementFilterSlice";
 import { getAccountStatementData } from "../../Services/Downlinelistapi";
@@ -83,6 +84,20 @@ const AccountStatementFilter = ({
       setIsDataFetched(false);
     }
   };
+  const formatDateTime = (date) => {
+    const formattedDate = new Date(date).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+    const formattedTime = new Date(date).toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+
+    return `${formattedDate} ${formattedTime}`;
+  };
 
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
@@ -90,16 +105,16 @@ const AccountStatementFilter = ({
         <label className="text-sm font-medium text-black mb-2">
           Data Source
         </label>
-        <select
-          value={dataSource}
-          onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-10 py-2 "
-        >
-          <option value="">Data Source</option>
-          <option value="live">LIVE DATA</option>
-          <option value="backup">BACKUP DATA</option>
-          <option value="old">OLD DATA</option>
-        </select>
+       <select
+                value={dataSource}
+                onChange={(e) => dispatch(setDataSource(e.target.value))}
+                className="border rounded px-10 py-2 "
+              >
+                <option value="">Data Source</option>
+                <option value="live">LIVE DATA</option>
+                <option value="backup">BACKUP DATA</option>
+                <option value="old">OLD DATA</option>
+              </select>
       </div>
 
       <div className="flex flex-col items-start">
