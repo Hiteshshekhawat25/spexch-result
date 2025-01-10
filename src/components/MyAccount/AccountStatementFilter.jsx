@@ -4,7 +4,7 @@ import {
   setDataSource,
   setFromDate,
   setToDate,
-  
+
   selectAccountStatementFilter,
 } from "../../Store/Slice/accountStatementFilterSlice";
 import { getAccountStatementData } from "../../Services/Downlinelistapi";
@@ -105,16 +105,16 @@ const AccountStatementFilter = ({
         <label className="text-sm font-medium text-black mb-2">
           Data Source
         </label>
-        <select
-          value={dataSource}
-          onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-10 py-2 "
-        >
-          <option value="">Data Source</option>
-          <option value="live">LIVE DATA</option>
-          <option value="backup">BACKUP DATA</option>
-          <option value="old">OLD DATA</option>
-        </select>
+       <select
+                value={dataSource}
+                onChange={(e) => dispatch(setDataSource(e.target.value))}
+                className="border rounded px-10 py-2 "
+              >
+                <option value="">Data Source</option>
+                <option value="live">LIVE DATA</option>
+                <option value="backup">BACKUP DATA</option>
+                <option value="old">OLD DATA</option>
+              </select>
       </div>
 
       <div className="flex flex-col items-start">
