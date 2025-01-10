@@ -1,23 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
-import { getUserData } from "../../Services/Downlinelistapi"; // Import the API function
+import { getUserData } from "../../Services/Downlinelistapi";
 
-const UserHierarchyModal = ({ userId, childname, closeModal }) => {
+const UserHierarchyModal = ({ userId, username, closeModal }) => {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log(userId);
-    console.log(childname);
     if (!userId) return;
     const fetchUserData = async () => {
       try {
         setLoading(true);
         const response = await getUserData(`user/get-user/${userId}`);
-                 
         setUserData(response.data.data);
-     
         setLoading(false);
       } catch (error) {
         setError(error.message);
@@ -29,23 +25,33 @@ const UserHierarchyModal = ({ userId, childname, closeModal }) => {
   }, [userId]);
 
   return (
-    <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg w-96 max-h-full overflow-auto">
-        <div className="flex justify-between items-center mb-4">
-          <h1 className="text-xl font-semibold bg-blue text-white py-2 px-4 rounded">
-            {childname} 
-          </h1>
-          <button onClick={closeModal} className="text-xl text-gray-500 hover:text-gray-800">
+    <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
+      <div className="bg-white rounded-lg w-[300px] mt-20">
+        {/* Header */}
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-2">
+          <span>Parent List</span>
+          <button onClick={closeModal} className="text-xl text-white hover:text-gray-800">
             <FaTimes />
           </button>
         </div>
 
+        {/* Content */}
         {!loading && !error && userData && (
-          <div className="space-y-4">
-            <p>Username: {userData.username}</p>
-            {/* You can add more details about the user here */}
+          <div className="p-4">
+            <table className="w-full border border-collapse border-gray-200">
+              <tbody>
+                <tr className="border-b border-cream-200">
+                                    <td className="text-gray-700 p-2">{userData.username}</td>
+                </tr>
+             
+              </tbody>
+            </table>
           </div>
         )}
+
+        {/* Loading/Error Messages */}
+        {loading && <p className="p-4 text-center text-gray-500">Loading...</p>}
+        {error && <p className="p-4 text-center text-red-500">{error}</p>}
       </div>
     </div>
   );
@@ -53,64 +59,6 @@ const UserHierarchyModal = ({ userId, childname, closeModal }) => {
 
 export default UserHierarchyModal;
 
-// import React, { useState, useEffect } from "react";
-// import { FaTimes } from "react-icons/fa";
-// import { getUserData } from "../../Services/Downlinelistapi"; // Import the API function
 
-// const UserHierarchyModal = ({ userId, childname, closeModal }) => {
-//   const [userData, setUserData] = useState(null);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState(null);
 
-//   useEffect(() => {
-//     console.log(userId)
-//     console.log(childname)
-//     if (!userId) return; 
-//     const fetchUserData = async () => {
-//       try {
-//         setLoading(true); 
-//         const response = await getUserData(`user/get-user/${userId}`);
-                 
-//         setUserData(response.data.data); 
-     
-//         setLoading(false); 
-//       } catch (error) {
-//         setError(error.message); 
-//         setLoading(false); 
-//       }
-//     };
-
-//     fetchUserData(); 
-//   }, [userId]); 
-
-//   return (
-//     <div className="fixed inset-0 bg-gray-800 bg-opacity-50 flex justify-center items-center z-50">
-//       <div className="bg-white p-6 rounded-lg w-96 max-h-full overflow-auto">
-//         <div className="flex justify-between items-center mb-4">
-//           <h1 className="text-xl font-semibold">
-//             {loading
-//               ? "Loading..."
-//               : error
-//               ? `Error: ${error}`
-//               : `User Hierarchy for ${userData?.username || "Unknown"}`}
-//           </h1>
-//           <button onClick={closeModal} className="text-xl text-gray-500 hover:text-gray-800">
-//             <FaTimes />
-//           </button>
-//         </div>
-
-      
-//         {!loading && !error && userData && (
-//           <div className="space-y-4">
-//             <p> {userData.username}</p>
-            
-           
-//           </div>
-//         )}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default UserHierarchyModal;
 
