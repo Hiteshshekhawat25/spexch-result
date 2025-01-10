@@ -124,24 +124,31 @@ const AccountStatement = () => {
                   >
                     <div className="flex justify-between items-center">
                       <span className="text-center">{label}</span>
-                      <div className="flex flex-col items-center space-y-0.5 ml-2">
-                        <FaSortUp
-                          className={`text-sm ${
-                            sortConfig.key === key &&
-                            sortConfig.direction === "ascending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                        />
-                        <FaSortDown
-                          className={`text-sm ${
-                            sortConfig.key === key &&
-                            sortConfig.direction === "descending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                        />
-                      </div>
+                      
+                      <div className="flex flex-col items-center ml-2">
+                      <FaSortUp
+                        className={`${
+                          sortConfig.key === key &&
+                          sortConfig.direction === "ascending"
+                            ? "text-black"
+                            : "text-gray-400"
+                        }`}
+                        style={{
+                          marginBottom: "-6px",
+                        }} 
+                      />
+                      <FaSortDown
+                        className={`${
+                          sortConfig.key === key &&
+                          sortConfig.direction === "descending"
+                            ? "text-black"
+                            : "text-gray-400"
+                        }`}
+                        style={{
+                          marginTop: "-6px",
+                        }} 
+                      />
+                    </div>
                     </div>
                   </th>
                 ))}

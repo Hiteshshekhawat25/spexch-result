@@ -10,15 +10,15 @@ import BetListFilter from "./BetListFilter";
 
 const BetList = () => {
   const dispatch = useDispatch();
-  const data = useSelector(selectBetListData); // Data fetched from Redux store
+  const data = useSelector(selectBetListData); 
   const loading = useSelector(selectBetListLoading);
   const error = useSelector(selectBetListError);
-  const filters = useSelector(selectBetListFilter); // Access filters from Redux
+  const filters = useSelector(selectBetListFilter); 
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
-  const [betlistData, setBetlistData] = useState([]); // Initialize betlistData with empty array
+  const [betlistData, setBetlistData] = useState([]); 
   const [totalBets, setTotalBets] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -31,7 +31,7 @@ const BetList = () => {
     direction: "ascending",
   });
 
-  // Handle BetListFilter data update
+  
   const handleBetlistUpdate = (newData) => {
     setBetlistData(newData);
   };
@@ -42,19 +42,19 @@ const BetList = () => {
   };
 
   useEffect(() => {
-    // Set betlist data whenever Redux data or filters change
+    
     setBetlistData(data);
-    setCurrentPage(1); // Reset page when data or filters change
+    setCurrentPage(1); 
   }, [data, filters]);
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
-    setCurrentPage(1); // Reset to first page on search change
+    setCurrentPage(1); 
   };
 
   const handleEntriesChange = (e) => {
     setEntriesToShow(Number(e.target.value));
-    setCurrentPage(1); // Reset to first page on entries change
+    setCurrentPage(1); 
   };
 
   const handlePageChange = (direction) => {
@@ -71,8 +71,7 @@ const BetList = () => {
     currentPage * entriesToShow
   );
   
-  console.log("Paginated Data:", paginatedData); // Log the paginated data
-  
+  console.log("Paginated Data:", paginatedData);   
 const handleFilterChange = (data) => {
     setTotalBets(data.pagination.totalTransactions || 0);
     setTotalPages(data.pagination.totalPages || 1);
@@ -96,11 +95,11 @@ const handleFilterChange = (data) => {
   });
 
   useEffect(() => {
-    // Handle actions when currentPage changes
+ 
   }, [currentPage]);
 
   
-  console.log("Sorted Data:", sortedData); // Log sorted data
+  console.log("Sorted Data:", sortedData); 
   
   console.log("Current Page:", currentPage);
   console.log("Entries to Show:", entriesToShow);
@@ -152,7 +151,7 @@ const handleFilterChange = (data) => {
           </div>
         </div>
 
-        {/* Table */}
+       
         {loading ? (
           <div>Loading...</div>
         ) : error ? (
@@ -203,22 +202,31 @@ const handleFilterChange = (data) => {
                             ? "Settle Time" 
                             : key}
                         </span>
-                        <div className="flex flex-col items-center space-y-0.5 ml-2">
-                          <FaSortUp
-                            className={`text-sm ${
-                              sortConfig.key === key && sortConfig.direction === "ascending"
-                                ? "text-black"
-                                : "text-gray-400"
-                            }`}
-                          />
-                          <FaSortDown
-                            className={`text-sm ${
-                              sortConfig.key === key && sortConfig.direction === "descending"
-                                ? "text-black"
-                                : "text-gray-400"
-                            }`}
-                          />
-                        </div>
+                       
+                        <div className="flex flex-col items-center ml-2">
+                                              <FaSortUp
+                                                className={`${
+                                                  sortConfig.key === key &&
+                                                  sortConfig.direction === "ascending"
+                                                    ? "text-black"
+                                                    : "text-gray-400"
+                                                }`}
+                                                style={{
+                                                  marginBottom: "-6px",
+                                                }} 
+                                              />
+                                              <FaSortDown
+                                                className={`${
+                                                  sortConfig.key === key &&
+                                                  sortConfig.direction === "descending"
+                                                    ? "text-black"
+                                                    : "text-gray-400"
+                                                }`}
+                                                style={{
+                                                  marginTop: "-6px",
+                                                }} 
+                                              />
+                                            </div>
                       </div>
                     </th>
                   ))}
@@ -229,18 +237,21 @@ const handleFilterChange = (data) => {
                 {sortedData.length > 0 ? (
                   sortedData.map((item, index) => (
                     <tr key={index}>
-                      <td
+                     
+<td
   onClick={() => {
+    console.log("Clicked Item:", item); // Log the entire item object
     console.log("Selected User ID:", item.createdBy); 
+    console.log("Selected User Name:", item.username); 
     setSelectedUserId(item.createdBy);
     setSelectedUsername(item.username);
-    console.log("Selected User Name:", item.username); 
-    setIsModalOpen(true); 
+    setIsModalOpen(true);
   }}
   className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
 >
   {item.username}
 </td>
+
 
                       <td className="border border-gray-400 px-4 py-3">{item.sport}</td>
                       <td className="border border-gray-400 px-4 py-3">{item.event}</td>
