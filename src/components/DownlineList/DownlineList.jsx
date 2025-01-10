@@ -412,30 +412,29 @@ const DownlineList = () => {
             <label className="ml-2 text-sm font-medium">entries</label>
           </div>
           <div className="flex items-center space-x-6">
-          <div className="rounded-md w-28 px-3">
-  <select
-    value={selectedFilter}
-    onChange={handleFilterChange}
-    className="border rounded py-1 px-2 text-sm w-full bg-gray-200 text-black border-gray-400"
-  >
-    <option value="">Status</option>
-    <option value="active">Active</option>
-    <option value="suspended">Suspended</option>
-    <option value="locked">Locked</option>
-  </select>
-</div>
+            <div className="rounded-md w-28 px-3">
+              <select
+                value={selectedFilter}
+                onChange={handleFilterChange}
+                className="border rounded py-1 px-2 text-sm w-full bg-gray-200 text-black border-gray-400"
+              >
+                <option value="">Status</option>
+                <option value="active">Active</option>
+                <option value="suspended">Suspended</option>
+                <option value="locked">Locked</option>
+              </select>
+            </div>
 
-  <label className="text-sm">Search:</label>
-  <div className="rounded-md w-28">
-    <input
-      type="text"
-      value={searchTerm}
-      onChange={handleSearchChange}
-      className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
-    />
-  </div>
-</div>
-
+            <label className="text-sm">Search:</label>
+            <div className="rounded-md w-28">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
+              />
+            </div>
+          </div>
         </div>
         <table className="w-full table-auto border-collapse border border-gray-300">
           <thead className="border border-gray-300">
