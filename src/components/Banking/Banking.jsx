@@ -32,6 +32,8 @@ const Banking = () => {
       const [password, setPassword] = useState("");
       const [selectedRowIndex, setSelectedRowIndex] = useState(null);
 
+const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   const columns = [
@@ -110,8 +112,13 @@ const Banking = () => {
       return;
     }
   
-    if (!data.userId || !data.depositwithdraw || !data.depositwithdrawStatus) {
+    if (!data.userId ) {
       toast.error("Invalid data. Ensure all fields are filled correctly.");
+      return;
+    }
+
+    if (!data.depositwithdraw || !data.depositwithdrawStatus) {
+      toast.error("Amount is Mandatory");
       return;
     }
   
@@ -178,7 +185,11 @@ const handleSubmitPaymentForRow = () => {
   if (selectedRowIndex === null) {
     toast.error("No row selected for payment.");
     return;
+
+   
   }
+  setIsSubmitClicked(true); 
+  setTimeout(() => setIsSubmitClicked(false), 300);
 
   const item = filteredData[selectedRowIndex];
   const currentData = {
@@ -559,10 +570,13 @@ const handleSubmitPaymentForRow = () => {
 />
 <button
   onClick={() => handleSubmitPaymentForRow()}
-  className="px-3 py-1 bg-gradient-seablue text-white text-sm font-medium rounded-md"
+  className={`px-3 py-1 ${
+    isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
+  } text-white text-sm font-medium rounded-md`}
 >
   Submit Payment
 </button>
+
 
 </div>
 {isModalOpen && selectedUser && (
