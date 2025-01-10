@@ -12,6 +12,8 @@ const MenuHeader = () => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
+  console.log('userDatauserData', userData)
+
   const handleLogout = () => {
     dispatch(clearUserData());
     localStorage.clear();
@@ -50,14 +52,14 @@ const MenuHeader = () => {
     { name: "Commission", link: "#" },
     { name: "Password History", link: "/password-history" },
     { name: "Restore User", link: "#" },
-    {
-      name: "Logout",
-      link: "#",
-      onClick: handleLogout, // Attach logout handler here
-    }, // Logout item
+    // {
+    //   name: "Logout",
+    //   link: "#",
+    //   onClick: handleLogout, // Attach logout handler here
+    // }, // Logout item
   ];
 
-  if (userData && userData.data.role_name === "super-master") {
+  if (userData && userData.data.role_name === "super-admin") {
     menuItems.push(
       {
         name: "Matches",
@@ -66,14 +68,31 @@ const MenuHeader = () => {
           { name: "Create New Match", link: "/CreateNewMatch" },
           { name: "Create Manual Match", link: "/CreateManualMatch" },
           { name: "All Matches", link: "/AllMatches" },
+          { name: "Session Result", link: "/SessionResult" },
+
         ],
       },
       {
         name: "Global Settings",
         link: "/GlobalSettings",
-      }
+      },
+      {
+        name: "Logout",
+        link: "#",
+        onClick: handleLogout, // Attach logout handler here
+      }, // Logout item
     );
+  } else {
+    menuItems?.push(
+      {
+        name: "Logout",
+        link: "#",
+        onClick: handleLogout, // Attach logout handler here
+      }, 
+    )
   }
+
+  
 
   return (
     <div className="bg-gradient-green text-black font-bold px-2">
@@ -121,7 +140,7 @@ const MenuHeader = () => {
                 activeMenu === item.name
                   ? "bg-gradient-blue-hover text-white"
                   : "hover:border-gradient-blue-hover hover:text-white"
-              } ${item.name === "Logout" ? "pl-48" : ""}`}
+              } ${item.name === "Logout" ? "ml-auto" : ""}`}
             >
               {item.name}
               {item.subMenu && (

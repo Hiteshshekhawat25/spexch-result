@@ -275,7 +275,7 @@ console.log("Matches",matches);
                   <div className="flex space-2 flex-col">
                     <div className="min-w-52 mb-1">
                       {match.event?.name}
-                      {match?.inPlay ? <span className='ml-2 text-white bg-red-500 py-0.5 px-3 rounded-full text-xs font-medium'>In Play</span>: ''}
+                      {match?.inPlay ? <span className='ml-2 text-white text-nowrap bg-red-500 py-0.5 px-3 rounded-full text-xs font-medium'>In Play</span>: ''}
                     </div>
                     <div className="flex space-x-2">
                       <MdModeEdit onClick={() => openStakeModal(match)} className="text-white bg-lightblue p-1 rounded-full cursor-pointer size-7" />
