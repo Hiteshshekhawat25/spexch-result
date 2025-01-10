@@ -153,7 +153,35 @@ const DownlineList = () => {
   );
 
   useEffect(() => {
-    if (location.pathname === "/master-downline-list") {
+    // if (location.pathname === "/master-downline-list") {
+    //   const fetchUserRoles = async () => {
+    //     try {
+    //       const token = localStorage.getItem("authToken");
+    //       if (token) {
+    //         const rolesArray = await fetchRoles(token);
+
+    //         if (Array.isArray(rolesArray)) {
+    //           const rolesData = rolesArray.map((role) => ({
+    //             role_name: role.role_name,
+    //             role_id: role._id,
+    //           }));
+
+    //           setRoles(rolesData);
+    //           if (rolesData.length > 0) {
+    //             setRoleId(rolesData[0].role_id);
+    //           }
+    //         } else {
+    //           setError("Roles data is not an array.");
+    //         }
+    //       }
+    //     } catch (error) {
+    //       setError(error.message || "Failed to fetch roles.");
+    //     }
+    //   };
+
+    //   fetchUserRoles();
+    // }
+    if (location.pathname === "/user-downline-list") {
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
@@ -165,9 +193,13 @@ const DownlineList = () => {
                 role_name: role.role_name,
                 role_id: role._id,
               }));
-
               setRoles(rolesData);
-              if (rolesData.length > 0) {
+              const userRole = rolesData.find(
+                (role) => role.role_name === "master" || role.role_name === "agent"
+              );
+              if (userRole) {
+                setRoleId(userRole.role_id);
+              } else if (rolesData.length > 0) {
                 setRoleId(rolesData[0].role_id);
               }
             } else {
