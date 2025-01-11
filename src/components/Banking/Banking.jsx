@@ -4,6 +4,7 @@ import { fetchDownlineData,performTransaction } from "../../Services/Downlinelis
 import { setLoading, setError, setDownlineData } from "../../Store/Slice/downlineSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
 import {
   selectDownlineData,
   selectDownlineLoading,
@@ -362,7 +363,26 @@ const handleSubmitPaymentForRow = () => {
   };
 
   return (
+
     <div className="p-4 border border-gray-200 rounded-md bg-white">
+    {loading ? (
+
+    <div className="flex justify-center items-center h-64">
+      <div className="relative w-48 h-48">
+        
+        <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
+       
+        <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+        
+        <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+          Loading...
+        </div>
+      </div>
+     
+     
+    </div>
+    ) : (
+      <>
       <div className="flex justify-between items-center mb-4">
         <div className="border border-gray-300 p-2 rounded-md">
           <label className="mr-2 text-sm font-medium">Show</label>
@@ -591,10 +611,14 @@ const handleSubmitPaymentForRow = () => {
             userId={selectedUser?._id}
             currentPage={currentPage}
             entriesToShow={entriesToShow}
-          />
+            />
+            </>
+          )}
         </>
       )}
     </div>
+
+      
   );
 };
 
