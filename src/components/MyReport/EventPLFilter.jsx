@@ -6,23 +6,88 @@ import {
   setToDate,
   setFromTime,
   setToTime,
+   resetFilters,
   selectEventPLFilter,
 } from "../../Store/Slice/eventPLFilterSlice";
+import { getProfitLossData } from "../../Services/Downlinelistapi"; // Import your API function
 
-const EventPLFilter = () => {
+const EventPLFilter = ({
+  setPLData,
+  setTotalTransactions,
+  setTotalPages,
+  setIsDataFetched,
+  entriesToShow,
+  currentPage,
+  setCurrentPage,
+}) => {
   const dispatch = useDispatch();
 
-  const { dataSource, fromDate, toDate, fromTime, toTime } =
-    useSelector(selectEventPLFilter) || {};
+  const eventPLFilterState = useSelector((state) => state.eventPLFilter);
+  console.log('Redux State for eventPLFilter:', eventPLFilterState);
 
-  const handleGetPL = () => {
-    console.log("Fetching Event P&L with:", {
-      dataSource,
-      fromDate,
-      fromTime,
-      toDate,
-      toTime,
-    });
+  // Destructure properties from the state
+  const { dataSource, fromDate, toDate, fromTime, toTime } = eventPLFilterState || {};
+
+  // const { dataSource, fromDate, toDate, fromTime, toTime } =
+  //   useSelector(selectEventPLFilter);
+
+  // Reset page to 1 when entriesToShow changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [entriesToShow, setCurrentPage]);
+
+  // Fetch P&L data when filters or pagination change
+  useEffect(() => {
+    if (fromDate && toDate) {
+      console.log("Fetching P&L data due to filter or page change");
+      handleGetPL();
+    }
+  }, [
+    currentPage,
+    fromDate,
+    toDate,
+    fromTime,
+    toTime,
+    dataSource,
+    entriesToShow,
+  ]);
+
+  const handleGetPL = async () => {
+    try {
+      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
+        fromDate || ""
+      }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
+        toTime || ""
+      }&dataSource=${dataSource || ""}`;
+      console.log("Fetching data with URL:", url);
+
+      const response = await getProfitLossData(url);
+      console.log(response);
+
+      if (response && response.data) {
+        const { pagination, data } = response.data;
+
+        setPLData(data); // Update parent state with fetched data
+        setTotalTransactions(pagination?.totalRecords || 0);
+        setTotalPages(pagination?.totalPages || 1);
+        setIsDataFetched(true); // Mark data as fetched
+      } else {
+        console.error("No data found in response");
+        setIsDataFetched(false);
+      }
+    } catch (error) {
+      console.error("Error fetching P&L data:", error);
+      setIsDataFetched(false);
+    }
+  };
+
+  const handleReset = () => {
+    dispatch(resetFilters());
+    setPLData([]); // Clear parent data on reset
+    setTotalTransactions(0);
+    setTotalPages(1);
+    setIsDataFetched(false);
+    setCurrentPage(1); // Reset to page 1
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -52,11 +117,39 @@ const EventPLFilter = () => {
     }
   }, [dataSource, dispatch, today]);
 
+  const handleTimeChangeWithValidation = (
+    time,
+    type,
+    dispatch,
+    fromTime,
+    toTime
+  ) => {
+    if (type === "fromTime") {
+      if (toTime && time > toTime) {
+        alert("From Time cannot be later than To Time");
+        return;
+      }
+      dispatch(setFromTime(time));
+    } else if (type === "toTime") {
+      if (fromTime && time < fromTime) {
+        alert("To Time cannot be earlier than From Time");
+        return;
+      }
+      dispatch(setToTime(time));
+    }
+  };
+
+  useEffect(() => {
+    // Set default values if not already set
+    if (!fromTime) dispatch(setFromTime("00:00"));
+    if (!toTime) dispatch(setToTime("23:59"));
+  }, [dispatch, fromTime, toTime]);
+
   return (
-    <div className="flex space-x-4 items-center p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
+    <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
       {/* Data Source Dropdown */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">
+        <label className="text-sm font-medium text-black mb-2">
           Data Source
         </label>
         <select
@@ -71,7 +164,7 @@ const EventPLFilter = () => {
         </select>
       </div>
 
-      {/* From Date Input */}
+      {/* Date and Time Filters */}
       <div className="flex flex-col items-start">
         <label className="text-sm font-medium text-black mb-1">From Date</label>
         <input
@@ -82,9 +175,8 @@ const EventPLFilter = () => {
         />
       </div>
 
-      {/* From Time Input */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">Time</label>
+        <label className="text-sm font-medium text-black mb-1">From Time</label>
         <input
           type="time"
           value={fromTime || "00:00"}
@@ -93,7 +185,6 @@ const EventPLFilter = () => {
         />
       </div>
 
-      {/* To Date Input */}
       <div className="flex flex-col items-start">
         <label className="text-sm font-medium text-black mb-1">To Date</label>
         <input
@@ -104,9 +195,8 @@ const EventPLFilter = () => {
         />
       </div>
 
-      {/* To Time Input */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">Time</label>
+        <label className="text-sm font-medium text-black mb-1">To Time</label>
         <input
           type="time"
           value={toTime || "23:59"}
@@ -116,12 +206,18 @@ const EventPLFilter = () => {
       </div>
 
       {/* Buttons */}
-      <div className="flex space-x-2 items-center ml-50% mt-5">
+      <div className="flex space-x-2 items-center ml-auto">
         <button
           onClick={handleGetPL}
           className="px-4 py-2 bg-darkgray text-white rounded-md text-sm"
         >
           Get P & L
+        </button>
+        <button
+          onClick={handleReset}
+          className="px-4 py-2 bg-gradient-blue text-white rounded-md text-sm"
+        >
+          Reset
         </button>
       </div>
     </div>
@@ -129,3 +225,4 @@ const EventPLFilter = () => {
 };
 
 export default EventPLFilter;
+

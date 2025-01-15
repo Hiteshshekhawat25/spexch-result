@@ -7,6 +7,7 @@ import { FaSearch, FaSortUp, FaSortDown } from "react-icons/fa";
 import UserHierarchyModal from "../Modal/UserHierarchyModal";
 
 import BetListFilter from "./BetListFilter";
+import { ClipLoader } from "react-spinners";
 
 const BetList = () => {
   const dispatch = useDispatch();
@@ -30,6 +31,8 @@ const BetList = () => {
     key: "username",
     direction: "ascending",
   });
+
+  
 
   
   const handleBetlistUpdate = (newData) => {
@@ -108,6 +111,20 @@ const handleFilterChange = (data) => {
 
   return (
     <div className="p-4">
+    {loading ? (
+      <div className="flex justify-center items-center h-64">
+        <div className="relative w-48 h-48">
+          <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
+          <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+          <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+            Loading...
+          </div>
+        </div>
+      </div>
+) : (
+  <>
+
+
       <BetListFilter
         setTotalBets={(total) => setTotalBets(total)}
         setTotalPages={(total) => setTotalPages(total)}
@@ -346,10 +363,12 @@ const handleFilterChange = (data) => {
       {isModalOpen && (
         <UserHierarchyModal userId={selectedUserId} username={selectedUsername}  closeModal={closeModal} />
       )}
-    </div>
-  );
-};
 
+  </>
+)}
+</div>
+   );
+  };
 
 export default BetList;
 

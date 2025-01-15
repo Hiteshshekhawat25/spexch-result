@@ -4,6 +4,7 @@ import { fetchDownlineData,performTransaction } from "../../Services/Downlinelis
 import { setLoading, setError, setDownlineData } from "../../Store/Slice/downlineSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
 import {
   selectDownlineData,
   selectDownlineLoading,
@@ -31,6 +32,8 @@ const Banking = () => {
       const { startFetchData } = useSelector((state) => state.downline);
       const [password, setPassword] = useState("");
       const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+
+const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
@@ -110,8 +113,13 @@ const Banking = () => {
       return;
     }
   
-    if (!data.userId || !data.depositwithdraw || !data.depositwithdrawStatus) {
+    if (!data.userId ) {
       toast.error("Invalid data. Ensure all fields are filled correctly.");
+      return;
+    }
+
+    if (!data.depositwithdraw || !data.depositwithdrawStatus) {
+      toast.error("Amount is Mandatory");
       return;
     }
   
@@ -178,7 +186,11 @@ const handleSubmitPaymentForRow = () => {
   if (selectedRowIndex === null) {
     toast.error("No row selected for payment.");
     return;
+
+   
   }
+  setIsSubmitClicked(true); 
+  setTimeout(() => setIsSubmitClicked(false), 300);
 
   const item = filteredData[selectedRowIndex];
   const currentData = {
@@ -351,7 +363,26 @@ const handleSubmitPaymentForRow = () => {
   };
 
   return (
+
     <div className="p-4 border border-gray-200 rounded-md bg-white">
+    {loading ? (
+
+    <div className="flex justify-center items-center h-64">
+      <div className="relative w-48 h-48">
+        
+        <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
+       
+        <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+        
+        <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+          Loading...
+        </div>
+      </div>
+     
+     
+    </div>
+    ) : (
+      <>
       <div className="flex justify-between items-center mb-4">
         <div className="border border-gray-300 p-2 rounded-md">
           <label className="mr-2 text-sm font-medium">Show</label>
@@ -559,10 +590,13 @@ const handleSubmitPaymentForRow = () => {
 />
 <button
   onClick={() => handleSubmitPaymentForRow()}
-  className="px-3 py-1 bg-gradient-seablue text-white text-sm font-medium rounded-md"
+  className={`px-3 py-1 ${
+    isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
+  } text-white text-sm font-medium rounded-md`}
 >
   Submit Payment
 </button>
+
 
 </div>
 {isModalOpen && selectedUser && (
@@ -577,10 +611,14 @@ const handleSubmitPaymentForRow = () => {
             userId={selectedUser?._id}
             currentPage={currentPage}
             entriesToShow={entriesToShow}
-          />
+            />
+            </>
+          )}
         </>
       )}
     </div>
+
+      
   );
 };
 
