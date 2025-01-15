@@ -8,21 +8,20 @@ const MyAccount = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // Optionally, perform any setup or fetch actions here
+    
   }, []);
 
 
   useEffect(() => {
     if (loading) {
-      // Simulate loading time (1 second) before switching the page
-      const timer = setTimeout(() => {
-        setLoading(false); // Set loading to false after the simulated delay
-      }, 300); // Adjust this delay based on your actual content load time
 
-      // Clean up the timer on component unmount or when the loading state changes
+      const timer = setTimeout(() => {
+        setLoading(false); 
+      }, 300); 
+      
       return () => clearTimeout(timer);
     }
-  }, [loading]); // This effect runs every time the `loading` state changes
+  }, [loading]); 
 
   const handleSelection = (page) => {
     setLoading(true);
