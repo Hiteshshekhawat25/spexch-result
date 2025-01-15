@@ -101,15 +101,7 @@ const handleFilterChange = (data) => {
  
   }, [currentPage]);
 
-  
-  console.log("Sorted Data:", sortedData); 
-  
-  console.log("Current Page:", currentPage);
-  console.log("Entries to Show:", entriesToShow);
-  console.log("Total Bets:", totalBets);
-  console.log("Total Pages:", totalPages);
-
-  return (
+   return (
     <div className="p-4">
     {loading ? (
       <div className="flex justify-center items-center h-64">

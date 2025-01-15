@@ -28,7 +28,11 @@ const eventProfitLossSlice = createSlice({
 
     // Action to set the event loading state
     setEventLoading: (state) => {
-      state.status = "loading";
+      state.status = "loading"; // Correct status value for loading state
+    },
+
+    setStatus: (state, action) => {
+      state.status = action.payload; 
     },
 
     // Action to set the event error state
