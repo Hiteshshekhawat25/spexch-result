@@ -6,6 +6,7 @@ import { deleteData, fetchDownlineData } from "../../Services/Downlinelistapi";
 import { setDownlineData } from "../../Store/Slice/downlineSlice";
 import { toast } from "react-toastify";
 import { fetchRoles } from "../../Utils/LoginApi";
+import { ClipLoader } from "react-spinners";
 const DeleteConfirmationModal = ({
   isOpen,
   onClose,
@@ -28,7 +29,6 @@ const DeleteConfirmationModal = ({
       await deleteData(`user/delete-user/${userId}`);
       toast.success("User deleted successfully.");
 
-      // Fetch roles
       const token = localStorage.getItem("authToken");
       if (!token) {
         throw new Error("Authentication token not found. Please log in again.");
@@ -110,7 +110,11 @@ const DeleteConfirmationModal = ({
           <p className="text-md text-gray-700 text-center">
             Are you sure you want to delete?
           </p>
-          {loading && <p className="text-blue-500 text-sm mt-2">Deleting...</p>}
+          {loading && (
+            <p className="text-blue-500 text-sm mt-2">
+              <ClipLoader />
+            </p>
+          )}
           {errorMessage && (
             <p className="text-blue text-sm mt-2">{errorMessage}</p>
           )}

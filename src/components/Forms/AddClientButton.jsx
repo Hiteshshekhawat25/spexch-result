@@ -4,16 +4,15 @@ import { RiResetLeftLine } from "react-icons/ri";
 import { useLocation } from "react-router-dom";
 import { AddClientForm } from "../../components/Forms/AddClientForm";
 import { AddMasterForm } from "./AddMasterForm";
+import { FaUserPlus } from "react-icons/fa";
 
 const AddClientButton = () => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // Local state for dialog visibility
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const location = useLocation();
   const modalRef = useRef(null);
 
-  // Function to handle opening the dialog
   const handleOpenDialog = () => setIsDialogOpen(true);
 
-  // Function to handle closing the dialog
   const handleCloseDialog = () => setIsDialogOpen(false);
 
   useEffect(() => {
@@ -23,17 +22,14 @@ const AddClientButton = () => {
       document.body.classList.remove("overflow-hidden");
     }
 
-    // Close modal if click occurs outside the modal
     const handleClickOutside = (event) => {
       if (modalRef.current && !modalRef.current.contains(event.target)) {
         handleCloseDialog();
       }
     };
 
-    // Add event listener to the document to detect clicks outside modal
     document.addEventListener("mousedown", handleClickOutside);
 
-    // Cleanup the event listener on unmount or when modal state changes
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
@@ -54,17 +50,17 @@ const AddClientButton = () => {
       {location.pathname === "/master-downline-list" ? (
         <button
           onClick={handleOpenDialog}
-          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
+          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"
         >
-          <AiOutlineUserAdd />
+          <FaUserPlus />
           {buttonText}
         </button>
       ) : (
         <button
           onClick={handleOpenDialog}
-          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
+          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"
         >
-          <AiOutlineUserAdd />
+          <FaUserPlus />
           {buttonText}
         </button>
       )}

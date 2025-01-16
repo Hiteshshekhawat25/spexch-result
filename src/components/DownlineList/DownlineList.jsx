@@ -153,34 +153,6 @@ const DownlineList = () => {
   );
 
   useEffect(() => {
-    // if (location.pathname === "/master-downline-list") {
-    //   const fetchUserRoles = async () => {
-    //     try {
-    //       const token = localStorage.getItem("authToken");
-    //       if (token) {
-    //         const rolesArray = await fetchRoles(token);
-
-    //         if (Array.isArray(rolesArray)) {
-    //           const rolesData = rolesArray.map((role) => ({
-    //             role_name: role.role_name,
-    //             role_id: role._id,
-    //           }));
-
-    //           setRoles(rolesData);
-    //           if (rolesData.length > 0) {
-    //             setRoleId(rolesData[0].role_id);
-    //           }
-    //         } else {
-    //           setError("Roles data is not an array.");
-    //         }
-    //       }
-    //     } catch (error) {
-    //       setError(error.message || "Failed to fetch roles.");
-    //     }
-    //   };
-
-    //   fetchUserRoles();
-    // }
     if (location.pathname === "/user-downline-list") {
       const fetchUserRoles = async () => {
         try {
@@ -195,12 +167,14 @@ const DownlineList = () => {
               }));
               setRoles(rolesData);
               const userRole = rolesData.find(
-                (role) => role.role_name === "master" || role.role_name === "agent"
+                (role) =>
+                  role.role_name === "master" || role.role_name === "agent"
               );
               if (userRole) {
                 setRoleId(userRole.role_id);
               } else if (rolesData.length > 0) {
                 setRoleId(rolesData[0].role_id);
+                window.location.reload();
               }
             } else {
               setError("Roles data is not an array.");
@@ -281,7 +255,6 @@ const DownlineList = () => {
   const paginatedData = sortedData;
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
-  // Event handlers
   const handleEntriesChange = (e) => {
     setEntriesToShow(Number(e.target.value));
     setCurrentPage(1);
@@ -320,7 +293,6 @@ const DownlineList = () => {
 
   if (error) {
     console.error("Error fetching user:", error);
-    // Optional: Display the error in the UI
     return (
       <div className="text-red-500 font-bold">An error occurred: {error}</div>
     );
@@ -379,7 +351,6 @@ const DownlineList = () => {
     if (item.role_name === "master") {
       try {
         const data = await fetchallUsers(item._id);
-        // console.log("aaaaaaaaaaaaaaaaaaaaaaaa", data);
         setUserFetchList(data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -388,7 +359,7 @@ const DownlineList = () => {
   };
 
   const fetchUsers = async () => {
-    if (!selectedFilter) return; // Prevent fetching if no filter is selected
+    if (!selectedFilter) return;
     try {
       const fetchedUsers = await fetchUsersByStatus(selectedFilter);
       console.log("fetcheedddddddd", fetchedUsers);
@@ -399,60 +370,41 @@ const DownlineList = () => {
     }
   };
 
-  // Handle dropdown change
   const handleFilterChange = (e) => {
     setSelectedFilter(e.target.value);
   };
 
-  // Fetch users whenever selectedFilter changes
   useEffect(() => {
     fetchUsers();
   }, [selectedFilter]);
 
   return (
-    <>
-          {loading ? (
-
-<div className="flex justify-center items-center h-64">
-  <div className="relative w-48 h-48">
-    
-    <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
-   
-    <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
-    
-    <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
-      Loading...
-    </div>
-  </div>
- 
- 
-</div>
-) : (
-  <>
+    <div className="container">
       {userFetchList.length ? (
         <>
           <div
-            className="border rounded p-2 mb-3 w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-semibold"
+            className="border rounded p-2 mb-3 w-full sm:w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-semibold"
             onClick={() => setUserFetchList([])}
           >
-            <div className="bg-green-500 text-white px-2 py-1 mr-2  rounded font-semibold text-xs w-14">
+            <div className="bg-green-500 text-white px-2 py-1 mr-2 rounded font-semibold text-xs sm:text-sm w-14">
               Master
             </div>
-            {userFetchList?.[0]?.username}
+            <div className="text-sm sm:text-base">
+              {userFetchList?.[0]?.username}
+            </div>
           </div>
         </>
       ) : (
         ""
       )}
-      <div className="p-4 border border-gray-200 rounded-md bg-white">
-
-        <div className="flex justify-between items-center mb-4">
-          <div className="border border-gray-300 p-2 rounded-md">
+      <div className="p-4 border border-gray-300 rounded-md bg-white">
+        <div className="flex flex-wrap justify-between items-center mb-4 w-full">
+          <div className="flex flex-wrap items-center space-x-2 sm:ml-0 ml-10 w-full sm:w-auto">
             <label className="mr-2 text-sm font-medium">Show</label>
             <select
               value={entriesToShow}
               onChange={handleEntriesChange}
-              className="border border-gray-300 rounded px-2 py-1 text-sm"
+              className="border border-gray-300 rounded px-2 py-1 text-sm sm:w-auto mb-2"
             >
               {[10, 25, 50, 100].map((number) => (
                 <option key={number} value={number}>
@@ -462,8 +414,9 @@ const DownlineList = () => {
             </select>
             <label className="ml-2 text-sm font-medium">entries</label>
           </div>
-          <div className="flex items-center space-x-6">
-            <div className="rounded-md w-28 px-3">
+
+          <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 sm:ml-10 w-full sm:w-auto">
+            <div className="rounded-md w-full sm:w-28 px-3">
               <select
                 value={selectedFilter}
                 onChange={handleFilterChange}
@@ -477,7 +430,7 @@ const DownlineList = () => {
             </div>
 
             <label className="text-sm">Search:</label>
-            <div className="rounded-md w-28">
+            <div className="rounded-md w-full sm:w-28">
               <input
                 type="text"
                 value={searchTerm}
@@ -487,258 +440,270 @@ const DownlineList = () => {
             </div>
           </div>
         </div>
-        <table className="w-full table-auto border-collapse border border-gray-300">
-          <thead className="border border-gray-300">
-            <tr className="bg-gray-300">
-              {[
-                { key: "username", label: "Username" },
-                { key: "creditRef", label: "CreditRef" },
-                ...(isMasterDownlineList
-                  ? [{ key: "partnership", label: "Partnership" }]
-                  : []),
-                { key: "balance", label: "Balance" },
-                { key: "exposures", label: "Exposures" },
-                ...(!isMasterDownlineList
-                  ? [{ key: "exposure", label: "Exposure Limit" }]
-                  : []),
-                { key: "availableBalance", label: "Avail. Bal" },
-                { key: "refPL", label: "Ref. P/L" },
-                ...(!isMasterDownlineList
-                  ? [{ key: "partnership", label: "Partnership" }]
-                  : []),
-                { key: "status", label: "Status" },
-              ].map(({ key, label }) => (
-                <th
-                  key={key}
-                  className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
-                  onClick={() => handleSort(key)}
-                >
-                  <div className="flex justify-between">
-                    <div className="flex items-center">{label}</div>
-                    <div className="flex flex-col items-center ml-2">
-                      <FaSortUp
-                        className={`${
-                          sortConfig.key === key &&
-                          sortConfig.direction === "ascending"
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                        style={{
-                          marginBottom: "-6px",
-                        }} /* Adjust to overlap tightly */
-                      />
-                      <FaSortDown
-                        className={`${
-                          sortConfig.key === key &&
-                          sortConfig.direction === "descending"
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                        style={{
-                          marginTop: "-6px",
-                        }} /* Ensures they touch tightly */
-                      />
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto border-collapse border border-gray-300">
+            <thead className="border border-gray-300">
+              <tr className="bg-gray-300">
+                {[
+                  { key: "username", label: "Username" },
+                  { key: "creditRef", label: "CreditRef" },
+                  ...(isMasterDownlineList
+                    ? [{ key: "partnership", label: "Partnership" }]
+                    : []),
+                  { key: "balance", label: "Balance" },
+                  { key: "exposures", label: "Exposures" },
+                  ...(!isMasterDownlineList
+                    ? [{ key: "exposure", label: "Exposure Limit" }]
+                    : []),
+                  { key: "availableBalance", label: "Avail. Bal" },
+                  { key: "refPL", label: "Ref. P/L" },
+                  ...(!isMasterDownlineList
+                    ? [{ key: "partnership", label: "Partnership" }]
+                    : []),
+                  { key: "status", label: "Status" },
+                ].map(({ key, label }) => (
+                  <th
+                    key={key}
+                    className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
+                    onClick={() => handleSort(key)}
+                  >
+                    <div className="flex justify-between">
+                      <div className="flex items-center">{label}</div>
+                      <div className="flex flex-col items-center ml-2">
+                        <FaSortUp
+                          className={`${
+                            sortConfig.key === key &&
+                            sortConfig.direction === "ascending"
+                              ? "text-black"
+                              : "text-gray-400"
+                          }`}
+                          style={{
+                            marginBottom: "-6px",
+                          }}
+                        />
+                        <FaSortDown
+                          className={`${
+                            sortConfig.key === key &&
+                            sortConfig.direction === "descending"
+                              ? "text-black"
+                              : "text-gray-400"
+                          }`}
+                          style={{
+                            marginTop: "-6px",
+                          }}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  </th>
+                ))}
+                <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
+                  Actions
                 </th>
-              ))}
-              <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* {userList.length > 0 ? (userList */}
-            {(searchTerm?.length
-              ? searchData
-              : userFetchList.length > 0
-              ? userFetchList
-              : userList.length > 0
-              ? userList
-              : downlineData
-            )?.length ? (
-              (searchTerm?.length
+              </tr>
+            </thead>
+            <tbody>
+              {/* {userList.length > 0 ? (userList */}
+              {(searchTerm?.length
                 ? searchData
                 : userFetchList.length > 0
                 ? userFetchList
                 : userList.length > 0
                 ? userList
                 : downlineData
-              ).map((item) => (
-                <tr key={item?._id} className="border border-gray-400 bg-white">
-                  <td className="px-4 py-2 text-sm">
-                    {" "}
-                    <div
-                      onClick={() => handleUsernameList(item)}
-                      className={`${
-                        item.role_name === "master" ? "cursor-pointer" : ""
-                      }`}
-                    >
-                      <span
-                        className={`bg-green-500 text-white px-2 py-1 text-xs mr-1 rounded font-semibold text-l ${
+              )?.length ? (
+                (searchTerm?.length
+                  ? searchData
+                  : userFetchList.length > 0
+                  ? userFetchList
+                  : userList.length > 0
+                  ? userList
+                  : downlineData
+                ).map((item) => (
+                  <tr
+                    key={item?._id}
+                    className="border border-gray-400 bg-white"
+                  >
+                    <td className="px-4 py-2 text-sm">
+                      {" "}
+                      <div
+                        onClick={() => handleUsernameList(item)}
+                        className={`${
                           item.role_name === "master" ? "cursor-pointer" : ""
                         }`}
                       >
-                        {item.role_name.toUpperCase()}
-                      </span>
-                      <span className="text-black font-semibold">
-                        {item.username}
-                      </span>
-                    </div>
-                  </td>
-                  <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(
-                      item.creditReference
-                    )}
-                    <div className="ml-2 inline-flex space-x-2">
-                      <FaEdit
-                        className="text-blue cursor-pointer"
-                        onClick={() => handleEditClick(item)}
-                      />
-                      <FaEye
-                        className="text-blue cursor-pointer"
-                        onClick={() => handleListView(item)}
-                      />
-                    </div>
-                  </td>
-                  {!isMasterDownlineList && (
-                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                      {new Intl.NumberFormat("en-IN").format(
-                        item.openingBalance
-                      )}
-                    </td>
-                  )}
-                  {isMasterDownlineList && (
-                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                      {new Intl.NumberFormat("en-IN").format(item.partnership)}
-                      <div className="ml-2 inline-flex space-x-2">
-                        <FaEdit
-                          className="text-blue cursor-pointer"
-                          onClick={() => handleUpdatePartnership(item)}
-                        />
+                        <span
+                          className={`bg-green-500 text-white px-2 py-1 text-xs mr-1 rounded font-semibold text-l ${
+                            item.role_name === "master" ? "cursor-pointer" : ""
+                          }`}
+                        >
+                          {item.role_name.toUpperCase()}
+                        </span>
+                        <span className="text-black font-semibold">
+                          {item.username}
+                        </span>
                       </div>
                     </td>
-                  )}
-                  {isMasterDownlineList && (
-                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                    <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
                       {new Intl.NumberFormat("en-IN").format(
-                        item.openingBalance
-                      )}
-                    </td>
-                  )}
-                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    0
-                  </td>
-                  {!isMasterDownlineList && (
-                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                      {new Intl.NumberFormat("en-IN").format(
-                        item.exposureLimit
+                        item.creditReference
                       )}
                       <div className="ml-2 inline-flex space-x-2">
                         <FaEdit
                           className="text-blue cursor-pointer"
-                          onClick={() => handleExposureEditClick(item)}
+                          onClick={() => handleEditClick(item)}
+                        />
+                        <FaEye
+                          className="text-blue cursor-pointer"
+                          onClick={() => handleListView(item)}
                         />
                       </div>
                     </td>
-                  )}
-
-                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(
-                      item.totalBalance || 0
+                    {!isMasterDownlineList && (
+                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(
+                          item.openingBalance
+                        )}
+                      </td>
                     )}
-                  </td>
-                  <td
-                    className={`border border-gray-400 px-4 py-2 text-sm font-semibold ${
-                      item.profit_loss < 0 ? "text-red-500" : ""
-                    }`}
-                  >
-                    {item.profit_loss < 0
-                      ? `(-${new Intl.NumberFormat("en-IN").format(
-                          Math.abs(item.profit_loss)
-                        )})`
-                      : new Intl.NumberFormat("en-IN").format(item.profit_loss)}
-                  </td>
-                  {!isMasterDownlineList && (
-                    <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                      {new Intl.NumberFormat("en-IN").format(100)}
+                    {isMasterDownlineList && (
+                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(
+                          item.partnership
+                        )}
+                        <div className="ml-2 inline-flex space-x-2">
+                          <FaEdit
+                            className="text-blue cursor-pointer"
+                            onClick={() => handleUpdatePartnership(item)}
+                          />
+                        </div>
+                      </td>
+                    )}
+                    {isMasterDownlineList && (
+                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(
+                          item.openingBalance
+                        )}
+                      </td>
+                    )}
+                    <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                      0
                     </td>
-                  )}
+                    {!isMasterDownlineList && (
+                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(
+                          item.exposureLimit
+                        )}
+                        <div className="ml-2 inline-flex space-x-2">
+                          <FaEdit
+                            className="text-blue cursor-pointer"
+                            onClick={() => handleExposureEditClick(item)}
+                          />
+                        </div>
+                      </td>
+                    )}
 
-                  <td className="border border-gray-400 px-4 py-2 font-bold text-l">
-                    <span
-                      className={`p-1 rounded border ${
-                        item.status === "active"
-                          ? "text-green-600 border-green-600 bg-green-100"
-                          : item.status === "suspended"
-                          ? "text-red-600 border-red-600 bg-red-100"
-                          : item.status === "locked"
-                          ? "text-red-600 border-red-600 bg-red-100"
-                          : "text-gray-600 border-gray-600 bg-gray-100"
+                    <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                      {new Intl.NumberFormat("en-IN").format(
+                        item.totalBalance || 0
+                      )}
+                    </td>
+                    <td
+                      className={`border border-gray-400 px-4 py-2 text-sm font-semibold ${
+                        item.profit_loss < 0 ? "text-red-500" : ""
                       }`}
                     >
-                      {item.status}
-                    </span>
-                  </td>
+                      {item.profit_loss < 0
+                        ? `(-${new Intl.NumberFormat("en-IN").format(
+                            Math.abs(item.profit_loss)
+                          )})`
+                        : new Intl.NumberFormat("en-IN").format(
+                            item.profit_loss
+                          )}
+                    </td>
+                    {!isMasterDownlineList && (
+                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(100)}
+                      </td>
+                    )}
 
-                  <td className="px-4 py-2 text-sm">
-                    <div className="flex space-x-2">
-                      <div
-                        onClick={() => handleIconClick(item)}
-                        title="Banking"
-                        className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                    <td className="border border-gray-400 px-4 py-2 font-bold text-l">
+                      <span
+                        className={`p-1 rounded border ${
+                          item.status === "active"
+                            ? "text-green-600 border-green-600 bg-green-100"
+                            : item.status === "suspended"
+                            ? "text-red-600 border-red-600 bg-red-100"
+                            : item.status === "locked"
+                            ? "text-red-600 border-red-600 bg-red-100"
+                            : "text-gray-600 border-gray-600 bg-gray-100"
+                        }`}
                       >
-                        <AiFillDollarCircle className="text-darkgray" />
-                      </div>
-                      {!isMasterDownlineList && (
-                        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                          <RiArrowUpDownFill className="text-darkgray" />
+                        {item.status}
+                      </span>
+                    </td>
+
+                    <td className="px-4 py-2 text-sm">
+                      <div className="flex space-x-2">
+                        <div
+                          onClick={() => handleIconClick(item)}
+                          title="Banking"
+                          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                        >
+                          <AiFillDollarCircle className="text-darkgray" />
                         </div>
-                      )}
-                      {!isMasterDownlineList && (
-                        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                          <MdManageHistory className="text-darkgray" />
+                        {!isMasterDownlineList && (
+                          <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                            <RiArrowUpDownFill className="text-darkgray" />
+                          </div>
+                        )}
+                        {!isMasterDownlineList && (
+                          <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                            <MdManageHistory className="text-darkgray" />
+                          </div>
+                        )}
+                        <div
+                          onClick={() => statushandlechange(item)}
+                          title="Change status"
+                          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                        >
+                          <MdSettings className="text-darkgray" />
                         </div>
-                      )}
-                      <div
-                        onClick={() => statushandlechange(item)}
-                        title="Change status"
-                        className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                      >
-                        <MdSettings className="text-darkgray" />
-                      </div>
-                      <Link title="Account Setting" to={ROUTES_CONST.MyAccount}>
-                        <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
-                          <FaUserAlt className="text-darkgray" />
+                        <Link
+                          title="Account Setting"
+                          to={ROUTES_CONST.MyAccount}
+                        >
+                          <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
+                            <FaUserAlt className="text-darkgray" />
+                          </div>
+                        </Link>
+                        <div
+                          onClick={() => handleOpenSettings(item)}
+                          title="Sports Settings"
+                          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                        >
+                          <BsBuildingFillLock className="text-darkgray" />
                         </div>
-                      </Link>
-                      <div
-                        onClick={() => handleOpenSettings(item)}
-                        title="Sports Settings"
-                        className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
-                      >
-                        <BsBuildingFillLock className="text-darkgray" />
+                        <div
+                          onClick={() => handleDeleteClick(item)}
+                          title="Delete"
+                          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                        >
+                          <MdDelete className="text-" />
+                        </div>
                       </div>
-                      <div
-                        onClick={() => handleDeleteClick(item)}
-                        title="Delete"
-                        className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
-                      >
-                        <MdDelete className="text-" />
-                      </div>
-                    </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={10} className="text-center p-6">
+                    No Data Available
                   </td>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={10} className="text-center p-6">
-                  No Data Available
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              )}
+            </tbody>
+          </table>
+        </div>
         <div className="flex justify-between items-center mt-4">
           <div className="text-sm text-gray-600">
             Showing{" "}
@@ -886,10 +851,7 @@ const DownlineList = () => {
           </>
         )}
       </div>
-      </>
-)
-}
-    </>
+    </div>
   );
 };
 
