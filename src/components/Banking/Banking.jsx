@@ -39,7 +39,7 @@ const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
   const columns = [
     { key: "username", label: "UID" },
-    { key: "openingBalance", label: "Balance" },  // This can stay as 'balance' for user clarity
+    { key: "openingBalance", label: "Balance" },  
     { key: "totalBalance", label: "Available D/W" },
     { key: "exposure", label: "Exposure" },
     { key: "creditReference", label: "Credit Referance" },
@@ -148,7 +148,7 @@ const [isSubmitClicked, setIsSubmitClicked] = useState(false);
       .then(() => {
         toast.success(`Transaction was successful.`);
   
-        // Update local edited data state
+        
         setEditedData((prevState) => {
           const updatedData = [...prevState];
           updatedData[selectedRowIndex] = {
@@ -161,7 +161,7 @@ const [isSubmitClicked, setIsSubmitClicked] = useState(false);
           return updatedData;
         });
   
-        // Update the global downline data
+        
         const updatedDownlineData = downlineData.map((item) =>
           item._id === data.userId
             ? {
@@ -201,8 +201,7 @@ const handleSubmitPaymentForRow = () => {
     password
   };
 
-  console.log("Submit Payment Data:", currentData);  // Debugging log
-
+  console.log("Submit Payment Data:", currentData);  
   handleSubmitPaymentFunction(currentData);
 };
 

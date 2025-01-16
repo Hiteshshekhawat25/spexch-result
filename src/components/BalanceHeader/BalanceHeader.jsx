@@ -13,6 +13,7 @@ const BalanceHeader = () => {
       try {
         const response = await getBalanceData("user/user-data-summary");
         console.log(response);
+        console.log(response);
         if (response?.data?.success) {
           dispatch(setBalanceData(response.data.data));
         } else {
@@ -30,53 +31,132 @@ const BalanceHeader = () => {
   }, [dispatch]);
 
   return (
-    <div className="bg-white shadow-md rounded-md p-2 w-full mx-[5px] border border-b-2 border-blue-900">
-      <div className="grid grid-cols-7 divide-x divide-gray-200">
-        <div className="text-left 0 text-gray-500 text-sm font-medium pl-2">
+    <div className="bg-white shadow-md rounded-md p-2 w-full mx-[5px] border border-gray-300">
+      {/* Large Screen Grid */}
+      <div className="hidden md:grid grid-cols-7 divide-x divide-gray-200">
+        {/* Total Balance */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-2">
           Total Balance
         </div>
-        <div className="text-left 0 text-gray-500 text-sm font-medium pl-2">
+        {/* Total Exposure */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-2">
           Total Exposure
         </div>
-        <div className="text-left 0 text-gray-500 text-sm font-medium pl-2">
+        {/* Available Balance */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-2">
           Available Balance
         </div>
-        <div className="text-left 0 text-gray-500 text-sm font-medium pl-2">
+        {/* Balance */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-2">
           Balance
         </div>
-        <div className="text-left 0 text-gray-500 text-sm font-medium pl-2">
+        {/* Total Available Balance */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-2">
           Total Avail. Bal
         </div>
-        <div className="text-left 0 text-gray-500 text-xs font-medium pl-2">
+        {/* Upline P/L */}
+        <div className="text-left py-1 text-xs font-medium text-gray-500 pl-2">
           Upline P/L
         </div>
-        <div className="text-left 0 text-gray-500 text-xs font-medium pl-2"></div>
+        {/* Empty space */}
+        <div className="text-left py-1 text-xs font-medium pl-2"></div>
       </div>
-      <div className="grid grid-cols-7 divide-x divide-gray-200">
-        <div className="text-left 0 text-blue-800 text-md font-bold pl-2">
+
+      {/* Large Screen Values */}
+      <div className="hidden md:grid grid-cols-7 divide-x divide-gray-200">
+        {/* Total Balance Value */}
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
           IRP {new Intl.NumberFormat("en-IN").format(balanceData.totalBalance)}
         </div>
-        <div className="text-left text-blue-800 text-md font-bold pl-2">
+        {/* Total Exposure Value */}
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
           IRP{" "}
           <span className="text-red-500">
             ({new Intl.NumberFormat("en-IN").format(balanceData.totalExposure)})
           </span>
         </div>
-        <div className="text-left 0 text-blue-800 text-md font-bold pl-2">
+        {/* Available Balance Value */}
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
           IRP{" "}
           {new Intl.NumberFormat("en-IN").format(balanceData.availableBalance)}
         </div>
-        <div className="text-left 0 text-blue-800 text-md font-bold pl-2">
+        {/* Balance Value */}
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
           IRP {new Intl.NumberFormat("en-IN").format(balanceData.balance)}
         </div>
-        <div className="text-left 0 text-blue-800 text-md font-bold pl-2">
+        {/* Total Available Balance Value */}
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
           IRP{" "}
           {new Intl.NumberFormat("en-IN").format(balanceData.totalavailbalance)}
         </div>
-        <div className="text-left 0 text-blue-800 text-md font-bold pl-2">
+        {/* Upline P/L Value */}
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
           IRP {new Intl.NumberFormat("en-IN").format(balanceData.uplinePL)}
         </div>
-        <div className="text-left 0 text-blue-800 text-md font-bold pl-2"></div>
+        {/* Empty space */}
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2"></div>
+      </div>
+
+      {/* Mobile and Tablet Stack */}
+      <div className="md:hidden">
+        {/* Total Balance */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
+          Total Balance
+        </div>
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+          IRP {new Intl.NumberFormat("en-IN").format(balanceData.totalBalance)}
+        </div>
+        <div className="w-full border-t border-gray-200"></div>
+
+        {/* Total Exposure */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
+          Total Exposure
+        </div>
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+          IRP{" "}
+          <span className="text-red-500">
+            ({new Intl.NumberFormat("en-IN").format(balanceData.totalExposure)})
+          </span>
+        </div>
+        <div className="w-full border-t border-gray-200"></div>
+
+        {/* Available Balance */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
+          Available Balance
+        </div>
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+          IRP{" "}
+          {new Intl.NumberFormat("en-IN").format(balanceData.availableBalance)}
+        </div>
+        <div className="w-full border-t border-gray-200"></div>
+
+        {/* Balance */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
+          Balance
+        </div>
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+          IRP {new Intl.NumberFormat("en-IN").format(balanceData.balance)}
+        </div>
+        <div className="w-full border-t border-gray-200"></div>
+
+        {/* Total Available Balance */}
+        <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
+          Total Avail. Bal
+        </div>
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+          IRP{" "}
+          {new Intl.NumberFormat("en-IN").format(balanceData.totalavailbalance)}
+        </div>
+        <div className="w-full border-t border-gray-200"></div>
+
+        {/* Upline P/L */}
+        <div className="text-left py-1 text-xs font-medium text-gray-500 pl-1">
+          Upline P/L
+        </div>
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+          IRP {new Intl.NumberFormat("en-IN").format(balanceData.uplinePL)}
+        </div>
+        <div className="w-full border-t border-gray-200"></div>
       </div>
     </div>
   );

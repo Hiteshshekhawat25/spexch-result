@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectProfileData, selectProfileStatus, selectProfileError, updateProfile, setProfileLoading, setProfileError, setRollingCommission, setAgentRollingCommission } from '../../Store/Slice/profileSlice';
-import { FaEye, FaRegEdit } from 'react-icons/fa';
+import { FaEye, FaRegEdit ,FaEdit} from 'react-icons/fa';
 import { getUserData } from '../../Services/Downlinelistapi'; 
 import RollingCommisionModal from '../Modal/RollingCommisionModal';
 import AgentRollingCommisionModal from '../Modal/AgentRollingCommisionModal';
 import ChangePasswordModal from '../Modal/ChangePasswordModal'; 
+import EditRollingCommissionModal from '../Modal/EditRollingCommisionModal'; 
 
 const MyProfile = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ const MyProfile = () => {
   const [isRollingModalOpen, setIsRollingModalOpen] = useState(false);
   const [isAgentRollingModalOpen, setIsAgentRollingModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] = useState(false); 
+  const [isEditRollingModalOpen, setIsEditRollingModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
 
   const userData = JSON.parse(localStorage.getItem('userData'));
@@ -69,6 +71,19 @@ const MyProfile = () => {
     }
   };
 
+  const handleOpenEditRollingModal = () => {
+    if (modalData) {
+      console.log("Edit button clicked!");
+      setIsEditRollingModalOpen(true); // Open the edit rolling commission modal
+    }
+  };
+
+  // const handleOpenRollingModal = () => {
+    
+  //     setIsRollingModalOpen(true);
+    
+  // };
+
   // Open Agent Rolling Commission modal
   const handleOpenAgentRollingModal = () => {
     if (modalData) {
@@ -100,6 +115,12 @@ const MyProfile = () => {
     </div>
     <div className="flex border-b py-3 px-4">
       <span className="font-medium w-48">Rolling Commission</span>
+      <span className="text-left ml-4 flex items-center">
+        <FaEdit
+              className="ml-2 text-blue cursor-pointer" 
+              onClick={handleOpenEditRollingModal} 
+            />
+      </span>
       <span className="text-left ml-4 flex items-center">
         <FaEye 
           className="ml-2 text-blue cursor-pointer" 
@@ -150,6 +171,8 @@ const MyProfile = () => {
     />
   )}
 
+
+
   {isAgentRollingModalOpen && modalData && (
     <AgentRollingCommisionModal
       username={modalData.name}
@@ -157,6 +180,17 @@ const MyProfile = () => {
       onCancel={() => setIsAgentRollingModalOpen(false)}
     />
   )}
+
+{isEditRollingModalOpen && modalData && (
+        <EditRollingCommissionModal
+        userId={userId} 
+          onCancel={() => setIsEditRollingModalOpen(false)}
+          onSubmit={(updatedData) => {
+            console.log("Updated Rolling Commission Data:", updatedData);
+            setIsEditRollingModalOpen(false);
+          }}
+        />
+      )}
 
   {isChangePasswordModalOpen && (
     <ChangePasswordModal

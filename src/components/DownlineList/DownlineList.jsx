@@ -216,7 +216,7 @@ const DownlineList = () => {
             }
           }
         } catch (error) {
-          setError(error.message || "Failed to fetch roles.");
+          setError(error.message || "Failed to fetch roles."); 
         }
       };
 
@@ -379,7 +379,25 @@ const DownlineList = () => {
   }, [selectedFilter]);
 
   return (
-    <div className="container">
+    <>
+          {loading ? (
+
+<div className="flex justify-center items-center h-64">
+  <div className="relative w-48 h-48">
+    
+    <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
+   
+    <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+    
+    <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+      Loading...
+    </div>
+  </div>
+ 
+ 
+</div>
+) : (
+  <>
       {userFetchList.length ? (
         <>
           <div
@@ -397,9 +415,10 @@ const DownlineList = () => {
       ) : (
         ""
       )}
-      <div className="p-4 border border-gray-300 rounded-md bg-white">
-        <div className="flex flex-wrap justify-between items-center mb-4 w-full">
-          <div className="flex flex-wrap items-center space-x-2 sm:ml-0 ml-10 w-full sm:w-auto">
+      <div className="p-4 border border-gray-200 rounded-md bg-white">
+
+        <div className="flex justify-between items-center mb-4">
+          <div className="border border-gray-300 p-2 rounded-md">
             <label className="mr-2 text-sm font-medium">Show</label>
             <select
               value={entriesToShow}
@@ -742,6 +761,7 @@ const DownlineList = () => {
             </button>
           </div>
         </div>
+
         {isModalOpen && selectedUser && (
           <>
             <CreditEditReferenceModal
@@ -850,7 +870,10 @@ const DownlineList = () => {
           </>
         )}
       </div>
-    </div>
+      </>
+)
+}
+    </>
   );
 };
 

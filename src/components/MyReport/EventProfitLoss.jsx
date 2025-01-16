@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
+import {  useSelector } from "react-redux";
 import EventPLFilter from './EventPLFilter';
+import {
+  
+  setEventLoading,
+} from "../../Store/Slice/eventProfitLossSlice";
+
 import { FaSortUp, FaSortDown } from 'react-icons/fa';
 
 const EventProfitLoss = () => {
@@ -9,6 +15,9 @@ const EventProfitLoss = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false); 
+  // const loading = useSelector(setEventLoading);
+  
   const [sortConfig, setSortConfig] = useState({
     key: 'sportName',
     direction: 'ascending',
@@ -63,7 +72,27 @@ const EventProfitLoss = () => {
 
   return (
     <div className='p-4'>
-      {/* Filter Component */}
+    
+    {localLoading ? (
+
+<div className="flex justify-center items-center h-64">
+  <div className="relative w-48 h-48">
+    
+    <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
+   
+    <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+    
+    <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+      Loading...
+    </div>
+  </div>
+ 
+ 
+</div>
+) : (
+  <>
+
+
       <EventPLFilter
         setPLData={setProfitLossData}
         setTotalTransactions={setTotalEntries}
@@ -72,6 +101,7 @@ const EventProfitLoss = () => {
         entriesToShow={entriesToShow}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        setLocalLoading={setLocalLoading} 
         
       />
      
@@ -231,6 +261,8 @@ const EventProfitLoss = () => {
           </div>
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 };

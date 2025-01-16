@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect ,useState} from "react";
+import { useDispatch,useSelector } from "react-redux";
 import {
   setDataSource,
   setFromDate,
@@ -9,6 +9,10 @@ import {
    resetFilters,
   selectEventPLFilter,
 } from "../../Store/Slice/eventPLFilterSlice";
+import {
+  setEventLoading, // Ensure this is imported correctly
+ 
+} from "../../Store/Slice/eventProfitLossSlice";
 import { getProfitLossData } from "../../Services/Downlinelistapi"; // Import your API function
 
 const EventPLFilter = ({
@@ -19,19 +23,31 @@ const EventPLFilter = ({
   entriesToShow,
   currentPage,
   setCurrentPage,
+  setLocalLoading,
 }) => {
   const dispatch = useDispatch();
 
   const eventPLFilterState = useSelector((state) => state.eventPLFilter);
+  const loading = useSelector((state) => state.eventProfitLoss.status === "loading");
+  const [localLoading, setLocalLoadingState] = useState(false);
+
+
+  useEffect(() => {
+    // When localLoading changes, pass it back to the parent using setLocalLoading
+    setLocalLoading(localLoading);
+  }, [localLoading, setLocalLoading]);
+
   console.log('Redux State for eventPLFilter:', eventPLFilterState);
 
   // Destructure properties from the state
   const { dataSource, fromDate, toDate, fromTime, toTime } = eventPLFilterState || {};
 
-  // const { dataSource, fromDate, toDate, fromTime, toTime } =
-  //   useSelector(selectEventPLFilter);
 
-  // Reset page to 1 when entriesToShow changes
+  useEffect(() => {
+    console.log('loading state has changed:', loading); // Track loading state changes
+  }, [loading]); // This will run every time 'loading' changes
+  
+  
   useEffect(() => {
     setCurrentPage(1);
   }, [entriesToShow, setCurrentPage]);
@@ -41,6 +57,7 @@ const EventPLFilter = ({
     if (fromDate && toDate) {
       console.log("Fetching P&L data due to filter or page change");
       handleGetPL();
+      setLocalLoadingState(false);
     }
   }, [
     currentPage,
@@ -52,25 +69,96 @@ const EventPLFilter = ({
     entriesToShow,
   ]);
 
-  const handleGetPL = async () => {
-    try {
-      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
-        fromDate || ""
-      }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
-        toTime || ""
-      }&dataSource=${dataSource || ""}`;
-      console.log("Fetching data with URL:", url);
+  // const handleGetPL = async () => {
+  //   dispatch(setEventLoading(true)); // Set loading state to true
+  //   try {
+     
+  //     const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
+  //       fromDate || ""
+  //     }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
+  //       toTime || ""
+  //     }&dataSource=${dataSource || ""}`;
+  //     console.log("Fetching data with URL:", url);
 
+  //     const response = await getProfitLossData(url);
+  //     console.log(response);
+
+  //     if (response && response.data) {
+  //       const { pagination, data } = response.data;
+
+  //       setPLData(data); // Update parent state with fetched data
+  //       setTotalTransactions(pagination?.totalRecords || 0);
+  //       setTotalPages(pagination?.totalPages || 1);
+  //       setIsDataFetched(true); // Mark data as fetched
+        
+  //     } else {
+  //       console.error("No data found in response");
+  //       setIsDataFetched(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching P&L data:", error);
+  //     setIsDataFetched(false);
+  //   }
+  //   finally {
+  //     dispatch(setEventLoading(false)); // Set loading state to false
+  //           }
+  // };
+
+  // const handleGetPL = async () => {
+  //   dispatch(setEventLoading(true)); // Set loading state to true
+  //   console.log("Started fetching data");
+
+  
+  //   try {
+  //     const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
+  //       fromDate || ""
+  //     }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
+  //       toTime || ""
+  //     }&dataSource=${dataSource || ""}`;
+  //     console.log("Fetching data with URL:", url);
+  
+  //     const response = await getProfitLossData(url);
+  //     console.log(response);
+  
+  //     if (response && response.data) {
+  //       const { pagination, data } = response.data;
+  
+  //       setPLData(data); // Update parent state with fetched data
+  //       setTotalTransactions(pagination?.totalRecords || 0);
+  //       setTotalPages(pagination?.totalPages || 1);
+  //       setIsDataFetched(true); // Mark data as fetched
+  //     } else {
+  //       console.error("No data found in response");
+  //       setIsDataFetched(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching P&L data:", error);
+  //     setIsDataFetched(false);
+  //   } finally {
+  //     dispatch(setEventLoading(false)); // Ensure loading state is reset
+  //     console.log("Loading state reset to false");
+  //   }
+  // };
+  
+
+  const handleGetPL = async () => {
+  setLocalLoadingState(false); 
+    console.log("Started fetching data");
+  
+    try {
+      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate || ""}&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${toTime || ""}&dataSource=${dataSource || ""}`;
+      console.log("Fetching data with URL:", url);
+  
       const response = await getProfitLossData(url);
       console.log(response);
-
+  
       if (response && response.data) {
         const { pagination, data } = response.data;
-
-        setPLData(data); // Update parent state with fetched data
+  
+        setPLData(data);
         setTotalTransactions(pagination?.totalRecords || 0);
         setTotalPages(pagination?.totalPages || 1);
-        setIsDataFetched(true); // Mark data as fetched
+        setIsDataFetched(true);
       } else {
         console.error("No data found in response");
         setIsDataFetched(false);
@@ -78,16 +166,20 @@ const EventPLFilter = ({
     } catch (error) {
       console.error("Error fetching P&L data:", error);
       setIsDataFetched(false);
+    } finally {
+      console.log("Setting loading state to false in finally block");
+      // setLocalLoadingState(false);
+            // console.log("Loading state reset to false");
     }
   };
-
+  
   const handleReset = () => {
     dispatch(resetFilters());
-    setPLData([]); // Clear parent data on reset
+    setPLData([]); 
     setTotalTransactions(0);
     setTotalPages(1);
     setIsDataFetched(false);
-    setCurrentPage(1); // Reset to page 1
+    setCurrentPage(1); 
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -147,7 +239,27 @@ const EventPLFilter = ({
 
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-      {/* Data Source Dropdown */}
+          {/* {localLoading  ? (
+
+<div className="flex justify-center items-center h-64">
+  <div className="relative w-48 h-48">
+    
+    <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
+   
+    <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+    
+    <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+      Loading...
+    </div>
+  </div>
+ 
+ 
+</div>
+) : (
+  <> */}
+
+
+      
       <div className="flex flex-col items-start">
         <label className="text-sm font-medium text-black mb-2">
           Data Source
@@ -220,8 +332,10 @@ const EventPLFilter = ({
           Reset
         </button>
       </div>
-    </div>
-  );
+   {/* </>
+  )} */}
+</div>
+);
 };
 
 export default EventPLFilter;
