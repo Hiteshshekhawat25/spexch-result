@@ -4,11 +4,11 @@ import AccountStatement from './AccountStatement';
 import ActivityLog from './ActivityLog';
 
 const MyAccount = () => {
-  const [selectedPage, setSelectedPage] = useState('myProfile'); // Default to 'myProfile'
+  const [selectedPage, setSelectedPage] = useState('myProfile'); 
 
-  useEffect(() => {
-    // Optionally, perform any setup or fetch actions here
-  }, []);
+  // useEffect(() => {
+  //   // Optionally, perform any setup or fetch actions here
+  // }, []);
 
   const handleSelection = (page) => {
     setSelectedPage(page);

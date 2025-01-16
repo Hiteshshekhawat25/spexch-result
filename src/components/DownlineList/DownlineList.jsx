@@ -153,34 +153,6 @@ const DownlineList = () => {
   );
 
   useEffect(() => {
-    // if (location.pathname === "/master-downline-list") {
-    //   const fetchUserRoles = async () => {
-    //     try {
-    //       const token = localStorage.getItem("authToken");
-    //       if (token) {
-    //         const rolesArray = await fetchRoles(token);
-
-    //         if (Array.isArray(rolesArray)) {
-    //           const rolesData = rolesArray.map((role) => ({
-    //             role_name: role.role_name,
-    //             role_id: role._id,
-    //           }));
-
-    //           setRoles(rolesData);
-    //           if (rolesData.length > 0) {
-    //             setRoleId(rolesData[0].role_id);
-    //           }
-    //         } else {
-    //           setError("Roles data is not an array.");
-    //         }
-    //       }
-    //     } catch (error) {
-    //       setError(error.message || "Failed to fetch roles.");
-    //     }
-    //   };
-
-    //   fetchUserRoles();
-    // }
     if (location.pathname === "/user-downline-list") {
       const fetchUserRoles = async () => {
         try {
@@ -195,7 +167,8 @@ const DownlineList = () => {
               }));
               setRoles(rolesData);
               const userRole = rolesData.find(
-                (role) => role.role_name === "master" || role.role_name === "agent"
+                (role) =>
+                  role.role_name === "master" || role.role_name === "agent"
               );
               if (userRole) {
                 setRoleId(userRole.role_id);
@@ -214,7 +187,6 @@ const DownlineList = () => {
 
       fetchUserRoles();
     }
-   
   }, [token, location.pathname]);
 
   useEffect(() => {
@@ -283,7 +255,6 @@ const DownlineList = () => {
   const paginatedData = sortedData;
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
-  // Event handlers
   const handleEntriesChange = (e) => {
     setEntriesToShow(Number(e.target.value));
     setCurrentPage(1);
@@ -322,7 +293,6 @@ const DownlineList = () => {
 
   if (error) {
     console.error("Error fetching user:", error);
-    // Optional: Display the error in the UI
     return (
       <div className="text-red-500 font-bold">An error occurred: {error}</div>
     );
@@ -381,7 +351,6 @@ const DownlineList = () => {
     if (item.role_name === "master") {
       try {
         const data = await fetchallUsers(item._id);
-        // console.log("aaaaaaaaaaaaaaaaaaaaaaaa", data);
         setUserFetchList(data);
       } catch (error) {
         console.error("Error fetching details:", error);
@@ -390,7 +359,7 @@ const DownlineList = () => {
   };
 
   const fetchUsers = async () => {
-    if (!selectedFilter) return; // Prevent fetching if no filter is selected
+    if (!selectedFilter) return;
     try {
       const fetchedUsers = await fetchUsersByStatus(selectedFilter);
       console.log("fetcheedddddddd", fetchedUsers);
@@ -401,12 +370,10 @@ const DownlineList = () => {
     }
   };
 
-  // Handle dropdown change
   const handleFilterChange = (e) => {
     setSelectedFilter(e.target.value);
   };
 
-  // Fetch users whenever selectedFilter changes
   useEffect(() => {
     fetchUsers();
   }, [selectedFilter]);
@@ -428,9 +395,9 @@ const DownlineList = () => {
       ) : (
         ""
       )}
-      <div className="p-4 border border-gray-200 rounded-md bg-white">
+      <div className="p-4 border border-gray-300 rounded-md bg-white">
         <div className="flex justify-between items-center mb-4">
-          <div className="border border-gray-300 p-2 rounded-md">
+          <div className="p-2 rounded-md">
             <label className="mr-2 text-sm font-medium">Show</label>
             <select
               value={entriesToShow}
@@ -508,7 +475,7 @@ const DownlineList = () => {
                         }`}
                         style={{
                           marginBottom: "-6px",
-                        }} /* Adjust to overlap tightly */
+                        }}
                       />
                       <FaSortDown
                         className={`${
@@ -519,7 +486,7 @@ const DownlineList = () => {
                         }`}
                         style={{
                           marginTop: "-6px",
-                        }} /* Ensures they touch tightly */
+                        }}
                       />
                     </div>
                   </div>
