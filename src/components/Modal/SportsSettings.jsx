@@ -23,14 +23,12 @@ const SportsSettingsModal = ({
 }) => {
   const dispatch = useDispatch();
 
-  // Selectors
   const sportsList = useSelector(selectSportsList);
   const loading = useSelector(selectLoading);
   const error = useSelector(selectError);
 
   const token = localStorage.getItem("authToken");
 
-  // Fetch sports list when modal opens
   useEffect(() => {
     if (isOpen) {
       dispatch(fetchSportsList({ token }));
@@ -38,13 +36,7 @@ const SportsSettingsModal = ({
     }
   }, [isOpen, dispatch, token]);
 
-  // useEffect(() => {
-  //   if (isOpen && userId) {
-  //     dispatch(fetchUserGameStatusThunk({ userId }));
-  //   }
-  // }, [isOpen, userId, dispatch]);
-
-  const handleCheckboxChange = (gameId, isChecked) => {
+   const handleCheckboxChange = (gameId, isChecked) => {
     dispatch(
       updateGameStatusThunk({ token, userId, gameId, isChecked: !isChecked })
     )

@@ -125,117 +125,121 @@ const DepositModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[500px] mt-12">
-        {/* Modal Header */}
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
-          <span>Banking - Master- {userData?.data?.name}</span>
-          <button
-            onClick={() => {
-              resetState();
-              onClose();
-            }}
-            className="cursor-pointer text-white text-2xl"
-          >
-            &times;
-          </button>
+    <div className="bg-white rounded-lg w-[500px] mt-12 sm:w-[90%] md:w-[500px]">
+      {/* Modal Header */}
+      <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
+        <span>Banking - Master- {userData?.data?.name}</span>
+        <button
+          onClick={() => {
+            resetState();
+            onClose();
+          }}
+          className="cursor-pointer text-white text-2xl"
+        >
+          &times;
+        </button>
+      </div>
+  
+      {/* Modal Body */}
+      <form className="space-y-4 p-5">
+        {/* Amount Field */}
+        <div className="flex justify-between">
+          <div>
+            <span
+              className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-bold text-l"
+              // onClick={() => handleUsernameList(item)}
+            >
+              {user.role_name.toUpperCase()}
+            </span>
+            {user.username}
+          </div>
+          <div>
+            Client Bal:{" "}
+            <span className="font-bold">
+              {new Intl.NumberFormat("en-IN").format(user.totalBalance || 0)}
+            </span>
+          </div>
         </div>
-
-        {/* Modal Body */}
-        <form className="space-y-4 p-5">
-          {/* Amount Field */}
-          <div className="flex justify-between">
-            <div>
-              <span
-                className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-bold text-l"
-                // onClick={() => handleUsernameList(item)}
-              >
-                {user.role_name.toUpperCase()}
-              </span>
-              {user.username}
-            </div>
-            <div>
-              Client Bal:{" "}
-              <span className="font-bold">
-                {new Intl.NumberFormat("en-IN").format(user.totalBalance || 0)}
-              </span>
-            </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
-              Balance
-            </label>
-            <div className="w-2/3 flex items-center space-x-2">
-              <input
-                type="text"
-                value={amount}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (value.length <= 8) {
-                    setAmount(Number(value));
-                  }
-                }}
-                // placeholder="Enter Amount"
-                className="w-full p-2 border border-black rounded-lg text-gray-700"
-              />
-            </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
-              Remark
-            </label>
-            <div className="w-2/3 flex items-center space-x-2">
-              <input
-                type="text"
-                value={remark}
-                onChange={(e) => setRemark(e.target.value)}
-                // placeholder="Enter Remark"
-                className="w-full p-2 border border-black rounded-lg text-gray-700"
-              />
-            </div>
-          </div>
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
-              Password
-            </label>
+        
+        <div className="flex justify-between items-center">
+          <label className="block text-sm font-medium text-gray-700 w-1/3">
+            Balance
+          </label>
+          <div className="w-2/3 flex items-center space-x-2">
             <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              // placeholder="Enter your password"
+              type="text"
+              value={amount}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value.length <= 8) {
+                  setAmount(Number(value));
+                }
+              }}
+              // placeholder="Enter Amount"
+              className="w-full p-2 border border-black rounded-lg text-gray-700"
             />
           </div>
-
-          {/* Transaction Buttons */}
-          <div className="flex justify-end space-x-4">
-            <button
-              type="button"
-              onClick={() => handleTransaction("deposit")}
-              disabled={loading || !amount || !password}
-              className={`py-2 px-6 rounded-lg hover:bg-green-600 focus:outline-none ${
-                loading || !amount || !password
-                  ? "bg-green-500 bg-opacity-50 cursor-not-allowed"
-                  : "bg-green-500 text-white hover:bg-green-600"
-              }`}
-            >
-              {loading ? "Processing..." : "Deposit"}
-            </button>
-            <button
-              type="button"
-              onClick={() => handleTransaction("withdraw")}
-              disabled={loading || !amount || !password}
-              className={`py-2 px-6 rounded-lg hover:bg-red-600 focus:outline-none ${
-                loading || !amount || !password
-                  ? "bg-red-500 bg-opacity-50 cursor-not-allowed"
-                  : "bg-red-500 text-white hover:bg-red-600"
-              }`}
-            >
-              {loading ? "Processing..." : "Withdraw"}
-            </button>
+        </div>
+        
+        <div className="flex justify-between items-center">
+          <label className="block text-sm font-medium text-gray-700 w-1/3">
+            Remark
+          </label>
+          <div className="w-2/3 flex items-center space-x-2">
+            <input
+              type="text"
+              value={remark}
+              onChange={(e) => setRemark(e.target.value)}
+              // placeholder="Enter Remark"
+              className="w-full p-2 border border-black rounded-lg text-gray-700"
+            />
           </div>
-        </form>
-      </div>
+        </div>
+        
+        <div className="flex justify-between items-center">
+          <label className="block text-sm font-medium text-gray-700 w-1/3">
+            Password
+          </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
+            // placeholder="Enter your password"
+          />
+        </div>
+  
+        {/* Transaction Buttons */}
+        <div className="flex justify-end space-x-4">
+          <button
+            type="button"
+            onClick={() => handleTransaction("deposit")}
+            disabled={loading || !amount || !password}
+            className={`py-2 px-6 rounded-lg hover:bg-green-600 focus:outline-none ${
+              loading || !amount || !password
+                ? "bg-green-500 bg-opacity-50 cursor-not-allowed"
+                : "bg-green-500 text-white hover:bg-green-600"
+            }`}
+          >
+            {loading ? "Processing..." : "Deposit"}
+          </button>
+          <button
+            type="button"
+            onClick={() => handleTransaction("withdraw")}
+            disabled={loading || !amount || !password}
+            className={`py-2 px-6 rounded-lg hover:bg-red-600 focus:outline-none ${
+              loading || !amount || !password
+                ? "bg-red-500 bg-opacity-50 cursor-not-allowed"
+                : "bg-red-500 text-white hover:bg-red-600"
+            }`}
+          >
+            {loading ? "Processing..." : "Withdraw"}
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
+  
   );
 };
 
