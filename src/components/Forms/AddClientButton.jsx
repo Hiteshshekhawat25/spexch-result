@@ -4,6 +4,7 @@ import { RiResetLeftLine } from "react-icons/ri";
 import { useLocation } from "react-router-dom";
 import { AddClientForm } from "../../components/Forms/AddClientForm";
 import { AddMasterForm } from "./AddMasterForm";
+import { FaUserPlus } from "react-icons/fa";
 
 const AddClientButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false); // Local state for dialog visibility
@@ -54,17 +55,17 @@ const AddClientButton = () => {
       {location.pathname === "/master-downline-list" ? (
         <button
           onClick={handleOpenDialog}
-          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
+          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"
         >
-          <AiOutlineUserAdd />
+          <FaUserPlus /> 
           {buttonText}
         </button>
       ) : (
         <button
           onClick={handleOpenDialog}
-          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200"
+          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"
         >
-          <AiOutlineUserAdd />
+          <FaUserPlus /> 
           {buttonText}
         </button>
       )}
