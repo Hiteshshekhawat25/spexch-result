@@ -58,8 +58,12 @@ const DepositModal = ({
         description: remark,
       };
 
-      const response = await performTransactionDownline(type, requestData, token);
-      console.log("response",response);
+      const response = await performTransactionDownline(
+        type,
+        requestData,
+        token
+      );
+      console.log("response", response);
 
       if (response.success) {
         toast.success(response.message || "Transaction Successful");
@@ -152,7 +156,7 @@ const DepositModal = ({
             <div>
               Client Bal:{" "}
               <span className="font-bold">
-                {new Intl.NumberFormat("en-IN").format(user.totalBalance || 0 )}
+                {new Intl.NumberFormat("en-IN").format(user.totalBalance || 0)}
               </span>
             </div>
           </div>
@@ -207,16 +211,24 @@ const DepositModal = ({
             <button
               type="button"
               onClick={() => handleTransaction("deposit")}
-              disabled={loading}
-              className="bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 focus:outline-none"
+              disabled={loading || !amount || !password}
+              className={`py-2 px-6 rounded-lg hover:bg-green-600 focus:outline-none ${
+                loading || !amount || !password
+                  ? "bg-green-500 bg-opacity-50 cursor-not-allowed"
+                  : "bg-green-500 text-white hover:bg-green-600"
+              }`}
             >
               {loading ? "Processing..." : "Deposit"}
             </button>
             <button
               type="button"
               onClick={() => handleTransaction("withdraw")}
-              disabled={loading}
-              className="bg-red-500 text-white py-2 px-6 rounded-lg hover:bg-red-600 focus:outline-none"
+              disabled={loading || !amount || !password}
+              className={`py-2 px-6 rounded-lg hover:bg-red-600 focus:outline-none ${
+                loading || !amount || !password
+                  ? "bg-red-500 bg-opacity-50 cursor-not-allowed"
+                  : "bg-red-500 text-white hover:bg-red-600"
+              }`}
             >
               {loading ? "Processing..." : "Withdraw"}
             </button>

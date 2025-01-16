@@ -77,53 +77,53 @@ const SportsSettingsModal = ({
               </p>
             )}
             {error && <p className="text-center text-red-500">{error}</p>}
-<div className="p-4">
-            {!loading && !error && (
-              <table className="min-w-full table-auto border border-gray-400">
-                <thead className="bg-gray-300 border border-gray-400">
-                  <tr>
-                    <th className="px-4 py-2 text-left border-r border-gray-400">
-                      Sr.No.
-                    </th>
-                    <th className="px-4 py-2 text-left border-r border-gray-400">
-                      Sport Name
-                    </th>
-                    <th className="px-4 py-2 text-center">Action</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {sportsList?.map((sport, index) => (
-                    <tr
-                      key={sport?.gameId}
-                      className={`${
-                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      }`}
-                    >
-                      <td className="border border-gray-400 px-4 py-2 text-center">
-                        {index + 1}
-                      </td>
-                      <td className="border border-gray-400 px-4 py-2 text-left">
-                        {sport.name}
-                      </td>
-                      <td className="border border-gray-400 px-4 py-2 text-center">
-                        <input
-                          type="checkbox"
-                          checked={sport?.isChecked}
-                          onChange={() =>
-                            handleCheckboxChange(
-                              sport?.gameId,
-                              sport?.isChecked
-                            )
-                          }
-                          className="form-checkbox h-5 w-5 text-blue-600"
-                        />
-                      </td>
+            <div className="p-4">
+              {!loading && !error && (
+                <table className="min-w-full table-auto border border-gray-400">
+                  <thead className="bg-gray-300 border border-gray-400">
+                    <tr>
+                      <th className="px-4 py-2 text-left border-r border-gray-400">
+                        Sr.No.
+                      </th>
+                      <th className="px-4 py-2 text-left border-r border-gray-400">
+                        Sport Name
+                      </th>
+                      <th className="px-4 py-2 text-center">Action</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+                  </thead>
+
+                  <tbody>
+                    {sportsList?.map((sport, index) => (
+                      <tr
+                        key={sport?.gameId}
+                        className={`${
+                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        }`}
+                      >
+                        <td className="border border-gray-400 px-4 py-2 text-center">
+                          {index + 1}
+                        </td>
+                        <td className="border border-gray-400 px-4 py-2 text-left">
+                          {sport.name}
+                        </td>
+                        <td className="border border-gray-400 px-4 py-2 text-center">
+                          <input
+                            type="checkbox"
+                            checked={sport?.isChecked}
+                            onChange={() =>
+                              handleCheckboxChange(
+                                sport?.gameId,
+                                sport?.isChecked
+                              )
+                            }
+                            className="form-checkbox h-5 w-5 text-blue-600"
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
             </div>
           </div>
         </div>
