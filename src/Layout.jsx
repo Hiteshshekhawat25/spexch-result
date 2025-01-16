@@ -1,4 +1,5 @@
 import React, { Suspense } from "react";
+import { ClipLoader } from "react-spinners";
 
 // Lazily load components
 const TopHeader = React.lazy(() => import("./components/Header/TopHeader"));
@@ -13,21 +14,36 @@ const BalanceHeader = React.lazy(() =>
 const Layout = ({ children }) => {
   return (
     <div>
-      {/* <Suspense fallback={<div>Loading Top Header...</div>}>
-     
-      </Suspense> */}
       <TopHeader />
-      <Suspense fallback={<div>Loading Menu Header...</div>}>
+      <Suspense
+        fallback={
+          <div>
+            <ClipLoader />
+          </div>
+        }
+      >
         <MenuHeader />
       </Suspense>
 
       <div className="p-6">
-        <Suspense fallback={<div>Loading Add Client Button...</div>}>
+        <Suspense
+          fallback={
+            <div>
+              <ClipLoader />
+            </div>
+          }
+        >
           <AddClientButton />
         </Suspense>
 
         <div className="mb-6">
-          <Suspense fallback={<div>Loading Balance Header...</div>}>
+          <Suspense
+            fallback={
+              <div>
+                <ClipLoader />
+              </div>
+            }
+          >
             <BalanceHeader />
           </Suspense>
         </div>
