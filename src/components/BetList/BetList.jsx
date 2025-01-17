@@ -164,7 +164,7 @@ const BetList = () => {
             ) : error ? (
               <div className="text-red-500">{error}</div>
             ) : (
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto p-4">
                 <table className="w-full table-auto border-collapse border border-gray-400 p-2">
                   <thead className="border border-gray-400 bg-gray-300 text-black text-center">
                     <tr className="text-center">
@@ -182,57 +182,59 @@ const BetList = () => {
                       ].map((key) => (
                         <th
                           key={key}
-                          className="border border-gray-300 px-4 py-3 text-sm font-medium text-center cursor-pointer"
+                          className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer p-1"
                           onClick={() => handleSort(key)}
                         >
-                          <div className="flex justify-between items-center">
-                            <span>
-                              {key === "username"
-                                ? "Username"
-                                : key === "sportName"
-                                ? "Sport Name"
-                                : key === "event"
-                                ? "Event"
-                                : key === "market"
-                                ? "Market"
-                                : key === "selection"
-                                ? "Selection"
-                                : key === "Type"
-                                ? "Type"
-                                : key === "oddsReq"
-                                ? "Odds Req"
-                                : key === "stack"
-                                ? "Stack"
-                                : key === "placeTime"
-                                ? "Place Time"
-                                : key === "settleTime"
-                                ? "Settle Time"
-                                : key}
-                            </span>
+                          <div className="flex flex-col border-b border-gray-300 pb-2">
+                            <div className="flex justify-between items-center">
+                              <span>
+                                {key === "username"
+                                  ? "Username"
+                                  : key === "sportName"
+                                  ? "Sport Name"
+                                  : key === "event"
+                                  ? "Event"
+                                  : key === "market"
+                                  ? "Market"
+                                  : key === "selection"
+                                  ? "Selection"
+                                  : key === "Type"
+                                  ? "Type"
+                                  : key === "oddsReq"
+                                  ? "Odds Req"
+                                  : key === "stack"
+                                  ? "Stack"
+                                  : key === "placeTime"
+                                  ? "Place Time"
+                                  : key === "settleTime"
+                                  ? "Settle Time"
+                                  : key}
+                              </span>
 
-                            <div className="flex flex-col items-center ml-2">
-                              <FaSortUp
-                                className={`${
-                                  sortConfig.key === key &&
-                                  sortConfig.direction === "ascending"
-                                    ? "text-black"
-                                    : "text-gray-400"
-                                }`}
-                                style={{
-                                  marginBottom: "-6px",
-                                }}
-                              />
-                              <FaSortDown
-                                className={`${
-                                  sortConfig.key === key &&
-                                  sortConfig.direction === "descending"
-                                    ? "text-black"
-                                    : "text-gray-400"
-                                }`}
-                                style={{
-                                  marginTop: "-6px",
-                                }}
-                              />
+                              <div className="flex flex-col items-center ml-2">
+                                <FaSortUp
+                                  className={`${
+                                    sortConfig.key === key &&
+                                    sortConfig.direction === "ascending"
+                                      ? "text-black"
+                                      : "text-gray-400"
+                                  }`}
+                                  style={{
+                                    marginBottom: "-6px",
+                                  }}
+                                />
+                                <FaSortDown
+                                  className={`${
+                                    sortConfig.key === key &&
+                                    sortConfig.direction === "descending"
+                                      ? "text-black"
+                                      : "text-gray-400"
+                                  }`}
+                                  style={{
+                                    marginTop: "-6px",
+                                  }}
+                                />
+                              </div>
                             </div>
                           </div>
                         </th>
@@ -327,7 +329,7 @@ const BetList = () => {
                           colSpan="10"
                           className="border border-gray-400 px-4 py-3"
                         >
-                          No data found
+                          No data !
                         </td>
                       </tr>
                     )}

@@ -1,17 +1,16 @@
-import React, { useEffect ,useState} from "react";
-import { useDispatch,useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setDataSource,
   setFromDate,
   setToDate,
   setFromTime,
   setToTime,
-   resetFilters,
+  resetFilters,
   selectEventPLFilter,
 } from "../../Store/Slice/eventPLFilterSlice";
 import {
   setEventLoading, // Ensure this is imported correctly
- 
 } from "../../Store/Slice/eventProfitLossSlice";
 import { getProfitLossData } from "../../Services/Downlinelistapi"; // Import your API function
 
@@ -28,31 +27,28 @@ const EventPLFilter = ({
   const dispatch = useDispatch();
 
   const eventPLFilterState = useSelector((state) => state.eventPLFilter);
-  const loading = useSelector((state) => state.eventProfitLoss.status === "loading");
+  const loading = useSelector(
+    (state) => state.eventProfitLoss.status === "loading"
+  );
   const [localLoading, setLocalLoadingState] = useState(false);
 
-
   useEffect(() => {
-    // When localLoading changes, pass it back to the parent using setLocalLoading
     setLocalLoading(localLoading);
   }, [localLoading, setLocalLoading]);
 
-  console.log('Redux State for eventPLFilter:', eventPLFilterState);
+  console.log("Redux State for eventPLFilter:", eventPLFilterState);
 
-  // Destructure properties from the state
-  const { dataSource, fromDate, toDate, fromTime, toTime } = eventPLFilterState || {};
-
+  const { dataSource, fromDate, toDate, fromTime, toTime } =
+    eventPLFilterState || {};
 
   useEffect(() => {
-    console.log('loading state has changed:', loading); // Track loading state changes
-  }, [loading]); // This will run every time 'loading' changes
-  
-  
+    console.log("loading state has changed:", loading);
+  }, [loading]);
+
   useEffect(() => {
     setCurrentPage(1);
   }, [entriesToShow, setCurrentPage]);
 
-  // Fetch P&L data when filters or pagination change
   useEffect(() => {
     if (fromDate && toDate) {
       console.log("Fetching P&L data due to filter or page change");
@@ -72,7 +68,7 @@ const EventPLFilter = ({
   // const handleGetPL = async () => {
   //   dispatch(setEventLoading(true)); // Set loading state to true
   //   try {
-     
+
   //     const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
   //       fromDate || ""
   //     }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
@@ -90,7 +86,7 @@ const EventPLFilter = ({
   //       setTotalTransactions(pagination?.totalRecords || 0);
   //       setTotalPages(pagination?.totalPages || 1);
   //       setIsDataFetched(true); // Mark data as fetched
-        
+
   //     } else {
   //       console.error("No data found in response");
   //       setIsDataFetched(false);
@@ -108,7 +104,6 @@ const EventPLFilter = ({
   //   dispatch(setEventLoading(true)); // Set loading state to true
   //   console.log("Started fetching data");
 
-  
   //   try {
   //     const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
   //       fromDate || ""
@@ -116,13 +111,13 @@ const EventPLFilter = ({
   //       toTime || ""
   //     }&dataSource=${dataSource || ""}`;
   //     console.log("Fetching data with URL:", url);
-  
+
   //     const response = await getProfitLossData(url);
   //     console.log(response);
-  
+
   //     if (response && response.data) {
   //       const { pagination, data } = response.data;
-  
+
   //       setPLData(data); // Update parent state with fetched data
   //       setTotalTransactions(pagination?.totalRecords || 0);
   //       setTotalPages(pagination?.totalPages || 1);
@@ -139,22 +134,25 @@ const EventPLFilter = ({
   //     console.log("Loading state reset to false");
   //   }
   // };
-  
 
   const handleGetPL = async () => {
-  setLocalLoadingState(false); 
+    setLocalLoadingState(false);
     console.log("Started fetching data");
-  
+
     try {
-      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate || ""}&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${toTime || ""}&dataSource=${dataSource || ""}`;
+      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
+        fromDate || ""
+      }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
+        toTime || ""
+      }&dataSource=${dataSource || ""}`;
       console.log("Fetching data with URL:", url);
-  
+
       const response = await getProfitLossData(url);
       console.log(response);
-  
+
       if (response && response.data) {
         const { pagination, data } = response.data;
-  
+
         setPLData(data);
         setTotalTransactions(pagination?.totalRecords || 0);
         setTotalPages(pagination?.totalPages || 1);
@@ -169,17 +167,17 @@ const EventPLFilter = ({
     } finally {
       console.log("Setting loading state to false in finally block");
       // setLocalLoadingState(false);
-            // console.log("Loading state reset to false");
+      // console.log("Loading state reset to false");
     }
   };
-  
+
   const handleReset = () => {
     dispatch(resetFilters());
-    setPLData([]); 
+    setPLData([]);
     setTotalTransactions(0);
     setTotalPages(1);
     setIsDataFetched(false);
-    setCurrentPage(1); 
+    setCurrentPage(1);
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -232,14 +230,13 @@ const EventPLFilter = ({
   };
 
   useEffect(() => {
-    // Set default values if not already set
     if (!fromTime) dispatch(setFromTime("00:00"));
     if (!toTime) dispatch(setToTime("23:59"));
   }, [dispatch, fromTime, toTime]);
 
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-          {/* {localLoading  ? (
+      {/* {localLoading  ? (
 
 <div className="flex justify-center items-center h-64">
   <div className="relative w-48 h-48">
@@ -258,8 +255,6 @@ const EventPLFilter = ({
 ) : (
   <> */}
 
-
-      
       <div className="flex flex-col items-start">
         <label className="text-sm font-medium text-black mb-2">
           Data Source
@@ -276,7 +271,6 @@ const EventPLFilter = ({
         </select>
       </div>
 
-      {/* Date and Time Filters */}
       <div className="flex flex-col items-start">
         <label className="text-sm font-medium text-black mb-1">From Date</label>
         <input
@@ -318,25 +312,22 @@ const EventPLFilter = ({
       </div>
 
       {/* Buttons */}
-      <div className="flex space-x-2 items-center ml-auto">
+      <div className="flex space-x-2 items-center">
         <button
           onClick={handleGetPL}
-          className="px-4 py-2 bg-darkgray text-white rounded-md text-sm"
+          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
         >
           Get P & L
         </button>
-        <button
+        {/* <button
           onClick={handleReset}
           className="px-4 py-2 bg-gradient-blue text-white rounded-md text-sm"
         >
           Reset
-        </button>
+        </button> */}
       </div>
-   {/* </>
-  )} */}
-</div>
-);
+    </div>
+  );
 };
 
 export default EventPLFilter;
-

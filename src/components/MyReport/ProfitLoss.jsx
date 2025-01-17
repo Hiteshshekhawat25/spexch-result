@@ -60,7 +60,7 @@ const ProfitLoss = () => {
 
       {/* Data Table */}
       <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="text-xl bg-gradient-blue text-white font-bold">
+        <h1 className="text-md bg-gradient-seablue text-white font-bold p-1.5">
           Profit Loss
         </h1>
 

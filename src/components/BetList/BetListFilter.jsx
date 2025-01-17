@@ -94,8 +94,8 @@ const BetListFilter = ({
           }}
           className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         >
-          <option value="settled">Settled</option>
-          <option value="unsettled">Unsettled</option>
+          <option value="settled">Settle</option>
+          <option value="unsettled">UnSettle</option>
           <option value="void">Void</option>
         </select>
       </div>
