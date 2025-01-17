@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import { FaSortUp, FaSortDown, FaEdit, FaEye } from "react-icons/fa";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { RiArrowUpDownFill } from "react-icons/ri";
@@ -100,26 +100,22 @@ const DownlineList = () => {
     }
   };
 
-
-
-
   const handleArrowClick = (item) => {
-    console.log('Selected User Data:', item); // Debugging: Logs the selected user data
+    console.log("Selected User Data:", item); 
     navigate(ROUTES_CONST.MyAccount, {
       state: {
         selectedUser: item,
-        selectedPage: 'profitLoss', // Pass the selected page here
+        selectedPage: "profitLoss", 
       },
     });
   };
 
-
   const handleHistoryClick = (item) => {
-    console.log('Selected User Data:', item); // Debugging: Logs the selected user data
+    console.log("Selected User Data:", item); 
     navigate(ROUTES_CONST.MyAccount, {
       state: {
         selectedUser: item,
-        selectedPage: 'bethistory', // Pass the selected page here
+        selectedPage: "bethistory", 
       },
     });
   };
@@ -768,12 +764,18 @@ const DownlineList = () => {
                               <AiFillDollarCircle className="text-darkgray" />
                             </div>
                             {!isMasterDownlineList && (
-                              <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                              <div
+                                onClick={() => handleArrowClick(item)}
+                                className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                              >
                                 <RiArrowUpDownFill className="text-darkgray" />
                               </div>
                             )}
                             {!isMasterDownlineList && (
-                              <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                              <div
+                                onClick={() => handleHistoryClick(item)}
+                                className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                              >
                                 <MdManageHistory className="text-darkgray" />
                               </div>
                             )}
