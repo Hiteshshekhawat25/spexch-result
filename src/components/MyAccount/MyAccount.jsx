@@ -5,10 +5,13 @@ import ActivityLog from "./ActivityLog";
 import { ClipLoader } from "react-spinners";
 
 const MyAccount = () => {
-  const [selectedPage, setSelectedPage] = useState("myProfile");
+  const [selectedPage, setSelectedPage] = useState('myProfile'); 
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    
+  }, []);
+
 
   useEffect(() => {
     if (loading) {
