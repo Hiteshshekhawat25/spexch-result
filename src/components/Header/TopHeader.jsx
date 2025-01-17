@@ -43,32 +43,41 @@ const TopHeader = () => {
         <div className="text-xl font-bold flex-shrink-0">
           <img src={spexec} alt="Logo" height={80} width={80} />
         </div>
-        <div className="lg:hidden flex items-center justify-end w-full">
-          {loading ? (
-            <div className="flex items-center">
-              <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Loading...</span>
-              <FaSyncAlt className="text-white animate-spin ml-1" />
-            </div>
-          ) : error ? (
-            <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Error: {error}</span>
-          ) : userData ? (
-            <div className="flex items-center space-x-1">
-              <span className="text-white text-sm font-bold px-1 rounded-md">
-                {userData?.data?.username}
-              </span>
-              <span className="text-white px-1 py-0.5 rounded-md font-bold">
-                IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
-              </span>
-              <button
-                onClick={refreshData}
-                className="bg-darkgray text-white p-0.5 rounded-md hover:bg-gray-700"
-                title="Refresh"
-              >
-                <MdRefresh />
-              </button>
-            </div>
-          ) : null}
-        </div>
+<div className="lg:hidden flex flex-col items-end space-y-1">
+  {loading ? (
+    <div className="flex items-center">
+      <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Loading...</span>
+      <FaSyncAlt className="text-white animate-spin ml-1" />
+    </div>
+  ) : error ? (
+    <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Error: {error}</span>
+  ) : userData ? (
+    <div className="flex flex-col items-end space-y-1">
+      <div className="flex items-center space-x-1">
+        <span className="bg-darkgray text-white text-xs font-bold px-1 rounded-md">
+          {userData?.data?.role_name?.toUpperCase()}
+        </span>
+        <span className="text-white text-sm font-bold px-1 rounded-md">
+          {userData?.data?.username}
+        </span>
+      </div>
+      <div className="flex items-center space-x-1">
+        <span className="text-white px-1 py-0.5 rounded-md font-bold">
+          IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
+        </span>
+        <button
+          onClick={refreshData}
+          className="bg-darkgray text-white p-0.5 rounded-md hover:bg-gray-700"
+          title="Refresh"
+        >
+          <MdRefresh />
+        </button>
+      </div>
+    </div>
+  ) : null}
+</div>
+
+
       </div>
       <div className="hidden lg:flex flex-col lg:flex-row items-center lg:space-x-2">
         {loading ? (
