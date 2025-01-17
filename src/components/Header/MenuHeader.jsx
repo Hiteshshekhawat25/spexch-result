@@ -8,11 +8,11 @@ import { clearUserData } from "../../Store/Slice/userInfoSlice";
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
-  const [activeSubMenu, setActiveSubMenu] = useState(null); // Manage submenu visibility
-  const [subMenuStyles, setSubMenuStyles] = useState({}); // Store submenu position and width
+  const [activeSubMenu, setActiveSubMenu] = useState(null); 
+  const [subMenuStyles, setSubMenuStyles] = useState({}); 
   const dispatch = useDispatch();
-  const menuRefs = useRef([]); // Store references to each menu item
-  const subMenuRef = useRef(null); // Ref for the active submenu
+  const menuRefs = useRef([]); 
+  const subMenuRef = useRef(null); 
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
@@ -86,25 +86,24 @@ const MenuHeader = () => {
     } else {
       setActiveSubMenu(name);
 
-      // Get the parent menu item
+     
       const menuItem = menuRefs.current[index];
       if (menuItem) {
-        const { offsetTop, offsetHeight, offsetLeft, offsetWidth } =
-          menuItem.getBoundingClientRect();
+        const { offsetTop, offsetHeight, offsetLeft } = menuItem;
 
-        // Dynamically position submenu below the selected menu item
+        
         setSubMenuStyles({
-          top: offsetTop + offsetHeight,  // Position below the menu item
-          left: offsetLeft,               // Align submenu horizontally with the menu item
-          width: offsetWidth,             // Set submenu width to match the menu item
-          position: "absolute",           // Ensure the submenu appears above the other content
-          zIndex: 10,                     // Make sure submenu is on top
+          top: offsetTop + offsetHeight, 
+          left: offsetLeft, 
+          width: 200, 
+          position: "absolute", 
+          zIndex: 10, 
         });
       }
     }
   };
 
-  // Close submenu when clicking outside
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -123,20 +122,20 @@ const MenuHeader = () => {
 
   return (
     <div className="bg-gradient-green text-black font-bold px-2 relative">
-      {/* Main Menu (horizontal scroll for small screens) */}
+      
       <div className="lg:hidden overflow-x-auto whitespace-nowrap">
         <ul className="flex">
           {menuItems.map((item, index) => (
             <li
               key={index}
               className="relative text-sm border-l border-r border-gray-400"
-              ref={(el) => (menuRefs.current[index] = el)} // Reference for each menu item
+              ref={(el) => (menuRefs.current[index] = el)} 
             >
               <Link
                 to={item.link}
                 onClick={() => {
-                  setActiveMenu(item.name); // Change background on click
-                  item.subMenu && toggleSubMenu(item.name, index); // Toggle submenu visibility
+                  setActiveMenu(item.name); 
+                  item.subMenu && toggleSubMenu(item.name, index); 
                 }}
                 className={`py-1 px-2 block border-b-2 ${
                   activeMenu === item.name
@@ -153,28 +152,30 @@ const MenuHeader = () => {
             </li>
           ))}
         </ul>
-        {/* Submenus */}
+       
         {menuItems.map((item, index) =>
-          item.subMenu && activeSubMenu === item.name ? (
-            <ul
-              key={index}
-              ref={subMenuRef} // Reference for submenu
-              style={subMenuStyles} // Dynamically position submenu
-              className="absolute bg-gradient-blue-hover shadow-lg z-10 flex flex-col whitespace-nowrap"
-            >
-              {item.subMenu.map((subItem, subIndex) => (
-                <li key={subIndex}>
-                  <Link
-                    to={subItem.link}
-                    className="block hover:bg-gradient-green text-white"
-                  >
-                    {subItem.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          ) : null
-        )}
+  item.subMenu && activeSubMenu === item.name ? (
+    <ul
+      key={index}
+      ref={subMenuRef} 
+      style={subMenuStyles} 
+      className="absolute bg-gradient-blue-hover shadow-lg z-10 flex flex-col whitespace-nowrap"
+    >
+      {item.subMenu.map((subItem, subIndex) => (
+        <li key={subIndex}>
+          <Link
+            to={subItem.link}
+            className="block px-4 py-2 hover:bg-gradient-green text-white w-auto"
+            style={{ whiteSpace: "nowrap" }} 
+          >
+            {subItem.name}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  ) : null
+)}
+
       </div>
 
       {/* Main Menu for Large Screens */}
@@ -187,7 +188,7 @@ const MenuHeader = () => {
             <Link
               to={item.link}
               onClick={() => {
-                setActiveMenu(item.name); // Change background on click
+                setActiveMenu(item.name); 
               }}
               className={`py-1 px-2 block border-b-2 ${
                 activeMenu === item.name
@@ -223,4 +224,5 @@ const MenuHeader = () => {
 };
 
 export default MenuHeader;
+
 
