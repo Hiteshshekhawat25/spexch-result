@@ -38,6 +38,7 @@ import { toast } from "react-toastify";
 import { Link, useLocation } from "react-router-dom";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
 import UpdatePartnershipModal from "../Modal/UpdatePartnershipModal";
+import { ClipLoader } from "react-spinners";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -216,7 +217,7 @@ const DownlineList = () => {
             }
           }
         } catch (error) {
-          setError(error.message || "Failed to fetch roles."); 
+          setError(error.message || "Failed to fetch roles.");
         }
       };
 
@@ -380,499 +381,506 @@ const DownlineList = () => {
 
   return (
     <>
-          {loading ? (
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="relative w-48 h-48">
+            <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
 
-<div className="flex justify-center items-center h-64">
-  <div className="relative w-48 h-48">
-    
-    <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
-   
-    <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
-    
-    <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
-      Loading...
-    </div>
-  </div>
- 
- 
-</div>
-) : (
-  <>
-      {userFetchList.length ? (
+            <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+
+            <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+              <ClipLoader />
+            </div>
+          </div>
+        </div>
+      ) : (
         <>
-          <div
-            className="border rounded p-2 mb-3 w-full sm:w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-semibold"
-            onClick={() => setUserFetchList([])}
-          >
-            <div className="bg-green-500 text-white px-2 py-1 mr-2 rounded font-semibold text-xs sm:text-sm w-14">
-              Master
+          {userFetchList.length ? (
+            <>
+              <div
+                className="border rounded p-2 mb-3 w-full sm:w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-semibold"
+                onClick={() => setUserFetchList([])}
+              >
+                <div className="bg-green-500 text-white px-2 py-1 mr-2 rounded font-semibold text-xs sm:text-sm w-14">
+                  Master
+                </div>
+                <div className="text-sm sm:text-base">
+                  {userFetchList?.[0]?.username}
+                </div>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
+          <div className="p-4 border border-gray-200 rounded-md bg-white">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
+              {/* Show Entries Dropdown */}
+              <div className="p-2 rounded-md flex items-center w-full sm:w-auto">
+                <label className="mr-2 text-sm font-medium">Show</label>
+                <select
+                  value={entriesToShow}
+                  onChange={handleEntriesChange}
+                  // className="border border-gray-300 rounded px-2 py-1 text-sm w-full sm:w-auto"
+                  className="border rounded px-2 py-1 text-sm  sm:w-auto"
+                >
+                  {[10, 25, 50, 100].map((number) => (
+                    <option key={number} value={number}>
+                      {number}
+                    </option>
+                  ))}
+                </select>
+                <label className="ml-2 text-sm font-medium">entries</label>
+              </div>
+
+              {/* Filters and Search */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 w-full sm:w-auto">
+                {/* Filter Dropdown */}
+                <div className="rounded-md w-full sm:w-28 px-3">
+                  <select
+                    value={selectedFilter}
+                    onChange={handleFilterChange}
+                    // className="border rounded py-1 px-2 text-sm bg-gray-200 text-black border-gray-400 sm:ml-10 "
+                    className="border rounded py-1 px-2 text-sm bg-gray-200 text-black border-gray-400 sm:ml-0 ml-10"
+                  >
+                    <option value="">Status</option>
+                    <option value="active">Active</option>
+                    <option value="suspended">Suspended</option>
+                    <option value="locked">Locked</option>
+                  </select>
+                </div>
+
+                {/* Search Input */}
+                <div className="flex w-full sm:flex-row sm:items-center sm:space-x-2">
+                  <label className="text-sm p-1">Search:</label>
+                  <div className="rounded-md w-full sm:w-28">
+                    <input
+                      type="text"
+                      value={searchTerm}
+                      onChange={handleSearchChange}
+                      className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
+                    />
+                  </div>
+                </div>
+              </div>
             </div>
-            <div className="text-sm sm:text-base">
-              {userFetchList?.[0]?.username}
+
+            <div className="overflow-x-auto">
+              <table className="w-full table-auto border-collapse border border-gray-300">
+                <thead className="border border-gray-300">
+                  <tr className="bg-gray-300">
+                    {[
+                      { key: "username", label: "Username" },
+                      { key: "creditRef", label: "CreditRef" },
+                      ...(isMasterDownlineList
+                        ? [{ key: "partnership", label: "Partnership" }]
+                        : []),
+                      { key: "balance", label: "Balance" },
+                      { key: "exposures", label: "Exposures" },
+                      ...(!isMasterDownlineList
+                        ? [{ key: "exposure", label: "Exposure Limit" }]
+                        : []),
+                      { key: "availableBalance", label: "Avail. Bal" },
+                      { key: "refPL", label: "Ref. P/L" },
+                      ...(!isMasterDownlineList
+                        ? [{ key: "partnership", label: "Partnership" }]
+                        : []),
+                      { key: "status", label: "Status" },
+                    ].map(({ key, label }) => (
+                      <th
+                        key={key}
+                        className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
+                        onClick={() => handleSort(key)}
+                      >
+                        <div className="flex justify-between">
+                          <div className="flex items-center">{label}</div>
+                          <div className="flex flex-col items-center ml-2">
+                            <FaSortUp
+                              className={`${
+                                sortConfig.key === key &&
+                                sortConfig.direction === "ascending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                              }`}
+                              style={{
+                                marginBottom: "-6px",
+                              }}
+                            />
+                            <FaSortDown
+                              className={`${
+                                sortConfig.key === key &&
+                                sortConfig.direction === "descending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                              }`}
+                              style={{
+                                marginTop: "-6px",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </th>
+                    ))}
+                    <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
+                      Actions
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {/* {userList.length > 0 ? (userList */}
+                  {(searchTerm?.length
+                    ? searchData
+                    : userFetchList.length > 0
+                    ? userFetchList
+                    : userList.length > 0
+                    ? userList
+                    : downlineData
+                  )?.length ? (
+                    (searchTerm?.length
+                      ? searchData
+                      : userFetchList.length > 0
+                      ? userFetchList
+                      : userList.length > 0
+                      ? userList
+                      : downlineData
+                    ).map((item) => (
+                      <tr
+                        key={item?._id}
+                        className="border border-gray-400 bg-white"
+                      >
+                        <td className="px-4 py-2 text-sm">
+                          {" "}
+                          <div
+                            onClick={() => handleUsernameList(item)}
+                            className={`${
+                              item.role_name === "master"
+                                ? "cursor-pointer"
+                                : ""
+                            }`}
+                          >
+                            <span
+                              className={`bg-green-500 text-white px-2 py-1 text-xs mr-1 rounded font-semibold text-l ${
+                                item.role_name === "master"
+                                  ? "cursor-pointer"
+                                  : ""
+                              }`}
+                            >
+                              {item.role_name.toUpperCase()}
+                            </span>
+                            <span className="text-black font-semibold">
+                              {item.username}
+                            </span>
+                          </div>
+                        </td>
+                        <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
+                          {new Intl.NumberFormat("en-IN").format(
+                            item.creditReference
+                          )}
+                          <div className="ml-2 inline-flex space-x-2">
+                            <FaEdit
+                              className="text-blue cursor-pointer"
+                              onClick={() => handleEditClick(item)}
+                            />
+                            <FaEye
+                              className="text-blue cursor-pointer"
+                              onClick={() => handleListView(item)}
+                            />
+                          </div>
+                        </td>
+                        {!isMasterDownlineList && (
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                            {new Intl.NumberFormat("en-IN").format(
+                              item.openingBalance
+                            )}
+                          </td>
+                        )}
+                        {isMasterDownlineList && (
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                            {new Intl.NumberFormat("en-IN").format(
+                              item.partnership
+                            )}
+                            <div className="ml-2 inline-flex space-x-2">
+                              <FaEdit
+                                className="text-blue cursor-pointer"
+                                onClick={() => handleUpdatePartnership(item)}
+                              />
+                            </div>
+                          </td>
+                        )}
+                        {isMasterDownlineList && (
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                            {new Intl.NumberFormat("en-IN").format(
+                              item.openingBalance
+                            )}
+                          </td>
+                        )}
+                        <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                          0
+                        </td>
+                        {!isMasterDownlineList && (
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                            {new Intl.NumberFormat("en-IN").format(
+                              item.exposureLimit
+                            )}
+                            <div className="ml-2 inline-flex space-x-2">
+                              <FaEdit
+                                className="text-blue cursor-pointer"
+                                onClick={() => handleExposureEditClick(item)}
+                              />
+                            </div>
+                          </td>
+                        )}
+
+                        <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                          {new Intl.NumberFormat("en-IN").format(
+                            item.totalBalance || 0
+                          )}
+                        </td>
+                        <td
+                          className={`border border-gray-400 px-4 py-2 text-sm font-semibold ${
+                            item.profit_loss < 0 ? "text-red-500" : ""
+                          }`}
+                        >
+                          {item.profit_loss < 0
+                            ? `(-${new Intl.NumberFormat("en-IN").format(
+                                Math.abs(item.profit_loss)
+                              )})`
+                            : new Intl.NumberFormat("en-IN").format(
+                                item.profit_loss
+                              )}
+                        </td>
+                        {!isMasterDownlineList && (
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                            {new Intl.NumberFormat("en-IN").format(100)}
+                          </td>
+                        )}
+
+                        <td className="border border-gray-400 px-4 py-2 font-bold text-l">
+                          <span
+                            className={`p-1 rounded border ${
+                              item.status === "active"
+                                ? "text-green-600 border-green-600 bg-green-100"
+                                : item.status === "suspended"
+                                ? "text-red-600 border-red-600 bg-red-100"
+                                : item.status === "locked"
+                                ? "text-red-600 border-red-600 bg-red-100"
+                                : "text-gray-600 border-gray-600 bg-gray-100"
+                            }`}
+                          >
+                            {item.status}
+                          </span>
+                        </td>
+
+                        <td className="px-4 py-2 text-sm">
+                          <div className="flex space-x-2">
+                            <div
+                              onClick={() => handleIconClick(item)}
+                              title="Banking"
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                            >
+                              <AiFillDollarCircle className="text-darkgray" />
+                            </div>
+                            {!isMasterDownlineList && (
+                              <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                                <RiArrowUpDownFill className="text-darkgray" />
+                              </div>
+                            )}
+                            {!isMasterDownlineList && (
+                              <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
+                                <MdManageHistory className="text-darkgray" />
+                              </div>
+                            )}
+                            <div
+                              onClick={() => statushandlechange(item)}
+                              title="Change status"
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                            >
+                              <MdSettings className="text-darkgray" />
+                            </div>
+                            <Link
+                              title="Account Setting"
+                              to={ROUTES_CONST.MyAccount}
+                            >
+                              <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
+                                <FaUserAlt className="text-darkgray" />
+                              </div>
+                            </Link>
+                            <div
+                              onClick={() => handleOpenSettings(item)}
+                              title="Sports Settings"
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                            >
+                              <BsBuildingFillLock className="text-darkgray" />
+                            </div>
+                            <div
+                              onClick={() => handleDeleteClick(item)}
+                              title="Delete"
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                            >
+                              <MdDelete className="text-" />
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan={10} className="text-center p-6">
+                        No Data Available
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
+            <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
+              <div className="text-sm text-gray-600">
+                Showing{" "}
+                {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
+                to {Math.min(currentPage * entriesToShow, totalUsers)} of{" "}
+                {totalUsers} entries
+              </div>
+              <div className="flex space-x-2 sm:ml-auto">
+                <button
+                  onClick={() => handlePageChange("first")}
+                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  disabled={currentPage === 1}
+                >
+                  First
+                </button>
+                <button
+                  onClick={() => handlePageChange("prev")}
+                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+                <button
+                  onClick={() => handlePageChange("next")}
+                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  disabled={currentPage === totalPages}
+                >
+                  Next
+                </button>
+                <button
+                  onClick={() => handlePageChange("last")}
+                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  disabled={currentPage === totalPages}
+                >
+                  Last
+                </button>
+              </div>
+            </div>
+
+            {isModalOpen && selectedUser && (
+              <>
+                <CreditEditReferenceModal
+                  isOpen={isModalOpen}
+                  onCancel={handleModalClose}
+                  username={selectedUser.username}
+                  currentCreditRef={selectedUser.creditReference}
+                  onSubmit={handleSubmitFunction}
+                  user={selectedUser}
+                  userId={selectedUser?._id}
+                  currentPage={currentPage}
+                  entriesToShow={entriesToShow}
+                />
+              </>
+            )}
+            {selectedUser && updatePartnership && (
+              <>
+                <UpdatePartnershipModal
+                  isOpen={updatePartnership}
+                  onCancel={handleDeleteModalClose}
+                  username={selectedUser.username}
+                  currentPartnership={selectedUser.partnership}
+                  onSubmit={handleSubmitFunction}
+                  user={selectedUser}
+                  userId={selectedUser?._id}
+                  currentPage={currentPage}
+                  entriesToShow={entriesToShow}
+                />
+              </>
+            )}
+            {/* Log userId */}
+            {creditReferenceTransactionList && (
+              <>
+                <CreditReferenceTransactionModel
+                  username={creditReferenceTransactionList.username}
+                  isOpen={creditReferenceTransactionList}
+                  onClose={handleDeleteModalClose}
+                  // onConfirm={handleDeleteConfirm}
+                  userId={creditReferenceTransactionList?._id}
+                  currentPage={currentPage}
+                  entriesToShow={entriesToShow}
+                />
+              </>
+            )}
+            <DeleteConfirmationModal
+              isOpen={isDeleteModalOpen}
+              onClose={handleDeleteModalClose}
+              onConfirm={handleDeleteConfirm}
+              userId={userToDelete?._id}
+              currentPage={currentPage}
+              entriesToShow={entriesToShow}
+            />
+            {selectedUser && depositModal && (
+              <DepositModal
+                isOpen={depositModal}
+                onClose={handleDeleteModalClose}
+                userId={selectedUser?._id}
+                currentPage={currentPage}
+                entriesToShow={entriesToShow}
+                user={selectedUser}
+              />
+            )}
+            {selectedUser && (
+              <>
+                <SportsSettingsModal
+                  isOpen={settingsModal}
+                  onClose={handleDeleteModalClose}
+                  // onConfirm={handleDeleteConfirm}
+                  userId={selectedUser?._id}
+                  currentPage={currentPage}
+                  entriesToShow={entriesToShow}
+                />
+              </>
+            )}
+            {selectedUser && (
+              <>
+                <AccountStatus
+                  isOpen={accountStatus}
+                  onClose={handleDeleteModalClose}
+                  // onConfirm={handleDeleteConfirm}
+                  userId={selectedUser?._id}
+                  currentPage={currentPage}
+                  entriesToShow={entriesToShow}
+                  user={selectedUser}
+                />
+              </>
+            )}
+            {isExposureModalOpen && selectedExposureUser && (
+              <>
+                <EditExposureLimitModal
+                  username={selectedExposureUser.username}
+                  currentExposureLimit={selectedExposureUser.exposureLimit}
+                  onSubmit={(newExposureLimit, password) => {
+                    console.log(
+                      `Updated exposure limit for ${selectedExposureUser.username}: ${newExposureLimit} (Password: ${password})`
+                    );
+                    handleExposureModalClose();
+                  }}
+                  onCancel={handleExposureModalClose}
+                  // onSubmit={handleSubmitFunction}
+                  user={selectedExposureUser}
+                  userId={selectedExposureUser?._id}
+                  currentPage={currentPage}
+                  entriesToShow={entriesToShow}
+                />
+              </>
+            )}
           </div>
         </>
-      ) : (
-        ""
       )}
-      <div className="p-4 border border-gray-200 rounded-md bg-white">
-
-        <div className="flex justify-between items-center mb-4">
-          <div className="border border-gray-300 p-2 rounded-md">
-            <label className="mr-2 text-sm font-medium">Show</label>
-            <select
-              value={entriesToShow}
-              onChange={handleEntriesChange}
-              className="border border-gray-300 rounded px-2 py-1 text-sm sm:w-auto mb-2"
-            >
-              {[10, 25, 50, 100].map((number) => (
-                <option key={number} value={number}>
-                  {number}
-                </option>
-              ))}
-            </select>
-            <label className="ml-2 text-sm font-medium">entries</label>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-6 sm:ml-10 w-full sm:w-auto">
-            <div className="rounded-md w-full sm:w-28 px-3">
-              <select
-                value={selectedFilter}
-                onChange={handleFilterChange}
-                className="border rounded py-1 px-2 text-sm w-full bg-gray-200 text-black border-gray-400"
-              >
-                <option value="">Status</option>
-                <option value="active">Active</option>
-                <option value="suspended">Suspended</option>
-                <option value="locked">Locked</option>
-              </select>
-            </div>
-
-            <label className="text-sm">Search:</label>
-            <div className="rounded-md w-full sm:w-28">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse border border-gray-300">
-            <thead className="border border-gray-300">
-              <tr className="bg-gray-300">
-                {[
-                  { key: "username", label: "Username" },
-                  { key: "creditRef", label: "CreditRef" },
-                  ...(isMasterDownlineList
-                    ? [{ key: "partnership", label: "Partnership" }]
-                    : []),
-                  { key: "balance", label: "Balance" },
-                  { key: "exposures", label: "Exposures" },
-                  ...(!isMasterDownlineList
-                    ? [{ key: "exposure", label: "Exposure Limit" }]
-                    : []),
-                  { key: "availableBalance", label: "Avail. Bal" },
-                  { key: "refPL", label: "Ref. P/L" },
-                  ...(!isMasterDownlineList
-                    ? [{ key: "partnership", label: "Partnership" }]
-                    : []),
-                  { key: "status", label: "Status" },
-                ].map(({ key, label }) => (
-                  <th
-                    key={key}
-                    className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
-                    onClick={() => handleSort(key)}
-                  >
-                    <div className="flex justify-between">
-                      <div className="flex items-center">{label}</div>
-                      <div className="flex flex-col items-center ml-2">
-                        <FaSortUp
-                          className={`${
-                            sortConfig.key === key &&
-                            sortConfig.direction === "ascending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{
-                            marginBottom: "-6px",
-                          }}
-                        />
-                        <FaSortDown
-                          className={`${
-                            sortConfig.key === key &&
-                            sortConfig.direction === "descending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{
-                            marginTop: "-6px",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </th>
-                ))}
-                <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* {userList.length > 0 ? (userList */}
-              {(searchTerm?.length
-                ? searchData
-                : userFetchList.length > 0
-                ? userFetchList
-                : userList.length > 0
-                ? userList
-                : downlineData
-              )?.length ? (
-                (searchTerm?.length
-                  ? searchData
-                  : userFetchList.length > 0
-                  ? userFetchList
-                  : userList.length > 0
-                  ? userList
-                  : downlineData
-                ).map((item) => (
-                  <tr
-                    key={item?._id}
-                    className="border border-gray-400 bg-white"
-                  >
-                    <td className="px-4 py-2 text-sm">
-                      {" "}
-                      <div
-                        onClick={() => handleUsernameList(item)}
-                        className={`${
-                          item.role_name === "master" ? "cursor-pointer" : ""
-                        }`}
-                      >
-                        <span
-                          className={`bg-green-500 text-white px-2 py-1 text-xs mr-1 rounded font-semibold text-l ${
-                            item.role_name === "master" ? "cursor-pointer" : ""
-                          }`}
-                        >
-                          {item.role_name.toUpperCase()}
-                        </span>
-                        <span className="text-black font-semibold">
-                          {item.username}
-                        </span>
-                      </div>
-                    </td>
-                    <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
-                      {new Intl.NumberFormat("en-IN").format(
-                        item.creditReference
-                      )}
-                      <div className="ml-2 inline-flex space-x-2">
-                        <FaEdit
-                          className="text-blue cursor-pointer"
-                          onClick={() => handleEditClick(item)}
-                        />
-                        <FaEye
-                          className="text-blue cursor-pointer"
-                          onClick={() => handleListView(item)}
-                        />
-                      </div>
-                    </td>
-                    {!isMasterDownlineList && (
-                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                        {new Intl.NumberFormat("en-IN").format(
-                          item.openingBalance
-                        )}
-                      </td>
-                    )}
-                    {isMasterDownlineList && (
-                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                        {new Intl.NumberFormat("en-IN").format(
-                          item.partnership
-                        )}
-                        <div className="ml-2 inline-flex space-x-2">
-                          <FaEdit
-                            className="text-blue cursor-pointer"
-                            onClick={() => handleUpdatePartnership(item)}
-                          />
-                        </div>
-                      </td>
-                    )}
-                    {isMasterDownlineList && (
-                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                        {new Intl.NumberFormat("en-IN").format(
-                          item.openingBalance
-                        )}
-                      </td>
-                    )}
-                    <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                      0
-                    </td>
-                    {!isMasterDownlineList && (
-                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                        {new Intl.NumberFormat("en-IN").format(
-                          item.exposureLimit
-                        )}
-                        <div className="ml-2 inline-flex space-x-2">
-                          <FaEdit
-                            className="text-blue cursor-pointer"
-                            onClick={() => handleExposureEditClick(item)}
-                          />
-                        </div>
-                      </td>
-                    )}
-
-                    <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                      {new Intl.NumberFormat("en-IN").format(
-                        item.totalBalance || 0
-                      )}
-                    </td>
-                    <td
-                      className={`border border-gray-400 px-4 py-2 text-sm font-semibold ${
-                        item.profit_loss < 0 ? "text-red-500" : ""
-                      }`}
-                    >
-                      {item.profit_loss < 0
-                        ? `(-${new Intl.NumberFormat("en-IN").format(
-                            Math.abs(item.profit_loss)
-                          )})`
-                        : new Intl.NumberFormat("en-IN").format(
-                            item.profit_loss
-                          )}
-                    </td>
-                    {!isMasterDownlineList && (
-                      <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
-                        {new Intl.NumberFormat("en-IN").format(100)}
-                      </td>
-                    )}
-
-                    <td className="border border-gray-400 px-4 py-2 font-bold text-l">
-                      <span
-                        className={`p-1 rounded border ${
-                          item.status === "active"
-                            ? "text-green-600 border-green-600 bg-green-100"
-                            : item.status === "suspended"
-                            ? "text-red-600 border-red-600 bg-red-100"
-                            : item.status === "locked"
-                            ? "text-red-600 border-red-600 bg-red-100"
-                            : "text-gray-600 border-gray-600 bg-gray-100"
-                        }`}
-                      >
-                        {item.status}
-                      </span>
-                    </td>
-
-                    <td className="px-4 py-2 text-sm">
-                      <div className="flex space-x-2">
-                        <div
-                          onClick={() => handleIconClick(item)}
-                          title="Banking"
-                          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
-                        >
-                          <AiFillDollarCircle className="text-darkgray" />
-                        </div>
-                        {!isMasterDownlineList && (
-                          <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                            <RiArrowUpDownFill className="text-darkgray" />
-                          </div>
-                        )}
-                        {!isMasterDownlineList && (
-                          <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200">
-                            <MdManageHistory className="text-darkgray" />
-                          </div>
-                        )}
-                        <div
-                          onClick={() => statushandlechange(item)}
-                          title="Change status"
-                          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
-                        >
-                          <MdSettings className="text-darkgray" />
-                        </div>
-                        <Link
-                          title="Account Setting"
-                          to={ROUTES_CONST.MyAccount}
-                        >
-                          <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
-                            <FaUserAlt className="text-darkgray" />
-                          </div>
-                        </Link>
-                        <div
-                          onClick={() => handleOpenSettings(item)}
-                          title="Sports Settings"
-                          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
-                        >
-                          <BsBuildingFillLock className="text-darkgray" />
-                        </div>
-                        <div
-                          onClick={() => handleDeleteClick(item)}
-                          title="Delete"
-                          className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
-                        >
-                          <MdDelete className="text-" />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan={10} className="text-center p-6">
-                    No Data Available
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-        <div className="flex justify-between items-center mt-4">
-          <div className="text-sm text-gray-600">
-            Showing{" "}
-            {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
-            {Math.min(currentPage * entriesToShow, totalUsers)} of {totalUsers}{" "}
-            entries
-          </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => handlePageChange("first")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === 1}
-            >
-              First
-            </button>
-            <button
-              onClick={() => handlePageChange("prev")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => handlePageChange("next")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-            <button
-              onClick={() => handlePageChange("last")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === totalPages}
-            >
-              Last
-            </button>
-          </div>
-        </div>
-
-        {isModalOpen && selectedUser && (
-          <>
-            <CreditEditReferenceModal
-              isOpen={isModalOpen}
-              onCancel={handleModalClose}
-              username={selectedUser.username}
-              currentCreditRef={selectedUser.creditReference}
-              onSubmit={handleSubmitFunction}
-              user={selectedUser}
-              userId={selectedUser?._id}
-              currentPage={currentPage}
-              entriesToShow={entriesToShow}
-            />
-          </>
-        )}
-        {selectedUser && updatePartnership && (
-          <>
-            <UpdatePartnershipModal
-              isOpen={updatePartnership}
-              onCancel={handleDeleteModalClose}
-              username={selectedUser.username}
-              currentPartnership={selectedUser.partnership}
-              onSubmit={handleSubmitFunction}
-              user={selectedUser}
-              userId={selectedUser?._id}
-              currentPage={currentPage}
-              entriesToShow={entriesToShow}
-            />
-          </>
-        )}
-        {/* Log userId */}
-        {creditReferenceTransactionList && (
-          <>
-            <CreditReferenceTransactionModel
-              username={creditReferenceTransactionList.username}
-              isOpen={creditReferenceTransactionList}
-              onClose={handleDeleteModalClose}
-              // onConfirm={handleDeleteConfirm}
-              userId={creditReferenceTransactionList?._id}
-              currentPage={currentPage}
-              entriesToShow={entriesToShow}
-            />
-          </>
-        )}
-        <DeleteConfirmationModal
-          isOpen={isDeleteModalOpen}
-          onClose={handleDeleteModalClose}
-          onConfirm={handleDeleteConfirm}
-          userId={userToDelete?._id}
-          currentPage={currentPage}
-          entriesToShow={entriesToShow}
-        />
-        {selectedUser && depositModal && (
-          <DepositModal
-            isOpen={depositModal}
-            onClose={handleDeleteModalClose}
-            userId={selectedUser?._id}
-            currentPage={currentPage}
-            entriesToShow={entriesToShow}
-            user={selectedUser}
-          />
-        )}
-        {selectedUser && (
-          <>
-            <SportsSettingsModal
-              isOpen={settingsModal}
-              onClose={handleDeleteModalClose}
-              // onConfirm={handleDeleteConfirm}
-              userId={selectedUser?._id}
-              currentPage={currentPage}
-              entriesToShow={entriesToShow}
-            />
-          </>
-        )}
-        {selectedUser && (
-          <>
-            <AccountStatus
-              isOpen={accountStatus}
-              onClose={handleDeleteModalClose}
-              // onConfirm={handleDeleteConfirm}
-              userId={selectedUser?._id}
-              currentPage={currentPage}
-              entriesToShow={entriesToShow}
-              user={selectedUser}
-            />
-          </>
-        )}
-        {isExposureModalOpen && selectedExposureUser && (
-          <>
-            <EditExposureLimitModal
-              username={selectedExposureUser.username}
-              currentExposureLimit={selectedExposureUser.exposureLimit}
-              onSubmit={(newExposureLimit, password) => {
-                console.log(
-                  `Updated exposure limit for ${selectedExposureUser.username}: ${newExposureLimit} (Password: ${password})`
-                );
-                handleExposureModalClose();
-              }}
-              onCancel={handleExposureModalClose}
-              // onSubmit={handleSubmitFunction}
-              user={selectedExposureUser}
-              userId={selectedExposureUser?._id}
-              currentPage={currentPage}
-              entriesToShow={entriesToShow}
-            />
-          </>
-        )}
-      </div>
-      </>
-)
-}
     </>
   );
 };
