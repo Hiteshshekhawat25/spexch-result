@@ -79,54 +79,31 @@ const MenuHeader = () => {
     );
   }
 
-  
-  // const toggleSubMenu = (name, index) => {
-  //   if (activeSubMenu === name) {
-  //     setActiveSubMenu(null);
-  //     setSubMenuStyles({});
-  //   } else {
-  //     setActiveSubMenu(name);
-      
-  //     // Get the parent menu item
-  //     const menuItem = menuRefs.current[index];
-  //     if (menuItem) {
-  //       const { offsetTop, offsetHeight, offsetLeft, offsetWidth } =
-  //         menuItem.getBoundingClientRect();
-        
-        
-  //       setSubMenuStyles({
-  //         top: offsetTop + offsetHeight, 
-  //         left: offsetLeft, 
-  //         width: offsetWidth, 
-  //       });
-  //     }
-  //   }
-  // };
-  
-
   const toggleSubMenu = (name, index) => {
     if (activeSubMenu === name) {
       setActiveSubMenu(null);
       setSubMenuStyles({});
     } else {
       setActiveSubMenu(name);
-      
+
       // Get the parent menu item
       const menuItem = menuRefs.current[index];
       if (menuItem) {
         const { offsetTop, offsetHeight, offsetLeft, offsetWidth } =
           menuItem.getBoundingClientRect();
-        
-        // Adjust submenu position to be directly below the main menu
+
+        // Dynamically position submenu below the selected menu item
         setSubMenuStyles({
-          top: offsetTop + offsetHeight + 4, // Add 4px or adjust as needed for spacing
-          left: offsetLeft,
-          width: offsetWidth,
+          top: offsetTop + offsetHeight,  // Position below the menu item
+          left: offsetLeft,               // Align submenu horizontally with the menu item
+          width: offsetWidth,             // Set submenu width to match the menu item
+          position: "absolute",           // Ensure the submenu appears above the other content
+          zIndex: 10,                     // Make sure submenu is on top
         });
       }
     }
   };
-  
+
   // Close submenu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -143,7 +120,6 @@ const MenuHeader = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-  
 
   return (
     <div className="bg-gradient-green text-black font-bold px-2 relative">
@@ -153,7 +129,7 @@ const MenuHeader = () => {
           {menuItems.map((item, index) => (
             <li
               key={index}
-              className="relative text-sm py-2 px-4 border-l border-r border-gray-400"
+              className="relative text-sm border-l border-r border-gray-400"
               ref={(el) => (menuRefs.current[index] = el)} // Reference for each menu item
             >
               <Link
@@ -190,7 +166,7 @@ const MenuHeader = () => {
                 <li key={subIndex}>
                   <Link
                     to={subItem.link}
-                    className="block px-4 py-2 hover:bg-gradient-green text-white"
+                    className="block hover:bg-gradient-green text-white"
                   >
                     {subItem.name}
                   </Link>
@@ -247,8 +223,4 @@ const MenuHeader = () => {
 };
 
 export default MenuHeader;
-
-
-
-
 
