@@ -46,11 +46,10 @@ const DeleteConfirmationModal = ({
 
       let roleId = null;
 
-      // Determine roleId based on the location or other criteria
-      if (location.pathname === "/user-downline-list") {
+      if (location.pathname === "/admin/user-downline-list") {
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
+      } else if (location.pathname === "/admin/master-downline-list") {
         const masterRole = rolesData.find(
           (role) => role.role_name === "master"
         );
@@ -59,7 +58,6 @@ const DeleteConfirmationModal = ({
         throw new Error("Invalid location path. Unable to determine roleId.");
       }
 
-      // Fetch downline data with the determined roleId
       const result = await fetchDownlineData(
         currentPage,
         entriesToShow,
@@ -67,7 +65,6 @@ const DeleteConfirmationModal = ({
       );
       if (result && result.data) {
         dispatch(setDownlineData(result.data));
-        // toast.success("Downline data updated successfully.");
       }
 
       dispatch(resetDeleteState());
