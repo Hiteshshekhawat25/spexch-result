@@ -10,6 +10,7 @@ import {
   setStartFetchData,
 } from "../../Store/Slice/downlineSlice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
+import { IoClose } from "react-icons/io5";
 
 export const AddClientForm = ({ closeModal }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -174,7 +175,7 @@ export const AddClientForm = ({ closeModal }) => {
       dispatch(setStartFetchData());
       // }, 2000);
     } catch (error) {
-      setError(
+      toast.error(
         error.response?.data?.message ||
           "An error occurred while creating the client."
       );
@@ -199,8 +200,12 @@ export const AddClientForm = ({ closeModal }) => {
 
   return (
     <div className="bg-white shadow-lg">
-      <h2 className=" text-white font-semibold mb-4 py-2 px-2 bg-gradient-blue">
+      <h2 className=" flex text-white font-semibold mb-4 py-2 px-2 bg-gradient-blue">
         Add User
+        <IoClose
+                    onClick={closeModal}
+                    className="cursor-pointer text-white text-2xl ml-auto"
+                  />
       </h2>
       <form onSubmit={handleSubmit} className="space-y-2 px-6">
         <div className="w-full flex justify-between">
@@ -223,7 +228,7 @@ export const AddClientForm = ({ closeModal }) => {
         )}
         <div className="flex justify-between">
           <label className="w-1/3 text-left font-semibold">
-            Name<span className="text-red-500">*</span>
+            Name
           </label>
           <input
             type="text"

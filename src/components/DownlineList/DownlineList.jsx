@@ -6,7 +6,6 @@ import { MdSettings, MdDelete, MdManageHistory } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
 import { BsBuildingFillLock } from "react-icons/bs";
 import CreditEditReferenceModal from "../Modal/CreditEditReferanceModal";
-import DeleteConfirmationModal from "../Modal/DeleteConfirmationModal";
 import EditExposureLimitModal from "../Modal/EditExposureLimitModal";
 import {
   setLoading,
@@ -21,6 +20,7 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import { BASE_URL } from "../../Constant/Api";
 import {
+  deleteData,
   fetchDownlineData,
   fetchUsersByStatus,
   searchDownline,
@@ -39,6 +39,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
 import UpdatePartnershipModal from "../Modal/UpdatePartnershipModal";
 import { ClipLoader } from "react-spinners";
+import { resetDeleteState } from "../../Store/Slice/deleteSlice";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -147,7 +148,14 @@ const DownlineList = () => {
     };
 
     fetchData();
-  }, [dispatch, currentPage, entriesToShow, roleId, startFetchData,location.pathname]);
+  }, [
+    dispatch,
+    currentPage,
+    entriesToShow,
+    roleId,
+    startFetchData,
+    location.pathname,
+  ]);
 
   const filteredData = downlineData.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
@@ -323,7 +331,6 @@ const DownlineList = () => {
   };
 
   const handleUpdatePartnership = (item) => {
-    console.log("hie");
     setUpdatePartnership(true);
     setSelectedUser(item);
   };
@@ -363,9 +370,7 @@ const DownlineList = () => {
     if (!selectedFilter) return;
     try {
       const fetchedUsers = await fetchUsersByStatus(selectedFilter);
-      console.log("fetcheedddddddd", fetchedUsers);
       setUserList(fetchedUsers);
-      console.log("usersssss", userList);
     } catch (error) {
       console.error("Error fetching users:", error);
     }
@@ -378,6 +383,63 @@ const DownlineList = () => {
   useEffect(() => {
     fetchUsers();
   }, [selectedFilter]);
+
+  const handleDelete = async (item) => {
+    try {
+      await deleteData(`user/delete-user/${item._id}`);
+      toast.success("User deleted successfully.");
+
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        throw new Error("Authentication token not found. Please log in again.");
+      }
+
+      const rolesArray = await fetchRoles(token);
+      if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
+        throw new Error("No roles found. Please check your configuration.");
+      }
+
+      const rolesData = rolesArray.map((role) => ({
+        role_name: role.role_name,
+        role_id: role._id,
+      }));
+
+      let roleId = null;
+
+      if (location.pathname === "/user-downline-list") {
+        const userRole = rolesData.find((role) => role.role_name === "user");
+        roleId = userRole ? userRole.role_id : rolesData[0].role_id;
+      } else if (location.pathname === "/master-downline-list") {
+        const masterRole = rolesData.find(
+          (role) => role.role_name === "master"
+        );
+        roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+      } else {
+        throw new Error("Invalid location path. Unable to determine roleId.");
+      }
+
+      const result = await fetchDownlineData(
+        currentPage,
+        entriesToShow,
+        roleId
+      );
+      if (result && result.data) {
+        dispatch(setDownlineData(result.data));
+      }
+
+      dispatch(resetDeleteState());
+      // onClose();
+    } catch (err) {
+      const errorMessage =
+        err.response?.data?.message ||
+        err.message ||
+        "An error occurred. Please try again.";
+      // setApiError(errorMessage);s
+      toast.error(errorMessage);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <>
@@ -716,7 +778,10 @@ const DownlineList = () => {
                               title="Delete"
                               className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                             >
-                              <MdDelete className="text-" />
+                              <MdDelete
+                                className="text-"
+                                onClick={() => handleDelete(item)}
+                              />
                             </div>
                           </div>
                         </td>
@@ -815,14 +880,6 @@ const DownlineList = () => {
                 />
               </>
             )}
-            <DeleteConfirmationModal
-              isOpen={isDeleteModalOpen}
-              onClose={handleDeleteModalClose}
-              onConfirm={handleDeleteConfirm}
-              userId={userToDelete?._id}
-              currentPage={currentPage}
-              entriesToShow={entriesToShow}
-            />
             {selectedUser && depositModal && (
               <DepositModal
                 isOpen={depositModal}
