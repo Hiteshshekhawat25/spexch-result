@@ -95,7 +95,7 @@ const MenuHeader = () => {
         setSubMenuStyles({
           top: offsetTop + offsetHeight, 
           left: offsetLeft, 
-          width: 200, 
+          width: 150, 
           position: "absolute", 
           zIndex: 10, 
         });
@@ -165,7 +165,7 @@ const MenuHeader = () => {
         <li key={subIndex}>
           <Link
             to={subItem.link}
-            className="block px-4 py-2 hover:bg-gradient-green text-white w-auto"
+            className="block px-4 py-2 hover:bg-gradient-green text-white w-auto text-xs lg:text-sm"
             style={{ whiteSpace: "nowrap" }} 
           >
             {subItem.name}
