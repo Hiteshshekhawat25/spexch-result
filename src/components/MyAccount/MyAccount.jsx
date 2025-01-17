@@ -1,3 +1,10 @@
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import MyProfile from './MyProfile';
+import AccountStatement from './AccountStatement';
+import ActivityLog from './ActivityLog';
+import EventProfitLoss from '../MyReport/EventProfitLoss';
+import BetList from '../BetList/BetList';
 import React, { useEffect, useState } from "react";
 import MyProfile from "./MyProfile";
 import AccountStatement from "./AccountStatement";
@@ -5,16 +12,20 @@ import ActivityLog from "./ActivityLog";
 import { ClipLoader } from "react-spinners";
 
 const MyAccount = () => {
-  const [selectedPage, setSelectedPage] = useState('myProfile'); 
+  const location = useLocation();
+  const selectedUser = location.state?.selectedUser;
+  const initialPage = location.state?.selectedPage || 'myProfile'; 
+
+
+  console.log('Location State:', location.state);
+  console.log('Selected User:', selectedUser);
+
+  const [selectedPage, setSelectedPage] = useState(initialPage);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    
-  }, []);
-
-
-  useEffect(() => {
     if (loading) {
+      const timer = setTimeout(() => setLoading(false), 300);
       const timer = setTimeout(() => {
         setLoading(false);
       }, 300);
@@ -22,8 +33,10 @@ const MyAccount = () => {
       return () => clearTimeout(timer);
     }
   }, [loading]);
+  }, [loading]);
 
   const handleSelection = (page) => {
+    console.log('Page Selected:', page); 
     setLoading(true);
     setSelectedPage(page);
   };
@@ -39,9 +52,18 @@ const MyAccount = () => {
     case "activityLog":
       content = <ActivityLog />;
       break;
+      case 'bethistory':
+      content = <BetList />;
+      break;
+    case 'profitLoss':
+      content = <EventProfitLoss />;
+      break;
     default:
       content = <MyProfile />;
   }
+
+  
+  const containerHeight = selectedUser ? 'max-h-[calc(5.3*2.6rem)]' : 'max-h-[calc(3.5*2.6rem)]';
 
   return (
     <div className="md:flex sm:0 justify-center mt-6">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { useNavigate } from 'react-router-dom';
 import { FaSortUp, FaSortDown, FaEdit, FaEye } from "react-icons/fa";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { RiArrowUpDownFill } from "react-icons/ri";
@@ -76,6 +77,7 @@ const DownlineList = () => {
   const loading = useSelector(selectDownlineLoading);
   const error = useSelector(selectDownlineError);
   const { startFetchData } = useSelector((state) => state.downline);
+  const navigate = useNavigate();
 
   console.log("startFetchDatastartFetchData", startFetchData);
 
@@ -96,6 +98,30 @@ const DownlineList = () => {
         setCurrentPage(currentPage + 1);
       }
     }
+  };
+
+
+
+
+  const handleArrowClick = (item) => {
+    console.log('Selected User Data:', item); // Debugging: Logs the selected user data
+    navigate(ROUTES_CONST.MyAccount, {
+      state: {
+        selectedUser: item,
+        selectedPage: 'profitLoss', // Pass the selected page here
+      },
+    });
+  };
+
+
+  const handleHistoryClick = (item) => {
+    console.log('Selected User Data:', item); // Debugging: Logs the selected user data
+    navigate(ROUTES_CONST.MyAccount, {
+      state: {
+        selectedUser: item,
+        selectedPage: 'bethistory', // Pass the selected page here
+      },
+    });
   };
 
   useEffect(() => {
