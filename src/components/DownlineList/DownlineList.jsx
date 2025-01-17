@@ -147,14 +147,14 @@ const DownlineList = () => {
     };
 
     fetchData();
-  }, [dispatch, currentPage, entriesToShow, roleId, startFetchData]);
+  }, [dispatch, currentPage, entriesToShow, roleId, startFetchData,location.pathname]);
 
   const filteredData = downlineData.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   useEffect(() => {
-    if (location.pathname === "/user-downline-list") {
+    if (location.pathname === "/master-downline-list") {
       const fetchUserRoles = async () => {
         try {
           const token = localStorage.getItem("authToken");
