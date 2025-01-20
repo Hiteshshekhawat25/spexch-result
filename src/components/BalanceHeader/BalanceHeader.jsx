@@ -91,7 +91,8 @@ const BalanceHeader = () => {
         </div>
         {/* Upline P/L Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
-          IRP {new Intl.NumberFormat("en-IN").format(balanceData.uplinePL)}
+          IRP{" "}
+          {new Intl.NumberFormat("en-IN").format(balanceData.totalProfitLoss)}
         </div>
         {/* Empty space */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2"></div>
@@ -154,7 +155,8 @@ const BalanceHeader = () => {
           Upline P/L
         </div>
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
-          IRP {new Intl.NumberFormat("en-IN").format(balanceData.uplinePL)}
+          IRP{" "}
+          {new Intl.NumberFormat("en-IN").format(balanceData.totalProfitLoss)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
       </div>
