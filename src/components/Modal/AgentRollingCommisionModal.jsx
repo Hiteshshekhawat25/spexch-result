@@ -7,7 +7,7 @@ const AgentRollingCommissionModal = ({ username, onCancel, commissionRates }) =>
       <div className="bg-white rounded-lg w-[500px] mt-20">
         {/* Header */}
         <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-2">
-          <span>Agent Rolling Commission - {username}</span>
+          <span>Agent Rolling Commission</span>
           <IoClose
             onClick={onCancel}
             className="cursor-pointer text-white text-2xl"
