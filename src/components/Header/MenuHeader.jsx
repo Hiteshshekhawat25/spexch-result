@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
@@ -8,15 +9,16 @@ import { clearUserData } from "../../Store/Slice/userInfoSlice";
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
-  const [activeSubMenu, setActiveSubMenu] = useState(null); 
-  const [subMenuStyles, setSubMenuStyles] = useState({}); 
+  const [activeSubMenu, setActiveSubMenu] = useState(null);
+  const [subMenuStyles, setSubMenuStyles] = useState({});
   const dispatch = useDispatch();
-  const menuRefs = useRef([]); 
-  const subMenuRef = useRef(null); 
+  const menuRefs = useRef([]);
+  const subMenuRef = useRef(null);
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
   const handleLogout = () => {
+    console.log("logout Clicked");
     dispatch(clearUserData());
     localStorage.clear();
     window.location.reload();
@@ -56,8 +58,7 @@ const MenuHeader = () => {
     { name: "Restore User", link: "#" },
     {
       name: "Logout",
-      link: "#",
-      onClick: handleLogout,
+      onClick: handleLogout, 
     },
   ];
 
@@ -79,30 +80,31 @@ const MenuHeader = () => {
     );
   }
 
+ 
+  const menuWrapperRef = useRef(null); // Reference to the scrollable menu container
+
   const toggleSubMenu = (name, index) => {
     if (activeSubMenu === name) {
       setActiveSubMenu(null);
       setSubMenuStyles({});
     } else {
       setActiveSubMenu(name);
-
-     
+  
       const menuItem = menuRefs.current[index];
-      if (menuItem) {
+      if (menuItem && menuWrapperRef.current) {
         const { offsetTop, offsetHeight, offsetLeft } = menuItem;
-
-        
+        const scrollLeft = menuWrapperRef.current.scrollLeft;
+  
         setSubMenuStyles({
-          top: offsetTop + offsetHeight, 
-          left: offsetLeft, 
-          width: 150, 
-          position: "absolute", 
-          zIndex: 10, 
+          top: offsetTop + offsetHeight,
+          left: offsetLeft - scrollLeft, 
+          minWidth: 150, 
+          position: "absolute",
+          zIndex: 10,
         });
       }
     }
   };
-
   
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -122,92 +124,135 @@ const MenuHeader = () => {
 
   return (
     <div className="bg-gradient-green text-black font-bold px-2 relative">
-      
-      <div className="lg:hidden overflow-x-auto whitespace-nowrap">
-        <ul className="flex">
-          {menuItems.map((item, index) => (
-            <li
-              key={index}
-              className="relative text-sm border-l border-r border-gray-400"
-              ref={(el) => (menuRefs.current[index] = el)} 
-            >
-              <Link
-                to={item.link}
-                onClick={() => {
-                  setActiveMenu(item.name); 
-                  item.subMenu && toggleSubMenu(item.name, index); 
-                }}
-                className={`py-1 px-2 block border-b-2 ${
-                  activeMenu === item.name
-                    ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
-                    : "border-transparent hover:underline hover:decoration-black"
-                }`}
-              >
-                {item.name}
-                {item.subMenu && (
-                  <TbTriangleInvertedFilled className="inline ml-2 size-2" />
-                )}
-                {item.name === "Logout" && <IoLogOutOutline className="inline ml-2" />}
-              </Link>
+      <div
+  className="lg:hidden overflow-x-auto whitespace-nowrap"
+  ref={menuWrapperRef} // Attach the ref here
+>
+  <ul className="flex">
+    {menuItems.map((item, index) => (
+      <li
+        key={index}
+        className="relative text-sm border-l border-r border-gray-400"
+        ref={(el) => (menuRefs.current[index] = el)}
+      >
+              {item.name === "Logout" ? (
+                <button
+                  onClick={item.onClick}
+                  className="py-1 px-2 ml-24 block border-b-2 bg-gradient-green text-black border-transparent hover:underline hover:decoration-black"
+                >
+                  {item.name}
+                  <IoLogOutOutline className="inline ml-2" />
+                </button>
+              ) : (
+                <Link
+                  to={item.link}
+                  onClick={() => {
+                    setActiveMenu(item.name);
+                    item.subMenu && toggleSubMenu(item.name, index);
+                  }}
+                  className={`py-1 px-2 block border-b-2 ${
+                    activeMenu === item.name
+                      ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
+                      : "border-transparent hover:underline hover:decoration-black"
+                  }`}
+                >
+                  {item.name}
+                  {item.subMenu && (
+                    <TbTriangleInvertedFilled className="inline ml-2 size-2" />
+                  )}
+                </Link>
+              )}
             </li>
           ))}
         </ul>
-       
-        {menuItems.map((item, index) =>
-  item.subMenu && activeSubMenu === item.name ? (
-    <ul
-      key={index}
-      ref={subMenuRef} 
-      style={subMenuStyles} 
-      className="absolute bg-gradient-blue-hover shadow-lg z-10 flex flex-col whitespace-nowrap"
-    >
-      {item.subMenu.map((subItem, subIndex) => (
-        <li key={subIndex}>
-          <Link
-            to={subItem.link}
-            className="block px-4 py-2 hover:bg-gradient-green text-white w-auto text-xs lg:text-sm"
-            style={{ whiteSpace: "nowrap" }} 
-          >
-            {subItem.name}
-          </Link>
-        </li>
-      ))}
-    </ul>
-  ) : null
-)}
 
+        {menuItems.map((item, index) =>
+          item.subMenu && activeSubMenu === item.name ? (
+
+            <ul
+  key={index}
+  ref={subMenuRef}
+  style={{
+    ...subMenuStyles, 
+    left: subMenuStyles.left, 
+    minWidth: subMenuStyles.minWidth 
+  }}
+  className="absolute bg-gradient-blue-hover shadow-lg z-10 flex flex-col whitespace-nowrap"
+>
+
+       
+              {item.subMenu.map((subItem, subIndex) => (
+                <li key={subIndex}>
+                  <Link
+                    to={subItem.link}
+                    onClick={() => setActiveSubMenu(null)}
+
+                    onMouseEnter={() => {
+                      // On hover, show the submenu
+                      item.subMenu && toggleSubMenu(item.name, index);
+                    }}
+                    onMouseLeave={() => {
+                      // On hover out, hide the submenu
+                      setActiveSubMenu(null);
+                    }}
+                    className="block px-4 py-2 hover:bg-gradient-green text-white w-auto text-xs lg:text-sm"
+                    style={{ whiteSpace: "nowrap" }}
+                  >
+                    {subItem.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          ) : null
+        )}
       </div>
 
-      {/* Main Menu for Large Screens */}
       <ul className="hidden lg:flex justify-center lg:justify-start ml-24 mr-4">
         {menuItems.map((item, index) => (
           <li
             key={index}
             className="relative group border-l border-r border-gray-400 text-sm"
           >
-            <Link
-              to={item.link}
-              onClick={() => {
-                setActiveMenu(item.name); 
-              }}
-              className={`py-1 px-2 block border-b-2 ${
-                activeMenu === item.name
-                  ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
-                  : "border-transparent hover:border-gray-600"
-              }`}
-            >
-              {item.name}
-              {item.subMenu && (
-                <TbTriangleInvertedFilled className="inline ml-2 size-2" />
-              )}
-              {item.name === "Logout" && <IoLogOutOutline className="inline ml-2" />}
-            </Link>
+            {item.name === "Logout" ? (
+              <button
+                onClick={item.onClick}
+                className="py-1 px-2 ml-24 block border-b-2 bg-gradient-green text-black border-transparent hover:border-gray-600"
+              >
+                {item.name}
+                <IoLogOutOutline className="inline ml-2" />
+              </button>
+            ) : (
+              <Link
+                to={item.link}
+                onClick={() => setActiveMenu(item.name)}
+                className={`py-1 px-2 block border-b-2 ${
+                  activeMenu === item.name
+                    ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
+                    : "border-transparent hover:border-gray-600"
+                }`}
+              >
+                {item.name}
+                {item.subMenu && (
+                  <TbTriangleInvertedFilled className="inline ml-2 size-2" />
+                )}
+              </Link>
+            )}
             {item.subMenu && (
               <ul className="absolute left-0 top-full hidden bg-gradient-blue-hover group-hover:block shadow-lg z-10 flex whitespace-nowrap">
                 {item.subMenu.map((subItem, subIndex) => (
                   <li key={subIndex}>
                     <Link
+                    onClick={() => setActiveSubMenu(null)}
+                    onMouseEnter={() => {
+                      // On hover, show the submenu
+                      item.subMenu && toggleSubMenu(item.name, index);
+                    }}
+                    onMouseLeave={() => {
+                      // On hover out, hide the submenu
+                      setActiveSubMenu(null);
+                    }}
                       to={subItem.link}
+                      
                       className="block px-4 py-2 hover:bg-gradient-green text-white"
                     >
                       {subItem.name}
