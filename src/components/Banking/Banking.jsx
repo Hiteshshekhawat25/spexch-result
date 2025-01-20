@@ -403,7 +403,7 @@ const Banking = () => {
               <label className="ml-2 text-sm font-medium">entries</label>
             </div>
             <div className="p-2 rounded-md">
-              <label className="">Search:</label>
+              <label className="p-1">Search:</label>
               <input
                 type="text"
                 placeholder="Search"
