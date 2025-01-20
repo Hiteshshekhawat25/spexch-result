@@ -89,7 +89,7 @@ const ProfitLoss = () => {
 
         <div className="overflow-x-auto my-4 mx-4">
           <table className="w-full table-auto border-collapse border border-gray-400 ">
-            <thead className="border border-gray-400 bg-gray-300 text-black text-center ">
+            <thead className="border border-gray-400 bg-gray-200 text-black text-center ">
               <tr>
                 {[
                   "username",
@@ -160,16 +160,17 @@ const ProfitLoss = () => {
               ))}
             </tbody>
             <tfoot>
-              <tr className="bg-gray-300 text-black">
-                <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+              <tr className=" ext-black">
+                <td className="px-4 py-3 text-sm text-center border-r border-gray-100">
                   {totalData.username}
                 </td>
-                <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                <td className="px-4 py-3 text-sm text-center border-r border-gray-400 text-green-500">
                   {totalData.profitLoss}
                 </td>
-                <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                <td className="px-4 py-3 text-sm text-center border-r border-gray-400 text-red-500">
                   {totalData.downlineProfitLoss}
                 </td>
+
                 <td className="px-4 py-3 text-sm text-center">
                   {totalData.commission}
                 </td>
