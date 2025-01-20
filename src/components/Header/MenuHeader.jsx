@@ -126,7 +126,7 @@ const MenuHeader = () => {
     <div className="bg-gradient-green text-black font-bold px-2 relative">
       <div
   className="lg:hidden overflow-x-auto whitespace-nowrap"
-  ref={menuWrapperRef} // Attach the ref here
+  ref={menuWrapperRef} 
 >
   <ul className="flex">
     {menuItems.map((item, index) => (
@@ -138,7 +138,7 @@ const MenuHeader = () => {
               {item.name === "Logout" ? (
                 <button
                   onClick={item.onClick}
-                  className="py-1 px-2 ml-24 block border-b-2 bg-gradient-green text-black border-transparent hover:underline hover:decoration-black"
+                  className="py-1 px-2  block border-b-2 bg-gradient-green text-black border-transparent hover:underline hover:decoration-black"
                 >
                   {item.name}
                   <IoLogOutOutline className="inline ml-2" />
