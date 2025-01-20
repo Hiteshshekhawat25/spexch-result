@@ -23,7 +23,7 @@ const MyProfile = () => {
   const profileStatus = useSelector(selectProfileStatus);
   const profileError = useSelector(selectProfileError);
 
-  // State to control modal visibility and data
+  
   const [isRollingModalOpen, setIsRollingModalOpen] = useState(false);
   const [isAgentRollingModalOpen, setIsAgentRollingModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
@@ -50,7 +50,7 @@ const MyProfile = () => {
           dispatch(setRollingCommission(response.data.rollingCommission));
           dispatch(
             setAgentRollingCommission({
-              username: response.data.data.name,
+              username: response.data.data.username,
               commissionRates: response.data.agentRollingCommission,
             })
           );
@@ -86,24 +86,20 @@ const MyProfile = () => {
   const handleOpenEditRollingModal = () => {
     if (modalData) {
       console.log("Edit button clicked!");
-      setIsEditRollingModalOpen(true); // Open the edit rolling commission modal
+      setIsEditRollingModalOpen(true); 
     }
   };
 
-  // const handleOpenRollingModal = () => {
 
-  //     setIsRollingModalOpen(true);
 
-  // };
-
-  // Open Agent Rolling Commission modal
+  
   const handleOpenAgentRollingModal = () => {
     if (modalData) {
       setIsAgentRollingModalOpen(true);
     }
   };
 
-  // Open Change Password modal
+  
   const handleOpenChangePasswordModal = () => {
     setIsChangePasswordModalOpen(true);
   };
@@ -176,7 +172,7 @@ const MyProfile = () => {
       {/* Modals */}
       {isRollingModalOpen && modalData && (
         <RollingCommisionModal
-          username={modalData.name}
+          username={modalData.username}
           commissionRates={modalData.rollingCommission}
           onCancel={() => setIsRollingModalOpen(false)}
         />
@@ -184,7 +180,7 @@ const MyProfile = () => {
 
       {isAgentRollingModalOpen && modalData && (
         <AgentRollingCommisionModal
-          username={modalData.name}
+          username={modalData.username}
           commissionRates={modalData.agentRollingCommission}
           onCancel={() => setIsAgentRollingModalOpen(false)}
         />
@@ -192,6 +188,7 @@ const MyProfile = () => {
 
       {isEditRollingModalOpen && modalData && (
         <EditRollingCommissionModal
+          username={modalData.username}
           userId={userId}
           onCancel={() => setIsEditRollingModalOpen(false)}
           onSubmit={(updatedData) => {
