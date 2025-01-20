@@ -60,7 +60,6 @@ export const AddClientForm = ({ closeModal }) => {
     }
   }, []);
 
-  // Fetch roles and extract user role ID
   useEffect(() => {
     if (token) {
       const fetchRoles = async () => {

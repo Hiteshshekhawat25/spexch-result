@@ -179,7 +179,7 @@ const ProfitLoss = () => {
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-between items-center mt-4 p-4">
+        <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
           <div className="text-sm text-gray-600">
             Showing {(currentPage - 1) * entriesToShow + 1} to{" "}
             {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
@@ -188,14 +188,14 @@ const ProfitLoss = () => {
           <div className="flex space-x-2">
             <button
               onClick={() => setCurrentPage(1)}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
               disabled={currentPage === 1}
             >
               First
             </button>
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
               disabled={currentPage === 1}
             >
               Previous
@@ -204,14 +204,14 @@ const ProfitLoss = () => {
               onClick={() =>
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
               disabled={currentPage === totalPages}
             >
               Next
             </button>
             <button
               onClick={() => setCurrentPage(totalPages)}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
               disabled={currentPage === totalPages}
             >
               Last
