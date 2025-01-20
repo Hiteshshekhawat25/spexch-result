@@ -76,7 +76,7 @@ export const AddMasterForm = ({ closeModal }) => {
     }
   };
 
-  // Validation
+  // Validatio
   const validate = () => {
     const newErrors = {};
 
@@ -181,9 +181,9 @@ export const AddMasterForm = ({ closeModal }) => {
           masterPassword: "",
         });
         toast.success(response?.data?.message || "Master created Successfully");
-        // setTimeout(() => {
         handleCloseModal();
         dispatch(setStartFetchData());
+        // setTimeout(() => { 
         // }, 2000);
       } else {
         toast.error(
@@ -196,15 +196,9 @@ export const AddMasterForm = ({ closeModal }) => {
       );
     } finally {
       setIsSubmitting(false);
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 2000);
     }
   };
   const handleCloseModal = () => {
-    // setFormData(initialFormData);
-    // setFormErrors({});
-    // setError(null);
     setSuccessMessage("");
     closeModal();
   };
