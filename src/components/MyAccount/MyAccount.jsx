@@ -72,13 +72,13 @@ const MyAccount = () => {
       ) : (
         <>
           <div className={`sm:w-1/4 border border-gray-400 mx-4 sm:mx-8 bg-white ${containerHeight} overflow-hidden mb-3`}>
-            <h2 className="text-sm text-white bg-gradient-seablue font-bold py-2 px-4">
+            <h2 className="text-sm text-white bg-gradient-seablue font-custom py-2 px-4">
               My Account
             </h2>
 
             <div className="w-full border-collapse">
               <div
-                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === "myProfile" ? "font-bold bg-bluehover" : ""}`}
+                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === "myProfile" ? "font-custom bg-bluehover" : ""}`}
                 onClick={() => handleSelection("myProfile")}
               >
                 <div className="flex justify-between py-2 px-4 text-sm">
@@ -87,7 +87,7 @@ const MyAccount = () => {
               </div>
 
               <div
-                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === "accountStatement" ? "font-bold bg-bluehover" : ""}`}
+                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === "accountStatement" ? "font-custom bg-bluehover" : ""}`}
                 onClick={() => handleSelection("accountStatement")}
               >
                 <div className="flex justify-between py-2 px-4 text-sm">
@@ -96,7 +96,7 @@ const MyAccount = () => {
               </div>
 
               <div
-                className={`cursor-pointer text-left  border-b border-gray-300 hover:bg-lime ${selectedPage === "activityLog" ? "font-bold bg-bluehover" : ""}`}
+                className={`cursor-pointer text-left  border-b border-gray-300 hover:bg-lime ${selectedPage === "activityLog" ? "font-custom bg-bluehover" : ""}`}
                 onClick={() => handleSelection("activityLog")}
               >
                 <div className="flex justify-between py-2 px-4 text-sm">
@@ -108,7 +108,7 @@ const MyAccount = () => {
               {selectedUser && (
                 <>
                   <div
-                    className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === 'bethistory' ? 'font-bold bg-bluehover' : ''}`}
+                    className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === 'bethistory' ? 'font-custom bg-bluehover' : ''}`}
                     onClick={() => handleSelection('bethistory')}
                   >
                     <div className="flex justify-between py-2 px-4 text-sm">
@@ -116,7 +116,7 @@ const MyAccount = () => {
                     </div>
                   </div>
                   <div
-                    className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === 'profitLoss' ? 'font-bold bg-bluehover' : ''}`}
+                    className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === 'profitLoss' ? 'font-custom bg-bluehover' : ''}`}
                     onClick={() => handleSelection('profitLoss')}
                   >
                     <div className="flex justify-between py-2 px-4 text-sm">

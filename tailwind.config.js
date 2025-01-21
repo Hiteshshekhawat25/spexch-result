@@ -42,6 +42,7 @@ module.exports = {
         'gradient-blue-hover': 'linear-gradient(#14213d 0%, #315195 100%)',
         'gradient-seablue': 'linear-gradient(-180deg, #2E4B5E 0%, #243A48 82%) ',
         'gradient-green2': 'linear-gradient(180deg,#0a92a5 15%,#076875 100%)',
+        'gradient-black':'linear-gradient(#535353 0%, #000000 80%)',
       },
       // Custom spacing for positioning toasts
       spacing: {
@@ -57,6 +58,9 @@ module.exports = {
         semibold: '600',
         bold: '700',
         black: '900',
+      },
+      fontFamily: {        
+        custom: ['Tahoma', 'Helvetica', 'sans-serif'],
       },
       keyframes: {
         crossing1: {

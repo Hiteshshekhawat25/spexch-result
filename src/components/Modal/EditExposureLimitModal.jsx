@@ -142,17 +142,17 @@ const EditExposureLimitModal = ({
         <form onSubmit={handleSubmit} className="space-y-4 p-5">
           {/* Current Exposure Limit */}
           <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
+            <label className="block text-sm font-custom text-gray-700 w-1/3">
               Current
             </label>
-            <p className="w-2/3 text-black font-medium">
+            <p className="w-2/3 text-black font-custom">
               {currentExposureLimit}
             </p>
           </div>
 
           {/* New Exposure Limit */}
           <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
+            <label className="block text-sm font-custom text-gray-700 w-1/3">
               New
             </label>
             <div className="w-2/3 flex items-center space-x-2">
@@ -167,7 +167,7 @@ const EditExposureLimitModal = ({
 
           {/* Password Field */}
           <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
+            <label className="block text-sm font-custom text-gray-700 w-1/3">
               Password
             </label>
             <input

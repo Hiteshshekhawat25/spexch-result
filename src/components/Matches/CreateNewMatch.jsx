@@ -177,14 +177,14 @@ const CreateNewMatch = () => {
   
   return (
     <>
-    <h1 className="text-center text-2xl font-bold mb-4">Create New Match</h1>
+    <h1 className="text-center text-2xl font-custom mb-4">Create New Match</h1>
     <div className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded border border-gray-300">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-4 gap-4">
     
         {/* Dynamic Fields */}
         <div>
-          <label className="block text-gray-700 text-lg font-bold mb-1">Select Sport</label>
+          <label className="block text-gray-700 text-lg font-custom mb-1">Select Sport</label>
           <select
             value={formState.sport}
             onChange={(e) => handleInputChange("sport", e.target.value)}
@@ -200,7 +200,7 @@ const CreateNewMatch = () => {
         </div>
 
         <div>
-          <label className="block text-gray-700 text-lg font-bold mb-1">Select League</label>
+          <label className="block text-gray-700 text-lg font-custom mb-1">Select League</label>
           <select
             value={formState.league}
             onChange={(e) => handleInputChange("league", e.target.value)}
@@ -216,7 +216,7 @@ const CreateNewMatch = () => {
         </div>
 
         <div>
-          <label className="block text-gray-700 text-lg font-bold mb-1">Select Match</label>
+          <label className="block text-gray-700 text-lg font-custom mb-1">Select Match</label>
           <select
             value={formState.match}
             onChange={(e) => handleInputChange("match", e.target.value)}
@@ -234,7 +234,7 @@ const CreateNewMatch = () => {
         {/* Rest of the form fields */}
         {[{ label: "Market Type", field: "marketType" }, { label: "MarketID", field: "marketID" }, { label: "Team 1", field: "team1" }, { label: "Team 2", field: "team2" }, { label: "Runners", field: "runners" }].map(({ label, field }) => (
           <div key={field}>
-            <label className="block text-gray-700 text-lg font-bold mb-1">{label}</label>
+            <label className="block text-gray-700 text-lg font-custom mb-1">{label}</label>
             <input
               type="text"
               value={formState[field]}
@@ -247,7 +247,7 @@ const CreateNewMatch = () => {
         {/* Delays */}
         {["oddsDelay", "sessionDelay", "bookDelay", "tossDelay"].map((field) => (
           <div key={field}>
-            <label className="block text-gray-700 text-lg font-bold mb-1">{field}</label>
+            <label className="block text-gray-700 text-lg font-custom mb-1">{field}</label>
             <input
               type="text"
               value={formState[field]}
@@ -260,7 +260,7 @@ const CreateNewMatch = () => {
         {/* Stakes */}
         {["oddsMinStake", "oddsMaxStake", "sessionMinStake", "sessionMaxStake", "bookMinStake", "bookMaxStake", "tossMinStake", "tossMaxStake"].map((field) => (
           <div key={field}>
-            <label className="block text-gray-700 text-lg font-bold mb-1">{field}</label>
+            <label className="block text-gray-700 text-lg font-custom mb-1">{field}</label>
             <input
               type="text"
               value={formState[field]}
@@ -273,7 +273,7 @@ const CreateNewMatch = () => {
         {/* Statuses - Active/Inactive */}
         {["matchStatus", "sessionStatus", "bookmakerStatus", "tossStatus", "oddsStatus"].map((field) => (
           <div key={field} className="flex flex-col">
-            <label className="block text-gray-700 text-lg font-bold mb-1">{field}</label>
+            <label className="block text-gray-700 text-lg font-custom mb-1">{field}</label>
             <div className="flex space-x-4">
               <label className="flex items-center space-x-2">
                 <input
@@ -503,7 +503,7 @@ export default CreateNewMatch;
     
 //         {/* Dynamic Fields */}
 //         <div>
-//           <label className="block text-gray-700 text-lg font-bold mb-1">Select Sport</label>
+//           <label className="block text-gray-700 text-lg font-custom mb-1">Select Sport</label>
 //           <select
 //             value={formState.sport}
 //             onChange={(e) => handleInputChange("sport", e.target.value)}
@@ -519,7 +519,7 @@ export default CreateNewMatch;
 //         </div>
 
 //         <div>
-//           <label className="block text-gray-700 text-lg font-bold mb-1">Select League</label>
+//           <label className="block text-gray-700 text-lg font-custom mb-1">Select League</label>
 //           <select
 //             value={formState.league}
 //             onChange={(e) => handleInputChange("league", e.target.value)}
@@ -535,7 +535,7 @@ export default CreateNewMatch;
 //         </div>
 
 //         <div>
-//           <label className="block text-gray-700 text-lg font-bold mb-1">Select Match</label>
+//           <label className="block text-gray-700 text-lg font-custom mb-1">Select Match</label>
 //           <select
 //             value={formState.match}
 //             onChange={(e) => handleInputChange("match", e.target.value)}
@@ -553,7 +553,7 @@ export default CreateNewMatch;
 //         {/* Rest of the form fields */}
 //         {[{ label: "Market Type", field: "marketType" }, { label: "MarketID", field: "marketID" }, { label: "Team 1", field: "team1" }, { label: "Team 2", field: "team2" }, { label: "Runners", field: "runners" }].map(({ label, field }) => (
 //           <div key={field}>
-//             <label className="block text-gray-700 text-lg font-bold mb-1">{label}</label>
+//             <label className="block text-gray-700 text-lg font-custom mb-1">{label}</label>
 //             <input
 //               type="text"
 //               value={formState[field]}
@@ -566,7 +566,7 @@ export default CreateNewMatch;
 //         {/* Delays */}
 //         {["oddsDelay", "sessionDelay", "bookDelay", "tossDelay"].map((field) => (
 //           <div key={field}>
-//             <label className="block text-gray-700 text-lg font-bold mb-1">{field}</label>
+//             <label className="block text-gray-700 text-lg font-custom mb-1">{field}</label>
 //             <input
 //               type="text"
 //               value={formState[field]}
@@ -579,7 +579,7 @@ export default CreateNewMatch;
 //         {/* Stakes */}
 //         {["oddsMinStake", "oddsMaxStake", "sessionMinStake", "sessionMaxStake", "bookMinStake", "bookMaxStake", "tossMinStake", "tossMaxStake"].map((field) => (
 //           <div key={field}>
-//             <label className="block text-gray-700 text-lg font-bold mb-1">{field}</label>
+//             <label className="block text-gray-700 text-lg font-custom mb-1">{field}</label>
 //             <input
 //               type="text"
 //               value={formState[field]}
@@ -592,7 +592,7 @@ export default CreateNewMatch;
 //         {/* Statuses - Active/Inactive */}
 //         {["matchStatus", "sessionStatus", "bookmakerStatus", "tossStatus", "oddsStatus"].map((field) => (
 //           <div key={field} className="flex flex-col">
-//             <label className="block text-gray-700 text-lg font-bold mb-1">{field}</label>
+//             <label className="block text-gray-700 text-lg font-custom mb-1">{field}</label>
 //             <div className="flex space-x-4">
 //               <label className="flex items-center space-x-2">
 //                 <input

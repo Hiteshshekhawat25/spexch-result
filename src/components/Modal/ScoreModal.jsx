@@ -81,7 +81,7 @@ const ScoreModal = ({ onCancel, match }) => {
           {/* Left Column - Score ID */}
           <div className="space-y-4">
             <div className="flex flex-col">
-              <label className="text-md font-bold text-gray-700">SCORE ID</label>
+              <label className="text-md font-custom text-gray-700">SCORE ID</label>
               <input
                 type="text"
                 value={newScoreId}
@@ -104,7 +104,7 @@ const ScoreModal = ({ onCancel, match }) => {
             <div className="flex space-x-6">
               {/* Team 1 */}
               <div className="flex flex-col w-1/2">
-                <label className="text-md font-bold text-gray-700">TEAM 1</label>
+                <label className="text-md font-custom text-gray-700">TEAM 1</label>
                 <input
                   type="text"
                   value={newTeam1Name}
@@ -115,7 +115,7 @@ const ScoreModal = ({ onCancel, match }) => {
 
               {/* Team 2 */}
               <div className="flex flex-col w-1/2">
-                <label className="text-md font-bold text-gray-700">TEAM 2</label>
+                <label className="text-md font-custom text-gray-700">TEAM 2</label>
                 <input
                   type="text"
                   value={newTeam2Name}
@@ -218,7 +218,7 @@ export default ScoreModal;
 //           {/* Left Column - Score ID */}
 //           <div className="space-y-4">
 //             <div className="flex flex-col">
-//               <label className="text-md font-bold text-gray-700">SCORE ID</label>
+//               <label className="text-md font-custom text-gray-700">SCORE ID</label>
 //               <input
 //                 type="text"
 //                 value={newScoreId}
@@ -241,7 +241,7 @@ export default ScoreModal;
 //             <div className="flex space-x-6">
 //               {/* Team 1 */}
 //               <div className="flex flex-col w-1/2">
-//                 <label className="text-md font-bold text-gray-700">TEAM 1</label>
+//                 <label className="text-md font-custom text-gray-700">TEAM 1</label>
 //                 <input
 //                   type="text"
 //                   value={newTeam1Name}
@@ -252,7 +252,7 @@ export default ScoreModal;
 
 //               {/* Team 2 */}
 //               <div className="flex flex-col w-1/2">
-//                 <label className="text-md font-bold text-gray-700">TEAM 2</label>
+//                 <label className="text-md font-custom text-gray-700">TEAM 2</label>
 //                 <input
 //                   type="text"
 //                   value={newTeam2Name}
@@ -352,7 +352,7 @@ export default ScoreModal;
 //           {/* Left Column - Score ID */}
 //           <div className="space-y-4">
 //             <div className="flex flex-col">
-//               <label className="text-md font-bold text-gray-700">SCORE ID</label>
+//               <label className="text-md font-custom text-gray-700">SCORE ID</label>
 //               <input
 //                 type="text"
 //                 value={newScoreId} // Use local state for score ID input
@@ -375,7 +375,7 @@ export default ScoreModal;
 //             <div className="flex space-x-6">
 //               {/* Team 1 */}
 //               <div className="flex flex-col w-1/2">
-//                 <label className="text-md font-bold text-gray-700">TEAM 1</label>
+//                 <label className="text-md font-custom text-gray-700">TEAM 1</label>
 //                 <input
 //                   type="text"
 //                   value={newTeam1Name} // Bind input to local state for team 1 name
@@ -386,7 +386,7 @@ export default ScoreModal;
 
 //               {/* Team 2 */}
 //               <div className="flex flex-col w-1/2">
-//                 <label className="text-md font-bold text-gray-700">TEAM 2</label>
+//                 <label className="text-md font-custom text-gray-700">TEAM 2</label>
 //                 <input
 //                   type="text"
 //                   value={newTeam2Name} // Bind input to local state for team 2 name

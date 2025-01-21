@@ -184,7 +184,7 @@ const EventPLFilter = ({
   <> */}
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-2">
+        <label className="text-sm font-custom text-black mb-2">
           Data Source
         </label>
         <select
@@ -200,7 +200,7 @@ const EventPLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From Date</label>
+        <label className="text-sm font-custom text-black mb-1">From Date</label>
         <input
           type="date"
           value={fromDate || today}
@@ -210,7 +210,7 @@ const EventPLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From Time</label>
+        <label className="text-sm font-custom text-black mb-1">From Time</label>
         <input
           type="time"
           value={fromTime || "00:00"}
@@ -220,7 +220,7 @@ const EventPLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To Date</label>
+        <label className="text-sm font-custom text-black mb-1">To Date</label>
         <input
           type="date"
           value={toDate || today}
@@ -230,7 +230,7 @@ const EventPLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To Time</label>
+        <label className="text-sm font-custom text-black mb-1">To Time</label>
         <input
           type="time"
           value={toTime || "23:59"}

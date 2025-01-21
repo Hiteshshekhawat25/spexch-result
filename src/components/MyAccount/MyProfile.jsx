@@ -114,15 +114,15 @@ const MyProfile = () => {
       {/* Profile Details */}
       <div className="mt-4 text-sm">
         <div className="flex border-b py-3 px-4">
-          <span className="font-medium w-48">Name</span>
+          <span className="font-custom w-48">Name</span>
           <span className="text-left ml-4">{profile.name}</span>
         </div>
         <div className="flex border-b py-3 px-4">
-          <span className="font-medium w-48">Commission</span>
+          <span className="font-custom w-48">Commission</span>
           <span className="text-left ml-4">{profile.commission}%</span>
         </div>
         <div className="flex border-b py-3 px-4">
-          <span className="font-medium w-48">Rolling Commission</span>
+          <span className="font-custom w-48">Rolling Commission</span>
           <span className="text-left ml-4 flex items-center">
             <FaEdit
               className="ml-2 text-blue cursor-pointer"
@@ -137,7 +137,7 @@ const MyProfile = () => {
           </span>
         </div>
         <div className="flex border-b py-3 px-4">
-          <span className="font-medium w-48">Agent Rolling Commission</span>
+          <span className="font-custom w-48">Agent Rolling Commission</span>
           <span className="text-left ml-4 flex items-center">
             <FaEye
               className="ml-2 text-blue cursor-pointer"
@@ -146,19 +146,19 @@ const MyProfile = () => {
           </span>
         </div>
         <div className="flex border-b py-3 px-4">
-          <span className="font-medium w-48">Currency</span>
+          <span className="font-custom w-48">Currency</span>
           <span className="text-left ml-4">{profile.currency}</span>
         </div>
         <div className="flex border-b py-3 px-4">
-          <span className="font-medium w-48">Partnership</span>
+          <span className="font-custom w-48">Partnership</span>
           <span className="text-left ml-4">{profile.partnership}</span>
         </div>
         <div className="flex border-b py-3 px-4">
-          <span className="font-medium w-48">Mobile Number</span>
+          <span className="font-custom w-48">Mobile Number</span>
           <span className="text-left ml-4">{profile.mobileNumber}</span>
         </div>
         <div className="flex py-3 px-4">
-          <span className="font-medium w-48">Password</span>
+          <span className="font-custom w-48">Password</span>
           <span className="flex items-center ml-4">
             <span className="mr-2">********</span>
             <FaRegEdit

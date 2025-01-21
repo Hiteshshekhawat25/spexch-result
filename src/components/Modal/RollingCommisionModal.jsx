@@ -28,10 +28,10 @@ const RollingCommisionModal = ({ username, onCancel, commissionRates }) => {
               key={index}
               className="flex justify-between items-center border border-black p-2"
             >
-              <span className="text-sm font-medium text-gray-700 w-1/3">
+              <span className="text-sm font-custom text-gray-700 w-1/3">
                 {category.label}
               </span>
-              <span className="text-gray-800 font-medium w-2/3 text-right">
+              <span className="text-gray-800 font-custom w-2/3 text-right">
                 {category.value}
               </span>
             </div>

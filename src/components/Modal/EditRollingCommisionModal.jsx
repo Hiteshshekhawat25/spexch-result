@@ -88,7 +88,7 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
           
           {["fancy", "matka", "casino", "binary", "sportbook", "bookmaker"].map((field) => (
             <div key={field} className="flex items-center space-x-3">
-              <label className="text-xs font-medium text-gray-700 capitalize w-1/3">{field}</label>
+              <label className="text-xs font-custom text-gray-700 capitalize w-1/3">{field}</label>
               <input
                 type="number"
                 name={field}
@@ -102,7 +102,7 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
 
           
           <div className="flex items-center space-x-3">
-            <label className="text-xs font-medium text-gray-700 w-1/3">Password <span className="text-red-600">*</span></label>
+            <label className="text-xs font-custom text-gray-700 w-1/3">Password <span className="text-red-600">*</span></label>
             <div className="relative w-2/3">
               <input
                 type={showPassword ? "text" : "password"}
