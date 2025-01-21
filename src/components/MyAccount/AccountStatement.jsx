@@ -189,9 +189,9 @@ const AccountStatement = () => {
             </tbody>
           </table>
         </div>
-
-        <div className="flex justify-between items-center mt-4 p-4">
-          <div className="text-sm text-gray-600">
+        <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+        <div className="text-sm text-gray-600 mb-2 sm:mb-0">
+        
             Showing {(currentPage - 1) * entriesToShow + 1} to{" "}
             {Math.min(currentPage * entriesToShow, totalTransactions)} of{" "}
             {totalTransactions} entries
