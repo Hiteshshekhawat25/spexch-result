@@ -10,9 +10,9 @@ import {
   selectEventPLFilter,
 } from "../../Store/Slice/eventPLFilterSlice";
 import {
-  setEventLoading, // Ensure this is imported correctly
+  setEventLoading,
 } from "../../Store/Slice/eventProfitLossSlice";
-import { getProfitLossData } from "../../Services/Downlinelistapi"; // Import your API function
+import { getProfitLossData } from "../../Services/Downlinelistapi";
 
 const EventPLFilter = ({
   setPLData,
@@ -65,76 +65,6 @@ const EventPLFilter = ({
     entriesToShow,
   ]);
 
-  // const handleGetPL = async () => {
-  //   dispatch(setEventLoading(true)); // Set loading state to true
-  //   try {
-
-  //     const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
-  //       fromDate || ""
-  //     }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
-  //       toTime || ""
-  //     }&dataSource=${dataSource || ""}`;
-  //     console.log("Fetching data with URL:", url);
-
-  //     const response = await getProfitLossData(url);
-  //     console.log(response);
-
-  //     if (response && response.data) {
-  //       const { pagination, data } = response.data;
-
-  //       setPLData(data); // Update parent state with fetched data
-  //       setTotalTransactions(pagination?.totalRecords || 0);
-  //       setTotalPages(pagination?.totalPages || 1);
-  //       setIsDataFetched(true); // Mark data as fetched
-
-  //     } else {
-  //       console.error("No data found in response");
-  //       setIsDataFetched(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching P&L data:", error);
-  //     setIsDataFetched(false);
-  //   }
-  //   finally {
-  //     dispatch(setEventLoading(false)); // Set loading state to false
-  //           }
-  // };
-
-  // const handleGetPL = async () => {
-  //   dispatch(setEventLoading(true)); // Set loading state to true
-  //   console.log("Started fetching data");
-
-  //   try {
-  //     const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
-  //       fromDate || ""
-  //     }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
-  //       toTime || ""
-  //     }&dataSource=${dataSource || ""}`;
-  //     console.log("Fetching data with URL:", url);
-
-  //     const response = await getProfitLossData(url);
-  //     console.log(response);
-
-  //     if (response && response.data) {
-  //       const { pagination, data } = response.data;
-
-  //       setPLData(data); // Update parent state with fetched data
-  //       setTotalTransactions(pagination?.totalRecords || 0);
-  //       setTotalPages(pagination?.totalPages || 1);
-  //       setIsDataFetched(true); // Mark data as fetched
-  //     } else {
-  //       console.error("No data found in response");
-  //       setIsDataFetched(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching P&L data:", error);
-  //     setIsDataFetched(false);
-  //   } finally {
-  //     dispatch(setEventLoading(false)); // Ensure loading state is reset
-  //     console.log("Loading state reset to false");
-  //   }
-  // };
-
   const handleGetPL = async () => {
     setLocalLoadingState(false);
     console.log("Started fetching data");
@@ -166,8 +96,6 @@ const EventPLFilter = ({
       setIsDataFetched(false);
     } finally {
       console.log("Setting loading state to false in finally block");
-      // setLocalLoadingState(false);
-      // console.log("Loading state reset to false");
     }
   };
 
@@ -311,7 +239,7 @@ const EventPLFilter = ({
         />
       </div>
 
-      {/* Buttons */}
+
       <div className="flex space-x-2 items-center">
         <button
           onClick={handleGetPL}
@@ -319,12 +247,7 @@ const EventPLFilter = ({
         >
           Get P & L
         </button>
-        {/* <button
-          onClick={handleReset}
-          className="px-4 py-2 bg-gradient-blue text-white rounded-md text-sm"
-        >
-          Reset
-        </button> */}
+      
       </div>
     </div>
   );
