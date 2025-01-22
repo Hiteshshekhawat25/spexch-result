@@ -572,7 +572,7 @@ const DownlineList = () => {
                     ].map(({ key, label }) => (
                       <th
                         key={key}
-                        className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
+                        className="border border-gray-400 text-left px-4 text-sm  font-custom  text-black cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setDataSource,
@@ -9,7 +9,10 @@ import {
   resetFilters,
   selectPLFilter,
 } from "../../Store/Slice/plFilterSlice";
-import { getProfitLossData } from "../../Services/Downlinelistapi"; // Import your API function
+import { getProfitLossData } from "../../Services/Downlinelistapi";
+import {
+  setEventLoading, 
+} from "../../Store/Slice/profitLossSlice";
 
 const PLFilter = ({
   setPLData,
@@ -19,48 +22,116 @@ const PLFilter = ({
   entriesToShow,
   currentPage,
   setCurrentPage,
+  setLocalLoading,
 }) => {
-  const dispatch = useDispatch();
-  const { dataSource, fromDate, toDate, fromTime, toTime } =
-    useSelector(selectPLFilter);
+  // const dispatch = useDispatch();
+  // const { dataSource, fromDate, toDate, fromTime, toTime } =
+  //   useSelector(selectPLFilter);
 
-  // Reset page to 1 when entriesToShow changes
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [entriesToShow, setCurrentPage]);
+  // // Reset page to 1 when entriesToShow changes
+  // useEffect(() => {
+  //   setCurrentPage(1);
+  // }, [entriesToShow, setCurrentPage]);
 
-  // Fetch P&L data when filters or pagination change
-  useEffect(() => {
-    if (fromDate && toDate) {
-      console.log("Fetching P&L data due to filter or page change");
-      handleGetPL();
-    }
-  }, [
-    currentPage,
-    fromDate,
-    toDate,
-    fromTime,
-    toTime,
-    dataSource,
-    entriesToShow,
-  ]);
+  // // Fetch P&L data when filters or pagination change
+  // useEffect(() => {
+  //   if (fromDate && toDate) {
+  //     console.log("Fetching P&L data due to filter or page change", { currentPage, fromDate, toDate });
+  //     handleGetPL();
+  //   }
+  // }, [
+  //   currentPage, 
+  //   fromDate,
+  //   toDate,
+  //   fromTime,
+  //   toTime,
+  //   dataSource,
+  //   entriesToShow,
+  // ]);
+    const dispatch = useDispatch();
+  
+    const plFilterState = useSelector((state) => state.plFilter);
+    const loading = useSelector(
+      (state) => state.eventProfitLoss.status === "loading"
+    );
+    const [localLoading, setLocalLoadingState] = useState(false);
+  
+    useEffect(() => {
+      setLocalLoading(localLoading);
+    }, [localLoading, setLocalLoading]);
+  
+    console.log("Redux State for PLFilter:", plFilterState);
+  
+    const { dataSource, fromDate, toDate, fromTime, toTime } =
+    plFilterState|| {};
+  
+    useEffect(() => {
+      console.log("loading state has changed:", loading);
+    }, [loading]);
+  
+    useEffect(() => {
+      setCurrentPage(1);
+    }, [entriesToShow, setCurrentPage]);
+  
+    useEffect(() => {
+      if (fromDate && toDate) {
+        console.log("Fetching P&L data due to filter or page change");
+        handleGetPL();
+        setLocalLoadingState(false);
+      }
+    }, [
+      currentPage,
+      fromDate,
+      toDate,
+      fromTime,
+      toTime,
+      dataSource,
+      entriesToShow,
+    ]);
+
+  // const handleGetPL = async () => {
+  //   try {
+  //     const url = `user/get-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
+  //       fromDate || ""
+  //     }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
+  //       toTime || ""
+  //     }&dataSource=${dataSource || ""}`;
+  //     console.log("Fetching data with URL:", url);
+
+  //     const response = await getProfitLossData(url);
+  //     console.log(response);
+
+  //     if (response && response.data) {
+  //       const { pagination, data } = response.data;
+
+  //       setPLData(data); // Update parent state with fetched data
+  //       setTotalTransactions(pagination?.totalRecords || 0);
+  //       setTotalPages(pagination?.totalPages || 1);
+  //       setIsDataFetched(true); // Mark data as fetched
+  //     } else {
+  //       console.error("No data found in response");
+  //       setIsDataFetched(false);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching P&L data:", error);
+  //     setIsDataFetched(false);
+  //   }
+  // };
 
   const handleGetPL = async () => {
     try {
-      const url = `user/get-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
-        fromDate || ""
-      }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
-        toTime || ""
-      }&dataSource=${dataSource || ""}`;
+      const url = `user/get-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate || ""}&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${toTime || ""}&dataSource=${dataSource || ""}`;
       console.log("Fetching data with URL:", url);
-
+  
       const response = await getProfitLossData(url);
-      console.log(response);
-
+      console.log("API Response:", response.data);
+  
       if (response && response.data) {
         const { pagination, data } = response.data;
-
-        setPLData(data); // Update parent state with fetched data
+        console.log("Pagination:", pagination);
+        console.log("Data:", data);
+  
+        setPLData(data);
         setTotalTransactions(pagination?.totalRecords || 0);
         setTotalPages(pagination?.totalPages || 1);
         setIsDataFetched(true); // Mark data as fetched
@@ -73,6 +144,7 @@ const PLFilter = ({
       setIsDataFetched(false);
     }
   };
+  
 
   const handleReset = () => {
     dispatch(resetFilters());
@@ -142,7 +214,7 @@ const PLFilter = ({
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
       {/* Data Source Dropdown */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-2">
+        <label className="text-sm font-custom font-medium text-black mb-2">
           Data Source
         </label>
         <select
@@ -159,7 +231,7 @@ const PLFilter = ({
 
       {/* Date and Time Filters */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From Date</label>
+        <label className="text-sm font-custom font-medium text-black mb-1">From Date</label>
         <input
           type="date"
           value={fromDate || today}
@@ -169,7 +241,7 @@ const PLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From Time</label>
+        <label className="text-sm font-custom font-medium text-black mb-1">From Time</label>
         <input
           type="time"
           value={fromTime || "00:00"}
@@ -179,7 +251,7 @@ const PLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To Date</label>
+        <label className="text-sm font-custom font-medium text-black mb-1">To Date</label>
         <input
           type="date"
           value={toDate || today}
@@ -189,7 +261,7 @@ const PLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To Time</label>
+        <label className="text-sm font-custom font-medium text-black mb-1">To Time</label>
         <input
           type="time"
           value={toTime || "23:59"}

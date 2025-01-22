@@ -142,7 +142,7 @@ const AccountStatus = ({
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-12">
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-3">
           <span>Change Status</span>
           <IoClose
             onClick={onClose}
@@ -157,7 +157,7 @@ const AccountStatus = ({
             <div className="flex justify-between">
               <div>
                 <span
-                  className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-bold text-l"
+                  className="bg-green-500 text-white px-1 py-1 mr-1 rounded  font-custom font-bold text-l"
                   // onClick={() => handleUsernameList(item)}
                 >
                   {user.role_name.toUpperCase()}
@@ -224,7 +224,7 @@ const AccountStatus = ({
               >
                 <path d="M12 0C5.372 0 0 5.373 0 12s5.372 12 12 12 12-5.373 12-12S18.628 0 12 0zm-1 6h2v6h-2zm1 12c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5z" />
               </svg>
-              <span className="font-medium">Suspend</span>
+              <span className="font-custom font-medium">Suspend</span>
             </div>
             <div
               onClick={() => handleStatusChange("locked")}
@@ -242,7 +242,7 @@ const AccountStatus = ({
               >
                 <path d="M12 2C9.243 2 7 4.243 7 7v3h2V7c0-1.654 1.346-3 3-3s3 1.346 3 3v3h2V7c0-2.757-2.243-5-5-5zm4 9H8c-1.103 0-2 .897-2 2v6c0 1.103.897 2 2 2h8c1.103 0 2-.897 2-2v-6c0-1.103-.897-2-2-2zm-4 6c-.828 0-1.5-.672-1.5-1.5S11.172 14 12 14s1.5.672 1.5 1.5S12.828 17 12 17z" />
               </svg>
-              <span className="font-medium">Locked</span>
+              <span className="font-custom font-medium">Locked</span>
             </div>
           </div>
 
@@ -251,7 +251,7 @@ const AccountStatus = ({
             <div className="flex-1">
               <label
                 htmlFor="password"
-                className="block text-sm font-medium mb-1"
+                className="block text-sm font-custom font-medium mb-1"
               >
                 Password
               </label>
@@ -268,7 +268,7 @@ const AccountStatus = ({
             {/* Submit Button */}
             <button
               onClick={handleSubmit}
-              className="py-2 px-4 bg-NavyBlue text-white font-medium rounded-lg mt-5"
+              className="py-2 px-4 bg-NavyBlue text-white font-custom font-medium rounded-lg mt-5"
             >
               Change Status
             </button>

@@ -64,7 +64,7 @@ const EventProfitLoss = () => {
 
   return (
     <div className="p-4">
-      {localLoading ? (
+      {localLoading  ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
             <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
@@ -129,7 +129,7 @@ const EventProfitLoss = () => {
                     ].map((key) => (
                       <th
                         key={key}
-                        className="border border-gray-300 px-4 py-3 text-sm font-medium text-center cursor-pointer"
+                        className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between items-center text-center">

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import {
@@ -39,6 +40,9 @@ const Banking = () => {
   const { startFetchData } = useSelector((state) => state.downline);
   const [password, setPassword] = useState("");
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [selectedButtonRow, setSelectedButtonRow] = useState(null);
+  const [selectedButtonStatus, setSelectedButtonStatus] = useState(null);
+
 
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
@@ -93,26 +97,41 @@ const Banking = () => {
   const handleButtonClick = (status, index) => {
     setEditedData((prevState) => {
       const updatedData = [...prevState];
-      if (status === "Full") {
-        updatedData[index] = {
-          ...updatedData[index],
-          depositwithdraw: filteredData[index]?.totalBalance || "",
-          highlightFull: true,
-        };
-      } else {
-        updatedData[index] = {
-          ...updatedData[index],
-          depositwithdrawStatus: status,
-          highlightFull:
-            status === "W" ? true : updatedData[index]?.highlightFull,
+      
+      // If a button in another row is selected, unselect the previous one
+      if (selectedButtonRow !== null && selectedButtonRow !== index) {
+        updatedData[selectedButtonRow] = {
+          ...updatedData[selectedButtonRow],
+          depositwithdrawStatus: "", // Unselect the previous button
+          highlightFull: false, // Remove highlighting for "Full"
         };
       }
-
+  
+      // Now set the current selected button
+      if (status === "Full") {
+              updatedData[index] = {
+                ...updatedData[index],
+                depositwithdraw: filteredData[index]?.totalBalance || "",
+                highlightFull: true,
+              };
+      } else {
+              updatedData[index] = {
+                ...updatedData[index],
+                depositwithdrawStatus: status,
+                highlightFull:
+                  status === "W" ? true : updatedData[index]?.highlightFull,
+              };
+      }
+  
       return updatedData;
     });
+  
+    
+    setSelectedButtonRow(index);
+    setSelectedButtonStatus(status);
   };
-
-  const handleSubmitPaymentFunction = (data) => {
+  
+    const handleSubmitPaymentFunction = (data) => {
     if (!password) {
       toast.error("Please enter the password.");
       return;
@@ -157,6 +176,7 @@ const Banking = () => {
     )
       .then(() => {
         toast.success(`Transaction was successful.`);
+        setPassword("");
 
         setEditedData((prevState) => {
           const updatedData = [...prevState];
@@ -165,6 +185,7 @@ const Banking = () => {
             depositwithdraw: "",
             remark: "",
             depositwithdrawStatus: "",
+            
             highlightFull: false,
           };
           return updatedData;
@@ -640,3 +661,4 @@ const Banking = () => {
 };
 
 export default Banking;
+

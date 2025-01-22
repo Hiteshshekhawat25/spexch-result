@@ -141,7 +141,7 @@ const EditStakeModal = ({ onCancel, onSubmit, match }) => {
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3 mt-4">
           {Object.keys(formValues).map((field) => (
             <div key={field} className="space-y-1">
-              <label className="block items-center text-xs font-medium text-black">
+              <label className="block items-center text-xs font-custom text-black">
                 {field.replace(/([A-Z])/g, ' $1').toUpperCase()}
               </label>
               <input
@@ -300,7 +300,7 @@ export default EditStakeModal;
 //         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3 mt-4">
 //           {Object.keys(formValues).map((field) => (
 //             <div key={field} className="space-y-1">
-//               <label className="block items-center text-xs font-medium text-black">
+//               <label className="block items-center text-xs font-custom text-black">
 //                 {field.replace(/([A-Z])/g, ' $1').toUpperCase()}
 //               </label>
 //               <input
@@ -440,7 +440,7 @@ export default EditStakeModal;
 //           <div className="space-y-4">
 //             {["oddsDelay", "oddsMaxStake", "sessionDelay", "sessionMaxStake", "bookDelay", "bookMaxStake", "tossDelay"].map((field) => (
 //               <div key={field}>
-//                 <label className="block text-md font-bold text-gray-700 text-center">
+//                 <label className="block text-md font-custom text-gray-700 text-center">
 //                   {field.replace(/([A-Z])/g, ' $1').toUpperCase()}
 //                 </label>
 //                 <input
@@ -460,7 +460,7 @@ export default EditStakeModal;
 //           <div className="space-y-4">
 //             {["oddsMinStake", "oddsMaxProfit", "sessionMinStake", "sessionMaxProfit", "bookMinStake", "bookMaxProfit", "tossMaxStake"].map((field) => (
 //               <div key={field}>
-//                 <label className="block text-md font-bold text-gray-700 text-center">
+//                 <label className="block text-md font-custom text-gray-700 text-center">
 //                   {field.replace(/([A-Z])/g, ' $1').toUpperCase()}
 //                 </label>
 //                 <input
@@ -594,7 +594,7 @@ export default EditStakeModal;
 //           <div className="space-y-4">
 //             {["oddsDelay", "oddsMaxStake", "sessionDelay", "sessionMaxStake", "bookDelay", "bookMaxStake", "tossDelay"].map((field, index) => (
 //               <div key={field}>
-//                 <label className="block text-md font-bold text-gray-700 text-center">
+//                 <label className="block text-md font-custom text-gray-700 text-center">
 //                   {field.replace(/([A-Z])/g, ' $1').toUpperCase()}
 //                 </label>
 //                 <input
@@ -614,7 +614,7 @@ export default EditStakeModal;
 //           <div className="space-y-4">
 //             {["oddsMinStake", "oddsMaxProfit", "sessionMinStake", "sessionMaxProfit", "bookMinStake", "bookMaxProfit", "tossMaxStake"].map((field) => (
 //               <div key={field}>
-//                 <label className="block text-md font-bold text-gray-700 text-center">
+//                 <label className="block text-md font-custom text-gray-700 text-center">
 //                   {field.replace(/([A-Z])/g, ' $1').toUpperCase()}
 //                 </label>
 //                 <input
@@ -704,7 +704,7 @@ export default EditStakeModal;
 //           {/* Left Column */}
 //           <div className="space-y-4">
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Odds Delay</label>
+//               <label className="block text-md font-custom text-gray-700">Odds Delay</label>
 //               <input
 //                 type="text"
 //                 name="oddsDelay"
@@ -714,7 +714,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Odds Max Stake</label>
+//               <label className="block text-md font-custom text-gray-700">Odds Max Stake</label>
 //               <input
 //                 type="text"
 //                 name="oddsMaxStake"
@@ -724,7 +724,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Session Delay</label>
+//               <label className="block text-md font-custom text-gray-700">Session Delay</label>
 //               <input
 //                 type="text"
 //                 name="sessionDelay"
@@ -734,7 +734,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Session Max Stake</label>
+//               <label className="block text-md font-custom text-gray-700">Session Max Stake</label>
 //               <input
 //                 type="text"
 //                 name="sessionMaxStake"
@@ -744,7 +744,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Book Delay</label>
+//               <label className="block text-md font-custom text-gray-700">Book Delay</label>
 //               <input
 //                 type="text"
 //                 name="bookDelay"
@@ -754,7 +754,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Book Max Stake</label>
+//               <label className="block text-md font-custom text-gray-700">Book Max Stake</label>
 //               <input
 //                 type="text"
 //                 name="bookMaxStake"
@@ -764,7 +764,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Toss Delay</label>
+//               <label className="block text-md font-custom text-gray-700">Toss Delay</label>
 //               <input
 //                 type="text"
 //                 name="tossDelay"
@@ -778,7 +778,7 @@ export default EditStakeModal;
 //           {/* Right Column */}
 //           <div className="space-y-4">
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Odds Min Stake</label>
+//               <label className="block text-md font-custom text-gray-700">Odds Min Stake</label>
 //               <input
 //                 type="text"
 //                 name="oddsMinStake"
@@ -788,7 +788,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Odds Max Profit</label>
+//               <label className="block text-md font-custom text-gray-700">Odds Max Profit</label>
 //               <input
 //                 type="text"
 //                 name="oddsMaxProfit"
@@ -798,7 +798,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Session Min Stake</label>
+//               <label className="block text-md font-custom text-gray-700">Session Min Stake</label>
 //               <input
 //                 type="text"
 //                 name="sessionMinStake"
@@ -808,7 +808,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Session Max Profit</label>
+//               <label className="block text-md font-custom text-gray-700">Session Max Profit</label>
 //               <input
 //                 type="text"
 //                 name="sessionMaxProfit"
@@ -818,7 +818,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Book Min Stake</label>
+//               <label className="block text-md font-custom text-gray-700">Book Min Stake</label>
 //               <input
 //                 type="text"
 //                 name="bookMinStake"
@@ -828,7 +828,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Book Max Profit</label>
+//               <label className="block text-md font-custom text-gray-700">Book Max Profit</label>
 //               <input
 //                 type="text"
 //                 name="bookMaxProfit"
@@ -838,7 +838,7 @@ export default EditStakeModal;
 //               />
 //             </div>
 //             <div>
-//               <label className="block text-md font-bold text-gray-700">Toss Max Stake</label>
+//               <label className="block text-md font-custom text-gray-700">Toss Max Stake</label>
 //               <input
 //                 type="text"
 //                 name="tossMaxStake"
