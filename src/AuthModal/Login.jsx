@@ -79,13 +79,16 @@ const Login = () => {
               className="w-[250px] px-3 py-1.5 mt-1 text-black rounded-md border border-gray-600 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none pr-10"
               value={formData.username}
               onChange={handleChange}
-              placeholder="Enter your username"
+              placeholder="Username"
               required
             />
-            <div className="absolute inset-y-0 right-[10%] sm:right-[4%] lg:right-[24%] flex items-center pr-3 text-gray-400">
+            <div className="absolute inset-y-0 right-[4%] sm:right-[4%] lg:right-[24%] flex items-center pr-3 text-gray-400">
               <FaUser color="black" />
             </div>
           </div>
+          {!formData.username && (
+            <p className="text-white text-sm text-center top-0 left-3">Please enter username</p>
+          )}
           <div className="relative flex justify-center mb-4">
             <input
               type={passwordVisible ? "text" : "password"}
@@ -94,16 +97,19 @@ const Login = () => {
               className="w-[250px] px-3 py-1.5 mt-1 text-black rounded-md border border-gray-600 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none pr-10"
               value={formData.password}
               onChange={handleChange}
-              placeholder="Enter your password"
+              placeholder="Password"
               required
             />
             <div
-              className="absolute inset-y-0 right-[10%] sm:right-[4%] lg:right-[24%] flex items-center pr-3 text-gray-400 cursor-pointer"
+              className="absolute inset-y-0 right-[4%] sm:right-[4%] lg:right-[24%] flex items-center pr-3 text-gray-400 cursor-pointer"
               onClick={handlePasswordVisibility}
             >
               {passwordVisible ? <FaEyeSlash color="black" /> : <FaEye color="black" />}
             </div>
           </div>
+          {!formData.password && (
+            <p className="text-white text-sm text-center top-[calc(100%+2px)] left-3">Please enter Password</p>
+          )}
           <div className="flex justify-center">
             <button
               type="submit"
