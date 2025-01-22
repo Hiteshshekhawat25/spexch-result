@@ -57,7 +57,7 @@ const EventProfitLoss = () => {
 
   return (
     <div className="p-4">
-      {localLoading ? (
+      {localLoading  ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
             <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>

@@ -127,7 +127,7 @@ const DepositModal = ({
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
     <div className="bg-white rounded-lg w-[500px] mt-12 sm:w-[90%] md:w-[500px]">
       {/* Modal Header */}
-      <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
+      <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-3">
         <span>Banking - Master- {userData?.data?.name}</span>
         <button
           onClick={() => {
@@ -146,7 +146,7 @@ const DepositModal = ({
         <div className="flex justify-between">
           <div>
             <span
-              className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-bold text-l"
+              className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-custom font-bold text-l"
               // onClick={() => handleUsernameList(item)}
             >
               {user.role_name.toUpperCase()}
@@ -155,14 +155,14 @@ const DepositModal = ({
           </div>
           <div>
             Client Bal:{" "}
-            <span className="font-bold">
+            <span className="font-custom font-bold">
               {new Intl.NumberFormat("en-IN").format(user.totalBalance || 0)}
             </span>
           </div>
         </div>
         
         <div className="flex justify-between items-center">
-          <label className="block text-sm font-medium text-gray-700 w-1/3">
+          <label className="block text-sm font-custom font-medium text-gray-700 w-1/3">
             Balance
           </label>
           <div className="w-2/3 flex items-center space-x-2">
@@ -182,7 +182,7 @@ const DepositModal = ({
         </div>
         
         <div className="flex justify-between items-center">
-          <label className="block text-sm font-medium text-gray-700 w-1/3">
+          <label className="block text-sm font-custom font-medium text-gray-700 w-1/3">
             Remark
           </label>
           <div className="w-2/3 flex items-center space-x-2">
@@ -197,7 +197,7 @@ const DepositModal = ({
         </div>
         
         <div className="flex justify-between items-center">
-          <label className="block text-sm font-medium text-gray-700 w-1/3">
+          <label className="block text-sm font-custom font-medium text-gray-700 w-1/3">
             Password
           </label>
           <input

@@ -54,7 +54,7 @@ const MyAccount = () => {
       content = <MyProfile />;
   }
 
-  // Container height adjustment based on whether a user is selected
+  
   const containerHeight = selectedUser ? 'max-h-[calc(5.3*2.6rem)]' : 'max-h-[calc(3.5*2.6rem)]';
 
   return (
