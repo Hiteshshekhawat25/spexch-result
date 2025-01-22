@@ -29,6 +29,7 @@ import EventProfitLoss  from "../components/MyReport/EventProfitLoss";
 import Dashboard from "../components/Dashboard/dashboard";
 import Banking from "../components/Banking/Banking";
 import PasswordHistory from "../components/PasswordHistory/Passwordhistory";
+import RestoreUser from "../components/RestoreUser/RestoreUser";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -300,7 +301,18 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
+      <Route
+       path={ROUTES_CONST.restoreUser}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <RestoreUser/>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
     </Routes>
+    
   );
 };
 
