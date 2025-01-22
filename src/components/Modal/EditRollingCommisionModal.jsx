@@ -79,7 +79,7 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[450px] mt-24">
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-sm font-semibold w-full p-2">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-sm font-custom font-semibold w-full p-2">
           <span>Edit Rolling Commission - {username}</span>
           <IoClose onClick={onCancel} className="cursor-pointer text-white text-xl" />
         </div>
@@ -87,39 +87,42 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
         <div className="p-4 space-y-3">
           
           {["fancy", "matka", "casino", "binary", "sportbook", "bookmaker"].map((field) => (
-            <div key={field} className="flex items-center space-x-3">
-              <label className="text-xs font-custom text-gray-700 capitalize w-1/3">{field}</label>
-              <input
-                type="number"
-                name={field}
-                value={fields[field] || 0} 
-                onChange={handleChange}
-                className="w-2/3 p-1.5 border border-gray-300 rounded text-xs"
-                placeholder={`Enter ${field} value`}
-              />
-            </div>
+            
+            <div key={field} className="flex flex-col lg:flex-row items-center space-y-2 lg:space-x-3 lg:space-y-0">
+  <label className="text-xs font-custom text-gray-700 capitalize w-full lg:w-1/3">{field}</label>
+  <input
+    type="number"
+    name={field}
+    value={fields[field] || 0} 
+    onChange={handleChange}
+    className="w-full lg:w-2/3 p-1.5 border border-gray-300 rounded text-xs"
+    placeholder={`Enter ${field} value`}
+  />
+</div>
+
           ))}
 
           
-          <div className="flex items-center space-x-3">
-            <label className="text-xs font-custom text-gray-700 w-1/3">Password <span className="text-red-600">*</span></label>
-            <div className="relative w-2/3">
-              <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={passwordField || ""} 
-                onChange={handlePasswordChange}
-                className="w-full p-1.5 border border-gray-300 rounded text-xs"
-                placeholder="Enter your password"
-              />
-              <div
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <IoEyeOff className="text-gray-600" /> : <IoEye className="text-gray-600" />}
-              </div>
-            </div>
-          </div>
+<div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-x-3 lg:space-y-0">
+  <label className="text-xs font-custom text-gray-700 w-full lg:w-1/3">Password <span className="text-red-600">*</span></label>
+  <div className="relative w-full lg:w-2/3">
+    <input
+      type={showPassword ? "text" : "password"}
+      name="password"
+      value={passwordField || ""} 
+      onChange={handlePasswordChange}
+      className="w-full p-1.5 border border-gray-300 rounded text-xs"
+      placeholder="Enter your password"
+    />
+    <div
+      className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+      onClick={togglePasswordVisibility}
+    >
+      {showPassword ? <IoEyeOff className="text-gray-600" /> : <IoEye className="text-gray-600" />}
+    </div>
+  </div>
+</div>
+
 
           {error && <div className="text-red-600 text-xs mt-2">{error}</div>}
 

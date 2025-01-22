@@ -108,7 +108,7 @@ const MyProfile = () => {
     <div className="border border-gray-400 rounded-lg bg-white shadow-sm">
       {/* Header */}
       <div className="bg-gradient-seablue text-white py-1.5 px-2 rounded-t-lg">
-        <h1 className="text-md font-semibold">Account Details</h1>
+        <h1 className="text-md font-custom font-semibold">Account Details</h1>
       </div>
 
       {/* Profile Details */}
