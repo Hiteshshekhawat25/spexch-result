@@ -103,14 +103,14 @@ const PasswordHistory = () => {
   return (
     <div className="p-4 bg-gray-100">
       <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="text-md bg-gradient-seablue text-white font-bold p-1">
+        <h1 className="text-md bg-gradient-seablue text-white font-custom font-bold p-1">
           Password Change History
         </h1>
         <div className="p-4">
           <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
             {/* Entries Dropdown */}
             {/* <div className="flex items-center space-x-2 ml-10"> */}
-            <div className="flex items-center space-x-2 sm:ml-0 ml-10">
+            <div className="flex items-center space-x-2 sm:ml-0 ml-10 font-custom">
               <label className="">Show</label>
               <select
                 value={entriesToShow}

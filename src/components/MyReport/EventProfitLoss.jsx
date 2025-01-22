@@ -81,11 +81,11 @@ const EventProfitLoss = () => {
           />
           {/* Data Table */}
           <div className="border border-gray-300 rounded-md bg-white">
-            <h1 className="text-xl bg-gradient-blue text-white font-bold">Event Profit Loss</h1>
+            <h1 className="text-xl bg-gradient-blue text-white  font-custom font-bold">Event Profit Loss</h1>
 
             <div className="flex justify-between items-center mb-4 p-4">
               <div className="flex items-center">
-                <label className="mr-2 text-sm font-medium text-black">Show</label>
+                <label className="mr-2 text-sm font-custom font-medium text-black">Show</label>
                 <select
                   value={entriesToShow}
                   onChange={(e) => {
@@ -100,7 +100,7 @@ const EventProfitLoss = () => {
                     </option>
                   ))}
                 </select>
-                <label className="ml-2 text-sm font-medium text-black">entries</label>
+                <label className="ml-2 text-sm font-custom font-medium text-black">entries</label>
               </div>
             </div>
 
@@ -111,7 +111,7 @@ const EventProfitLoss = () => {
                     {['sportName', 'uplineProfitLoss', 'downlineProfitLoss', 'commission'].map((key) => (
                       <th
                         key={key}
-                        className="border border-gray-300 px-4 py-3 text-sm font-medium text-center cursor-pointer"
+                        className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between items-center text-center">

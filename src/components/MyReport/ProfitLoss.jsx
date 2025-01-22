@@ -66,15 +66,15 @@ const ProfitLoss = () => {
         setLocalLoading={setLocalLoading}
       />
 
-      {/* Data Table */}
+      
       <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="text-xl bg-gradient-blue text-white font-bold">
+        <h1 className="text-xl bg-gradient-blue text-white font-custom font-bold">
           Profit Loss
         </h1>
 
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
-            <label className="mr-2 text-sm font-medium text-black">Show</label>
+            <label className="mr-2 text-sm  font-custom font-medium text-black">Show</label>
             <select
               value={entriesToShow}
               onChange={(e) => {
@@ -89,7 +89,7 @@ const ProfitLoss = () => {
                 </option>
               ))}
             </select>
-            <label className="ml-2 text-sm font-medium text-black">entries</label>
+            <label className="ml-2 text-sm font-custom font-medium text-black">entries</label>
           </div>
         </div>
 
@@ -100,7 +100,7 @@ const ProfitLoss = () => {
                 {["username", "profitLoss", "downlineProfitLoss", "commission"].map((key) => (
                   <th
                     key={key}
-                    className="border border-gray-300 px-4 py-3 text-sm font-medium text-center cursor-pointer border-r border-gray-400"
+                    className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer border-r border-gray-400"
                     onClick={() => handleSort(key)}
                   >
                     <div className="flex justify-between items-center text-center">

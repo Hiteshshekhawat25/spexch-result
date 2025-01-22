@@ -72,7 +72,7 @@ const MyAccount = () => {
       ) : (
         <>
           <div className={`sm:w-1/4 border border-gray-400 mx-4 sm:mx-8 bg-white ${containerHeight} overflow-hidden mb-3`}>
-            <h2 className="text-sm text-white bg-gradient-seablue font-custom py-2 px-4">
+            <h2 className="text-sm text-white bg-gradient-seablue font-custom font-bold py-2 px-4">
               My Account
             </h2>
 

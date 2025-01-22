@@ -164,25 +164,7 @@ const EventPLFilter = ({
 
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-      {/* {localLoading  ? (
-
-<div className="flex justify-center items-center h-64">
-  <div className="relative w-48 h-48">
-    
-    <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
-   
-    <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
-    
-    <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
-      Loading...
-    </div>
-  </div>
- 
- 
-</div>
-) : (
-  <> */}
-
+  
       <div className="flex flex-col items-start">
         <label className="text-sm font-custom text-black mb-2">
           Data Source

@@ -214,7 +214,7 @@ const PLFilter = ({
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
       {/* Data Source Dropdown */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-2">
+        <label className="text-sm font-custom font-medium text-black mb-2">
           Data Source
         </label>
         <select
@@ -231,7 +231,7 @@ const PLFilter = ({
 
       {/* Date and Time Filters */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From Date</label>
+        <label className="text-sm font-custom font-medium text-black mb-1">From Date</label>
         <input
           type="date"
           value={fromDate || today}
@@ -241,7 +241,7 @@ const PLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From Time</label>
+        <label className="text-sm font-custom font-medium text-black mb-1">From Time</label>
         <input
           type="time"
           value={fromTime || "00:00"}
@@ -251,7 +251,7 @@ const PLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To Date</label>
+        <label className="text-sm font-custom font-medium text-black mb-1">To Date</label>
         <input
           type="date"
           value={toDate || today}
@@ -261,7 +261,7 @@ const PLFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To Time</label>
+        <label className="text-sm font-custom font-medium text-black mb-1">To Time</label>
         <input
           type="time"
           value={toTime || "23:59"}
