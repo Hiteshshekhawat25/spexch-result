@@ -87,7 +87,7 @@ const Login = () => {
             </div>
           </div>
           {!formData.username && (
-            <p className="text-white text-sm text-center top-0 left-3">Please enter username</p>
+            <p className="text-white text-sm w-[250px] sm:ml-[4%] lg:ml-[24%] text-left"style={{ marginTop: '-16px' }}>Please enter username</p>
           )}
           <div className="relative flex justify-center mb-4">
             <input
@@ -108,7 +108,7 @@ const Login = () => {
             </div>
           </div>
           {!formData.password && (
-            <p className="text-white text-sm text-center top-[calc(100%+2px)] left-3">Please enter Password</p>
+            <p className="text-white text-sm mt-0 w-[250px] sm:ml-[4%] lg:ml-[24%] text-left"style={{ marginTop: '-2px' }}>Please enter Password</p>
           )}
           <div className="flex justify-center">
             <button
