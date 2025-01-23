@@ -280,7 +280,7 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
         {formErrors.openingBalance && (
           <div className="text-red-500">{formErrors.openingBalance}</div>
         )}
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Credit Reference<span className="text-red-500">*</span>
           </label>
@@ -297,7 +297,7 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
         {formErrors.creditReference && (
           <div className="text-red-500">{formErrors.creditReference}</div>
         )}
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Mobile Number<span className="text-red-500">*</span>
           </label>
@@ -314,7 +314,7 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
         {formErrors.mobileNumber && (
           <div className="text-red-500">{formErrors.mobileNumber}</div>
         )}
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Exposure Limit<span className="text-red-500">*</span>
           </label>
@@ -331,19 +331,19 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
         {formErrors.exposureLimit && (
           <div className="text-red-500">{formErrors.exposureLimit}</div>
         )}
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Password<span className="text-red-500">*</span>
           </label>
           
-          <div className="relative w-2/3">
+          <div className="relative w-full">
   <input
     type={showPassword ? "text" : "password"}
     name="password"
     value={formData.password}
     placeholder="Password.."
     onChange={handleChange}
-    className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+    className="w-full p-1 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
     required
   />
   <span
@@ -358,18 +358,18 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
         {formErrors.password && (
           <div className="text-red-500">{formErrors.password}</div>
         )}
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Confirm Password<span className="text-red-500">*</span>
           </label>
-          <div className="relative w-2/3">
+          <div className="relative w-full">
           <input
             type="password"
             name="confirmPassword"
             value={formData.confirmPassword}
             placeholder="ConfirmPassword.."
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full p-1 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
            <span
@@ -383,25 +383,25 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
         {formErrors.confirmPassword && (
           <div className="text-red-500">{formErrors.confirmPassword}</div>
         )}
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between">
           <label className="w-full md:w-1/3 text-center md:text-left font-custom text-xm font-medium">
             Master Password<span className="text-red-500">*</span>
           </label>
-          <div className="relative w-2/3">
+          <div className="relative w-full">
           <input
             type="password"
             name="masterPassword"
             placeholder="MasterPassword.."
             value={formData.masterPassword}
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full p-1 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
           <span
-    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+    onClick={() => setShowMasterPassword(!showMasterPassword)}
     className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
   >
-    {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+    {showMasterPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
   </span>
   </div>
         </div>
