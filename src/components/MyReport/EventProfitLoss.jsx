@@ -192,10 +192,14 @@ const EventProfitLoss = () => {
             </div>
 
             {/* Pagination */}
-            <div className="flex justify-between items-center mt-4 p-4">
-              <div className="text-sm text-gray-600">
-                Showing {(currentPage - 1) * entriesToShow + 1} to{" "}
-                {Math.min(currentPage * entriesToShow, totalEntries)} of {totalEntries} entries
+            <div className="flex justify-between items-center mt-4  flex-col sm:flex-row">
+              <div className="text-sm text-gray-600 sm:mb-0">
+
+              Showing{" "}
+  {totalEntries > 0
+    ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(currentPage * entriesToShow, totalEntries)}`
+    : "0 to 0"}{" "}
+  of {totalEntries} entries
               </div>
               <div className="flex space-x-2">
                 <button
