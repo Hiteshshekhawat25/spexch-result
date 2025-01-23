@@ -10,7 +10,7 @@ import {
   setStartFetchData,
 } from "../../Store/Slice/downlineSlice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoEye, IoEyeOff } from 'react-icons/io5'; 
 
 export const AddClientForm = ({ closeModal }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -18,6 +18,10 @@ export const AddClientForm = ({ closeModal }) => {
   const [successMessage, setSuccessMessage] = useState("");
   const [token, setToken] = useState(null);
   const [userRoleId, setUserRoleId] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
+const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+const [showMasterPassword, setShowMasterPassword] = useState(false);
+
   const dispatch = useDispatch();
 
   const initialFormData = {
@@ -200,16 +204,16 @@ export const AddClientForm = ({ closeModal }) => {
 
   return (
     <div className="bg-white shadow-lg">
-      <h2 className=" flex text-white font-semibold mb-4 py-2 px-2 bg-gradient-blue">
+      <h2 className=" flex text-white font-custom font-semibold mb-4 py-2 px-2 bg-gradient-blue">
         Add User
         <IoClose
                     onClick={closeModal}
                     className="cursor-pointer text-white text-2xl ml-auto"
                   />
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-2 px-6">
-        <div className="w-full flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+      <form onSubmit={handleSubmit} className="space-y-2 px-6 ">
+        <div className="w-full flex flex-col md:flex-row justify-between">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Username<span className="text-red-500">*</span>
           </label>
 
@@ -217,55 +221,59 @@ export const AddClientForm = ({ closeModal }) => {
             type="text"
             name="username"
             value={formData.username}
+            placeholder="Username..."
             onChange={handleChange}
             // className="w-2/3 border p-1"
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
         {formErrors.username && (
           <div className="text-red-500">{formErrors.username}</div>
         )}
-        <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+        <div className="flex flex-col md:flex-row justify-between">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Name
           </label>
           <input
             type="text"
             name="name"
             value={formData.name}
+            placeholder="Name..."
             onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
 
-        <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+        <div className="flex flex-col md:flex-row justify-between">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Commission(%)<span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             name="commission"
             value={formData.commission}
+            placeholder="Commission.."
             onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
         {formErrors.commission && (
           <div className="text-red-500">{formErrors.commission}</div>
         )}
-        <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+        <div className="flex flex-col md:flex-row justify-between">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Opening Balance<span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             name="openingBalance"
+            placeholder="OpeningBalance.."
             value={formData.openingBalance}
             onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -273,15 +281,16 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.openingBalance}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Credit Reference<span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             name="creditReference"
+            placeholder="CreditReference.."
             value={formData.creditReference}
             onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -289,15 +298,16 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.creditReference}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Mobile Number<span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             name="mobileNumber"
             value={formData.mobileNumber}
+            placeholder="Mobile Number.."
             onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -305,15 +315,16 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.mobileNumber}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Exposure Limit<span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             name="exposureLimit"
             value={formData.exposureLimit}
+            placeholder="ExposureLimit.."
             onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
@@ -321,49 +332,78 @@ export const AddClientForm = ({ closeModal }) => {
           <div className="text-red-500">{formErrors.exposureLimit}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Password<span className="text-red-500">*</span>
           </label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-            required
-          />
+          
+          <div className="relative w-2/3">
+  <input
+    type={showPassword ? "text" : "password"}
+    name="password"
+    value={formData.password}
+    placeholder="Password.."
+    onChange={handleChange}
+    className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+    required
+  />
+  <span
+    onClick={() => setShowPassword(!showPassword)}
+    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+  >
+    {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+  </span>
+</div>
+
         </div>
         {formErrors.password && (
           <div className="text-red-500">{formErrors.password}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Confirm Password<span className="text-red-500">*</span>
           </label>
+          <div className="relative w-2/3">
           <input
             type="password"
             name="confirmPassword"
             value={formData.confirmPassword}
+            placeholder="ConfirmPassword.."
             onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
+           <span
+    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+  >
+    {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+  </span>
+          </div>
         </div>
         {formErrors.confirmPassword && (
           <div className="text-red-500">{formErrors.confirmPassword}</div>
         )}
         <div className="flex justify-between">
-          <label className="w-1/3 text-left font-semibold">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-xm font-medium">
             Master Password<span className="text-red-500">*</span>
           </label>
+          <div className="relative w-2/3">
           <input
             type="password"
             name="masterPassword"
+            placeholder="MasterPassword.."
             value={formData.masterPassword}
             onChange={handleChange}
-            className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
+          <span
+    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+  >
+    {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+  </span>
+  </div>
         </div>
         {formErrors.masterPassword && (
           <div className="text-red-500">{formErrors.masterPassword}</div>
@@ -381,47 +421,47 @@ export const AddClientForm = ({ closeModal }) => {
         {formData.rollingCommissionChecked && (
           <div className="space-y-2">
             <div className="flex justify-between">
-              <label className="w-1/3 text-left font-semibold">Fancy</label>
+              <label className="w-1/3 text-left font-custom ">Fancy</label>
               <input
                 type="text"
                 name="rollingCommission.fancy"
                 value={formData.rollingCommission.fancy}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left font-semibold">Matka</label>
+              <label className="w-1/3 text-left font-custom ">Matka</label>
               <input
                 type="text"
                 name="rollingCommission.matka"
                 value={formData.rollingCommission.matka}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left font-semibold">Casino</label>
+              <label className="w-1/3 text-left font-custom ">Casino</label>
               <input
                 type="text"
                 name="rollingCommission.casino"
                 value={formData.rollingCommission.casino}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left font-semibold">Binary</label>
+              <label className="w-1/3 text-left font-custom ">Binary</label>
               <input
                 type="text"
                 name="rollingCommission.binary"
                 value={formData.rollingCommission.binary}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left font-semibold">
+              <label className="w-1/3 text-left font-custom ">
                 Sportbook
               </label>
               <input
@@ -429,17 +469,17 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.sportbook"
                 value={formData.rollingCommission.sportbook}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex justify-between">
-              <label className="w-1/3 text-left font-semibold">Bookmaker</label>
+              <label className="w-1/3 text-left font-custom ">Bookmaker</label>
               <input
                 type="text"
                 name="rollingCommission.bookmaker"
                 value={formData.rollingCommission.bookmaker}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
           </div>
@@ -448,9 +488,9 @@ export const AddClientForm = ({ closeModal }) => {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-4 py-2 bg-NavyBlue text-white rounded mb-2"
+            className="px-4 py-2 bg-ashGray text-white rounded mb-2"
           >
-            {isSubmitting ? "Submitting..." : "Submit"}
+            {isSubmitting ? "Creating..." : "Create"}
           </button>
         </div>
       </form>

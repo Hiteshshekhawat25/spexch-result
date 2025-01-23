@@ -572,11 +572,11 @@ const DownlineList = () => {
                     ].map(({ key, label }) => (
                       <th
                         key={key}
-                        className="border border-gray-400 text-left px-4 text-sm  font-custom  text-black cursor-pointer"
+                        className="border border-gray-400 text-left px-4 p-2 text-sm  font-custom  text-black cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between">
-                          <div className="flex items-center">{label}</div>
+                          <div className="flex items-center ">{label}</div>
                           <div className="flex flex-col items-center ml-2">
                             <FaSortUp
                               className={`${
@@ -604,7 +604,7 @@ const DownlineList = () => {
                         </div>
                       </th>
                     ))}
-                    <th className="border border-gray-400 text-left px-4 py-3 text-sm font-custom font-medium text-black">
+                    <th className="border border-gray-400 text-left px-4 py-3 text-sm font-custom font-bold text-black">
                       Actions
                     </th>
                   </tr>
