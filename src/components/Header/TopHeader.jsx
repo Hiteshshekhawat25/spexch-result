@@ -54,15 +54,15 @@ const TopHeader = () => {
   ) : userData ? (
     <div className="flex flex-col items-end space-y-1">
       <div className="flex items-center space-x-1">
-        <span className="bg-darkgray text-white text-xs font-bold px-1 rounded-md">
+        <span className="bg-darkgray text-white text-xs font-custom font-bold px-1 rounded-md">
           {userData?.data?.role_name?.toUpperCase()}
         </span>
-        <span className="text-white text-sm font-bold px-1 rounded-md">
+        <span className="text-white text-sm font-custom font-bold px-1 rounded-md">
           {userData?.data?.username}
         </span>
       </div>
       <div className="flex items-center space-x-1">
-        <span className="text-white px-1 py-0.5 rounded-md font-bold">
+        <span className="text-white px-1 py-0.5 rounded-md font-custom font-bold">
           IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
         </span>
         <button
@@ -90,15 +90,15 @@ const TopHeader = () => {
         ) : userData ? (
           <>
             <div className="flex items-center space-x-1 mb-1 lg:mb-0">
-              <span className="bg-darkgray text-white text-xs font-bold px-1 rounded-md">
+              <span className="bg-darkgray text-white text-xs font-custom font-bold px-1 rounded-md">
                 {userData?.data?.role_name?.toUpperCase()}
               </span>
-              <span className="text-white text-sm font-bold px-1 rounded-md">
+              <span className="text-white text-sm font-custom font-bold px-1 rounded-md">
                 {userData?.data?.username}
               </span>
             </div>
             <div className="flex items-center space-x-1">
-              <span className="text-white px-1 py-0.5 rounded-md font-bold">
+              <span className="text-white px-1 py-0.5 rounded-md  font-custom font-bold">
                 IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
               </span>
               <button
