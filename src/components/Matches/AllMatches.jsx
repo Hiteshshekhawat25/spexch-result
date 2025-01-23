@@ -201,7 +201,7 @@ console.log("Matches",matches);
   {isScoreModalOpen && <ScoreModal match={selectedMatch} onCancel={closeModals} />} {/* Score Modal */}
   
   <div className="bg-gray-200 text-center py-2 mb-6">
-    <h1 className="text-2xl font-bold">ALL Matches</h1>
+    <h1 className="text-2xl font-custom">ALL Matches</h1>
   </div>
 
   <div className="flex space-x-4 mb-6">
@@ -237,7 +237,7 @@ console.log("Matches",matches);
 
   <div className="p-4 border border-gray-300 rounded-md bg-white">
     <div className="border border-gray-300 p-2 rounded-md mb-4">
-      <label className="mr-2 text-sm font-medium">Show</label>
+      <label className="mr-2 text-sm font-custom">Show</label>
       <select value={entriesToShow} onChange={handleEntriesChange} className="border rounded px-2 py-1 text-sm">
         {[10, 25, 50, 100].map((number) => (
           <option key={number} value={number}>
@@ -245,7 +245,7 @@ console.log("Matches",matches);
           </option>
         ))}
       </select>
-      <label className="ml-2 text-sm font-medium">entries</label>
+      <label className="ml-2 text-sm font-custom">entries</label>
     </div>
 
     {/* Table Container */}
@@ -275,7 +275,7 @@ console.log("Matches",matches);
                   <div className="flex space-2 flex-col">
                     <div className="min-w-52 mb-1">
                       {match.event?.name}
-                      {match?.inPlay ? <span className='ml-2 text-white text-nowrap bg-red-500 py-0.5 px-3 rounded-full text-xs font-medium'>In Play</span>: ''}
+                      {match?.inPlay ? <span className='ml-2 text-white bg-red-500 py-0.5 px-3 rounded-full text-xs font-custom'>In Play</span>: ''}
                     </div>
                     <div className="flex space-x-2">
                       <MdModeEdit onClick={() => openStakeModal(match)} className="text-white bg-lightblue p-1 rounded-full cursor-pointer size-7" />

@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { ClipLoader } from "react-spinners"; 
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Dashboard = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false); 
+    }, 1000); 
+  }, []);
+
   const liveSportsData = {
     labels: ["Cricket"],
     datasets: [
@@ -31,11 +40,25 @@ const Dashboard = () => {
     ],
   };
 
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="relative w-48 h-48">
+          <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
+          <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+          <div className="absolute bottom-[-40px] w-full text-center text-xl font-custom font-semibold text-black">
+            <ClipLoader />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col lg:flex-row gap-6 w-full">
+    <div className="flex flex-col lg:flex-row gap-2 w-full">
       {/* Live Sports Profit */}
-      <div className="flex-1 mt-4 ml-4 bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px]">
-        <h2 className="text-lg bg-gradient-seablue text-white font-bold mb-4 p-2 rounded">
+      <div className="flex-1 mt-4 mx-4 bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px]">
+        <h2 className="text-md bg-gradient-seablue text-white  font-custom font-bold mb-4 p-1 rounded">
           Live Sports Profit
         </h2>
         <div className="w-64 h-64 mx-auto">
@@ -44,8 +67,8 @@ const Dashboard = () => {
       </div>
 
       {/* Backup Sports Profit */}
-      <div className="flex-1 mt-4 mr-4  bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px] ">
-        <h2 className="text-lg bg-gradient-seablue text-white font-bold mb-4 p-2 rounded">
+      <div className="flex-1 mt-4 mx-4 bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px]">
+        <h2 className="text-md bg-gradient-seablue text-white font-custom font-bold mb-4 p-1 rounded">
           Backup Sports Profit
         </h2>
         <div className="w-64 h-64 mx-auto">
@@ -57,3 +80,4 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
+

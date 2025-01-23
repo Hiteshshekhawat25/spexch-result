@@ -19,16 +19,19 @@ const profitLossSlice = createSlice({
     setProfitLossData: (state, action) => {
       state.data = action.payload;
     },
-    setLoading: (state, action) => {
-      state.loading = action.payload;
+
+      
+    setEventLoading: (state) => {
+      state.status = "loading"; 
     },
+    
     setError: (state, action) => {
       state.error = action.payload;
     },
   },
 });
 
-export const { setProfitLossData, setLoading, setError } = profitLossSlice.actions;
+export const { setProfitLossData, setEventLoading, setError } = profitLossSlice.actions;
 
 export const selectProfitLossData = (state) => state.profitLoss.data;
 export const selectProfitLossLoading = (state) => state.profitLoss.loading;

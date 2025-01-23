@@ -74,6 +74,22 @@ const profileSlice = createSlice({
       state.agentRollingCommission.commissionRates = commissionRates;
     },
 
+    // Action to update a specific field in rolling commission
+    updateRollingCommissionField: (state, action) => {
+      const { field, value } = action.payload;
+      if (state.rollingCommission.hasOwnProperty(field)) {
+        state.rollingCommission[field] = value;
+      }
+    },
+
+    // Action to update a specific field in agent's rolling commission
+    updateAgentRollingCommissionField: (state, action) => {
+      const { field, value } = action.payload;
+      if (state.agentRollingCommission.commissionRates.hasOwnProperty(field)) {
+        state.agentRollingCommission.commissionRates[field] = value;
+      }
+    },
+
     // Action to clear the agent's rolling commission data
     clearAgentRollingCommission: (state) => {
       state.agentRollingCommission = initialState.agentRollingCommission;
@@ -104,6 +120,8 @@ export const {
   setProfileError,
   setRollingCommission,
   setAgentRollingCommission,
+  updateRollingCommissionField, // New Action for specific field update
+  updateAgentRollingCommissionField, // New Action for agent's commission field
   clearAgentRollingCommission,
   setChangePasswordLoading,
   setChangePasswordSuccess,
@@ -122,6 +140,7 @@ export const selectChangePasswordStatus = (state) => state.profile.changePasswor
 export const selectChangePasswordError = (state) => state.profile.changePasswordError;
 
 export default profileSlice.reducer;
+
 
 // import { createSlice } from "@reduxjs/toolkit";
 
@@ -156,6 +175,10 @@ export default profileSlice.reducer;
 //   // Status and Error Handling
 //   status: "idle", // Status to manage loading, success, error
 //   error: null, // For storing errors
+
+//   // Change Password
+//   changePasswordStatus: "idle", // Status to manage change password process
+//   changePasswordError: null, // For storing errors related to password change
 // };
 
 // const profileSlice = createSlice({
@@ -164,12 +187,11 @@ export default profileSlice.reducer;
 //   reducers: {
 //     // Action to update the main profile data
 //     updateProfile: (state, action) => {
-//       // Merge the profile payload into the state and set status to 'succeeded'
 //       return {
 //         ...state,
 //         ...action.payload,
-//         status: "succeeded", // Mark status as succeeded
-//         error: null, // Clear any previous errors
+//         status: "succeeded",
+//         error: null,
 //       };
 //     },
 
@@ -200,6 +222,22 @@ export default profileSlice.reducer;
 //     clearAgentRollingCommission: (state) => {
 //       state.agentRollingCommission = initialState.agentRollingCommission;
 //     },
+
+//     // Change Password Actions
+//     setChangePasswordLoading: (state) => {
+//       state.changePasswordStatus = "loading";
+//       state.changePasswordError = null;
+//     },
+
+//     setChangePasswordSuccess: (state) => {
+//       state.changePasswordStatus = "succeeded";
+//       state.changePasswordError = null;
+//     },
+
+//     setChangePasswordError: (state, action) => {
+//       state.changePasswordStatus = "failed";
+//       state.changePasswordError = action.payload;
+//     },
 //   },
 // });
 
@@ -211,6 +249,9 @@ export default profileSlice.reducer;
 //   setRollingCommission,
 //   setAgentRollingCommission,
 //   clearAgentRollingCommission,
+//   setChangePasswordLoading,
+//   setChangePasswordSuccess,
+//   setChangePasswordError,
 // } = profileSlice.actions;
 
 // // Selectors to access specific parts of the state
@@ -219,5 +260,9 @@ export default profileSlice.reducer;
 // export const selectProfileError = (state) => state.profile.error;
 // export const selectRollingCommissionData = (state) => state.profile.rollingCommission;
 // export const selectAgentRollingCommission = (state) => state.profile.agentRollingCommission;
+
+// // Change Password Selectors
+// export const selectChangePasswordStatus = (state) => state.profile.changePasswordStatus;
+// export const selectChangePasswordError = (state) => state.profile.changePasswordError;
 
 // export default profileSlice.reducer;

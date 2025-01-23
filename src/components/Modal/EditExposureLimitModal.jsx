@@ -122,16 +122,15 @@ const EditExposureLimitModal = ({
         error.message || "An error occurred while processing the request."
       );
     } finally {
-      // Ensure loading state is reset
       dispatch(setLoading(false));
     }
   };
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[500px] mt-20">
+      <div className="bg-white rounded-lg w-[90%] sm:w-[500px] mt-20 sm:mt-10">
         {/* Header */}
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-2">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-2">
           <span>Edit Exposure Limit - {username}</span>
           <IoClose
             onClick={onCancel}
@@ -143,17 +142,17 @@ const EditExposureLimitModal = ({
         <form onSubmit={handleSubmit} className="space-y-4 p-5">
           {/* Current Exposure Limit */}
           <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
+            <label className="block text-sm font-custom text-gray-700 w-1/3">
               Current
             </label>
-            <p className="w-2/3 text-black font-medium">
+            <p className="w-2/3 text-black font-custom">
               {currentExposureLimit}
             </p>
           </div>
 
           {/* New Exposure Limit */}
           <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
+            <label className="block text-sm font-custom text-gray-700 w-1/3">
               New
             </label>
             <div className="w-2/3 flex items-center space-x-2">
@@ -161,7 +160,6 @@ const EditExposureLimitModal = ({
                 type="text"
                 value={newExposureLimit}
                 onChange={(e) => setNewExposureLimit(e.target.value)}
-                // placeholder="New Credit Reference"
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
@@ -169,7 +167,7 @@ const EditExposureLimitModal = ({
 
           {/* Password Field */}
           <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
+            <label className="block text-sm font-custom text-gray-700 w-1/3">
               Password
             </label>
             <input
@@ -177,7 +175,6 @@ const EditExposureLimitModal = ({
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              // placeholder="Enter your password"
             />
           </div>
 
@@ -194,7 +191,7 @@ const EditExposureLimitModal = ({
             {/* Cancel Button */}
             <button
               type="button"
-              onClick={onCancel} // Call onCancel to close the modal
+              onClick={onCancel}
               className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg"
             >
               Cancel

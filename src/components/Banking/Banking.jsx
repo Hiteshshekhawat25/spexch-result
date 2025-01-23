@@ -1,9 +1,18 @@
+
 import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
-import { fetchDownlineData,performTransaction } from "../../Services/Downlinelistapi";
-import { setLoading, setError, setDownlineData } from "../../Store/Slice/downlineSlice";
+import {
+  fetchDownlineData,
+  performTransaction,
+} from "../../Services/Downlinelistapi";
+import {
+  setLoading,
+  setError,
+  setDownlineData,
+} from "../../Store/Slice/downlineSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { ClipLoader } from "react-spinners";
 import {
   selectDownlineData,
   selectDownlineLoading,
@@ -25,18 +34,23 @@ const Banking = () => {
   const loading = useSelector(selectDownlineLoading);
   const error = useSelector(selectDownlineError);
   const [editedData, setEditedData] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [totalUsers, setTotalUsers] = useState(0);
-      const { startFetchData } = useSelector((state) => state.downline);
-      const [password, setPassword] = useState("");
-      const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const { startFetchData } = useSelector((state) => state.downline);
+  const [password, setPassword] = useState("");
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
+  const [selectedButtonRow, setSelectedButtonRow] = useState(null);
+  const [selectedButtonStatus, setSelectedButtonStatus] = useState(null);
+
+
+  const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
   const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
 
   const columns = [
     { key: "username", label: "UID" },
-    { key: "openingBalance", label: "Balance" },  // This can stay as 'balance' for user clarity
+    { key: "openingBalance", label: "Balance" },
     { key: "totalBalance", label: "Available D/W" },
     { key: "exposure", label: "Exposure" },
     { key: "creditReference", label: "Credit Referance" },
@@ -50,11 +64,10 @@ const Banking = () => {
   );
 
   const handleClearAll = () => {
-        setEditedData([]);
+    setEditedData([]);
     setPassword("");
     setSelectedRowIndex(null);
     setSearchTerm("");
-    
 
     setIsModalOpen(false);
     setSelectedUser(null);
@@ -63,12 +76,12 @@ const Banking = () => {
   const handleRowClick = (index) => {
     setSelectedRowIndex(index);
   };
-  
+
   const handleEditClick = (user) => {
     setSelectedUser(user);
     setIsModalOpen(true);
-  }; 
-  
+  };
+
   const handleInputChange = (e, key, index) => {
     const { value } = e.target;
     setEditedData((prevState) => {
@@ -84,49 +97,73 @@ const Banking = () => {
   const handleButtonClick = (status, index) => {
     setEditedData((prevState) => {
       const updatedData = [...prevState];
-      if (status === "Full") {
-        updatedData[index] = {
-          ...updatedData[index],
-          depositwithdraw: filteredData[index]?.totalBalance || "",
-          highlightFull: true, 
-        };
-      } else {
-        updatedData[index] = {
-          ...updatedData[index],
-          depositwithdrawStatus: status,
-          highlightFull: status === "W" ? true : updatedData[index]?.highlightFull,
+      
+      // If a button in another row is selected, unselect the previous one
+      if (selectedButtonRow !== null && selectedButtonRow !== index) {
+        updatedData[selectedButtonRow] = {
+          ...updatedData[selectedButtonRow],
+          depositwithdrawStatus: "", // Unselect the previous button
+          highlightFull: false, // Remove highlighting for "Full"
         };
       }
-      
+  
+      // Now set the current selected button
+      if (status === "Full") {
+              updatedData[index] = {
+                ...updatedData[index],
+                depositwithdraw: filteredData[index]?.totalBalance || "",
+                highlightFull: true,
+              };
+      } else {
+              updatedData[index] = {
+                ...updatedData[index],
+                depositwithdrawStatus: status,
+                highlightFull:
+                  status === "W" ? true : updatedData[index]?.highlightFull,
+              };
+      }
+  
       return updatedData;
     });
+  
+    
+    setSelectedButtonRow(index);
+    setSelectedButtonStatus(status);
   };
   
-   
-  
-  const handleSubmitPaymentFunction = (data) => {
+    const handleSubmitPaymentFunction = (data) => {
     if (!password) {
       toast.error("Please enter the password.");
       return;
     }
-  
-    if (!data.userId || !data.depositwithdraw || !data.depositwithdrawStatus) {
+
+    if (!data.userId) {
       toast.error("Invalid data. Ensure all fields are filled correctly.");
       return;
     }
-  
+
+    if (!data.depositwithdraw || !data.depositwithdrawStatus) {
+      toast.error("Amount is Mandatory");
+      return;
+    }
+
     const token = localStorage.getItem("authToken");
     if (!token) {
       toast.error("Token not found. Please log in again.");
       return;
     }
-  
+
     const user = downlineData.find((item) => item._id === data.userId);
-    if (data.depositwithdrawStatus === "W" && user.totalBalance < Number(data.depositwithdraw)) {
-      toast.error("Insufficient balance. Withdrawal amount exceeds total balance.");
+    if (
+      data.depositwithdrawStatus === "W" &&
+      user.totalBalance < Number(data.depositwithdraw)
+    ) {
+      toast.error(
+        "Insufficient balance. Withdrawal amount exceeds total balance."
+      );
       return;
     }
-  
+
     performTransaction(
       data.depositwithdrawStatus,
       {
@@ -139,8 +176,8 @@ const Banking = () => {
     )
       .then(() => {
         toast.success(`Transaction was successful.`);
-  
-        // Update local edited data state
+        setPassword("");
+
         setEditedData((prevState) => {
           const updatedData = [...prevState];
           updatedData[selectedRowIndex] = {
@@ -148,12 +185,12 @@ const Banking = () => {
             depositwithdraw: "",
             remark: "",
             depositwithdrawStatus: "",
+            
             highlightFull: false,
           };
           return updatedData;
         });
-  
-        // Update the global downline data
+
         const updatedDownlineData = downlineData.map((item) =>
           item._id === data.userId
             ? {
@@ -166,35 +203,39 @@ const Banking = () => {
               }
             : item
         );
-  
+
         dispatch(setDownlineData(updatedDownlineData)); // Automatically update Redux store
       })
       .catch((error) => {
-        toast.error(error.message || `Error processing transaction for ${data.userId}.`);
+        toast.error(
+          error.message || `Error processing transaction for ${data.userId}.`
+        );
       });
   };
-  
-const handleSubmitPaymentForRow = () => {
-  if (selectedRowIndex === null) {
-    toast.error("No row selected for payment.");
-    return;
-  }
 
-  const item = filteredData[selectedRowIndex];
-  const currentData = {
-    userId: item._id,
-    depositwithdraw: editedData[selectedRowIndex]?.depositwithdraw || item.depositwithdraw,
-    depositwithdrawStatus: editedData[selectedRowIndex]?.depositwithdrawStatus,
-    remark: editedData[selectedRowIndex]?.remark || item.remark || "",
-    password
+  const handleSubmitPaymentForRow = () => {
+    if (selectedRowIndex === null) {
+      toast.error("No row selected for payment.");
+      return;
+    }
+    setIsSubmitClicked(true);
+    setTimeout(() => setIsSubmitClicked(false), 300);
+
+    const item = filteredData[selectedRowIndex];
+    const currentData = {
+      userId: item._id,
+      depositwithdraw:
+        editedData[selectedRowIndex]?.depositwithdraw || item.depositwithdraw,
+      depositwithdrawStatus:
+        editedData[selectedRowIndex]?.depositwithdrawStatus,
+      remark: editedData[selectedRowIndex]?.remark || item.remark || "",
+      password,
+    };
+
+    console.log("Submit Payment Data:", currentData);
+    handleSubmitPaymentFunction(currentData);
   };
 
-  console.log("Submit Payment Data:", currentData);  // Debugging log
-
-  handleSubmitPaymentFunction(currentData);
-};
-
-  
   const handleModalClose = () => {
     setIsModalOpen(false);
     setSelectedUser(null);
@@ -246,7 +287,7 @@ const handleSubmitPaymentForRow = () => {
 
         if (result && result.data) {
           dispatch(setDownlineData(result.data));
-           console.log("Fetched downline data:", result.data); 
+          console.log("Fetched downline data:", result.data);
           setTotalUsers(result.pagination?.totalUsers || 0);
         }
       } catch (err) {
@@ -325,7 +366,6 @@ const handleSubmitPaymentForRow = () => {
     }
   }, [dispatch, roleId, currentPage, entriesToShow]);
 
-  
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
   const handlePageChange = (direction) => {
@@ -351,233 +391,269 @@ const handleSubmitPaymentForRow = () => {
   };
 
   return (
-    <div className="p-4 border border-gray-200 rounded-md bg-white">
-      <div className="flex justify-between items-center mb-4">
-        <div className="border border-gray-300 p-2 rounded-md">
-          <label className="mr-2 text-sm font-medium">Show</label>
-          <select
-            value={entriesToShow}
-            onChange={handleEntriesChange}
-            className="border border-gray-300 rounded px-2 py-1 text-sm"
-          >
-            {[10, 25, 50, 100].map((number) => (
-              <option key={number} value={number}>
-                {number}
-              </option>
-            ))}
-          </select>
-          <label className="ml-2 text-sm font-medium">entries</label>
+    <div className="p-4 border border-gray-200 rounded-md bg-white overflow-x-auto">
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="relative w-48 h-48">
+            <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
+
+            <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
+
+            <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+              <ClipLoader />
+            </div>
+          </div>
         </div>
-        <div className="border border-gray-300 p-2 rounded-md">
-          <input
-            type="text"
-            placeholder="Search"
-            value={searchTerm}
-            onChange={handleSearchChange}
-            className="border border-gray-300 rounded px-2 py-1 text-sm"
-          />
-        </div>
-      </div>
-      <table className="w-full table-auto border-collapse border border-gray-300">
-        <thead className="border border-gray-300">
-          <tr className="bg-gray-300">
-            {columns.map(({ key, label }) => (
-              <th
-                key={key}
-                className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
-                onClick={() => handleSort(key)}
-              >
-                <div className="flex justify-between items-center">
-                  {label}
-                 <div className="flex flex-col items-center ml-2">
-                                      <FaSortUp
-                                        className={`${
-                                          sortConfig.key === key &&
-                                          sortConfig.direction === "ascending"
-                                            ? "text-black"
-                                            : "text-gray-400"
-                                        }`}
-                                        style={{
-                                          marginBottom: "-6px",
-                                        }} 
-                                      />
-                                      <FaSortDown
-                                        className={`${
-                                          sortConfig.key === key &&
-                                          sortConfig.direction === "descending"
-                                            ? "text-black"
-                                            : "text-gray-400"
-                                        }`}
-                                        style={{
-                                          marginTop: "-6px",
-                                        }} 
-                                      />
-                                    </div>
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-  {sortedData.map((item, index) => (
- <tr
- key={item._id}
- className="border border-gray-400 bg-white"
- onClick={() => handleRowClick(index)}
->
-      <td className="px-4 py-2 text-sm">
-        <span className="text-black font-semibold">{item.username}</span>
-      </td>
-      <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-        {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
-      </td>
-      <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-        {new Intl.NumberFormat("en-IN").format(item.totalBalance)}
-      </td>
-      <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
-        {/* {new Intl.NumberFormat("en-IN").format(item.exposure)} */}{'(0)'}
-      </td>
-      <td className=" px-4 py-2 text-md text-blue font-semibold flex items-center">
-  {new Intl.NumberFormat("en-IN").format(item.creditReference)}
-  <FaEdit className="text-blue cursor-pointer ml-2" onClick={() => handleEditClick(item)} />
-</td>
-
-
-      <td className="border border-gray-400 px-4 py-2 text-sm font-bold">{new Intl.NumberFormat("en-IN").format(item.profit_loss)} </td>
-      <td className="border border-gray-400 px-4 py-2 text-md">
-       
-        <div className="flex items-center space-x-2">
- 
-
-<button
-  onClick={() => handleButtonClick("D", index)}
-  className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
-    editedData[index]?.depositwithdrawStatus === "D"
-      ? "bg-green-600 text-white"
-      : "bg-gray-400 text-white"
-  } border border-black`}
->
-  D
-</button>
-
-<button
-  onClick={() => handleButtonClick("W", index)}
-  className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
-    editedData[index]?.depositwithdrawStatus === "W" || editedData[index]?.highlightFull
-      ? "bg-red-600 text-white"
-      : "bg-gray-400 text-white"
-  } border border-black`}
->
-  W
-</button>
-
-<input
-  type="text"
-  value={editedData[index]?.depositwithdraw || item.depositwithdraw || ""}
-  onChange={(e) => handleInputChange(e, "depositwithdraw", index)}
-  className="border border-gray-300 px-2 py-1 text-sm"
-/>
-
-<button
-  onClick={() => handleButtonClick("Full", index)}
-  className={`px-3 py-1 text-sm font-medium rounded-md ${
-    editedData[index]?.highlightFull ? "bg-gradient-blue text-white" : "bg-gray-400 text-white"
-  } border border-black`}
->
-  Full
-</button>
-
-</div>
-
-      </td>
-      
-      <td className="border border-gray-400 px-4 py-2 text-md">
-      <input
-  type="text"
-  value={editedData[index]?.remark || ""}
-  onChange={(e) => handleInputChange(e, "remark", index)}
-  placeholder="Remark"
-  className="border border-gray-300 px-2 py-1 text-sm"
-/>
-        
-      </td>
-      
-    </tr>
-  ))}
-</tbody>
-
-
-      </table>
-      <div className="flex justify-between items-center mt-4">
-        <div className="text-sm text-gray-600">
-          Showing {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
-          to {Math.min(currentPage * entriesToShow, totalUsers)} of {totalUsers}{" "}
-          entries
-        </div>
-        <div className="flex space-x-2">
-          <button
-            onClick={() => handlePageChange("first")}
-            className="px-3 py-1 text-gray-600 rounded text-sm"
-            disabled={currentPage === 1}
-          >
-            First
-          </button>
-          <button
-            onClick={() => handlePageChange("prev")}
-            className="px-3 py-1 text-gray-600 rounded text-sm"
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => handlePageChange("next")}
-            className="px-3 py-1 text-gray-600 rounded text-sm"
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </button>
-          <button
-            onClick={() => handlePageChange("last")}
-            className="px-3 py-1 text-gray-600 rounded text-sm"
-            disabled={currentPage === totalPages}
-          >
-            Last
-          </button>
-        </div>
-      </div>
-     
-<div className="flex items-center mt-4 space-x-4 w-full flex-wrap">
-  <button  onClick={handleClearAll} className="px-8 py-1 bg-lightred text-white font-bold text-md rounded-md w-72">
-    Clear All
-  </button>
-  <input
-  type="password"
-  value={password}
-  onChange={(e) => setPassword(e.target.value)}
-  placeholder="Enter password"
-  className="border border-gray-300 px-2 py-1 text-sm"
-/>
-<button
-  onClick={() => handleSubmitPaymentForRow()}
-  className="px-3 py-1 bg-gradient-seablue text-white text-sm font-medium rounded-md"
->
-  Submit Payment
-</button>
-
-</div>
-{isModalOpen && selectedUser && (
+      ) : (
         <>
-          <CreditEditReferenceModal
-            isOpen={isModalOpen}
-            onCancel={handleModalClose}
-            username={selectedUser.username}
-            currentCreditRef={selectedUser.creditReference}
-            onSubmit={handleSubmitFunction}
-            user={selectedUser}
-            userId={selectedUser?._id}
-            currentPage={currentPage}
-            entriesToShow={entriesToShow}
-          />
+          {/* <div className="p-4"> */}
+          <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
+            <div className="flex items-center space-x-2 sm:ml-0 ml-10">
+              <label className="mr-2 text-sm font-medium">Show</label>
+              <select
+                value={entriesToShow}
+                onChange={handleEntriesChange}
+                className="border border-gray-300 rounded px-2 py-1 text-sm"
+              >
+                {[10, 25, 50, 100].map((number) => (
+                  <option key={number} value={number}>
+                    {number}
+                  </option>
+                ))}
+              </select>
+              <label className="ml-2 text-sm font-medium">entries</label>
+            </div>
+            <div className="p-2 rounded-md">
+              <label className="p-1">Search:</label>
+              <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="border border-gray-300 rounded px-2 py-1 text-sm"
+              />
+            </div>
+          </div>
+          {/* </div> */}
+          <table className="w-full table-auto border-collapse border border-gray-300">
+            <thead className="border border-gray-300">
+              <tr className="bg-gray-300">
+                {columns.map(({ key, label }) => (
+                  <th
+                    key={key}
+                    className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
+                    onClick={() => handleSort(key)}
+                  >
+                    <div className="flex justify-between items-center">
+                      {label}
+                      <div className="flex flex-col items-center ml-2">
+                        <FaSortUp
+                          className={`${
+                            sortConfig.key === key &&
+                            sortConfig.direction === "ascending"
+                              ? "text-black"
+                              : "text-gray-400"
+                          }`}
+                          style={{
+                            marginBottom: "-6px",
+                          }}
+                        />
+                        <FaSortDown
+                          className={`${
+                            sortConfig.key === key &&
+                            sortConfig.direction === "descending"
+                              ? "text-black"
+                              : "text-gray-400"
+                          }`}
+                          style={{
+                            marginTop: "-6px",
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {sortedData.map((item, index) => (
+                <tr
+                  key={item._id}
+                  className="border border-gray-400 bg-white"
+                  onClick={() => handleRowClick(index)}
+                >
+                  <td className="px-4 py-2 text-sm">
+                    <span className="text-black font-semibold">
+                      {item.username}
+                    </span>
+                  </td>
+                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                    {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
+                  </td>
+                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                    {new Intl.NumberFormat("en-IN").format(item.totalBalance)}
+                  </td>
+                  <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
+                    {/* {new Intl.NumberFormat("en-IN").format(item.exposure)} */}
+                    {"(0)"}
+                  </td>
+                  <td className=" px-4 py-2 text-md text-blue font-semibold flex items-center">
+                    {new Intl.NumberFormat("en-IN").format(
+                      item.creditReference
+                    )}
+                    <FaEdit
+                      className="text-blue cursor-pointer ml-2"
+                      onClick={() => handleEditClick(item)}
+                    />
+                  </td>
+
+                  <td className="border border-gray-400 px-4 py-2 text-sm font-bold">
+                    {new Intl.NumberFormat("en-IN").format(item.profit_loss)}{" "}
+                  </td>
+                  <td className="border border-gray-400 px-4 py-2 text-md">
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleButtonClick("D", index)}
+                        className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
+                          editedData[index]?.depositwithdrawStatus === "D"
+                            ? "bg-green-600 text-white"
+                            : "bg-gray-400 text-white"
+                        } border border-black`}
+                      >
+                        D
+                      </button>
+
+                      <button
+                        onClick={() => handleButtonClick("W", index)}
+                        className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
+                          editedData[index]?.depositwithdrawStatus === "W" ||
+                          editedData[index]?.highlightFull
+                            ? "bg-red-600 text-white"
+                            : "bg-gray-400 text-white"
+                        } border border-black`}
+                      >
+                        W
+                      </button>
+
+                      <input
+                        type="text"
+                        value={
+                          editedData[index]?.depositwithdraw ||
+                          item.depositwithdraw ||
+                          ""
+                        }
+                        onChange={(e) =>
+                          handleInputChange(e, "depositwithdraw", index)
+                        }
+                        className="border border-gray-300 px-2 py-1 text-sm"
+                      />
+
+                      <button
+                        onClick={() => handleButtonClick("Full", index)}
+                        className={`px-3 py-1 text-sm font-medium rounded-md ${
+                          editedData[index]?.highlightFull
+                            ? "bg-gradient-blue text-white"
+                            : "bg-gray-400 text-white"
+                        } border border-black`}
+                      >
+                        Full
+                      </button>
+                    </div>
+                  </td>
+
+                  <td className="border border-gray-400 px-4 py-2 text-md">
+                    <input
+                      type="text"
+                      value={editedData[index]?.remark || ""}
+                      onChange={(e) => handleInputChange(e, "remark", index)}
+                      placeholder="Remark"
+                      className="border border-gray-300 px-2 py-1 text-sm"
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
+            <div className="text-sm text-gray-600">
+              Showing{" "}
+              {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+              {Math.min(currentPage * entriesToShow, totalUsers)} of{" "}
+              {totalUsers} entries
+            </div>
+            <div className="flex space-x-2 sm:ml-auto">
+              <button
+                onClick={() => handlePageChange("first")}
+                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                disabled={currentPage === 1}
+              >
+                First
+              </button>
+              <button
+                onClick={() => handlePageChange("prev")}
+                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                disabled={currentPage === 1}
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => handlePageChange("next")}
+                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                disabled={currentPage === totalPages}
+              >
+                Next
+              </button>
+              <button
+                onClick={() => handlePageChange("last")}
+                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                disabled={currentPage === totalPages}
+              >
+                Last
+              </button>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center mt-4 space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 w-full">
+            <div className="flex space-x-2">
+              <button
+                onClick={handleClearAll}
+                className="px-8 py-1 bg-lightred text-white font-bold text-md rounded-md w-full sm:w-72"
+              >
+                Clear All
+              </button>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="password"
+                className="border border-gray-300 px-2 py-1 text-sm w-full sm:w-auto"
+              />
+            </div>
+            <button
+              onClick={() => handleSubmitPaymentForRow()}
+              className={`px-3 py-1 ${
+                isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
+              } text-white text-sm font-medium rounded-md w-full sm:w-auto`}
+            >
+              Submit Payment
+            </button>
+          </div>
+
+          {isModalOpen && selectedUser && (
+            <>
+              <CreditEditReferenceModal
+                isOpen={isModalOpen}
+                onCancel={handleModalClose}
+                username={selectedUser.username}
+                currentCreditRef={selectedUser.creditReference}
+                onSubmit={handleSubmitFunction}
+                user={selectedUser}
+                userId={selectedUser?._id}
+                currentPage={currentPage}
+                entriesToShow={entriesToShow}
+              />
+            </>
+          )}
         </>
       )}
     </div>
@@ -585,5 +661,4 @@ const handleSubmitPaymentForRow = () => {
 };
 
 export default Banking;
-
 

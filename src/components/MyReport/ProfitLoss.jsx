@@ -9,6 +9,7 @@ const ProfitLoss = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
+    const [localLoading, setLocalLoading] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "username",
     direction: "ascending",
@@ -30,10 +31,16 @@ const ProfitLoss = () => {
     return 0;
   });
 
-  const paginatedData = sortedData.slice(
-    (currentPage - 1) * entriesToShow,
-    currentPage * entriesToShow
-  );
+  
+  console.log("Current Page: ", currentPage);
+  console.log("Entries to Show: ", entriesToShow);
+  console.log("Total Entries: ", totalEntries);
+
+ 
+    
+  const paginatedData = sortedData;
+
+  console.log("Paginated Data: ", paginatedData);
 
   const totalData = {
     username: "Total",
@@ -56,17 +63,18 @@ const ProfitLoss = () => {
         entriesToShow={entriesToShow}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
+        setLocalLoading={setLocalLoading}
       />
 
-      {/* Data Table */}
+      
       <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="text-xl bg-gradient-blue text-white font-bold">
+        <h1 className="text-xl bg-gradient-blue text-white font-custom font-bold">
           Profit Loss
         </h1>
 
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
-            <label className="mr-2 text-sm font-medium text-black">Show</label>
+            <label className="mr-2 text-sm  font-custom font-medium text-black">Show</label>
             <select
               value={entriesToShow}
               onChange={(e) => {
@@ -81,37 +89,22 @@ const ProfitLoss = () => {
                 </option>
               ))}
             </select>
-            <label className="ml-2 text-sm font-medium text-black">
-              entries
-            </label>
+            <label className="ml-2 text-sm font-custom font-medium text-black">entries</label>
           </div>
         </div>
 
         <div className="overflow-x-auto my-4 mx-4">
           <table className="w-full table-auto border-collapse border border-gray-400 ">
-            <thead className="border border-gray-400 bg-gray-300 text-black text-center ">
+            <thead className="border border-gray-400 bg-gray-200 text-black text-center ">
               <tr>
-                {[
-                  "username",
-                  "profitLoss",
-                  "downlineProfitLoss",
-                  "commission",
-                ].map((key) => (
+                {["username", "profitLoss", "downlineProfitLoss", "commission"].map((key) => (
                   <th
                     key={key}
-                    className="border border-gray-300 px-4 py-3 text-sm font-medium text-center cursor-pointer border-r border-gray-400"
+                    className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer border-r border-gray-400"
                     onClick={() => handleSort(key)}
                   >
                     <div className="flex justify-between items-center text-center">
-                      <span>
-                        {key === "username"
-                          ? "Username"
-                          : key === "profitLoss"
-                          ? "Profit/Loss"
-                          : key === "downlineProfitLoss"
-                          ? "Downline Profit/Loss"
-                          : "Commission"}
-                      </span>
+                      <span>{key === "username" ? "Username" : key}</span>
                       <div className="flex flex-col items-center ml-2">
                         <FaSortUp
                           className={`${
@@ -122,7 +115,7 @@ const ProfitLoss = () => {
                           }`}
                           style={{
                             marginBottom: "-6px",
-                          }} /* Adjust to overlap tightly */
+                          }}
                         />
                         <FaSortDown
                           className={`${
@@ -133,7 +126,7 @@ const ProfitLoss = () => {
                           }`}
                           style={{
                             marginTop: "-6px",
-                          }} /* Ensures they touch tightly */
+                          }}
                         />
                       </div>
                     </div>
@@ -142,44 +135,54 @@ const ProfitLoss = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedData.map((item, index) => (
-                <tr key={index} className="border-b border-gray-400">
-                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                    {item.username}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                    {item.profitLoss}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                    {item.downlineProfitLoss}
-                  </td>
-                  <td className="px-4 py-3 text-sm text-center">
-                    {item.commission}
+              {paginatedData.length > 0 ? (
+                paginatedData.map((item, index) => (
+                  <tr key={index} className="border-b border-gray-400">
+                    <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                      {item.username}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                      {item.profitLoss}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                      {item.downlineProfitLoss}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-center">
+                      {item.commission}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="px-4 py-3 text-sm text-center">
+                    No data available
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
-            <tfoot>
-              <tr className="bg-gray-300 text-black">
-                <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                  {totalData.username}
-                </td>
-                <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                  {totalData.profitLoss}
-                </td>
-                <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                  {totalData.downlineProfitLoss}
-                </td>
-                <td className="px-4 py-3 text-sm text-center">
-                  {totalData.commission}
-                </td>
-              </tr>
-            </tfoot>
+            {paginatedData.length > 0 && (
+              <tfoot>
+                <tr className="bg-gray-300 text-black">
+                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                    {totalData.username}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                    {totalData.profitLoss}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                    {totalData.downlineProfitLoss}
+                  </td>
+                  <td className="px-4 py-3 text-sm text-center">
+                    {totalData.commission}
+                  </td>
+                </tr>
+              </tfoot>
+            )}
           </table>
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-between items-center mt-4 p-4">
+        <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
           <div className="text-sm text-gray-600">
             Showing {(currentPage - 1) * entriesToShow + 1} to{" "}
             {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
@@ -188,14 +191,14 @@ const ProfitLoss = () => {
           <div className="flex space-x-2">
             <button
               onClick={() => setCurrentPage(1)}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
               disabled={currentPage === 1}
             >
               First
             </button>
             <button
               onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
               disabled={currentPage === 1}
             >
               Previous
@@ -204,14 +207,14 @@ const ProfitLoss = () => {
               onClick={() =>
                 setCurrentPage((prev) => Math.min(prev + 1, totalPages))
               }
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
               disabled={currentPage === totalPages}
             >
               Next
             </button>
             <button
               onClick={() => setCurrentPage(totalPages)}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
               disabled={currentPage === totalPages}
             >
               Last
@@ -224,3 +227,4 @@ const ProfitLoss = () => {
 };
 
 export default ProfitLoss;
+

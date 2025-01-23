@@ -41,10 +41,9 @@ const BetListFilter = ({
     fetchSports();
   }, []);
 
- 
   const handleGetHistory = async () => {
     if (!fromDate || !toDate || !type || !sport) {
-      return; 
+      return;
     }
 
     try {
@@ -81,9 +80,9 @@ const BetListFilter = ({
   }, [type, sport, fromDate, toDate, currentPage, entriesToShow]);
 
   return (
-    <div className="flex flex-wrap space-x-4 items-center mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
+    <div className="flex flex-wrap items-start space-y-4 sm:space-y-0 sm:space-x-4 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
       {/* Filter Inputs */}
-      <div className="flex flex-col items-start w-full sm:w-auto mb-4 sm:mb-0">
+      <div className="flex flex-col w-full sm:w-auto">
         <label className="text-sm font-medium text-black mb-1">
           Choose Type
         </label>
@@ -93,17 +92,16 @@ const BetListFilter = ({
             dispatch(setType(e.target.value));
             console.log("Type selected:", e.target.value);
           }}
-          className="border rounded px-8 py-2 text-sm w-full sm:w-auto"
+          className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         >
-          {/* <option value="">Select Type</option> */}
-          <option value="settled">Settled</option>
-          <option value="unsettled">Unsettled</option>
+          <option value="settled">Settle</option>
+          <option value="unsettled">UnSettle</option>
           <option value="void">Void</option>
         </select>
       </div>
 
       {/* Choose Sport */}
-      <div className="flex flex-col items-start w-full sm:w-auto mb-4 sm:mb-0">
+      <div className="flex flex-col w-full sm:w-auto">
         <label className="text-sm font-medium text-black mb-1">
           Choose Sport
         </label>
@@ -113,20 +111,19 @@ const BetListFilter = ({
             dispatch(setSport(e.target.value));
             console.log("Sport selected:", e.target.value);
           }}
-          className="border rounded px-8 py-2 text-sm w-full sm:w-auto"
+          className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         >
           <option value="">Select Sport</option>
           {sportsOptions.map((sport) => (
             <option key={sport._id} value={sport.name}>
-              {sport.name} 
+              {sport.name}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Date Filters */}
       {/* From Date */}
-      <div className="flex flex-col items-start w-full sm:w-auto mb-4 sm:mb-0">
+      <div className="flex flex-col w-full sm:w-auto">
         <label className="text-sm font-medium text-black mb-1">From</label>
         <input
           type="date"
@@ -135,12 +132,12 @@ const BetListFilter = ({
             dispatch(setFromDate(e.target.value));
             console.log("From Date selected:", e.target.value);
           }}
-          className="border rounded px-8 py-2 text-sm w-full sm:w-auto"
+          className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         />
       </div>
 
       {/* To Date */}
-      <div className="flex flex-col items-start w-full sm:w-auto mb-4 sm:mb-0">
+      <div className="flex flex-col w-full sm:w-auto">
         <label className="text-sm font-medium text-black mb-1">To</label>
         <input
           type="date"
@@ -149,15 +146,15 @@ const BetListFilter = ({
             dispatch(setToDate(e.target.value));
             console.log("To Date selected:", e.target.value);
           }}
-          className="border rounded px-8 py-2 text-sm w-full sm:w-auto"
+          className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         />
       </div>
 
       {/* Buttons */}
-      <div className="flex flex-col sm:flex-row space-x-0 sm:space-x-2 items-center sm:ml-auto w-full sm:w-auto mt-6">
+      <div className="flex justify-start sm:justify-center w-full sm:w-auto mt-4 sm:mt-0">
         <button
           onClick={handleGetHistory}
-          className="px-4 py-2 bg-darkgray text-white rounded-md text-sm w-full sm:w-auto"
+          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm w-full sm:w-auto sm:px-8"
         >
           Get History
         </button>

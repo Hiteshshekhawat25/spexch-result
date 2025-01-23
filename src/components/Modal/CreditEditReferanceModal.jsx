@@ -126,88 +126,83 @@ const CreditEditReferenceModal = ({
         error.message || "An error occurred while processing the request."
       );
     } finally {
-      // Ensure loading state is reset
       dispatch(setLoading(false));
     }
   };
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[500px] mt-12">
-        {" "}
-        {/* Reduced margin-top */}
-        {/* Header */}
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-3">
-          {" "}
-          {/* Reduced padding */}
-          <span>Edit Credit Reference - {username}</span>
-          <IoClose
-            onClick={onCancel} // Close the modal
-            className="cursor-pointer text-white text-2xl"
-          />
+    <div className="bg-white rounded-lg w-[90%] sm:w-[500px] mt-12 sm:mt-12">
+      {/* Header */}
+      <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-3">
+        <span>Edit Credit Reference - {username}</span>
+        <IoClose
+          onClick={onCancel} // Close the modal
+          className="cursor-pointer text-white text-2xl"
+        />
+      </div>
+  
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="space-y-4 p-5">
+        {/* Current Credit Reference */}
+        <div className="flex flex-col sm:flex-row justify-between items-center">
+          <label className="block text-sm font-custom font-medium text-gray-700 sm:w-1/3">
+            Current
+          </label>
+          <p className="w-full sm:w-2/3 text-black font-custom  font-medium">{currentCreditRef}</p>
         </div>
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 p-5">
-          {" "}
-          {/* Increased padding */}
-          {/* Current Credit Reference */}
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
-              Current
-            </label>
-            <p className="w-2/3 text-black font-medium">{currentCreditRef}</p>{" "}
-            {/* Display as text */}
-          </div>
-          {/* New Credit Reference */}
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
-              New
-            </label>
-            <div className="w-2/3 flex items-center space-x-2">
-              <input
-                type="text"
-                value={newCreditRef}
-                onChange={(e) => setNewCreditRef(e.target.value)}
-                // placeholder="New Credit Reference"
-                className="w-full p-2 border border-black rounded-lg text-gray-700"
-              />
-            </div>
-          </div>
-          {/* Password Field */}
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-medium text-gray-700 w-1/3">
-              Password
-            </label>
+  
+        {/* New Credit Reference */}
+        <div className="flex flex-col sm:flex-row justify-between items-center">
+          <label className="block text-sm font-custom font-medium text-gray-700 sm:w-1/3">
+            New
+          </label>
+          <div className="w-full sm:w-2/3 flex items-center space-x-2">
             <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-              // placeholder="Enter your password"
+              type="text"
+              value={newCreditRef}
+              onChange={(e) => setNewCreditRef(e.target.value)}
+              className="w-full p-2 border border-black rounded-lg text-gray-700"
             />
           </div>
-          {/* Buttons */}
-          <div className="flex justify-end space-x-4 mt-4">
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="px-6 py-2 bg-black text-white rounded-lg"
-            >
-              Submit
-            </button>
-
-            {/* Cancel Button */}
-            <button
-              type="button"
-              onClick={onCancel} // Call onCancel to close the modal
-              className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+  
+        {/* Password Field */}
+        <div className="flex flex-col sm:flex-row justify-between items-center">
+          <label className="block text-sm font-custom font-medium text-gray-700 sm:w-1/3">
+            Password
+          </label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full sm:w-2/3 p-2 border border-black rounded-lg text-gray-700"
+          />
+        </div>
+  
+        {/* Buttons */}
+        <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
+          {/* Submit Button */}
+          <button
+            type="submit"
+            className="px-6 py-2 bg-black text-white rounded-lg font-custom"
+          >
+            Submit
+          </button>
+  
+          {/* Cancel Button */}
+          <button
+            type="button"
+            onClick={onCancel} // Call onCancel to close the modal
+            className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
+  
   );
 };
 

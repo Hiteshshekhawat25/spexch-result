@@ -4,6 +4,7 @@ import { BASE_URL } from "../../Constant/Api";
 import { toast, ToastContainer } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setStartFetchData } from "../../Store/Slice/downlineSlice";
+import { IoClose } from "react-icons/io5";
 
 export const AddMasterForm = ({ closeModal }) => {
   const [formData, setFormData] = useState({
@@ -75,7 +76,7 @@ export const AddMasterForm = ({ closeModal }) => {
     }
   };
 
-  // Validation
+  // Validatio
   const validate = () => {
     const newErrors = {};
 
@@ -124,7 +125,7 @@ export const AddMasterForm = ({ closeModal }) => {
     console.log("role id", roleId);
     setFormData((prevData) => ({
       ...prevData,
-      role: roleId, // Pass role_id here
+      role: roleId,
     }));
   };
 
@@ -180,9 +181,9 @@ export const AddMasterForm = ({ closeModal }) => {
           masterPassword: "",
         });
         toast.success(response?.data?.message || "Master created Successfully");
-        // setTimeout(() => {
-        closeModal();
+        handleCloseModal();
         dispatch(setStartFetchData());
+        // setTimeout(() => { 
         // }, 2000);
       } else {
         toast.error(
@@ -195,23 +196,28 @@ export const AddMasterForm = ({ closeModal }) => {
       );
     } finally {
       setIsSubmitting(false);
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 2000);
     }
+  };
+  const handleCloseModal = () => {
+    setSuccessMessage("");
+    closeModal();
   };
 
   return (
     <div className=" bg-white rounded shadow-lg ">
-      <h2 className="text-white font-semibold mb-4 py-2 px-2 bg-gradient-blue">
+      <h2 className="flex text-white font-semibold mb-4 py-2 px-2 bg-gradient-blue">
         Add Master
+        <IoClose
+          onClick={closeModal}
+          className="cursor-pointer text-white text-2xl ml-auto"
+        />
       </h2>
       <form onSubmit={handleSubmit} className="px-4">
         <table className="w-full">
           <tbody>
             {/* Username */}
             <tr>
-              <td className="text-left py-2 font-semibold">Username</td>
+              <td className="text-left py-2 font-semibold">Username<span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="text"
@@ -247,32 +253,14 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Account Type */}
             <tr>
-              <td className="text-left py-2 font-semibold">Account Type</td>
+              <td className="text-left py-2 font-semibold">Account Type<span className="text-red-500">*</span></td>
               <td>
-                {/* <select
-                  name="role"
-                  value={formData.role || ""}
-                  onChange={(e) => {
-                    handleChange(e);
-                    handleRoleSelection(e.target.value);
-                  }}
-                  className="w-full p-1 border rounded"
-                >c{console.log(formData)}
-                  <option value="" disabled>
-                    Select Role
-                  </option>
-                  {role?.map(({ role_id, role_name }, index) => (
-                    <option key={index} value={role_id}>
-                      {role_name}
-                    </option>
-                  ))}
-                </select> */}
                 <select
                   name="role"
                   value={formData.role || ""}
                   onChange={(e) => {
                     handleChange(e);
-                    handleRoleSelection(e.target.value); // Pass the selected role_id
+                    handleRoleSelection(e.target.value);
                   }}
                   className="w-full p-1 border border-gray-700 rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
                 >
@@ -284,7 +272,7 @@ export const AddMasterForm = ({ closeModal }) => {
                       ({ role_name }) =>
                         userData?.data?.role_name !== "master" ||
                         role_name !== "master"
-                    ) // Filter condition
+                    )
                     .map(({ _id, role_name }, index) => (
                       <option key={index} value={_id}>
                         {role_name}
@@ -300,7 +288,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Commission */}
             <tr>
-              <td className="text-left py-2 font-semibold">Commission (%)</td>
+              <td className="text-left py-2 font-semibold">Commission (%)<span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="text"
@@ -320,7 +308,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Opening Balance */}
             <tr>
-              <td className="text-left py-2 font-semibold">Opening Balance</td>
+              <td className="text-left py-2 font-semibold">Opening Balance<span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="text"
@@ -340,7 +328,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Credit Reference */}
             <tr>
-              <td className="text-left py-2 font-semibold">Credit Reference</td>
+              <td className="text-left py-2 font-semibold">Credit Reference<span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="text"
@@ -360,7 +348,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Mobile Number */}
             <tr>
-              <td className="text-left py-2 font-semibold">Mobile Number</td>
+              <td className="text-left py-2 font-semibold">Mobile Number<span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="text"
@@ -380,7 +368,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Partnership */}
             <tr>
-              <td className="text-left py-2 font-semibold">Partnership</td>
+              <td className="text-left py-2 font-semibold">Partnership<span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="text"
@@ -400,7 +388,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Password */}
             <tr>
-              <td className="text-left py-2 font-semibold">Password</td>
+              <td className="text-left py-2 font-semibold">Password <span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="password"
@@ -418,7 +406,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Confirm Password */}
             <tr>
-              <td className="text-left py-2 font-semibold">Confirm Password</td>
+              <td className="text-left py-2 font-semibold">Confirm Password<span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="password"
@@ -611,7 +599,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
             {/* Master Password */}
             <tr>
-              <td className="text-left py-2 font-semibold">Master Password</td>
+              <td className="text-left py-2 font-semibold">Master Password<span className="text-red-500">*</span></td>
               <td>
                 <input
                   type="password"

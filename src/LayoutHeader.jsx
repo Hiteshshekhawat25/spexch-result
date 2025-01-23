@@ -1,4 +1,3 @@
-
 import MenuHeader from "./components/Header/MenuHeader";
 import TopHeader from "./components/Header/TopHeader";
 
@@ -9,10 +8,10 @@ const LayoutHeader = ({ children }) => {
     <div>
       <TopHeader />
       <MenuHeader />
-      <div className="p-1">
-        </div>
-        <div>{children}</div> 
+      <div className="p-4 bg-gray-150">
+        <div>{children}</div>
       </div>
+    </div>
   );
 };
 

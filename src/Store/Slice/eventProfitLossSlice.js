@@ -1,22 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  // Event Profit and Loss Information
-  sportName: "", // Sport name like Football, Basketball, etc.
-  uplineProfitLoss: 0, // Upline profit or loss
-  downlineProfitLoss: 0, // Downline profit or loss
-  commission: 0, // Commission related to the sport
-
-  // Status and Error Handling
-  status: "idle", // Status to manage loading, success, error
-  error: null, // For storing errors
+  
+  sportName: "", 
+  uplineProfitLoss: 0, 
+  downlineProfitLoss: 0, 
+  commission: 0, 
+  status: "idle", 
+  error: null, 
 };
 
 const eventProfitLossSlice = createSlice({
   name: "eventProfitLoss",
   initialState,
   reducers: {
-    // Action to update event profit/loss data
+    
     updateEventProfitLoss: (state, action) => {
       return {
         ...state,
@@ -26,35 +24,39 @@ const eventProfitLossSlice = createSlice({
       };
     },
 
-    // Action to set the event loading state
+    
     setEventLoading: (state) => {
-      state.status = "loading";
+      state.status = "loading"; 
     },
 
-    // Action to set the event error state
+    setStatus: (state, action) => {
+      state.status = action.payload; 
+    },
+
+    
     setEventError: (state, action) => {
       state.status = "failed";
       state.error = action.payload;
     },
 
-    // Action to update the upline profit/loss
+    
     setUplineProfitLoss: (state, action) => {
       state.uplineProfitLoss = action.payload;
     },
 
-    // Action to update the downline profit/loss
+    
     setDownlineProfitLoss: (state, action) => {
       state.downlineProfitLoss = action.payload;
     },
 
-    // Action to update the commission
+    
     setCommission: (state, action) => {
       state.commission = action.payload;
     },
   },
 });
 
-// Export actions for use in components
+
 export const {
   updateEventProfitLoss,
   setEventLoading,
@@ -64,7 +66,7 @@ export const {
   setCommission,
 } = eventProfitLossSlice.actions;
 
-// Selectors to access specific parts of the state
+
 export const selectEventProfitLossData = (state) => state.eventProfitLoss;
 export const selectEventStatus = (state) => state.eventProfitLoss.status;
 export const selectEventError = (state) => state.eventProfitLoss.error;

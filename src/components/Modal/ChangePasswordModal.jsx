@@ -58,7 +58,7 @@ const ChangePasswordModal = ({ onCancel }) => {
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-20">
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-2">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-2">
           <span>Change Password</span>
           <IoClose
             onClick={onCancel}
@@ -68,7 +68,7 @@ const ChangePasswordModal = ({ onCancel }) => {
 
         <div className="p-5 space-y-4">
           <div>
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-custom font-medium text-gray-700">
               Your Password <span className="text-red-600">*</span>
             </label>
             <div className="relative">
@@ -89,7 +89,7 @@ const ChangePasswordModal = ({ onCancel }) => {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-custom font-medium text-gray-700">
               New Password <span className="text-red-600">*</span>
             </label>
             <div className="relative">
@@ -110,7 +110,7 @@ const ChangePasswordModal = ({ onCancel }) => {
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700">
+            <label className="text-sm font-custom font-medium text-gray-700">
               Confirm Password <span className="text-red-600">*</span>
             </label>
             <div className="relative">

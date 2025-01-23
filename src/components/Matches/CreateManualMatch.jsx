@@ -68,14 +68,14 @@ const CreateManualMatch = () => {
 
   return (
     <div className="max-w-7xl mx-auto mt-6">
-      <h1 className="text-2xl font-bold text-center mb-6">
+      <h1 className="text-2xl font-custom text-center mb-6">
         Create Manual Match
       </h1>
       <div className="p-8 border border-gray-300 rounded-lg bg-white shadow">
         <form onSubmit={handleSubmit} className="grid grid-cols-4 gap-4">
           {/* Select Sport */}
           <div>
-            <label className="block font-bold">Select Sport</label>
+            <label className="block font-custom">Select Sport</label>
             <select
               value={formState.sport}
               onChange={(e) => handleInputChange("sport", e.target.value)}
@@ -119,7 +119,7 @@ const CreateManualMatch = () => {
             "bookMaxProfit",
           ].map((field, index) => (
             <div key={field}>
-              <label className="block font-bold capitalize">{field}</label>
+              <label className="block font-custom capitalize">{field}</label>
               <input
                 type="text"
                 value={formState[field] || ""}
@@ -221,7 +221,7 @@ export default CreateManualMatch;
 //     <form onSubmit={handleSubmit} className="grid grid-cols-4 gap-4 p-4">
 //       {/* Select Sport */}
 //       <div>
-//         <label className="block font-bold">Select Sport</label>
+//         <label className="block font-custom">Select Sport</label>
 //         <select
 //           value={formState.sport}
 //           onChange={(e) => handleInputChange("sport", e.target.value)}
@@ -265,7 +265,7 @@ export default CreateManualMatch;
 //         "bookMaxProfit",
 //       ].map((field, index) => (
 //         <div key={field}>
-//           <label className="block font-bold capitalize">{field}</label>
+//           <label className="block font-custom capitalize">{field}</label>
 //           <input
 //             type="text"
 //             value={formState[field] || ""}

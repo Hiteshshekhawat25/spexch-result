@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   setDataSource,
@@ -6,23 +6,106 @@ import {
   setToDate,
   setFromTime,
   setToTime,
+  resetFilters,
   selectEventPLFilter,
 } from "../../Store/Slice/eventPLFilterSlice";
+import {
+  setEventLoading,
+} from "../../Store/Slice/eventProfitLossSlice";
+import { getProfitLossData } from "../../Services/Downlinelistapi";
 
-const EventPLFilter = () => {
+const EventPLFilter = ({
+  setPLData,
+  setTotalTransactions,
+  setTotalPages,
+  setIsDataFetched,
+  entriesToShow,
+  currentPage,
+  setCurrentPage,
+  setLocalLoading,
+}) => {
   const dispatch = useDispatch();
 
-  const { dataSource, fromDate, toDate, fromTime, toTime } =
-    useSelector(selectEventPLFilter) || {};
+  const eventPLFilterState = useSelector((state) => state.eventPLFilter);
+  const loading = useSelector(
+    (state) => state.eventProfitLoss.status === "loading"
+  );
+  const [localLoading, setLocalLoadingState] = useState(false);
 
-  const handleGetPL = () => {
-    console.log("Fetching Event P&L with:", {
-      dataSource,
-      fromDate,
-      fromTime,
-      toDate,
-      toTime,
-    });
+  useEffect(() => {
+    setLocalLoading(localLoading);
+  }, [localLoading, setLocalLoading]);
+
+  console.log("Redux State for eventPLFilter:", eventPLFilterState);
+
+  const { dataSource, fromDate, toDate, fromTime, toTime } =
+    eventPLFilterState || {};
+
+  useEffect(() => {
+    console.log("loading state has changed:", loading);
+  }, [loading]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [entriesToShow, setCurrentPage]);
+
+  useEffect(() => {
+    if (fromDate && toDate) {
+      console.log("Fetching P&L data due to filter or page change");
+      handleGetPL();
+      setLocalLoadingState(false);
+    }
+  }, [
+    currentPage,
+    fromDate,
+    toDate,
+    fromTime,
+    toTime,
+    dataSource,
+    entriesToShow,
+  ]);
+
+  const handleGetPL = async () => {
+    setLocalLoadingState(false);
+    console.log("Started fetching data");
+
+    try {
+      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
+        fromDate || ""
+      }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
+        toTime || ""
+      }&dataSource=${dataSource || ""}`;
+      console.log("Fetching data with URL:", url);
+
+      const response = await getProfitLossData(url);
+      console.log(response);
+
+      if (response && response.data) {
+        const { pagination, data } = response.data;
+
+        setPLData(data);
+        setTotalTransactions(pagination?.totalRecords || 0);
+        setTotalPages(pagination?.totalPages || 1);
+        setIsDataFetched(true);
+      } else {
+        console.error("No data found in response");
+        setIsDataFetched(false);
+      }
+    } catch (error) {
+      console.error("Error fetching P&L data:", error);
+      setIsDataFetched(false);
+    } finally {
+      console.log("Setting loading state to false in finally block");
+    }
+  };
+
+  const handleReset = () => {
+    dispatch(resetFilters());
+    setPLData([]);
+    setTotalTransactions(0);
+    setTotalPages(1);
+    setIsDataFetched(false);
+    setCurrentPage(1);
   };
 
   const today = new Date().toISOString().split("T")[0];
@@ -52,11 +135,38 @@ const EventPLFilter = () => {
     }
   }, [dataSource, dispatch, today]);
 
+  const handleTimeChangeWithValidation = (
+    time,
+    type,
+    dispatch,
+    fromTime,
+    toTime
+  ) => {
+    if (type === "fromTime") {
+      if (toTime && time > toTime) {
+        alert("From Time cannot be later than To Time");
+        return;
+      }
+      dispatch(setFromTime(time));
+    } else if (type === "toTime") {
+      if (fromTime && time < fromTime) {
+        alert("To Time cannot be earlier than From Time");
+        return;
+      }
+      dispatch(setToTime(time));
+    }
+  };
+
+  useEffect(() => {
+    if (!fromTime) dispatch(setFromTime("00:00"));
+    if (!toTime) dispatch(setToTime("23:59"));
+  }, [dispatch, fromTime, toTime]);
+
   return (
-    <div className="flex space-x-4 items-center p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-      {/* Data Source Dropdown */}
+    <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
+  
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">
+        <label className="text-sm font-custom text-black mb-2">
           Data Source
         </label>
         <select
@@ -71,9 +181,8 @@ const EventPLFilter = () => {
         </select>
       </div>
 
-      {/* From Date Input */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From Date</label>
+        <label className="text-sm font-custom text-black mb-1">From Date</label>
         <input
           type="date"
           value={fromDate || today}
@@ -82,9 +191,8 @@ const EventPLFilter = () => {
         />
       </div>
 
-      {/* From Time Input */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">Time</label>
+        <label className="text-sm font-custom text-black mb-1">From Time</label>
         <input
           type="time"
           value={fromTime || "00:00"}
@@ -93,9 +201,8 @@ const EventPLFilter = () => {
         />
       </div>
 
-      {/* To Date Input */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To Date</label>
+        <label className="text-sm font-custom text-black mb-1">To Date</label>
         <input
           type="date"
           value={toDate || today}
@@ -104,9 +211,8 @@ const EventPLFilter = () => {
         />
       </div>
 
-      {/* To Time Input */}
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">Time</label>
+        <label className="text-sm font-custom text-black mb-1">To Time</label>
         <input
           type="time"
           value={toTime || "23:59"}
@@ -115,14 +221,15 @@ const EventPLFilter = () => {
         />
       </div>
 
-      {/* Buttons */}
-      <div className="flex space-x-2 items-center ml-50% mt-5">
+
+      <div className="flex space-x-2 items-center">
         <button
           onClick={handleGetPL}
-          className="px-4 py-2 bg-darkgray text-white rounded-md text-sm"
+          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
         >
           Get P & L
         </button>
+      
       </div>
     </div>
   );

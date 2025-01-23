@@ -7,7 +7,7 @@ const RollingCommisionModal = ({ username, onCancel, commissionRates }) => {
       <div className="bg-white rounded-lg w-[500px] mt-20">
         {/* Header */}
         <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-semibold w-full p-2">
-          <span>Rolling Commission - {username}</span>
+          <span>Rolling Commission </span>
           <IoClose
             onClick={onCancel}
             className="cursor-pointer text-white text-2xl"
@@ -28,10 +28,10 @@ const RollingCommisionModal = ({ username, onCancel, commissionRates }) => {
               key={index}
               className="flex justify-between items-center border border-black p-2"
             >
-              <span className="text-sm font-medium text-gray-700 w-1/3">
+              <span className="text-sm font-custom text-gray-700 w-1/3">
                 {category.label}
               </span>
-              <span className="text-gray-800 font-medium w-2/3 text-right">
+              <span className="text-gray-800 font-custom w-2/3 text-right">
                 {category.value}
               </span>
             </div>

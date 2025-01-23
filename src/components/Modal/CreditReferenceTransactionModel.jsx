@@ -71,8 +71,8 @@ const CreditReferenceTransactionModel = ({
         className="bg-white rounded-lg shadow-lg p-6 w-full max-w-4xl relative"
       >
         {/* Modal Header */}
-        <div className="flex justify-between items-center bg-black text-white text-lg font-semibold w-full p-3">
-          <h3 className="text-l font-semibold">Credit Reference Log</h3>
+        <div className="flex justify-between items-center bg-black text-white text-lg font-custom font-semibold w-full p-3">
+          <h3 className="text-l font-custom font-semibold">Credit Reference Log</h3>
           <button
             onClick={handleClose}
             className="cursor-pointer text-white text-2xl"

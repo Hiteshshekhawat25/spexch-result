@@ -101,17 +101,17 @@ const PasswordHistory = () => {
   };
 
   return (
-    <div className="p-4 bg-gray-100">
-      <div className="mx-auto bg-white shadow-md rounded-md">
-        <div className="p-4 bg-gray-800 text-white font-semibold text-lg">
+    <div className="bg-gray-100">
+      <div className="border border-gray-300 rounded-md bg-white">
+        <h1 className="text-md bg-gradient-seablue text-white font-custom font-bold p-1">
           Password Change History
-        </div>
+        </h1>
         <div className="p-4">
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <label className="mr-2 text-sm font-medium text-black">
-                Show
-              </label>
+          <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
+            {/* Entries Dropdown */}
+            {/* <div className="flex items-center space-x-2 ml-10"> */}
+            <div className="flex items-center space-x-2 sm:ml-0 ml-10 font-custom">
+              <label className="">Show</label>
               <select
                 value={entriesToShow}
                 onChange={handleEntriesChange}
@@ -123,21 +123,21 @@ const PasswordHistory = () => {
                   </option>
                 ))}
               </select>
-              <label className="ml-2 text-sm font-medium text-black">
-                entries
-              </label>
+              <label className="">entries</label>
             </div>
-            <div>
-              <label>Search: </label> 
+
+            {/* Search Input */}
+            <div className="flex items-center space-x-2">
+              <label className="">Search:</label>
               <input
                 type="text"
-                // placeholder="Search"
-                className="border border-gray-300 rounded-md p-2"
+                className="border border-gray-300 rounded-md p-2 text-sm w-full sm:w-auto"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
           </div>
+
           <div className="overflow-x-auto">
             <table className="w-full border-collapse border border-gray-300">
               <thead className="bg-gray-200">

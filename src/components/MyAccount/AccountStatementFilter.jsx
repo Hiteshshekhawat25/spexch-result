@@ -102,7 +102,7 @@ const AccountStatementFilter = ({
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-2">
+        <label className="text-sm font-custom text-black mb-2">
           Data Source
         </label>
        <select
@@ -118,7 +118,7 @@ const AccountStatementFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">From</label>
+        <label className="text-sm font-custom text-black mb-1">From</label>
         <input
           type="date"
           value={fromDate || today}
@@ -128,7 +128,7 @@ const AccountStatementFilter = ({
       </div>
 
       <div className="flex flex-col items-start">
-        <label className="text-sm font-medium text-black mb-1">To</label>
+        <label className="text-sm font-custom text-black mb-1">To</label>
         <input
           type="date"
           value={toDate || today}
