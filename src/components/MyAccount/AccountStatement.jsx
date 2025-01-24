@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import AccountStatementFilter from "./AccountStatementFilter";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const AccountStatement = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -13,7 +14,7 @@ const AccountStatement = () => {
     key: "createdAt", // Default sort by date
     direction: "ascending",
   });
-
+  const { userData} = useSelector((state) => state.user);
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
@@ -172,8 +173,8 @@ const AccountStatement = () => {
                       {item.currentMainWallet}
                     </td>
                     <td className="px-4 py-3 text-sm text-center">
-                      {item.description}
-                    </td>
+  {item.description || userData?.data?.username}
+</td>
                     <td className="px-4 py-3 text-sm text-center">
                       {item.from_To}
                     </td>
