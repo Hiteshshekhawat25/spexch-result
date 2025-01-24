@@ -628,15 +628,15 @@ const Banking = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="password"
-                className="border border-gray-300 px-2 py-1 text-sm w-full sm:w-auto"
+                placeholder="Password.."
+                className="border border-gray-300 px-2 py-1 lg:px-24 text-sm w-full sm:w-auto"
               />
             </div>
             <button
               onClick={() => handleSubmitPaymentForRow()}
-              className={`px-3 py-1 ${
-                isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
-              } text-white text-sm font-medium rounded-md w-full sm:w-auto`}
+              className={`px-3 py-1 lg:px-32 lg:py-2 ${
+    isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
+  } text-white text-sm lg:text-md font-medium rounded-md w-full sm:w-auto`}
             >
               Submit Payment
             </button>
