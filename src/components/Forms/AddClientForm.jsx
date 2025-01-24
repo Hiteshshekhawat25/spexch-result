@@ -327,54 +327,52 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
           <div className="text-red-500">{formErrors.exposureLimit}</div>
         )}
         <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Password<span className="text-red-500">*</span>
-          </label>
-          
-          <div className="relative w-full">
-  <input
-    type={showPassword ? "text" : "password"}
-    name="password"
-    value={formData.password}
-    placeholder="Password.."
-    onChange={handleChange}
-    className="w-full p-1 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-    required
-  />
-  <span
-    onClick={() => setShowPassword(!showPassword)}
-    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
-  >
-    {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-  </span>
+  <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+    Password<span className="text-red-500">*</span>
+  </label>
+  <div className="relative w-full md:w-2/3">
+    <input
+      type={showPassword ? "text" : "password"}
+      name="password"
+      value={formData.password}
+      placeholder="Password.."
+      onChange={handleChange}
+      className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+      required
+    />
+    <span
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+    >
+      {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+    </span>
+  </div>
 </div>
-
-        </div>
         {formErrors.password && (
           <div className="text-red-500">{formErrors.password}</div>
         )}
         <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Confirm Password<span className="text-red-500">*</span>
-          </label>
-          <div className="relative w-full">
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            placeholder="ConfirmPassword.."
-            onChange={handleChange}
-            className="w-full p-1 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-            required
-          />
-           <span
-    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
-  >
-    {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-  </span>
-          </div>
-        </div>
+  <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+    Confirm Password<span className="text-red-500">*</span>
+  </label>
+  <div className="relative w-full md:w-2/3">
+    <input
+      type={showConfirmPassword ? "text" : "password"}
+      name="confirmPassword"
+      value={formData.confirmPassword}
+      placeholder="ConfirmPassword.."
+      onChange={handleChange}
+      className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+      required
+    />
+    <span
+      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+    >
+      {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+    </span>
+  </div>
+</div>
         {formErrors.confirmPassword && (
           <div className="text-red-500">{formErrors.confirmPassword}</div>
         )}
@@ -392,47 +390,47 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
 
         {formData.rollingCommissionChecked && (
           <div className="space-y-2">
-            <div className="flex justify-between">
-              <label className="w-1/3 text-left font-custom ">Fancy</label>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">Fancy</label>
               <input
                 type="text"
                 name="rollingCommission.fancy"
                 value={formData.rollingCommission.fancy}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
-            <div className="flex justify-between">
-              <label className="w-1/3 text-left font-custom ">Matka</label>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">Matka</label>
               <input
                 type="text"
                 name="rollingCommission.matka"
                 value={formData.rollingCommission.matka}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
-            <div className="flex justify-between">
-              <label className="w-1/3 text-left font-custom ">Casino</label>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">Casino</label>
               <input
                 type="text"
                 name="rollingCommission.casino"
                 value={formData.rollingCommission.casino}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
-            <div className="flex justify-between">
-              <label className="w-1/3 text-left font-custom ">Binary</label>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">Binary</label>
               <input
                 type="text"
                 name="rollingCommission.binary"
                 value={formData.rollingCommission.binary}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
-            <div className="flex justify-between">
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
               <label className="w-1/3 text-left font-custom ">
                 Sportbook
               </label>
@@ -441,43 +439,43 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
                 name="rollingCommission.sportbook"
                 value={formData.rollingCommission.sportbook}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
-            <div className="flex justify-between">
-              <label className="w-1/3 text-left font-custom ">Bookmaker</label>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom ">Bookmaker</label>
               <input
                 type="text"
                 name="rollingCommission.bookmaker"
                 value={formData.rollingCommission.bookmaker}
                 onChange={handleChange}
-                className="w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full sm:w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
           </div>
         )}
         <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Master Password<span className="text-red-500">*</span>
-          </label>
-          <div className="relative w-full">
-          <input
-            type="password"
-            name="masterPassword"
-            placeholder="MasterPassword.."
-            value={formData.masterPassword}
-            onChange={handleChange}
-            className="w-full p-1 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-            required
-          />
-          <span
-    onClick={() => setShowMasterPassword(!showMasterPassword)}
-    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
-  >
-    {showMasterPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-  </span>
+  <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+    Master Password<span className="text-red-500">*</span>
+  </label>
+  <div className="relative w-full md:w-2/3">
+    <input
+      type={showMasterPassword ? "text" : "password"}
+      name="masterPassword"
+      value={formData.masterPassword}
+      placeholder="MasterPassword.."
+      onChange={handleChange}
+      className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+      required
+    />
+    <span
+      onClick={() => setShowMasterPassword(!showMasterPassword)}
+      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+    >
+      {showMasterPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+    </span>
   </div>
-        </div>
+</div>
         {formErrors.masterPassword && (
           <div className="text-red-500">{formErrors.masterPassword}</div>
         )}
