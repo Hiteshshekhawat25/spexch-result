@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setDownlineData } from "../../Store/Slice/downlineSlice";
 import { fetchRoles } from "../../Utils/LoginApi";
 
+
 const DepositModal = ({
   isOpen,
   onClose,
@@ -26,6 +27,8 @@ const DepositModal = ({
 
   const token = localStorage.getItem("authToken");
   console.log("userdata", userData);
+  const totalBalance = useSelector((state) => state.balance.totalBalance); 
+  console.log(totalBalance)
 
   if (!isOpen) return null;
 
@@ -128,7 +131,7 @@ const DepositModal = ({
     <div className="bg-white rounded-md w-[500px] mt-12 sm:w-[90%] md:w-[500px]">
       {/* Modal Header */}
       <div className="flex justify-between items-center bg-gradient-blue text-white text-sm font-custom font-semibold w-full">
-        <span>Banking - MasterBalance- {userData?.data?.name}</span>
+        <span>Banking - MasterBalance:{totalBalance}</span>
         <button
           onClick={() => {
             resetState();
@@ -185,12 +188,13 @@ const DepositModal = ({
             Remark
           </label>
           <div className="w-2/3 flex items-center space-x-2">
-            <input
-              type="text"
-              value={remark}
-              onChange={(e) => setRemark(e.target.value)}
-              className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
-            />
+           <input
+      type="text"
+      value={remark || userData?.data?.username || ''}
+      onChange={(e) => setRemark(e.target.value)}
+      placeholder="Remark..."
+      className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
+    />
           </div>
         </div>
         
