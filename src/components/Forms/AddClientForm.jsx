@@ -186,11 +186,6 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
       toast.error("Cannot create duplicate username");
     } finally {
       setIsSubmitting(false);
-
-      // dispatch(
-      //   fetchDownlineData({
-      //   })
-      // );
     }
   };
 
@@ -383,39 +378,16 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
         {formErrors.confirmPassword && (
           <div className="text-red-500">{formErrors.confirmPassword}</div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-xm font-medium">
-            Master Password<span className="text-red-500">*</span>
-          </label>
-          <div className="relative w-full">
-          <input
-            type="password"
-            name="masterPassword"
-            placeholder="MasterPassword.."
-            value={formData.masterPassword}
-            onChange={handleChange}
-            className="w-full p-1 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-            required
-          />
-          <span
-    onClick={() => setShowMasterPassword(!showMasterPassword)}
-    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
-  >
-    {showMasterPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-  </span>
-  </div>
-        </div>
-        {formErrors.masterPassword && (
-          <div className="text-red-500">{formErrors.masterPassword}</div>
-        )}
-        <div className="flex items-center">
+
+<div className="flex items-center">
+<label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">Rolling Commission</label>
           <input
             type="checkbox"
             name="rollingCommissionChecked"
             checked={formData.rollingCommissionChecked}
             onChange={handleChange}
           />
-          <label className="ml-2">Enable Rolling Commission</label>
+          
         </div>
 
         {formData.rollingCommissionChecked && (
@@ -484,6 +456,32 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
             </div>
           </div>
         )}
+        <div className="flex flex-col md:flex-row justify-between">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+            Master Password<span className="text-red-500">*</span>
+          </label>
+          <div className="relative w-full">
+          <input
+            type="password"
+            name="masterPassword"
+            placeholder="MasterPassword.."
+            value={formData.masterPassword}
+            onChange={handleChange}
+            className="w-full p-1 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            required
+          />
+          <span
+    onClick={() => setShowMasterPassword(!showMasterPassword)}
+    className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+  >
+    {showMasterPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+  </span>
+  </div>
+        </div>
+        {formErrors.masterPassword && (
+          <div className="text-red-500">{formErrors.masterPassword}</div>
+        )}
+        
         <div className="flex justify-center mt-4">
           <button
             type="submit"

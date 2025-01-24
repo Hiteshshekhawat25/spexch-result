@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5"; // Importing the close icon
+import { IoClose, IoEye, IoEyeOff } from 'react-icons/io5';
 import { useDispatch, useSelector } from "react-redux";
 import { updateCreditReference } from "../../Store/Slice/creditReferenceslice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
@@ -24,6 +24,9 @@ const CreditEditReferenceModal = ({
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
   const { creditReference } = useSelector((state) => state);
+  const [showPassword, setShowPassword] = useState(false);
+  
+
   const [roles, setRoles] = useState([]);
   const location = useLocation();
 
@@ -162,35 +165,43 @@ const CreditEditReferenceModal = ({
               type="text"
               value={newCreditRef}
               onChange={(e) => setNewCreditRef(e.target.value)}
-              className="w-full p-2 border border-black rounded-lg text-gray-700"
+              className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
             />
           </div>
         </div>
   
-        {/* Password Field */}
+        
         <div className="flex flex-col sm:flex-row justify-between items-center">
-          <label className="block text-sm font-custom font-medium text-gray-700 sm:w-1/3">
-            Password
-          </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full sm:w-2/3 p-2 border border-black rounded-lg text-gray-700"
-          />
-        </div>
-  
-        {/* Buttons */}
+  <label className="block text-sm font-custom font-medium text-gray-700 sm:w-1/3">
+    Password
+  </label>
+  <div className="w-full sm:w-2/3 relative">
+    <input
+      type={showPassword ? "text" : "password"}  
+      value={password}
+      onChange={(e) => setPassword(e.target.value)}
+      className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
+    />
+    <div
+      className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+      onClick={() => setShowPassword(!showPassword)}
+    >
+      {showPassword ? <IoEyeOff className="text-blue" /> : <IoEye className="text-blue" />}
+    </div>
+  </div>
+</div>
+
+      
         <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
-          {/* Submit Button */}
+         
           <button
             type="submit"
-            className="px-6 py-2 bg-black text-white rounded-lg font-custom"
+            className="px-6 py-2 bg-gradient-seablue text-white rounded-lg font-custom"
           >
             Submit
           </button>
   
-          {/* Cancel Button */}
+          
           <button
             type="button"
             onClick={onCancel} // Call onCancel to close the modal
