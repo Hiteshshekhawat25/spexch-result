@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5"; // Importing the close icon
+import { IoClose } from "react-icons/io5"; 
 import { useDispatch } from "react-redux";
-import { updateExposure } from "../../Store/Slice/editExposureSlice"; // Import the update exposure thunk
+import { updateExposure } from "../../Store/Slice/editExposureSlice"; 
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import {
   setDownlineData,
@@ -30,10 +31,17 @@ const EditExposureLimitModal = ({
   const [password, setPassword] = useState("");
   const [roles, setRoles] = useState([]);
   const location = useLocation();
+    const [passwordVisible, setPasswordVisible] = useState(false);
+
+    const handlePasswordVisibility = () => {
+      setPasswordVisible((prev) => !prev);
+    };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+   
     // Validation checks for empty fields
     if (!newExposureLimit) {
       toast.error("New Exposure Limit is required.");
@@ -176,6 +184,9 @@ const EditExposureLimitModal = ({
               onChange={(e) => setPassword(e.target.value)}
               className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
             />
+            <div className="absolute inset-y-0 right-[4%] sm:right-[4%] lg:right-[24%] flex items-center pr-3 text-gray-400 cursor-pointer"   onClick={handlePasswordVisibility}   >
+                          {passwordVisible ? <FaEyeSlash color="black" /> : <FaEye color="black" />}
+                        </div>
           </div>
 
           {/* Buttons */}
@@ -183,7 +194,7 @@ const EditExposureLimitModal = ({
             {/* Submit Button */}
             <button
               type="submit"
-              className="px-6 py-2 bg-black text-white rounded-lg"
+              className="px-4 py-2 bg-gradient-seablue font-custom font-bold text-white rounded-lg"
             >
               Submit
             </button>
@@ -192,7 +203,7 @@ const EditExposureLimitModal = ({
             <button
               type="button"
               onClick={onCancel}
-              className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg"
+              className="px-4 py-2 bg-gray-300 font-custom font-bold text-gray-700 rounded-lg"
             >
               Cancel
             </button>
