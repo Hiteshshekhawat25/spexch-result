@@ -5,7 +5,7 @@ import { BASE_URL } from '../../Constant/Api';
 // Thunk to fetch credit reference data
 export const fetchCreditReference = createAsyncThunk(
     'creditReference/fetchCreditReference',
-    async ({ userId, username, page, limit }, { rejectWithValue }) => {
+    async ({ userId, username, page, limit,sortKey, sortDirection}, { rejectWithValue }) => {
         const token = localStorage.getItem('authToken');
 
         if (!token) {
@@ -19,6 +19,8 @@ export const fetchCreditReference = createAsyncThunk(
                         username,
                         page,
                         limit,
+                        sortKey,
+            sortDirection, 
                     },
                     headers: {
                         Authorization: `Bearer ${token}`,
