@@ -46,7 +46,7 @@ const MenuHeader = () => {
       ],
     },
     { name: "BetList", link: "/BetList" },
-    { name: "Market Analysis", link: "#" },
+    { name: "Market Analysis", link: "/market-analysis" },
     {
       name: "Banking",
       link: "#",
@@ -58,10 +58,10 @@ const MenuHeader = () => {
     { name: "Commission", link: "#" },
     { name: "Password History", link: "/password-history" },
     { name: "Restore User", link: "/restore-user" },
-    {
-      name: "Logout",
-      onClick: handleLogout, 
-    },
+    // {
+    //   name: "Logout",
+    //   onClick: handleLogout, 
+    // },
   ];
 
   if (userData && userData.data.role_name === "super-admin") {

@@ -33,7 +33,9 @@ module.exports = {
         theme3: '#315195',
         theme4: '#14213d',
         theme5: '#72bbef',
-        theme6: '#faa9ba'
+        theme6: '#faa9ba',
+        theme7 : '#14213d',
+
       },
       backgroundImage: {
         'gradient-green': 'linear-gradient(#a4dc60 0%, #4f9f21 100%)',
