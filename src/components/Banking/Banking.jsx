@@ -441,7 +441,7 @@ const Banking = () => {
                 {columns.map(({ key, label }) => (
                   <th
                     key={key}
-                    className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer"
+                    className="border border-gray-400 text-left p-2 px-4  text-sm font-bold text-black cursor-pointer"
                     onClick={() => handleSort(key)}
                   >
                     <div className="flex justify-between items-center">
@@ -506,10 +506,13 @@ const Banking = () => {
                       onClick={() => handleEditClick(item)}
                     />
                   </td>
-
-                  <td className="border border-gray-400 px-4 py-2 text-sm font-bold">
-                    {new Intl.NumberFormat("en-IN").format(item.profit_loss)}{" "}
-                  </td>
+<td
+  className={`border border-gray-400 px-4 py-2 text-sm font-bold ${
+    item.profit_loss < 0 ? "text-red-500" : "text-green-500"
+  }`}
+>
+  {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
+</td>
                   <td className="border border-gray-400 px-4 py-2 text-md">
                     <div className="flex items-center space-x-2">
                       <button
@@ -625,15 +628,15 @@ const Banking = () => {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="password"
-                className="border border-gray-300 px-2 py-1 text-sm w-full sm:w-auto"
+                placeholder="Password.."
+                className="border border-gray-300 px-2 py-1 lg:px-24 text-sm w-full sm:w-auto"
               />
             </div>
             <button
               onClick={() => handleSubmitPaymentForRow()}
-              className={`px-3 py-1 ${
-                isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
-              } text-white text-sm font-medium rounded-md w-full sm:w-auto`}
+              className={`px-3 py-1 lg:px-32 lg:py-2 ${
+    isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
+  } text-white text-sm lg:text-md font-medium rounded-md w-full sm:w-auto`}
             >
               Submit Payment
             </button>

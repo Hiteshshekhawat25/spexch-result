@@ -20,9 +20,9 @@ const balanceSlice = createSlice({
       state.totalExposure = formatBalance(action.payload.totalExposure);
       state.availableBalance = formatBalance(action.payload.allAvailableBalance); // Update this based on your API
       state.balance = formatBalance(action.payload.allAvailableBalance);
-      state.uplinePL = '0.00'; // Assuming uplinePL is not part of API response, set it as '0.00'
+      state.uplinePL = formatBalance(action.payload.uplineProfitLoss); // Assuming uplinePL is not part of API response, set it as '0.00'
       state.totalavailbalance = formatBalance(action.payload.totalAvailableBalance);
-      state.availableBalanceUpdated = formatBalance(action.payload.totalAvailableBalance); // Assuming this uses the same field
+      // state.availableBalanceUpdated = formatBalance(action.payload.totalAvailableBalance); // Assuming this uses the same field
     },
   },
 });
