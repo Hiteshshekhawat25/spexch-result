@@ -98,8 +98,7 @@ const MenuHeader = () => {
   }
 
  
-  const menuWrapperRef = useRef(null); // Reference to the scrollable menu container
-
+  const menuWrapperRef = useRef(null); 
   const toggleSubMenu = (name, index) => {
     if (activeSubMenu === name) {
       setActiveSubMenu(null);
@@ -224,7 +223,7 @@ const MenuHeader = () => {
         )}
       </div>
 
-      <ul className="hidden lg:flex justify-center lg:justify-start ml-24 mr-4">
+      <ul className="hidden lg:flex justify-center lg:justify-start ml-24 mr-4 text-lg">
         {menuItems.map((item, index) => (
           <li
             key={index}

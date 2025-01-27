@@ -64,7 +64,7 @@ const EventProfitLoss = () => {
 
   return (
     <div className="p-4">
-      {localLoading  ? (
+      {localLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
             <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
@@ -220,12 +220,14 @@ const EventProfitLoss = () => {
             </div>
 
             {/* Pagination */}
+            <div className="flex justify-between items-center mt-4  flex-col sm:flex-row">
+              <div className="text-sm text-gray-600 sm:mb-0">
 
-            <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
-              <div className="text-sm text-gray-600">
-                Showing {(currentPage - 1) * entriesToShow + 1} to{" "}
-                {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
-                {totalEntries} entries
+              Showing{" "}
+  {totalEntries > 0
+    ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(currentPage * entriesToShow, totalEntries)}`
+    : "0 to 0"}{" "}
+  of {totalEntries} entries
               </div>
               <div className="flex space-x-2 sm:ml-auto">
                 <button

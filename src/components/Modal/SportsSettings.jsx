@@ -36,19 +36,37 @@ const SportsSettingsModal = ({
     }
   }, [isOpen, dispatch, token]);
 
-   const handleCheckboxChange = (gameId, isChecked) => {
+  //  const handleCheckboxChange = (gameId, isChecked) => {
+  //   dispatch(
+  //     updateGameStatusThunk({ token, userId, gameId, isChecked: !isChecked })
+  //   )
+  //     .unwrap()
+  //     .then((response) => {
+  //       toast.success(response.message || "Sports Locked successfully");
+  //     })
+  //     .catch((error) => {
+  //       toast.error(error || "Error updating game status");
+  //     });
+  // };
+
+  const handleToggleChange = (gameId, currentStatus) => {
+    const newStatus = !currentStatus;
+  
     dispatch(
-      updateGameStatusThunk({ token, userId, gameId, isChecked: !isChecked })
+      updateGameStatusThunk({ token, userId, gameId, isChecked: newStatus })
     )
       .unwrap()
       .then((response) => {
-        toast.success(response.message || "Game status updated successfully");
+        const message = newStatus
+          ? response.message || "Sports Locked successfully"
+          : "Sports Unlocked successfully";
+        toast.success(message);
       })
       .catch((error) => {
         toast.error(error || "Error updating game status");
       });
   };
-
+  
   return (
     <>
       {isOpen && (
@@ -98,19 +116,50 @@ const SportsSettingsModal = ({
                         <td className="border border-gray-400 px-4 py-2 text-left">
                           {sport.name}
                         </td>
-                        <td className="border border-gray-400 px-4 py-2 text-center">
-                          <input
-                            type="checkbox"
-                            checked={sport?.isChecked}
-                            onChange={() =>
-                              handleCheckboxChange(
-                                sport?.gameId,
-                                sport?.isChecked
-                              )
-                            }
-                            className="form-checkbox h-5 w-5 text-blue-600"
-                          />
-                        </td>
+                      
+                      <td className="border border-gray-400 px-4 py-2 text-center">
+  
+  <div
+  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+    sport?.isChecked
+      ? "bg-gradient-seablue"
+      : "bg-white"
+  }`}
+  onClick={() =>
+    handleToggleChange(
+      sport?.gameId,
+      sport?.isChecked
+    )
+  }
+>
+  
+  <span
+    className={`absolute right-2 text-sm font-bold ${
+      sport?.isChecked ? "text-transparent" : "text-whiteGray"
+    }`}
+  >
+    ✗
+  </span>
+
+  
+  <span
+    className={`absolute left-2 text-sm font-bold ${
+      sport?.isChecked ? "text-white" : "text-transparent"
+    }`}
+  >
+    ✓
+  </span>
+
+  
+  <span
+    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+      sport?.isChecked ? "translate-x-9" : "translate-x-1"
+    }`}
+  ></span>
+</div>
+
+</td>
+
                       </tr>
                     ))}
                   </tbody>

@@ -325,7 +325,7 @@ const DownlineList = () => {
   if (error) {
     console.error("Error fetching user:", error);
     return (
-      <div className="text-red-500 font-bold">An error occurred: {error}</div>
+      <div className="text-red-500 font-custom font-bold">An error occurred: {error}</div>
     );
   }
   const handleDeleteModalClose = () => {
@@ -472,7 +472,7 @@ const DownlineList = () => {
 
             <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
 
-            <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
+            <div className="absolute bottom-[-40px] w-full text-center text-xl font-custom font-semibold text-black">
               <ClipLoader />
             </div>
           </div>
@@ -482,10 +482,10 @@ const DownlineList = () => {
           {userFetchList.length ? (
             <>
               <div
-                className="border rounded p-2 mb-3 w-full sm:w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-semibold"
+                className="border rounded p-2 mb-3 w-full sm:w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-custom font-semibold"
                 onClick={() => setUserFetchList([])}
               >
-                <div className="bg-green-500 text-white px-2 py-1 mr-2 rounded font-semibold text-xs sm:text-sm w-14">
+                <div className="bg-green-500 text-white px-2 py-1 mr-2 rounded font-custom font-semibold text-xs sm:text-sm w-14">
                   Master
                 </div>
                 <div className="text-sm sm:text-base">
@@ -500,7 +500,7 @@ const DownlineList = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
               {/* Show Entries Dropdown */}
               <div className="p-2 rounded-md flex items-center w-full sm:w-auto">
-                <label className="mr-2 text-sm font-medium">Show</label>
+                <label className="mr-2 text-sm font-custom font-medium">Show</label>
                 <select
                   value={entriesToShow}
                   onChange={handleEntriesChange}
@@ -513,7 +513,7 @@ const DownlineList = () => {
                     </option>
                   ))}
                 </select>
-                <label className="ml-2 text-sm font-medium">entries</label>
+                <label className="ml-2 text-sm font-custom font-medium">entries</label>
               </div>
 
               {/* Filters and Search */}
@@ -572,11 +572,11 @@ const DownlineList = () => {
                     ].map(({ key, label }) => (
                       <th
                         key={key}
-                        className="border border-gray-400 text-left px-4 text-sm  font-custom  text-black cursor-pointer"
+                        className="border border-gray-400 text-left px-4 p-2 text-sm  font-custom  text-black cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between">
-                          <div className="flex items-center">{label}</div>
+                          <div className="flex items-center ">{label}</div>
                           <div className="flex flex-col items-center ml-2">
                             <FaSortUp
                               className={`${
@@ -604,7 +604,7 @@ const DownlineList = () => {
                         </div>
                       </th>
                     ))}
-                    <th className="border border-gray-400 text-left px-4 py-3 text-sm font-medium text-black">
+                    <th className="border border-gray-400 text-left px-4 py-3 text-sm font-custom font-bold text-black">
                       Actions
                     </th>
                   </tr>
@@ -642,7 +642,7 @@ const DownlineList = () => {
                             }`}
                           >
                             <span
-                              className={`bg-green-500 text-white px-2 py-1 text-xs mr-1 rounded font-semibold text-l ${
+                              className={`bg-green-500 text-white px-2 py-1 text-xs mr-1 rounded font-custom font-semibold text-l ${
                                 item.role_name === "master"
                                   ? "cursor-pointer"
                                   : ""
@@ -650,12 +650,12 @@ const DownlineList = () => {
                             >
                               {item.role_name.toUpperCase()}
                             </span>
-                            <span className="text-black font-semibold">
+                            <span className="text-black font-custom font-semibold">
                               {item.username}
                             </span>
                           </div>
                         </td>
-                        <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-semibold">
+                        <td className=" border border-gray-400 px-4 py-2 text-md text-blue-700 font-custom font-semibold">
                           {new Intl.NumberFormat("en-IN").format(
                             item.creditReference
                           )}
@@ -671,14 +671,14 @@ const DownlineList = () => {
                           </div>
                         </td>
                         {!isMasterDownlineList && (
-                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-semibold">
                             {new Intl.NumberFormat("en-IN").format(
                               item.openingBalance
                             )}
                           </td>
                         )}
                         {isMasterDownlineList && (
-                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom  font-semibold">
                             {new Intl.NumberFormat("en-IN").format(
                               item.partnership
                             )}
@@ -691,17 +691,17 @@ const DownlineList = () => {
                           </td>
                         )}
                         {isMasterDownlineList && (
-                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-semibold">
                             {new Intl.NumberFormat("en-IN").format(
                               item.openingBalance
                             )}
                           </td>
                         )}
-                        <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                        <td className="border border-gray-400 px-4 py-2 text-sm font-custom  font-semibold">
                           0
                         </td>
                         {!isMasterDownlineList && (
-                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-semibold">
                             {new Intl.NumberFormat("en-IN").format(
                               item.exposureLimit
                             )}
@@ -714,13 +714,13 @@ const DownlineList = () => {
                           </td>
                         )}
 
-                        <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
+                        <td className="border border-gray-400 px-4 py-2 text-sm font-custom font-semibold">
                           {new Intl.NumberFormat("en-IN").format(
                             item.totalBalance || 0
                           )}
                         </td>
                         <td
-                          className={`border border-gray-400 px-4 py-2 text-sm font-semibold ${
+                          className={`border border-gray-400 px-4 py-2 text-sm font-custom font-semibold ${
                             item.profit_loss < 0 ? "text-red-500" : ""
                           }`}
                         >
@@ -733,12 +733,12 @@ const DownlineList = () => {
                               )}
                         </td>
                         {!isMasterDownlineList && (
-                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-semibold">
+                          <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-semibold">
                             {new Intl.NumberFormat("en-IN").format(100)}
                           </td>
                         )}
 
-                        <td className="border border-gray-400 px-4 py-2 font-bold text-l">
+                        <td className="border border-gray-400 px-4 py-2  font-custom font-bold text-l">
                           <span
                             className={`p-1 rounded border ${
                               item.status === "active"

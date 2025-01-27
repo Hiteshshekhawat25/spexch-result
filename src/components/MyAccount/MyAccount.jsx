@@ -86,25 +86,7 @@ const MyAccount = () => {
                 </div>
               </div>
 
-              <div
-                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === "accountStatement" ? "font-custom bg-bluehover" : ""}`}
-                onClick={() => handleSelection("accountStatement")}
-              >
-                <div className="flex justify-between py-2 px-4 text-sm font-custom">
-                  <span>Account Statement</span>
-                </div>
-              </div>
-
-              <div
-                className={`cursor-pointer text-left  border-b border-gray-300 hover:bg-lime ${selectedPage === "activityLog" ? "font-custom bg-bluehover" : ""}`}
-                onClick={() => handleSelection("activityLog")}
-              >
-                <div className="flex justify-between py-2 px-4 text-sm font-custom">
-                  <span>Activity Log</span>
-                </div>
-              </div>
-
-             
+                         
               {selectedUser && (
                 <>
                   <div
@@ -125,6 +107,25 @@ const MyAccount = () => {
                   </div>
                 </>
               )}
+
+<div
+                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === "accountStatement" ? "font-custom bg-bluehover" : ""}`}
+                onClick={() => handleSelection("accountStatement")}
+              >
+                <div className="flex justify-between py-2 px-4 text-sm font-custom">
+                  <span>Account Statement</span>
+                </div>
+              </div>
+
+              <div
+                className={`cursor-pointer text-left  border-b border-gray-300 hover:bg-lime ${selectedPage === "activityLog" ? "font-custom bg-bluehover" : ""}`}
+                onClick={() => handleSelection("activityLog")}
+              >
+                <div className="flex justify-between py-2 px-4 text-sm font-custom">
+                  <span>Activity Log</span>
+                </div>
+              </div>
+
             </div>
           </div>
 

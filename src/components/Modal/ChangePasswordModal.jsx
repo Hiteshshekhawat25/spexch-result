@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { IoClose, IoEye, IoEyeOff } from 'react-icons/io5'; // Import eye icons
+import { IoClose, IoEye, IoEyeOff } from 'react-icons/io5';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   setChangePasswordLoading,

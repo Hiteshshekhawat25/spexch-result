@@ -15,6 +15,7 @@ module.exports = {
         lime: '#ecfccb',
         lightred: '#f86c6b ',
         customGray: '#2d2d2d',
+        ashGray:"#899499",
         darkgray: "#404040",
         whiteGray: "#d7dede",
         white: '#FFFFFF',

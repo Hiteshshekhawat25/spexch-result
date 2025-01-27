@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setDownlineData } from "../../Store/Slice/downlineSlice";
 import { fetchRoles } from "../../Utils/LoginApi";
 
+
 const DepositModal = ({
   isOpen,
   onClose,
@@ -25,7 +26,9 @@ const DepositModal = ({
   const dispatch = useDispatch();
 
   const token = localStorage.getItem("authToken");
-  console.log("userdeposiut", user);
+  console.log("userdata", userData);
+  const totalBalance = useSelector((state) => state.balance.totalBalance); 
+  console.log(totalBalance)
 
   if (!isOpen) return null;
 
@@ -98,7 +101,7 @@ const DepositModal = ({
 
         console.log("roleId:", roleId);
 
-        // Fetch updated downline data with roleId
+       
         const result = await fetchDownlineData(
           currentPage,
           entriesToShow,
@@ -108,8 +111,8 @@ const DepositModal = ({
         console.log("result", result);
         if (result && result.data) {
           dispatch(setDownlineData(result.data));
-          resetState(); // Reset form state
-          onClose(); // Close the modal or transaction form
+          resetState(); 
+          onClose(); 
         } else {
           toast.warning("Unable to fetch updated downline data.");
         }
@@ -125,10 +128,10 @@ const DepositModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-    <div className="bg-white rounded-lg w-[500px] mt-12 sm:w-[90%] md:w-[500px]">
+    <div className="bg-white rounded-md w-[500px] mt-12 sm:w-[90%] md:w-[500px]">
       {/* Modal Header */}
-      <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-3">
-        <span>Banking - Master- {userData?.data?.name}</span>
+      <div className="flex justify-between items-center bg-gradient-blue text-white text-sm font-custom font-semibold w-full">
+        <span>Banking - MasterBalance:{totalBalance}</span>
         <button
           onClick={() => {
             resetState();
@@ -140,14 +143,14 @@ const DepositModal = ({
         </button>
       </div>
   
-      {/* Modal Body */}
+     
       <form className="space-y-4 p-5">
-        {/* Amount Field */}
+        
         <div className="flex justify-between">
           <div>
             <span
-              className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-custom font-bold text-l"
-              // onClick={() => handleUsernameList(item)}
+              className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-custom font-bold text-xs"
+              
             >
               {user.role_name.toUpperCase()}
             </span>
@@ -155,7 +158,7 @@ const DepositModal = ({
           </div>
           <div>
             Client Bal:{" "}
-            <span className="font-custom font-bold">
+            <span className="font-custom">
               {new Intl.NumberFormat("en-IN").format(user.totalBalance || 0)}
             </span>
           </div>
@@ -175,8 +178,7 @@ const DepositModal = ({
                   setAmount(Number(value));
                 }
               }}
-              // placeholder="Enter Amount"
-              className="w-full p-2 border border-black rounded-lg text-gray-700"
+              className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
             />
           </div>
         </div>
@@ -186,26 +188,26 @@ const DepositModal = ({
             Remark
           </label>
           <div className="w-2/3 flex items-center space-x-2">
-            <input
-              type="text"
-              value={remark}
-              onChange={(e) => setRemark(e.target.value)}
-              // placeholder="Enter Remark"
-              className="w-full p-2 border border-black rounded-lg text-gray-700"
-            />
+           <input
+      type="text"
+      value={remark || userData?.data?.username || ''}
+      onChange={(e) => setRemark(e.target.value)}
+      placeholder="Remark..."
+      className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
+    />
           </div>
         </div>
         
         <div className="flex justify-between items-center">
           <label className="block text-sm font-custom font-medium text-gray-700 w-1/3">
-            Password
+            Your Password
           </label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-            // placeholder="Enter your password"
+            className="w-2/3 p-2 border border-whiteGray rounded-md text-gray-700"
+           
           />
         </div>
   
@@ -215,7 +217,7 @@ const DepositModal = ({
             type="button"
             onClick={() => handleTransaction("deposit")}
             disabled={loading || !amount || !password}
-            className={`py-2 px-6 rounded-lg hover:bg-green-600 focus:outline-none ${
+            className={`py-2 px-6 rounded-lg text-white font-bold hover:bg-green-600 focus:outline-none ${
               loading || !amount || !password
                 ? "bg-green-500 bg-opacity-50 cursor-not-allowed"
                 : "bg-green-500 text-white hover:bg-green-600"
@@ -227,7 +229,7 @@ const DepositModal = ({
             type="button"
             onClick={() => handleTransaction("withdraw")}
             disabled={loading || !amount || !password}
-            className={`py-2 px-6 rounded-lg hover:bg-red-600 focus:outline-none ${
+            className={`py-2 px-6 rounded-lg text-white font-bold hover:bg-red-600 focus:outline-none ${
               loading || !amount || !password
                 ? "bg-red-500 bg-opacity-50 cursor-not-allowed"
                 : "bg-red-500 text-white hover:bg-red-600"
