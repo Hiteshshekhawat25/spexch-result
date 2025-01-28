@@ -33,6 +33,8 @@ import eventFilterReducer from './Slice/eventPLFilterSlice';
 import eventPLFilterReducer  from './Slice/eventPLFilterSlice'; 
 import sessionReducer from '../Store/Slice/SessionSlice';
 import partnershipReducer from '../Store/Slice/updatePartnershipSlice'
+import { marketListReducer } from './Slice/marketAnalysisSlice';
+import { marketBetsReducer } from './Slice/marketBetsSlice';
 
 
 export const store = configureStore({
@@ -69,6 +71,8 @@ export const store = configureStore({
     eventPLFilter: eventPLFilterReducer,
     sessions: sessionReducer,
     partnership: partnershipReducer,
+    marketList : marketListReducer,
+    marketBetList : marketBetsReducer
   },
 });
 

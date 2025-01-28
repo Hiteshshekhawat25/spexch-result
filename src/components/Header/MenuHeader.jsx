@@ -17,6 +17,8 @@ const MenuHeader = () => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
+  console.log('userDatauserData', userData)
+
   const handleLogout = () => {
     console.log("logout Clicked");
     dispatch(clearUserData());
@@ -44,7 +46,7 @@ const MenuHeader = () => {
       ],
     },
     { name: "BetList", link: "/BetList" },
-    { name: "Market Analysis", link: "#" },
+    { name: "Market Analysis", link: "/market-analysis" },
     {
       name: "Banking",
       link: "#",
@@ -56,13 +58,13 @@ const MenuHeader = () => {
     { name: "Commission", link: "#" },
     { name: "Password History", link: "/password-history" },
     { name: "Restore User", link: "/restore-user" },
-    {
-      name: "Logout",
-      onClick: handleLogout, 
-    },
+    // {
+    //   name: "Logout",
+    //   onClick: handleLogout, 
+    // },
   ];
 
-  if (userData && userData.data.role_name === "super-master") {
+  if (userData && userData.data.role_name === "super-admin") {
     menuItems.push(
       {
         name: "Matches",
@@ -71,13 +73,28 @@ const MenuHeader = () => {
           { name: "Create New Match", link: "/CreateNewMatch" },
           { name: "Create Manual Match", link: "/CreateManualMatch" },
           { name: "All Matches", link: "/AllMatches" },
+          { name: "Session Result", link: "/SessionResult" },
+
         ],
       },
       {
         name: "Global Settings",
         link: "/GlobalSettings",
-      }
+      },
+      {
+        name: "Logout",
+        link: "#",
+        onClick: handleLogout, // Attach logout handler here
+      }, // Logout item
     );
+  } else {
+    menuItems?.push(
+      {
+        name: "Logout",
+        link: "#",
+        onClick: handleLogout, // Attach logout handler here
+      }, 
+    )
   }
 
  

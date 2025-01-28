@@ -30,6 +30,8 @@ import Dashboard from "../components/Dashboard/dashboard";
 import Banking from "../components/Banking/Banking";
 import PasswordHistory from "../components/PasswordHistory/Passwordhistory";
 import RestoreUser from "../components/RestoreUser/RestoreUser";
+import MarketAnalysis from "../components/MarketAnalysis/MarketAnalysis";
+import MarketAnalysisInner from "../components/MarketAnalysis/MarketAnalysisInner";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -307,6 +309,26 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <RestoreUser/>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={ROUTES_CONST.marketAnalysis}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <MarketAnalysis />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={`${ROUTES_CONST.marketAnalysis}/:gameId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <MarketAnalysisInner />
             </LayoutHeader>
           </ProtectedRoutes>
         }
