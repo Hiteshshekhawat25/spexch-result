@@ -146,7 +146,7 @@ const Pagination = ({pageNo, setPageNo, totalPages}) => {
 
   return (
     <>
-      <ul className='border border-[#D0D5DD] rounded-md mb-0 flex items-center bg-white'>
+      <ul className='border border-[#D0D5DD] rounded-md mb-0 inline-flex items-center bg-white'>
         <li onClick={handlePrev}>
           <button className='flex items-center justify-center size-[34px] border-r hover:no-underline hover:text-[#1D2939] border-[#D0D5DD] '>
             <img width={17} height={17} src={'assets/img/arrow-left.png'} alt={'arrow-left'} />

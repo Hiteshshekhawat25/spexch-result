@@ -163,7 +163,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-        path={ROUTES_CONST.MatchOddsBets}
+        path={`${ROUTES_CONST.MatchOddsBets}/:matchId`}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
