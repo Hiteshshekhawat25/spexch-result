@@ -482,7 +482,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
 {/* Agent Rolling Commission Checkbox */}
 <div className="py-2">
-  <label className="inline-flex items-center">
+  <label className="inline-flex items-center font-custom font-bold">
   
     Agent Rolling Commission
   </label>
@@ -500,7 +500,7 @@ export const AddMasterForm = ({ closeModal }) => {
   <div className="space-y-4">
     {['fancy', 'matka', 'casino', 'binary', 'sportbook', 'bookmaker'].map((field) => (
       <div key={field} className="flex flex-col">
-        <label className="capitalize font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">{field}</label>
+        <label className="capitalize font-custom font-bold sm:text-left text-center sm:w-1/3 w-full">{field}</label>
         <input
           type="text"
           name={`agentRollingCommission.${field}`}
@@ -515,7 +515,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
 {/* Master Password */}
 <div className="flex flex-col sm:flex-row sm:items-center">
-  <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+  <label className="font-custom font-bold sm:text-left text-center sm:w-1/3 w-full">
     Master Password <span className="text-red-500">*</span>
   </label>
   <div className="relative flex-1">

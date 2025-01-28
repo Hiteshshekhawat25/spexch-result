@@ -16,8 +16,9 @@ import RollingCommisionModal from "../Modal/RollingCommisionModal";
 import AgentRollingCommisionModal from "../Modal/AgentRollingCommisionModal";
 import ChangePasswordModal from "../Modal/ChangePasswordModal";
 import EditRollingCommissionModal from "../Modal/EditRollingCommisionModal";
+import EditCommissionModal from  "../Modal/EditCommisionModal";
 
-const MyProfile = () => {
+const MyProfile = ({ Userid }) => {
   const dispatch = useDispatch();
   const profile = useSelector(selectProfileData);
   const profileStatus = useSelector(selectProfileStatus);
@@ -29,20 +30,24 @@ const MyProfile = () => {
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState(false);
   const [isEditRollingModalOpen, setIsEditRollingModalOpen] = useState(false);
+  const [isEditCommissionModalOpen, setIsEditCommissionModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
 
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  const userId = userData?.data?._id;
+  console.log("Userid passed to MyProfile:", Userid);
+  
+const ID = Userid || JSON.parse(localStorage.getItem("userData"))?.data?._id;
+console.log("Final ID being used:", ID);
 
   useEffect(() => {
+
+   
     if (profileStatus === "idle") {
       console.log("Setting profile to loading...");
       dispatch(setProfileLoading());
 
       const fetchProfileData = async () => {
         try {
-          // Pass userId as a URL parameter
-          const response = await getUserData(`user/get-user/${userId}`);
+                    const response = await getUserData(`user/get-user/${ID}`);
           console.log("API Response:", response.data);
 
           dispatch(updateProfile(response.data.data));
@@ -66,7 +71,7 @@ const MyProfile = () => {
 
       fetchProfileData();
     }
-  }, [profileStatus, dispatch, userId]);
+  }, [profileStatus, dispatch, ID]);
   // Handle loading and error states
   if (profileStatus === "loading") {
     return <div>Loading...</div>;
@@ -87,6 +92,13 @@ const MyProfile = () => {
     if (modalData) {
       console.log("Edit button clicked!");
       setIsEditRollingModalOpen(true); 
+    }
+  };
+
+  const handleOpenEditCommissionModal = () => {
+    if (modalData) {
+      console.log("Edit button clicked!");
+      setIsEditCommissionModalOpen(true); 
     }
   };
 
@@ -120,6 +132,14 @@ const MyProfile = () => {
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Commission</span>
           <span className="text-left ml-4">{profile.commission}%</span>
+          {Userid && (
+    <span className="text-left ml-4 flex items-center">
+      <FaEdit
+        className="ml-2 text-blue cursor-pointer"
+        onClick={handleOpenEditCommissionModal}
+      />
+    </span>
+  )}
         </div>
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Rolling Commission</span>
@@ -147,7 +167,8 @@ const MyProfile = () => {
         </div>
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Currency</span>
-          <span className="text-left ml-4">{profile.currency}</span>
+          <span className="text-left ml-4">IRP{profile.currency}</span>
+          
         </div>
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Partnership</span>
@@ -189,11 +210,24 @@ const MyProfile = () => {
       {isEditRollingModalOpen && modalData && (
         <EditRollingCommissionModal
           username={modalData.username}
-          userId={userId}
+          userId={ID}
           onCancel={() => setIsEditRollingModalOpen(false)}
           onSubmit={(updatedData) => {
             console.log("Updated Rolling Commission Data:", updatedData);
             setIsEditRollingModalOpen(false);
+          }}
+        />
+      )}
+
+
+{isEditCommissionModalOpen && modalData && (
+        <EditCommissionModal
+          username={modalData.username}
+          userId={ID}
+          onCancel={() => setIsEditCommissionModalOpen(false)}
+          onSubmit={(updatedData) => {
+            console.log("Updated Rolling Commission Data:", updatedData);
+            setIsEditCommissionModalOpen(false);
           }}
         />
       )}

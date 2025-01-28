@@ -17,6 +17,12 @@ const MyAccount = () => {
   const [selectedPage, setSelectedPage] = useState(initialPage);
   const [loading, setLoading] = useState(false);
 
+  const role_name=location.state?.selectedUser?.role_name;
+  console.log(role_name)
+
+  const Userid= location.state?.selectedUser?._id;
+  console.log(Userid)
+
   useEffect(() => {
     if (loading) {
       const timer = setTimeout(() => {
@@ -36,7 +42,7 @@ const MyAccount = () => {
   let content;
   switch (selectedPage) {
     case "myProfile":
-      content = <MyProfile />;
+      content = <MyProfile Userid={Userid} />;
       break;
     case "accountStatement":
       content = <AccountStatement />;
@@ -51,7 +57,7 @@ const MyAccount = () => {
       content = <EventProfitLoss />;
       break;
     default:
-      content = <MyProfile />;
+      content = <MyProfile Userid={Userid} />;
   }
 
   
@@ -87,7 +93,7 @@ const MyAccount = () => {
               </div>
 
                          
-              {selectedUser && (
+              {selectedUser && role_name === "user" &&  (
                 <>
                   <div
                     className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === 'bethistory' ? 'font-custom bg-bluehover' : ''}`}
