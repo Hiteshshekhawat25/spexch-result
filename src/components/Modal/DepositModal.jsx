@@ -158,7 +158,7 @@ const DepositModal = ({
           </div>
           <div>
             Client Bal:{" "}
-            <span className="font-custom">
+            <span className="font-custom font-bold">
               {new Intl.NumberFormat("en-IN").format(user.totalBalance || 0)}
             </span>
           </div>
@@ -174,9 +174,7 @@ const DepositModal = ({
               value={amount}
               onChange={(e) => {
                 const value = e.target.value;
-                if (value.length <= 8) {
-                  setAmount(Number(value));
-                }
+                setAmount(Number(value));  // Removes the length restriction
               }}
               className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
             />
