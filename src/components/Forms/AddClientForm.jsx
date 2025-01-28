@@ -84,6 +84,16 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+    
+    if (name === "username") {
+      // Allow only alphabets and numbers
+      const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, "");
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: sanitizedValue,
+      }));
+      return;
+    }
 
     if (name === "rollingCommissionChecked") {
       setFormData((prevData) => ({

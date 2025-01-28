@@ -7,13 +7,12 @@ const balanceSlice = createSlice({
     totalExposure: 0,
     availableBalance: 0,
     balance: 0,
-    uplinePL: 0, // Assuming this is 0 initially
+    uplinePL: 0, 
     totalavailbalance: 0,
     availableBalanceUpdated: 0,
   },
   reducers: {
     setBalanceData: (state, action) => {
-      // Helper function to format the currency
       const formatBalance = (value) => (value ? parseFloat(value).toFixed(2) : '0.00');
 
       state.totalBalance = formatBalance(action.payload.totalBalance);
