@@ -8,7 +8,7 @@ import {
   selectChangePasswordStatus,
   selectChangePasswordError,
 } from '../../Store/Slice/profileSlice';
-import { clearUserData } from '../../Store/Slice/userInfoSlice'; // Import clearUserData action
+import { clearUserData } from '../../Store/Slice/userInfoSlice'; 
 import { toast } from "react-toastify";
 import { changeUserPassword } from '../../Services/UserInfoApi';
 
@@ -17,9 +17,9 @@ const ChangePasswordModal = ({ onCancel }) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false); // Toggle state for current password
-  const [showNewPassword, setShowNewPassword] = useState(false); // Toggle state for new password
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Toggle state for confirm password
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false); 
+  const [showNewPassword, setShowNewPassword] = useState(false); 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
 
   const dispatch = useDispatch();
   const changePasswordStatus = useSelector(selectChangePasswordStatus);
@@ -77,7 +77,6 @@ const ChangePasswordModal = ({ onCancel }) => {
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                // placeholder="Enter your current password"
               />
               <span
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
@@ -98,7 +97,6 @@ const ChangePasswordModal = ({ onCancel }) => {
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                // placeholder="Enter your new password"
               />
               <span
                 onClick={() => setShowNewPassword(!showNewPassword)}
@@ -119,8 +117,7 @@ const ChangePasswordModal = ({ onCancel }) => {
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                // placeholder="Confirm your new password"
-              />
+                 />
               <span
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
@@ -139,14 +136,14 @@ const ChangePasswordModal = ({ onCancel }) => {
           <div className="flex justify-end mt-4 space-x-2">
             <button
               onClick={handleSubmit}
-              className="bg-customGray  text-white px-4 py-2 rounded"
+              className="bg-ashGray text-white font-bold font-custom px-2 py-2 rounded"
               disabled={changePasswordStatus === 'loading'}
             >
               {changePasswordStatus === 'loading' ? 'Processing...' : 'Confirm'}
             </button>
             <button
               onClick={onCancel}
-              className="bg-gray-400 text-white px-4 py-2 rounded"
+              className="bg-gray-400 text-darkGray px-2 py-2 rounded font-bold font-custom"
               disabled={changePasswordStatus === 'loading'}
             >
               No

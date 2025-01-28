@@ -120,6 +120,17 @@ const DownlineList = () => {
     });
   };
 
+
+  const handleProfileClick = (item) => {
+    console.log("Selected User Data:", item); 
+    navigate(ROUTES_CONST.MyAccount, {
+      state: {
+        selectedUser: item,
+        selectedPage: "myProfile", 
+      },
+    });
+  };
+
   useEffect(() => {
     const timer = setTimeout(() => {
       handleSearch();
@@ -786,14 +797,12 @@ const DownlineList = () => {
                             >
                               <MdSettings className="text-darkgray" />
                             </div>
-                            <Link
-                              title="Account Setting"
-                              to={ROUTES_CONST.MyAccount}
-                            >
-                              <div className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
-                                <FaUserAlt className="text-darkgray" />
-                              </div>
-                            </Link>
+                          
+                            
+  <div  onClick={() => handleProfileClick(item)} className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
+    <FaUserAlt className="text-darkgray" />
+  </div>
+
                             <div
                               onClick={() => handleOpenSettings(item)}
                               title="Sports Settings"

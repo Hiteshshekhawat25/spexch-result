@@ -89,7 +89,7 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
           {["fancy", "matka", "casino", "binary", "sportbook", "bookmaker"].map((field) => (
             
             <div key={field} className="flex flex-col lg:flex-row items-center space-y-2 lg:space-x-3 lg:space-y-0">
-  <label className="text-xs font-custom text-gray-700 capitalize w-full lg:w-1/3">{field}</label>
+  <label className="text-xs font-custom font-semibold text-gray-700 capitalize w-full lg:w-1/3">{field}</label>
   <input
     type="number"
     name={field}
@@ -104,7 +104,7 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
 
           
 <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-x-3 lg:space-y-0">
-  <label className="text-xs font-custom text-gray-700 w-full lg:w-1/3">Password <span className="text-red-600">*</span></label>
+  <label className="text-xs font-custom font-semibold text-gray-700 w-full lg:w-1/3">Password <span className="text-red-600">*</span></label>
   <div className="relative w-full lg:w-2/3">
     <input
       type={showPassword ? "text" : "password"}
@@ -118,7 +118,7 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
       className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
       onClick={togglePasswordVisibility}
     >
-      {showPassword ? <IoEyeOff className="text-gray-600" /> : <IoEye className="text-gray-600" />}
+      {showPassword ? <IoEyeOff className="text-blue" /> : <IoEye className="text-blue" />}
     </div>
   </div>
 </div>
@@ -127,10 +127,10 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
           {error && <div className="text-red-600 text-xs mt-2">{error}</div>}
 
           <div className="flex justify-end mt-3 space-x-2">
-            <button onClick={handleSubmit} className="bg-customGray text-white text-xs px-4 py-1.5 rounded">
+            <button onClick={handleSubmit} className="bg-gray-400 text-white font-custom font-bold text-sm px-4 py-1.5 rounded">
               Submit
             </button>
-            <button onClick={onCancel} className="bg-gray-400 text-black text-xs px-4 py-1.5 rounded">
+            <button onClick={onCancel} className="bg-gray-400 text-black  font-custom font-bold text-sm px-4 py-1.5 rounded">
               Cancel
             </button>
           </div>
