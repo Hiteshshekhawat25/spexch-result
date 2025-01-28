@@ -17,8 +17,9 @@ import AgentRollingCommisionModal from "../Modal/AgentRollingCommisionModal";
 import ChangePasswordModal from "../Modal/ChangePasswordModal";
 import EditRollingCommissionModal from "../Modal/EditRollingCommisionModal";
 import EditCommissionModal from  "../Modal/EditCommisionModal";
+import EditExposureLimitModal from "../Modal/EditExposureLimitModal";
 
-const MyProfile = ({ Userid }) => {
+const MyProfile = ({ Userid , Role }) => {
   const dispatch = useDispatch();
   const profile = useSelector(selectProfileData);
   const profileStatus = useSelector(selectProfileStatus);
@@ -30,10 +31,12 @@ const MyProfile = ({ Userid }) => {
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState(false);
   const [isEditRollingModalOpen, setIsEditRollingModalOpen] = useState(false);
+  const [isEditExposureLimitModalOpen, setIsEditExposureLimitModalOpen] = useState(false);
   const [isEditCommissionModalOpen, setIsEditCommissionModalOpen] = useState(false);
   const [modalData, setModalData] = useState(null);
 
   console.log("Userid passed to MyProfile:", Userid);
+  console.log("Role",Role)
   
 const ID = Userid || JSON.parse(localStorage.getItem("userData"))?.data?._id;
 console.log("Final ID being used:", ID);
@@ -92,6 +95,14 @@ console.log("Final ID being used:", ID);
     if (modalData) {
       console.log("Edit button clicked!");
       setIsEditRollingModalOpen(true); 
+    }
+  };
+
+
+  const handleOpenEditExposureModal = () => {
+    if (modalData) {
+      console.log("Edit button clicked!");
+      setIsEditExposureLimitModalOpen(true); 
     }
   };
 
@@ -156,6 +167,7 @@ console.log("Final ID being used:", ID);
             />
           </span>
         </div>
+        {Role !== "user" && (
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Agent Rolling Commission</span>
           <span className="text-left ml-4 flex items-center">
@@ -165,11 +177,23 @@ console.log("Final ID being used:", ID);
             />
           </span>
         </div>
+        )}
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Currency</span>
           <span className="text-left ml-4">IRP{profile.currency}</span>
           
         </div>
+
+        {Role === "user" && (
+  <div className="flex border-b py-3 px-4">
+    <span className="font-custom w-48">Exposure Limit</span>
+    <span className="text-left ml-4">{profile.exposureLimit}</span>
+    <FaRegEdit
+              className="text-blue cursor-pointer"
+              onClick={handleOpenEditExposureModal}
+            />
+  </div>
+)}
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Partnership</span>
           <span className="text-left ml-4">{profile.partnership}</span>
@@ -237,6 +261,19 @@ console.log("Final ID being used:", ID);
           onCancel={() => setIsChangePasswordModalOpen(false)}
         />
       )}
+     {isEditExposureLimitModalOpen && modalData && (
+  <EditExposureLimitModal
+    username={modalData.username}
+    currentExposureLimit={modalData.exposureLimit}
+    userId={ID}
+    onCancel={() =>  setIsEditExposureLimitModalOpen(false)}// Close modal handler
+    onSubmit={(updatedData) => {
+      console.log("Updated Exposure Data:", updatedData);
+      setIsEditCommissionModalOpen(false);
+    }}
+  />
+)}
+                
     </div>
   );
 };

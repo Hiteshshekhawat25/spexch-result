@@ -174,20 +174,25 @@ const EditExposureLimitModal = ({
           </div>
 
           {/* Password Field */}
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-custom text-gray-700 w-1/3">
-              Password
-            </label>
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
-            />
-            <div className="absolute inset-y-0 right-[4%] sm:right-[4%] lg:right-[24%] flex items-center pr-3 text-gray-400 cursor-pointer"   onClick={handlePasswordVisibility}   >
-                          {passwordVisible ? <FaEyeSlash color="black" /> : <FaEye color="black" />}
-                        </div>
-          </div>
+      
+
+<div className="flex items-center relative">
+  <label className="block text-sm font-custom text-gray-700 w-1/3">
+    Password
+  </label>
+  <input
+    type={passwordVisible ? "text" : "password"}  // Toggle between password and text type
+    value={password}
+    onChange={(e) => setPassword(e.target.value)}
+    className="w-2/3 p-2 border border-black rounded-lg text-gray-700 pr-10"  // Add padding to the right to make room for the eye button
+  />
+  <div
+    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 cursor-pointer"
+    onClick={handlePasswordVisibility}
+  >
+    {passwordVisible ? <FaEyeSlash color="black" /> : <FaEye color="black" />}
+  </div>
+</div>
 
           {/* Buttons */}
           <div className="flex justify-end space-x-4 mt-4">

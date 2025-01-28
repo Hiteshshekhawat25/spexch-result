@@ -42,7 +42,7 @@ const MyAccount = () => {
   let content;
   switch (selectedPage) {
     case "myProfile":
-      content = <MyProfile Userid={Userid} />;
+      content = <MyProfile Userid={Userid} Role={role_name}/>;
       break;
     case "accountStatement":
       content = <AccountStatement />;
@@ -57,7 +57,7 @@ const MyAccount = () => {
       content = <EventProfitLoss />;
       break;
     default:
-      content = <MyProfile Userid={Userid} />;
+      content = <MyProfile Userid={Userid} Role={role_name} />;
   }
 
   
