@@ -8,7 +8,7 @@ import {
 } from "../Store/Slice/loginSlice";
 import { FaUser, FaLock, FaEye, FaEyeSlash } from "react-icons/fa";
 import { loginUser } from "../Utils/LoginApi";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import React from "react";
 import { getUserData } from "../Services/UserInfoApi";
 import ClipLoader from "react-spinners/ClipLoader";
@@ -21,6 +21,11 @@ const Login = () => {
     password: "",
   });
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const isAuthenticated = localStorage.getItem("authToken");
+
+  if (isAuthenticated) {
+    return <Navigate to="/dashboardPage" replace />;
+  }
   
 
   const handleChange = (e) => {

@@ -335,7 +335,7 @@ console.log("Matches",matches);
                 <td className="px-4 py-2 border border-gray-300"></td>
                 <td className="px-4 py-2 border border-gray-300">
                   <div className="space-y-2">
-                    <Link to={`/MatchOddsBets`} className="py-1 px-3 rounded-full text-white bg-amber whitespace-nowrap inline-block">
+                    <Link to={`/MatchOddsBets/${match?._id}`} className="py-1 px-3 rounded-full text-white bg-amber whitespace-nowrap inline-block">
                       Odds Bets
                     </Link>
                     <Link to={`/BookmakerBets`} className="py-1 px-3 rounded-full text-white bg-amber whitespace-nowrap inline-block">
