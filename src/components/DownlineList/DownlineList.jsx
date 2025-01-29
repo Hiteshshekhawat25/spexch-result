@@ -205,23 +205,25 @@ const DownlineList = () => {
                 role_id: role._id,
               }));
               setRoles(rolesData);
-  
+
               const masterAgentRoles = rolesData.filter(
                 (role) =>
                   role.role_name.toLowerCase() === "master" ||
                   role.role_name.toLowerCase() === "agent"
               );
-  
+
               if (masterAgentRoles.length > 0) {
                 const fetchPromises = masterAgentRoles.map((role) =>
                   fetchDownlineData(currentPage, entriesToShow, role.role_id)
                 );
-  
+
                 const results = await Promise.all(fetchPromises);
-  
-                const combinedData = results.flatMap((result) => result.data || []);
+
+                const combinedData = results.flatMap(
+                  (result) => result.data || []
+                );
                 dispatch(setDownlineData(combinedData));
-  
+
                 const totalUsers = results.reduce(
                   (sum, result) => sum + (result.pagination?.totalUsers || 0),
                   0
@@ -238,7 +240,7 @@ const DownlineList = () => {
           setError(error.message || "Failed to fetch roles.");
         }
       };
-  
+
       fetchUserRoles();
     }
   }, [token, location.pathname, currentPage, entriesToShow, dispatch]);
@@ -402,7 +404,7 @@ const DownlineList = () => {
 
   const handleUsernameList = async (item) => {
     console.log("it is to fetch nested users", item);
-    if (item.role_name === "master" ) {
+    if (item.role_name === "master") {
       try {
         const data = await fetchallUsers(item._id);
         setUserFetchList(data);
