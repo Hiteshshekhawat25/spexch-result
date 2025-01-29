@@ -50,6 +50,29 @@ export const AddMasterForm = ({ closeModal }) => {
   const dispatch = useDispatch();
   console.log("userData", userData?.data?.role_name);
 
+
+
+  const isFormValid = () => {
+    return (
+      formData.username.trim() !== "" &&
+      formData.name.trim() !== "" &&
+      formData.role !== "" &&
+      formData.commission >= 0 &&
+      formData.commission <= 100 &&
+      formData.partnership >= 0 &&
+      formData.partnership <= 100 &&
+      formData.password.trim() !== "" &&
+      formData.password === formData.confirmPassword &&
+      formData.masterPassword.trim() !== "" &&
+      (!formData.rollingCommissionChecked || 
+        Object.values(formData.rollingCommission).every(value => value !== "")
+      ) &&
+      (!formData.agentRollingCommissionChecked || 
+        Object.values(formData.agentRollingCommission).every(value => value !== "")
+      )
+    );
+  };
+  
   // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -447,13 +470,54 @@ export const AddMasterForm = ({ closeModal }) => {
   <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
        Rolling Commission
   </label>
+  <div
+  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+    formData.rollingCommissionChecked ? "bg-gradient-seablue" : "bg-white"
+  }`}
+  onClick={() => {
+    // Manually toggle the value of `rollingCommissionChecked`
+    setFormData({
+      ...formData,
+      rollingCommissionChecked: !formData.rollingCommissionChecked, // toggle the value
+    });
+  }}
+>
+  {/* Hidden Checkbox */}
   <input
-      type="checkbox"
-      name="rollingCommissionChecked"
-      checked={formData.rollingCommissionChecked}
-      onChange={handleChange}
-      className="ml-2"
-    />
+    type="checkbox"
+    name="rollingCommissionChecked"
+    checked={formData.rollingCommissionChecked}
+    onChange={handleChange}
+    className="hidden"
+  />
+
+  {/* Cross (✗) when unchecked */}
+  <span
+    className={`absolute right-2 text-sm font-bold ${
+      formData.rollingCommissionChecked ? "text-transparent" : "text-whiteGray"
+    }`}
+  >
+    ✗
+  </span>
+
+  {/* Checkmark (✓) when checked */}
+  <span
+    className={`absolute left-2 text-sm font-bold ${
+      formData.rollingCommissionChecked ? "text-white" : "text-transparent"
+    }`}
+  >
+    ✓
+  </span>
+
+  {/* Toggle Knob */}
+  <span
+    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+      formData.rollingCommissionChecked ? "translate-x-9" : "translate-x-1"
+    }`}
+  ></span>
+</div>
+
+
 </div>
 
 {/* Conditional Rendering for Rolling Commission Fields */}
@@ -480,13 +544,63 @@ export const AddMasterForm = ({ closeModal }) => {
   
     Agent Rolling Commission
   </label>
+  <div
+  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+    formData.agentRollingCommissionChecked ? "bg-gradient-seablue" : "bg-white"
+  }`}
+  onClick={() => {
+    // Manually toggle the value of `agentRollingCommissionChecked`
+    setFormData({
+      ...formData,
+      agentRollingCommissionChecked: !formData.agentRollingCommissionChecked, // toggle the value
+    });
+  }}
+>
+  {/* Hidden Checkbox */}
   <input
-      type="checkbox"
-      name="agentRollingCommissionChecked"
-      checked={formData.agentRollingCommissionChecked}
-      onChange={handleChange}
-      className="ml-2"
-    />
+    type="checkbox"
+    name="agentRollingCommissionChecked"
+    checked={formData.agentRollingCommissionChecked}
+    onChange={handleChange}
+    className="hidden"
+  />
+
+  {/* Cross (✗) when unchecked */}
+  <span
+    className={`absolute right-2 text-sm font-bold ${
+      formData.agentRollingCommissionChecked ? "text-transparent" : "text-whiteGray"
+    }`}
+  >
+    ✗
+  </span>
+
+  {/* Checkmark (✓) when checked */}
+  <span
+    className={`absolute left-2 text-sm font-bold ${
+      formData.agentRollingCommissionChecked ? "text-white" : "text-transparent"
+    }`}
+  >
+    ✓
+  </span>
+
+  {/* Toggle Knob */}
+  <span
+    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+      formData.agentRollingCommissionChecked ? "translate-x-9" : "translate-x-1"
+    }`}
+  ></span>
+</div>
+
+
+{/* Hidden checkbox input */}
+<input
+  type="checkbox"
+  name="agentRollingCommissionChecked"
+  checked={formData.agentRollingCommissionChecked}
+  onChange={handleChange}
+  className="hidden"
+/>
+
 </div>
 
 {/* Conditional Rendering for Agent Rolling Commission Fields */}
@@ -536,13 +650,16 @@ export const AddMasterForm = ({ closeModal }) => {
 
 
 <div className="flex justify-center mt-4">
-  <button
-    type="submit"
-    className="px-4 py-2 bg-ashGray text-white rounded mb-2"
-    disabled={isSubmitting}
-  >
-    {isSubmitting ? "Creating..." : "Create"}
-  </button>
+    <button  
+  type="submit"
+  className={`px-4 py-2 text-white rounded mb-2 ${
+    isFormValid() ? "bg-gradient-seablue hover:bg-gradient-seablue" : "bg-gray-400 cursor-not-allowed"
+  }`}
+  disabled={isSubmitting || !isFormValid()}
+>
+  {isSubmitting ? "Creating..." : "Create"}
+</button>
+
 </div>
 
 </div>

@@ -147,7 +147,7 @@ const DepositModal = ({
       <form className="space-y-4 p-5">
         
         <div className="flex justify-between">
-          <div>
+          <div className="font-custom font-bold">
             <span
               className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-custom font-bold text-xs"
               

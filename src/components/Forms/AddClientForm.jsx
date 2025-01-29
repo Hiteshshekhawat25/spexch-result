@@ -21,6 +21,7 @@ export const AddClientForm = ({ closeModal }) => {
   const [showPassword, setShowPassword] = useState(false);
 const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 const [showMasterPassword, setShowMasterPassword] = useState(false);
+const [isFormValid, setIsFormValid] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -49,7 +50,45 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
 
   const [formErrors, setFormErrors] = useState({});
 
-  // Fetch token from localStorage
+  useEffect(() => {
+    const checkFormValidity = () => {
+      const {
+        username,
+        name,
+        commission,
+        openingBalance,
+        creditReference,
+        mobileNumber,
+        exposureLimit,
+        password,
+        confirmPassword,
+        masterPassword
+      } = formData;
+  
+      const isValid =
+        username &&
+        name &&
+        commission &&
+        openingBalance &&
+        creditReference &&
+        mobileNumber &&
+        exposureLimit &&
+        password &&
+        confirmPassword &&
+        masterPassword &&
+        password === confirmPassword &&
+        /^\d{10}$/.test(mobileNumber) &&
+        commission >= 0 && commission <= 100 &&
+        openingBalance >= 0 &&
+        creditReference >= 0 &&
+        exposureLimit >= 0;
+  
+      setIsFormValid(isValid);
+    };
+  
+    checkFormValidity();
+  }, [formData]);
+
   useEffect(() => {
     const storedToken = localStorage.getItem("authToken");
     if (storedToken) {
@@ -390,14 +429,43 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
 
 <div className="flex items-center">
 <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">Rolling Commission</label>
-          <input
+          {/* <input
             type="checkbox"
             name="rollingCommissionChecked"
             checked={formData.rollingCommissionChecked}
             onChange={handleChange}
-            className="hover:cursor-pointer"
-          />
-          
+          /> */}
+          <div
+  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+    formData.rollingCommissionChecked ? "bg-gradient-seablue" : "bg-white"
+  }`}
+  onClick={() => handleChange({ target: { name: "rollingCommissionChecked", checked: !formData.rollingCommissionChecked } })}
+>
+  
+  <span
+    className={`absolute right-2 text-sm font-bold ${
+      formData.rollingCommissionChecked ? "text-transparent" : "text-whiteGray"
+    }`}
+  >
+    ✗
+  </span>
+
+
+  <span
+    className={`absolute left-2 text-sm font-bold ${
+      formData.rollingCommissionChecked ? "text-white" : "text-transparent"
+    }`}
+  >
+    ✓
+  </span>
+
+  <span
+    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+      formData.rollingCommissionChecked ? "translate-x-9" : "translate-x-1"
+    }`}
+  ></span>
+</div>
+
         </div>
 
         {formData.rollingCommissionChecked && (
@@ -493,13 +561,17 @@ const [showMasterPassword, setShowMasterPassword] = useState(false);
         )}
         
         <div className="flex justify-center mt-4">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className="px-4 py-2 bg-ashGray text-white rounded mb-2"
-          >
-            {isSubmitting ? "Creating..." : "Create"}
-          </button>
+         
+        <button
+  type="submit"
+  disabled={!isFormValid || isSubmitting}
+  className={`px-4 py-2 text-white rounded mb-2 ${
+    isFormValid ? "bg-gradient-seablue hover:bg-gradient-seablue" : "bg-gray-400 cursor-not-allowed"
+  } ${isSubmitting || !isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
+>
+  {isSubmitting ? "Submitting..." : "Create"}
+</button>
+
         </div>
       </form>
 
