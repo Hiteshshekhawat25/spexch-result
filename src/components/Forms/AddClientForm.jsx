@@ -418,13 +418,43 @@ const [isFormValid, setIsFormValid] = useState(false);
 
 <div className="flex items-center">
 <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">Rolling Commission</label>
-          <input
+          {/* <input
             type="checkbox"
             name="rollingCommissionChecked"
             checked={formData.rollingCommissionChecked}
             onChange={handleChange}
-          />
-          
+          /> */}
+          <div
+  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+    formData.rollingCommissionChecked ? "bg-gradient-seablue" : "bg-white"
+  }`}
+  onClick={() => handleChange({ target: { name: "rollingCommissionChecked", checked: !formData.rollingCommissionChecked } })}
+>
+  
+  <span
+    className={`absolute right-2 text-sm font-bold ${
+      formData.rollingCommissionChecked ? "text-transparent" : "text-whiteGray"
+    }`}
+  >
+    ✗
+  </span>
+
+
+  <span
+    className={`absolute left-2 text-sm font-bold ${
+      formData.rollingCommissionChecked ? "text-white" : "text-transparent"
+    }`}
+  >
+    ✓
+  </span>
+
+  <span
+    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+      formData.rollingCommissionChecked ? "translate-x-9" : "translate-x-1"
+    }`}
+  ></span>
+</div>
+
         </div>
 
         {formData.rollingCommissionChecked && (

@@ -476,13 +476,54 @@ export const AddMasterForm = ({ closeModal }) => {
   <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
        Rolling Commission
   </label>
+  <div
+  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+    formData.rollingCommissionChecked ? "bg-gradient-seablue" : "bg-white"
+  }`}
+  onClick={() => {
+    // Manually toggle the value of `rollingCommissionChecked`
+    setFormData({
+      ...formData,
+      rollingCommissionChecked: !formData.rollingCommissionChecked, // toggle the value
+    });
+  }}
+>
+  {/* Hidden Checkbox */}
   <input
-      type="checkbox"
-      name="rollingCommissionChecked"
-      checked={formData.rollingCommissionChecked}
-      onChange={handleChange}
-      className="ml-2"
-    />
+    type="checkbox"
+    name="rollingCommissionChecked"
+    checked={formData.rollingCommissionChecked}
+    onChange={handleChange}
+    className="hidden"
+  />
+
+  {/* Cross (✗) when unchecked */}
+  <span
+    className={`absolute right-2 text-sm font-bold ${
+      formData.rollingCommissionChecked ? "text-transparent" : "text-whiteGray"
+    }`}
+  >
+    ✗
+  </span>
+
+  {/* Checkmark (✓) when checked */}
+  <span
+    className={`absolute left-2 text-sm font-bold ${
+      formData.rollingCommissionChecked ? "text-white" : "text-transparent"
+    }`}
+  >
+    ✓
+  </span>
+
+  {/* Toggle Knob */}
+  <span
+    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+      formData.rollingCommissionChecked ? "translate-x-9" : "translate-x-1"
+    }`}
+  ></span>
+</div>
+
+
 </div>
 
 {/* Conditional Rendering for Rolling Commission Fields */}
@@ -509,13 +550,63 @@ export const AddMasterForm = ({ closeModal }) => {
   
     Agent Rolling Commission
   </label>
+  <div
+  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+    formData.agentRollingCommissionChecked ? "bg-gradient-seablue" : "bg-white"
+  }`}
+  onClick={() => {
+    // Manually toggle the value of `agentRollingCommissionChecked`
+    setFormData({
+      ...formData,
+      agentRollingCommissionChecked: !formData.agentRollingCommissionChecked, // toggle the value
+    });
+  }}
+>
+  {/* Hidden Checkbox */}
   <input
-      type="checkbox"
-      name="agentRollingCommissionChecked"
-      checked={formData.agentRollingCommissionChecked}
-      onChange={handleChange}
-      className="ml-2"
-    />
+    type="checkbox"
+    name="agentRollingCommissionChecked"
+    checked={formData.agentRollingCommissionChecked}
+    onChange={handleChange}
+    className="hidden"
+  />
+
+  {/* Cross (✗) when unchecked */}
+  <span
+    className={`absolute right-2 text-sm font-bold ${
+      formData.agentRollingCommissionChecked ? "text-transparent" : "text-whiteGray"
+    }`}
+  >
+    ✗
+  </span>
+
+  {/* Checkmark (✓) when checked */}
+  <span
+    className={`absolute left-2 text-sm font-bold ${
+      formData.agentRollingCommissionChecked ? "text-white" : "text-transparent"
+    }`}
+  >
+    ✓
+  </span>
+
+  {/* Toggle Knob */}
+  <span
+    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+      formData.agentRollingCommissionChecked ? "translate-x-9" : "translate-x-1"
+    }`}
+  ></span>
+</div>
+
+
+{/* Hidden checkbox input */}
+<input
+  type="checkbox"
+  name="agentRollingCommissionChecked"
+  checked={formData.agentRollingCommissionChecked}
+  onChange={handleChange}
+  className="hidden"
+/>
+
 </div>
 
 {/* Conditional Rendering for Agent Rolling Commission Fields */}
