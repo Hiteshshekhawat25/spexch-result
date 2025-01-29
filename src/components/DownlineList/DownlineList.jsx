@@ -192,6 +192,62 @@ const DownlineList = () => {
   const filteredData = downlineData.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  // useEffect(() => {
+  //   if (location.pathname === "/master-downline-list") {
+  //     const fetchUserRoles = async () => {
+  //       try {
+  //         const token = localStorage.getItem("authToken");
+  //         if (token) {
+  //           const rolesArray = await fetchRoles(token);
+  //           if (Array.isArray(rolesArray)) {
+  //             const rolesData = rolesArray.map((role) => ({
+  //               role_name: role.role_name,
+  //               role_id: role._id,
+  //             }));
+  //             setRoles(rolesData);
+  
+  //             // Case-insensitive check for 'master' or 'agent'
+  //             const masterAgentRoles = rolesData.filter(
+  //               (role) =>
+  //                 role.role_name.toLowerCase() === "master" ||
+  //                 role.role_name.toLowerCase() === "agent"
+  //             );
+  
+  //             if (masterAgentRoles.length > 0) {
+  //               const fetchPromises = masterAgentRoles.map((role) =>
+  //                 fetchDownlineData(currentPage, entriesToShow, role.role_id)
+  //               );
+  
+  //               const results = await Promise.all(fetchPromises);
+  
+  //               const combinedData = results.flatMap((result) => result.data || []);
+  
+  //               const startIndex = (currentPage - 1) * entriesToShow;
+  //               const endIndex = startIndex + entriesToShow;
+  //               const paginatedData = combinedData.slice(startIndex, endIndex);
+  
+  //               dispatch(setDownlineData(paginatedData));
+  
+  //               // Calculate total users
+  //               const totalUsers = combinedData.length;
+  //               setTotalUsers(totalUsers);
+  //             } else if (rolesData.length > 0) {
+  //               // Fallback to the first role if no master/agent roles are found
+  //               setRoleId(rolesData[0].role_id);
+  //             }
+  //           } else {
+  //             setError("Roles data is not an array.");
+  //           }
+  //         }
+  //       } catch (error) {
+  //         setError(error.message || "Failed to fetch roles.");
+  //       }
+  //     };
+  
+  //     fetchUserRoles();
+  //   }
+  // }, [token, location.pathname, currentPage, entriesToShow, dispatch]);
+
   useEffect(() => {
     if (location.pathname === "/master-downline-list") {
       const fetchUserRoles = async () => {
@@ -205,30 +261,33 @@ const DownlineList = () => {
                 role_id: role._id,
               }));
               setRoles(rolesData);
-
+  
               const masterAgentRoles = rolesData.filter(
                 (role) =>
                   role.role_name.toLowerCase() === "master" ||
                   role.role_name.toLowerCase() === "agent"
               );
-
+  
               if (masterAgentRoles.length > 0) {
+                // Fetch all data for each role without pagination
                 const fetchPromises = masterAgentRoles.map((role) =>
-                  fetchDownlineData(currentPage, entriesToShow, role.role_id)
+                  fetchDownlineData(1, 10000, role.role_id) // High limit to get all data
                 );
-
+  
                 const results = await Promise.all(fetchPromises);
-
-                const combinedData = results.flatMap(
-                  (result) => result.data || []
-                );
-                dispatch(setDownlineData(combinedData));
-
-                const totalUsers = results.reduce(
-                  (sum, result) => sum + (result.pagination?.totalUsers || 0),
-                  0
-                );
+  
+                const combinedData = results.flatMap((result) => result.data || []);
+  
+                // Calculate total users based on combined data
+                const totalUsers = combinedData.length;
                 setTotalUsers(totalUsers);
+  
+                // Apply client-side pagination
+                const startIndex = (currentPage - 1) * entriesToShow;
+                const endIndex = startIndex + entriesToShow;
+                const paginatedData = combinedData.slice(startIndex, endIndex);
+  
+                dispatch(setDownlineData(paginatedData));
               } else if (rolesData.length > 0) {
                 setRoleId(rolesData[0].role_id);
               }
@@ -240,11 +299,11 @@ const DownlineList = () => {
           setError(error.message || "Failed to fetch roles.");
         }
       };
-
+  
       fetchUserRoles();
     }
-  }, [token, location.pathname, currentPage, entriesToShow, dispatch]);
-
+  }, [token, location.pathname, currentPage, entriesToShow, dispatch]); 
+  
   useEffect(() => {
     if (location.pathname === "/user-downline-list") {
       const fetchUserRoles = async () => {
