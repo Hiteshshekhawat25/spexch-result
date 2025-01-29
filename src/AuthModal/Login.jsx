@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { IoLogOutOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 import {
   loginStart,
   loginSuccess,
@@ -26,7 +27,7 @@ const Login = () => {
   if (isAuthenticated) {
     return <Navigate to="/dashboardPage" replace />;
   }
-  
+  const [message, setMessage] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -65,6 +66,13 @@ const Login = () => {
     } catch (error) {
       dispatch(loginFailure(error.message));
       console.error("Login failed:", error.message || "Unknown error");
+      setMessage("Invalid username or password!");
+      const errorMessage =
+        error.response?.data?.message || error.message || "Login failed!";
+        console.log("errorMessage",errorMessage);
+      setMessage(errorMessage);
+      toast.error(errorMessage); // Show the error message in a toast
+
     } 
   };
 
