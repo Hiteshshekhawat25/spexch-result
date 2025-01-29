@@ -50,6 +50,29 @@ export const AddMasterForm = ({ closeModal }) => {
   const dispatch = useDispatch();
   console.log("userData", userData?.data?.role_name);
 
+
+
+  const isFormValid = () => {
+    return (
+      formData.username.trim() !== "" &&
+      formData.name.trim() !== "" &&
+      formData.role !== "" &&
+      formData.commission >= 0 &&
+      formData.commission <= 100 &&
+      formData.partnership >= 0 &&
+      formData.partnership <= 100 &&
+      formData.password.trim() !== "" &&
+      formData.password === formData.confirmPassword &&
+      formData.masterPassword.trim() !== "" &&
+      (!formData.rollingCommissionChecked || 
+        Object.values(formData.rollingCommission).every(value => value !== "")
+      ) &&
+      (!formData.agentRollingCommissionChecked || 
+        Object.values(formData.agentRollingCommission).every(value => value !== "")
+      )
+    );
+  };
+  
   // Handle input changes
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -542,13 +565,16 @@ export const AddMasterForm = ({ closeModal }) => {
 
 
 <div className="flex justify-center mt-4">
-  <button
-    type="submit"
-    className="px-4 py-2 bg-ashGray text-white rounded mb-2"
-    disabled={isSubmitting}
-  >
-    {isSubmitting ? "Creating..." : "Create"}
-  </button>
+    <button  
+  type="submit"
+  className={`px-4 py-2 text-white rounded mb-2 ${
+    isFormValid() ? "bg-gradient-seablue hover:bg-gradient-seablue" : "bg-gray-400 cursor-not-allowed"
+  }`}
+  disabled={isSubmitting || !isFormValid()}
+>
+  {isSubmitting ? "Creating..." : "Create"}
+</button>
+
 </div>
 
 </div>
