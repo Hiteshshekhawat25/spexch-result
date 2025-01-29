@@ -6,14 +6,12 @@ import { getBalanceData } from "../../Services/Downlinelistapi";
 const BalanceHeader = () => {
   const dispatch = useDispatch();
   const balanceData = useSelector((state) => state.balance);
-  console.log("balanceData", balanceData);
   const [data,setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getBalanceData("user/user-data-summary");
-        console.log("balanceData2", response);
         // setData(response?.data?.data);
         // console.log("setData",setData);
         setData(response?.data?.data)
@@ -65,7 +63,6 @@ const BalanceHeader = () => {
         {/* Empty space */}
         <div className="text-left py-1 text-xs font-medium pl-2"></div>
       </div>
-      {console.log("insde balance", data)}
       {/* Large Screen Values */}
       <div className="hidden md:grid grid-cols-7 divide-x divide-gray-200">
         {/* Total Balance Value */}

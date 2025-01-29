@@ -101,32 +101,31 @@ const DownlineList = () => {
   };
 
   const handleArrowClick = (item) => {
-    console.log("Selected User Data:", item); 
+    // console.log("Selected User Data:", item);
     navigate(ROUTES_CONST.MyAccount, {
       state: {
         selectedUser: item,
-        selectedPage: "profitLoss", 
+        selectedPage: "profitLoss",
       },
     });
   };
 
   const handleHistoryClick = (item) => {
-    console.log("Selected User Data:", item); 
+    // console.log("Selected User Data:", item);
     navigate(ROUTES_CONST.MyAccount, {
       state: {
         selectedUser: item,
-        selectedPage: "bethistory", 
+        selectedPage: "bethistory",
       },
     });
   };
 
-
   const handleProfileClick = (item) => {
-    console.log("Selected User Data:", item); 
+    // console.log("Selected User Data:", item);
     navigate(ROUTES_CONST.MyAccount, {
       state: {
         selectedUser: item,
-        selectedPage: "myProfile", 
+        selectedPage: "myProfile",
       },
     });
   };
@@ -201,6 +200,7 @@ const DownlineList = () => {
           const token = localStorage.getItem("authToken");
           if (token) {
             const rolesArray = await fetchRoles(token);
+            console.log("roleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeAraaayyyyyyyyyyyyyy",rolesArray)
 
             if (Array.isArray(rolesArray)) {
               const rolesData = rolesArray.map((role) => ({
@@ -208,10 +208,13 @@ const DownlineList = () => {
                 role_id: role._id,
               }));
               setRoles(rolesData);
+              console.log("roleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
               const userRole = rolesData.find(
                 (role) =>
+                console.log("role",role),
                   role.role_name === "master" || role.role_name === "agent"
               );
+              console.log("userRole",userRole)
               if (userRole) {
                 setRoleId(userRole.role_id);
               } else if (rolesData.length > 0) {
@@ -229,7 +232,7 @@ const DownlineList = () => {
 
       fetchUserRoles();
     }
-  }, [token, location.pathname]);
+  }, [token, location.pathname,roleId]);
 
   useEffect(() => {
     if (location.pathname === "/user-downline-list") {
@@ -267,7 +270,7 @@ const DownlineList = () => {
   }, [token, location.pathname]);
 
   const sortedData = useMemo(() => {
-    console.log("filteredData", filteredData);
+    // console.log("filteredData", filteredData);
     if (!sortConfig.key) return filteredData;
 
     return [...filteredData].sort((a, b) => {
@@ -336,7 +339,9 @@ const DownlineList = () => {
   if (error) {
     console.error("Error fetching user:", error);
     return (
-      <div className="text-red-500 font-custom font-bold">An error occurred: {error}</div>
+      <div className="text-red-500 font-custom font-bold">
+        An error occurred: {error}
+      </div>
     );
   }
   const handleDeleteModalClose = () => {
@@ -352,7 +357,7 @@ const DownlineList = () => {
 
   const handleDeleteConfirm = () => {
     if (userToDelete) {
-      console.log("Deleting user:", userToDelete.username);
+      // console.log("Deleting user:", userToDelete.username);
     }
     setIsDeleteModalOpen(false);
     setUserToDelete(null);
@@ -389,7 +394,7 @@ const DownlineList = () => {
 
   const handleUsernameList = async (item) => {
     console.log("it is to fetch nested users", item);
-    if (item.role_name === "master") {
+    if (item.role_name === "master" ) {
       try {
         const data = await fetchallUsers(item._id);
         setUserFetchList(data);
@@ -511,7 +516,9 @@ const DownlineList = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
               {/* Show Entries Dropdown */}
               <div className="p-2 rounded-md flex items-center w-full sm:w-auto">
-                <label className="mr-2 text-sm font-custom font-medium">Show</label>
+                <label className="mr-2 text-sm font-custom font-medium">
+                  Show
+                </label>
                 <select
                   value={entriesToShow}
                   onChange={handleEntriesChange}
@@ -524,7 +531,9 @@ const DownlineList = () => {
                     </option>
                   ))}
                 </select>
-                <label className="ml-2 text-sm font-custom font-medium">entries</label>
+                <label className="ml-2 text-sm font-custom font-medium">
+                  entries
+                </label>
               </div>
 
               {/* Filters and Search */}
@@ -570,7 +579,7 @@ const DownlineList = () => {
                         ? [{ key: "partnership", label: "Partnership" }]
                         : []),
                       { key: "balance", label: "Balance" },
-                      { key: "exposures", label: "Exposures" },
+                      { key: "exposure", label: "Exposure" },
                       ...(!isMasterDownlineList
                         ? [{ key: "exposure", label: "Exposure Limit" }]
                         : []),
@@ -708,8 +717,8 @@ const DownlineList = () => {
                             )}
                           </td>
                         )}
-                        <td className="border border-gray-400 px-4 py-2 text-sm font-custom  font-semibold">
-                          0
+                        <td className="border border-gray-400 px-4 py-2 text-sm text-red-700 font-custom  font-semibold">
+                          ({item.exposure})
                         </td>
                         {!isMasterDownlineList && (
                           <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-semibold">
@@ -797,11 +806,13 @@ const DownlineList = () => {
                             >
                               <MdSettings className="text-darkgray" />
                             </div>
-                          
-                            
-  <div  onClick={() => handleProfileClick(item)} className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
-    <FaUserAlt className="text-darkgray" />
-  </div>
+
+                            <div
+                              onClick={() => handleProfileClick(item)}
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                            >
+                              <FaUserAlt className="text-darkgray" />
+                            </div>
 
                             <div
                               onClick={() => handleOpenSettings(item)}
