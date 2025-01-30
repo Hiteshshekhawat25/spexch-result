@@ -24,6 +24,7 @@ export const ROUTES_CONST = {
     MyAccount:"/MyAccount",
     userbanking:"user-banking",
     masterbanking:"/master-banking",
-    passwordHistory: "/password-history"
+    passwordHistory: "/password-history",
+    changePassword:"/changePassword"
   };
   

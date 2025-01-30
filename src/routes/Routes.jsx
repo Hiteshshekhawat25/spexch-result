@@ -29,6 +29,8 @@ import EventProfitLoss  from "../components/MyReport/EventProfitLoss";
 import Dashboard from "../components/Dashboard/dashboard";
 import Banking from "../components/Banking/Banking";
 import PasswordHistory from "../components/PasswordHistory/Passwordhistory";
+import ChangePasswordModal from "../components/Modal/ChangePasswordModal";
+import ChangePassword from "../components/ChangePassword/ChangePassword";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -298,6 +300,17 @@ const RoutesComp = ({ socket }) => {
               <PasswordHistory />
             </LayoutHeader>
           </ProtectedRoutes>
+        }
+      />
+
+<Route
+        path={ROUTES_CONST.changePassword}
+        element={
+          <ProtectedRoutes>
+          <LayoutHeader>
+            <ChangePassword />
+          </LayoutHeader>
+        </ProtectedRoutes>
         }
       />
     </Routes>
