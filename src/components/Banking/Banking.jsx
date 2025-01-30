@@ -169,6 +169,7 @@ const Banking = () => {
 	  if (status === "Full" ) {
               updatedData[index] = {
                 ...updatedData[index],
+                depositwithdrawStatus: "W",
                 depositwithdraw: filteredData[index]?.totalBalance || "",
                 highlightFull: true,
               };
@@ -616,7 +617,7 @@ const Banking = () => {
                           editedData[index]?.highlightFull
                             ? "bg-gradient-blue text-white"
                             : "bg-gray-400 text-white"
-                        } border border-black `}
+                        } border border-black `}disabled={!editedData[index]?.highlightFull} 
                       >
                         Full
                       </button>
