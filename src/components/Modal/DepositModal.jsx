@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import {  IoEye, IoEyeOff } from 'react-icons/io5';
 import {
   fetchDownlineData,
   performTransactionDownline,
@@ -20,6 +21,7 @@ const DepositModal = ({
   const [amount, setAmount] = useState("");
   const [remark, setRemark] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false); 
   const [loading, setLoading] = useState(false);
   const { userData, error } = useSelector((state) => state.user);
   const [roles, setRoles] = useState([]);
@@ -200,13 +202,20 @@ const DepositModal = ({
           <label className="block text-sm font-custom font-medium text-gray-700 w-1/3">
             Your Password
           </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-2/3 p-2 border border-whiteGray rounded-md text-gray-700"
-           
-          />
+          <div className="relative w-2/3">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
+              />
+              <span
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
+              >
+                {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+              </span>
+            </div>
         </div>
   
         {/* Transaction Buttons */}

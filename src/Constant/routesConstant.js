@@ -26,6 +26,7 @@ export const ROUTES_CONST = {
     masterbanking:"/master-banking",
     passwordHistory: "/password-history",
     restoreUser:"/restore-user",
-    marketAnalysis : '/market-analysis'
+    marketAnalysis : '/market-analysis',
+    changePassword:"/changePassword"
   };
   

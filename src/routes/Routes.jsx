@@ -32,6 +32,8 @@ import PasswordHistory from "../components/PasswordHistory/Passwordhistory";
 import RestoreUser from "../components/RestoreUser/RestoreUser";
 import MarketAnalysis from "../components/MarketAnalysis/MarketAnalysis";
 import MarketAnalysisInner from "../components/MarketAnalysis/MarketAnalysisInner";
+import ChangePasswordModal from "../components/Modal/ChangePasswordModal";
+import ChangePassword from "../components/ChangePassword/ChangePassword";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -303,34 +305,15 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-      <Route
-       path={ROUTES_CONST.restoreUser}
+
+<Route
+        path={ROUTES_CONST.changePassword}
         element={
           <ProtectedRoutes>
-            <LayoutHeader>
-              <RestoreUser/>
-            </LayoutHeader>
-          </ProtectedRoutes>
-        }
-      />
-      <Route
-        path={ROUTES_CONST.marketAnalysis}
-        element={
-          <ProtectedRoutes>
-            <LayoutHeader>
-              <MarketAnalysis />
-            </LayoutHeader>
-          </ProtectedRoutes>
-        }
-      />
-      <Route
-        path={`${ROUTES_CONST.marketAnalysis}/:gameId`}
-        element={
-          <ProtectedRoutes>
-            <LayoutHeader>
-              <MarketAnalysisInner />
-            </LayoutHeader>
-          </ProtectedRoutes>
+          <LayoutHeader>
+            <ChangePassword />
+          </LayoutHeader>
+        </ProtectedRoutes>
         }
       />
     </Routes>
