@@ -24,7 +24,15 @@ const BetListFilter = ({
 
   const [sportsOptions, setSportsOptions] = useState([]);
 
-  const today = new Date().toISOString().split("T")[0];
+  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+
+  // Set default values when component mounts
+  useEffect(() => {
+    dispatch(setType("unsettled"));
+    dispatch(setSport("Cricket"));
+    dispatch(setFromDate(today));
+    dispatch(setToDate(today));
+  }, [dispatch, today]);
 
   useEffect(() => {
     // Fetch sports options
@@ -72,6 +80,7 @@ const BetListFilter = ({
     }
   };
 
+  // Fetch data automatically when filters change
   useEffect(() => {
     if (fromDate && toDate) {
       console.log("Fetching data due to filter change");
@@ -81,17 +90,14 @@ const BetListFilter = ({
 
   return (
     <div className="flex flex-wrap items-start space-y-4 sm:space-y-0 sm:space-x-4 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
-      {/* Filter Inputs */}
+      {/* Choose Type */}
       <div className="flex flex-col w-full sm:w-auto">
         <label className="text-sm font-medium text-black mb-1">
           Choose Type
         </label>
         <select
           value={type}
-          onChange={(e) => {
-            dispatch(setType(e.target.value));
-            console.log("Type selected:", e.target.value);
-          }}
+          onChange={(e) => dispatch(setType(e.target.value))}
           className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         >
           <option value="settled">Settle</option>
@@ -107,10 +113,7 @@ const BetListFilter = ({
         </label>
         <select
           value={sport}
-          onChange={(e) => {
-            dispatch(setSport(e.target.value));
-            console.log("Sport selected:", e.target.value);
-          }}
+          onChange={(e) => dispatch(setSport(e.target.value))}
           className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         >
           <option value="">Select Sport</option>
@@ -127,11 +130,8 @@ const BetListFilter = ({
         <label className="text-sm font-medium text-black mb-1">From</label>
         <input
           type="date"
-          value={fromDate || today}
-          onChange={(e) => {
-            dispatch(setFromDate(e.target.value));
-            console.log("From Date selected:", e.target.value);
-          }}
+          value={fromDate}
+          onChange={(e) => dispatch(setFromDate(e.target.value))}
           className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         />
       </div>
@@ -141,11 +141,8 @@ const BetListFilter = ({
         <label className="text-sm font-medium text-black mb-1">To</label>
         <input
           type="date"
-          value={toDate || today}
-          onChange={(e) => {
-            dispatch(setToDate(e.target.value));
-            console.log("To Date selected:", e.target.value);
-          }}
+          value={toDate}
+          onChange={(e) => dispatch(setToDate(e.target.value))}
           className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
         />
       </div>

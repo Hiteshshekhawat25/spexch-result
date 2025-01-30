@@ -7,11 +7,7 @@ import {
   setFromTime,
   setToTime,
   resetFilters,
-  selectEventPLFilter,
 } from "../../Store/Slice/eventPLFilterSlice";
-import {
-  setEventLoading,
-} from "../../Store/Slice/eventProfitLossSlice";
 import { getProfitLossData } from "../../Services/Downlinelistapi";
 
 const EventPLFilter = ({
@@ -25,25 +21,26 @@ const EventPLFilter = ({
   setLocalLoading,
 }) => {
   const dispatch = useDispatch();
-
   const eventPLFilterState = useSelector((state) => state.eventPLFilter);
-  const loading = useSelector(
-    (state) => state.eventProfitLoss.status === "loading"
-  );
   const [localLoading, setLocalLoadingState] = useState(false);
+
+  const today = new Date().toISOString().split("T")[0];
 
   useEffect(() => {
     setLocalLoading(localLoading);
   }, [localLoading, setLocalLoading]);
 
-  console.log("Redux State for eventPLFilter:", eventPLFilterState);
-
   const { dataSource, fromDate, toDate, fromTime, toTime } =
     eventPLFilterState || {};
 
+  // Set default values when component mounts
   useEffect(() => {
-    console.log("loading state has changed:", loading);
-  }, [loading]);
+    if (!dataSource) dispatch(setDataSource("live"));
+    if (!fromDate) dispatch(setFromDate(today));
+    if (!toDate) dispatch(setToDate(today));
+    if (!fromTime) dispatch(setFromTime("00:00"));
+    if (!toTime) dispatch(setToTime("23:59"));
+  }, [dataSource, fromDate, toDate, fromTime, toTime, dispatch, today]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -51,130 +48,40 @@ const EventPLFilter = ({
 
   useEffect(() => {
     if (fromDate && toDate) {
-      console.log("Fetching P&L data due to filter or page change");
       handleGetPL();
       setLocalLoadingState(false);
     }
-  }, [
-    currentPage,
-    fromDate,
-    toDate,
-    fromTime,
-    toTime,
-    dataSource,
-    entriesToShow,
-  ]);
+  }, [currentPage, fromDate, toDate, fromTime, toTime, dataSource, entriesToShow]);
 
   const handleGetPL = async () => {
-    setLocalLoadingState(false);
-    console.log("Started fetching data");
-
     try {
-      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${
-        fromDate || ""
-      }&toDate=${toDate || ""}&fromTime=${fromTime || ""}&toTime=${
-        toTime || ""
-      }&dataSource=${dataSource || ""}`;
-      console.log("Fetching data with URL:", url);
-
+      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&fromTime=${fromTime}&toTime=${toTime}&dataSource=${dataSource}`;
       const response = await getProfitLossData(url);
-      console.log(response);
 
       if (response && response.data) {
         const { pagination, data } = response.data;
-
         setPLData(data);
         setTotalTransactions(pagination?.totalRecords || 0);
         setTotalPages(pagination?.totalPages || 1);
         setIsDataFetched(true);
       } else {
-        console.error("No data found in response");
         setIsDataFetched(false);
       }
     } catch (error) {
       console.error("Error fetching P&L data:", error);
       setIsDataFetched(false);
-    } finally {
-      console.log("Setting loading state to false in finally block");
     }
   };
-
-  const handleReset = () => {
-    dispatch(resetFilters());
-    setPLData([]);
-    setTotalTransactions(0);
-    setTotalPages(1);
-    setIsDataFetched(false);
-    setCurrentPage(1);
-  };
-
-  const today = new Date().toISOString().split("T")[0];
-
-  const calculateDate = (months) => {
-    const date = new Date();
-    date.setMonth(date.getMonth() - months);
-    return date.toISOString().split("T")[0];
-  };
-
-  useEffect(() => {
-    switch (dataSource) {
-      case "live":
-        dispatch(setFromDate(today));
-        dispatch(setToDate(today));
-        break;
-      case "backup":
-        dispatch(setFromDate(calculateDate(3)));
-        dispatch(setToDate(today));
-        break;
-      case "old":
-        dispatch(setFromDate(calculateDate(12)));
-        dispatch(setToDate(today));
-        break;
-      default:
-        break;
-    }
-  }, [dataSource, dispatch, today]);
-
-  const handleTimeChangeWithValidation = (
-    time,
-    type,
-    dispatch,
-    fromTime,
-    toTime
-  ) => {
-    if (type === "fromTime") {
-      if (toTime && time > toTime) {
-        alert("From Time cannot be later than To Time");
-        return;
-      }
-      dispatch(setFromTime(time));
-    } else if (type === "toTime") {
-      if (fromTime && time < fromTime) {
-        alert("To Time cannot be earlier than From Time");
-        return;
-      }
-      dispatch(setToTime(time));
-    }
-  };
-
-  useEffect(() => {
-    if (!fromTime) dispatch(setFromTime("00:00"));
-    if (!toTime) dispatch(setToTime("23:59"));
-  }, [dispatch, fromTime, toTime]);
 
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-  
       <div className="flex flex-col items-start">
-        <label className="text-sm font-custom text-black mb-2">
-          Data Source
-        </label>
+        <label className="text-sm font-custom text-black mb-2">Data Source</label>
         <select
-          value={dataSource}
+          value={dataSource || "live"}
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-10 py-2 "
+          className="border rounded px-10 py-2"
         >
-          <option value="">Data Source</option>
           <option value="live">LIVE DATA</option>
           <option value="backup">BACKUP DATA</option>
           <option value="old">OLD DATA</option>
@@ -221,7 +128,6 @@ const EventPLFilter = ({
         />
       </div>
 
-
       <div className="flex space-x-2 items-center">
         <button
           onClick={handleGetPL}
@@ -229,7 +135,6 @@ const EventPLFilter = ({
         >
           Get P & L
         </button>
-      
       </div>
     </div>
   );
