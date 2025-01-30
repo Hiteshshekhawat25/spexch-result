@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 import React from "react";
@@ -17,7 +16,7 @@ const MenuHeader = () => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
-  console.log('userDatauserData', userData)
+  console.log("userDatauserData", userData);
 
   const handleLogout = () => {
     console.log("logout Clicked");
@@ -60,7 +59,7 @@ const MenuHeader = () => {
     { name: "Restore User", link: "/restore-user" },
     // {
     //   name: "Logout",
-    //   onClick: handleLogout, 
+    //   onClick: handleLogout,
     // },
   ];
 
@@ -74,7 +73,6 @@ const MenuHeader = () => {
           { name: "Create Manual Match", link: "/CreateManualMatch" },
           { name: "All Matches", link: "/AllMatches" },
           { name: "Session Result", link: "/SessionResult" },
-
         ],
       },
       {
@@ -84,44 +82,41 @@ const MenuHeader = () => {
       {
         name: "Logout",
         link: "#",
-        onClick: handleLogout, // Attach logout handler here
-      }, // Logout item
+        onClick: handleLogout,
+      }
     );
   } else {
-    menuItems?.push(
-      {
-        name: "Logout",
-        link: "#",
-        onClick: handleLogout, // Attach logout handler here
-      }, 
-    )
+    menuItems?.push({
+      name: "Logout",
+      link: "#",
+      onClick: handleLogout,
+    });
   }
 
- 
-  const menuWrapperRef = useRef(null); 
+  const menuWrapperRef = useRef(null);
   const toggleSubMenu = (name, index) => {
     if (activeSubMenu === name) {
       setActiveSubMenu(null);
       setSubMenuStyles({});
     } else {
       setActiveSubMenu(name);
-  
+
       const menuItem = menuRefs.current[index];
       if (menuItem && menuWrapperRef.current) {
         const { offsetTop, offsetHeight, offsetLeft } = menuItem;
         const scrollLeft = menuWrapperRef.current.scrollLeft;
-  
+
         setSubMenuStyles({
           top: offsetTop + offsetHeight,
-          left: offsetLeft - scrollLeft, 
-          minWidth: 150, 
+          left: offsetLeft - scrollLeft,
+          minWidth: 150,
           position: "absolute",
           zIndex: 10,
         });
       }
     }
   };
-  
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (
@@ -141,16 +136,16 @@ const MenuHeader = () => {
   return (
     <div className="bg-gradient-green text-black font-bold px-2 relative">
       <div
-  className="lg:hidden overflow-x-auto whitespace-nowrap"
-  ref={menuWrapperRef} 
->
-  <ul className="flex">
-    {menuItems.map((item, index) => (
-      <li
-        key={index}
-        className="relative text-sm border-l border-r border-gray-400"
-        ref={(el) => (menuRefs.current[index] = el)}
+        className="lg:hidden overflow-x-auto whitespace-nowrap"
+        ref={menuWrapperRef}
       >
+        <ul className="flex">
+          {menuItems.map((item, index) => (
+            <li
+              key={index}
+              className="relative text-sm border-l border-r border-gray-400"
+              ref={(el) => (menuRefs.current[index] = el)}
+            >
               {item.name === "Logout" ? (
                 <button
                   onClick={item.onClick}
@@ -166,7 +161,7 @@ const MenuHeader = () => {
                     setActiveMenu(item.name);
                     item.subMenu && toggleSubMenu(item.name, index);
                   }}
-                  className={`py-1 px-2 block border-b-2 ${
+                  className={`block border-b-2 ${
                     activeMenu === item.name
                       ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
                       : "border-transparent hover:underline hover:decoration-black"
@@ -184,25 +179,21 @@ const MenuHeader = () => {
 
         {menuItems.map((item, index) =>
           item.subMenu && activeSubMenu === item.name ? (
-
             <ul
-  key={index}
-  ref={subMenuRef}
-  style={{
-    ...subMenuStyles, 
-    left: subMenuStyles.left, 
-    minWidth: subMenuStyles.minWidth 
-  }}
-  className="absolute bg-gradient-blue-hover shadow-lg z-10 flex flex-col whitespace-nowrap"
->
-
-       
+              key={index}
+              ref={subMenuRef}
+              style={{
+                ...subMenuStyles,
+                left: subMenuStyles.left,
+                minWidth: subMenuStyles.minWidth,
+              }}
+              className="absolute bg-gradient-blue-hover shadow-lg z-10 flex flex-col whitespace-nowrap"
+            >
               {item.subMenu.map((subItem, subIndex) => (
                 <li key={subIndex}>
                   <Link
                     to={subItem.link}
                     onClick={() => setActiveSubMenu(null)}
-
                     onMouseEnter={() => {
                       // On hover, show the submenu
                       item.subMenu && toggleSubMenu(item.name, index);
@@ -258,17 +249,14 @@ const MenuHeader = () => {
                 {item.subMenu.map((subItem, subIndex) => (
                   <li key={subIndex}>
                     <Link
-                    onClick={() => setActiveSubMenu(null)}
-                    onMouseEnter={() => {
-                      // On hover, show the submenu
-                      item.subMenu && toggleSubMenu(item.name, index);
-                    }}
-                    onMouseLeave={() => {
-                      // On hover out, hide the submenu
-                      setActiveSubMenu(null);
-                    }}
+                      onClick={() => setActiveSubMenu(null)}
+                      onMouseEnter={() => {
+                        item.subMenu && toggleSubMenu(item.name, index);
+                      }}
+                      onMouseLeave={() => {
+                        setActiveSubMenu(null);
+                      }}
                       to={subItem.link}
-                      
                       className="block px-4 py-2 hover:bg-gradient-green text-white"
                     >
                       {subItem.name}
@@ -285,5 +273,3 @@ const MenuHeader = () => {
 };
 
 export default MenuHeader;
-
-
