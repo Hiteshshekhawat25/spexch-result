@@ -316,6 +316,16 @@ const RoutesComp = ({ socket }) => {
         </ProtectedRoutes>
         }
       />
+      <Route
+        path={ROUTES_CONST.restoreUser}
+        element={
+          <ProtectedRoutes>
+          <LayoutHeader>
+            <RestoreUser />
+          </LayoutHeader>
+        </ProtectedRoutes>
+        }
+      />
     </Routes>
     
   );
