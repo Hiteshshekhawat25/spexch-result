@@ -94,21 +94,79 @@ const Banking = () => {
     });
   };
 
+  // const handleButtonClick = (status, index) => {
+  //   setEditedData((prevState) => {
+  //     const updatedData = [...prevState];
+      
+      
+  //     if (selectedButtonRow !== null && selectedButtonRow !== index) {
+  //       updatedData[selectedButtonRow] = {
+  //         ...updatedData[selectedButtonRow],
+  //         depositwithdrawStatus: "", 
+  //         highlightFull: false, 
+  //       };
+  //     }
+  
+  //         // Now set the current selected button
+  //     if (status === "Full") {
+  //             updatedData[index] = {
+  //               ...updatedData[index],
+  //               depositwithdraw: filteredData[index]?.totalBalance || "",
+  //               highlightFull: true,
+  //             };
+  //     } else {
+  //             updatedData[index] = {
+  //               ...updatedData[index],
+  //               depositwithdrawStatus: status,
+  //               highlightFull:
+  //                 status === "W" ? true : updatedData[index]?.highlightFull,
+  //             };
+  //     }
+  
+  //     return updatedData;
+  //   });
+  
+    
+  //   setSelectedButtonRow(index);
+  //   setSelectedButtonStatus(status);
+  // };
+   
   const handleButtonClick = (status, index) => {
     setEditedData((prevState) => {
       const updatedData = [...prevState];
-      
-      // If a button in another row is selected, unselect the previous one
-      if (selectedButtonRow !== null && selectedButtonRow !== index) {
+	  
+	        if (selectedButtonRow !== null && selectedButtonRow !== index) {
         updatedData[selectedButtonRow] = {
           ...updatedData[selectedButtonRow],
-          depositwithdrawStatus: "", // Unselect the previous button
-          highlightFull: false, // Remove highlighting for "Full"
+          depositwithdrawStatus: "", 
+          highlightFull: false,
+          depositwithdraw: "", 
         };
       }
   
-      // Now set the current selected button
-      if (status === "Full") {
+      // Ensure the row exists in updatedData
+      if (!updatedData[index]) {
+        updatedData[index] = { depositwithdrawStatus: "", highlightFull: false };
+      }
+
+     
+
+      // If switching between "W" and "D", clear the previous selection
+      if (updatedData[index].depositwithdrawStatus && updatedData[index].depositwithdrawStatus !== status) {
+        updatedData[index].depositwithdrawStatus = ""; // Clear previous selection before setting new one
+      }
+  
+      // Toggle selection for "W" and "D"
+      updatedData[index] = {
+        ...updatedData[index],
+        depositwithdrawStatus:
+          updatedData[index].depositwithdrawStatus === status ? "" : status, // Unselect if the same button is clicked again
+        highlightFull: status === "W" ? true : false, // Highlight if "W" is selected, unhighlight otherwise
+      };
+	  
+      
+  
+	  if (status === "Full" ) {
               updatedData[index] = {
                 ...updatedData[index],
                 depositwithdraw: filteredData[index]?.totalBalance || "",
@@ -120,18 +178,19 @@ const Banking = () => {
                 depositwithdrawStatus: status,
                 highlightFull:
                   status === "W" ? true : updatedData[index]?.highlightFull,
+                  depositwithdraw: "",
               };
       }
-  
+       
       return updatedData;
     });
   
-    
     setSelectedButtonRow(index);
     setSelectedButtonStatus(status);
   };
   
-    const handleSubmitPaymentFunction = (data) => {
+  
+  const handleSubmitPaymentFunction = (data) => {
     if (!password) {
       toast.error("Please enter the password.");
       return;
@@ -557,7 +616,7 @@ const Banking = () => {
                           editedData[index]?.highlightFull
                             ? "bg-gradient-blue text-white"
                             : "bg-gray-400 text-white"
-                        } border border-black`}
+                        } border border-black `}
                       >
                         Full
                       </button>
