@@ -9,7 +9,7 @@ const ProfitLoss = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
-    const [localLoading, setLocalLoading] = useState(false);
+  const [localLoading, setLocalLoading] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "username",
     direction: "ascending",
@@ -31,13 +31,10 @@ const ProfitLoss = () => {
     return 0;
   });
 
-  
   console.log("Current Page: ", currentPage);
   console.log("Entries to Show: ", entriesToShow);
   console.log("Total Entries: ", totalEntries);
 
- 
-    
   const paginatedData = sortedData;
 
   console.log("Paginated Data: ", paginatedData);
@@ -66,7 +63,6 @@ const ProfitLoss = () => {
         setLocalLoading={setLocalLoading}
       />
 
-      
       <div className="border border-gray-300 rounded-md bg-white">
         <h1 className="text-xl bg-gradient-blue text-white font-custom font-bold">
           Profit Loss
@@ -74,7 +70,9 @@ const ProfitLoss = () => {
 
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
-            <label className="mr-2 text-sm  font-custom font-medium text-black">Show</label>
+            <label className="mr-2 text-sm  font-custom font-medium text-black">
+              Show
+            </label>
             <select
               value={entriesToShow}
               onChange={(e) => {
@@ -89,15 +87,22 @@ const ProfitLoss = () => {
                 </option>
               ))}
             </select>
-            <label className="ml-2 text-sm font-custom font-medium text-black">entries</label>
+            <label className="ml-2 text-sm font-custom font-medium text-black">
+              entries
+            </label>
           </div>
         </div>
 
         <div className="overflow-x-auto my-4 mx-4">
-          <table className="w-full table-auto border-collapse border border-gray-400 ">
-            <thead className="border border-gray-400 bg-gray-200 text-black text-center ">
+          <table className="w-full table-auto border-collapse border border-gray-400">
+            <thead className="border border-gray-400 bg-gray-200 text-black text-center">
               <tr>
-                {["username", "profitLoss", "downlineProfitLoss", "commission"].map((key) => (
+                {[
+                  "username",
+                  "profitLoss",
+                  "downlineProfitLoss",
+                  "commission",
+                ].map((key) => (
                   <th
                     key={key}
                     className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer border-r border-gray-400"
@@ -138,17 +143,31 @@ const ProfitLoss = () => {
               {paginatedData.length > 0 ? (
                 paginatedData.map((item, index) => (
                   <tr key={index} className="border-b border-gray-400">
-                    <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                      {item.username}
+                    <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500 text-blue">
+                      {item.username ? item.username.toUpperCase() : ""}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                      {item.profitLoss}
+                    <td
+                      className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                        item.profitLoss < 0 ? "text-red-500" : "text-green-500"
+                      }`}
+                    >
+                      {Math.abs(item.profitLoss)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                      {item.downlineProfitLoss}
+                    <td
+                      className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                        item.downlineProfitLoss < 0
+                          ? "text-red-500"
+                          : "text-green-500"
+                      }`}
+                    >
+                      {Math.abs(item.downlineProfitLoss)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center">
-                      {item.commission}
+                    <td
+                      className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                        item.commission < 0 ? "text-red-500" : "text-green-500"
+                      }`}
+                    >
+                      {Math.abs(item.commission)}
                     </td>
                   </tr>
                 ))
@@ -163,17 +182,35 @@ const ProfitLoss = () => {
             {paginatedData.length > 0 && (
               <tfoot>
                 <tr className="bg-gray-300 text-black">
-                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                    {totalData.username}
+                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500">
+                    {totalData.username ? totalData.username.toUpperCase() : ""}
                   </td>
-                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                    {totalData.profitLoss}
+                  <td
+                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                      totalData.profitLoss < 0
+                        ? "text-red-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    {Math.abs(totalData.profitLoss)}
                   </td>
-                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                    {totalData.downlineProfitLoss}
+                  <td
+                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                      totalData.downlineProfitLoss < 0
+                        ? "text-red-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    {Math.abs(totalData.downlineProfitLoss)}
                   </td>
-                  <td className="px-4 py-3 text-sm text-center">
-                    {totalData.commission}
+                  <td
+                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                      totalData.commission < 0
+                        ? "text-red-500"
+                        : "text-green-500"
+                    }`}
+                  >
+                    {Math.abs(totalData.commission)}
                   </td>
                 </tr>
               </tfoot>
@@ -183,14 +220,16 @@ const ProfitLoss = () => {
 
         {/* Pagination */}
         <div className="flex justify-between items-center mt-4  flex-col sm:flex-row">
-              <div className="text-sm text-gray-600 sm:mb-0">
-
-              Showing{" "}
-  {totalEntries > 0
-    ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(currentPage * entriesToShow, totalEntries)}`
-    : "0 to 0"}{" "}
-  of {totalEntries} entries
-              </div>
+          <div className="text-sm text-gray-600 sm:mb-0">
+            Showing{" "}
+            {totalEntries > 0
+              ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
+                  currentPage * entriesToShow,
+                  totalEntries
+                )}`
+              : "0 to 0"}{" "}
+            of {totalEntries} entries
+          </div>
           <div className="flex space-x-2">
             <button
               onClick={() => setCurrentPage(1)}
@@ -230,4 +269,3 @@ const ProfitLoss = () => {
 };
 
 export default ProfitLoss;
-

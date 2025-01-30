@@ -15,13 +15,17 @@ const TopHeader = () => {
   const dispatch = useDispatch();
   const { userData, loading, error } = useSelector((state) => state.user);
   const location = useLocation();
+  console.log("userData",userData)
 
   const refreshData = () => {
     dispatch(fetchUserDataStart());
     getUserData()
       .then((data) => {
-        console.log("Fetched user data:", data);
-        dispatch(fetchUserDataSuccess(data));
+        if (data && data.data) {
+          dispatch(fetchUserDataSuccess(data));
+        } else {
+          dispatch(fetchUserDataFailure("Invalid data format"));
+        }
       })
       .catch((err) => {
         console.error("Error fetching user data:", err);
@@ -30,12 +34,10 @@ const TopHeader = () => {
   };
 
   useEffect(() => {
-    refreshData();
+    if (!userData || !userData.data || Object.keys(userData.data).length === 0) {
+      refreshData();
+    }
   }, [dispatch, location.pathname]);
-
-  useEffect(() => {
-    console.log("Current userData:", userData);
-  }, [userData]);
 
   return (
     <div className="w-full bg-gradient-blue text-white py-6 px-4 lg:px-32 flex justify-between items-center">

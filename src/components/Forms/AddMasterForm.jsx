@@ -112,7 +112,6 @@ export const AddMasterForm = ({ closeModal }) => {
   // Validatio
   const validate = () => {
     const newErrors = {};
-
     if (!formData.username.trim()) newErrors.username = "Username is required.";
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.role) newErrors.role = "Role selection is required.";
@@ -120,9 +119,17 @@ export const AddMasterForm = ({ closeModal }) => {
       newErrors.commission = "Commission must be between 0 and 100.";
     if (formData.partnership < 0 || formData.partnership > 100)
       newErrors.partnership = "Partnership must be between 0 and 100.";
-    if (!formData.password.trim()) newErrors.password = "Password is required.";
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Password is required.";
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])/.test(formData.password)) {
+      newErrors.password =
+        "Password must contain at least one uppercase and one lowercase letter.";
+    }
+
     if (formData.password !== formData.confirmPassword)
       newErrors.confirmPassword = "Passwords do not match.";
+
     if (!formData.masterPassword.trim())
       newErrors.masterPassword = "Master Password is required.";
 

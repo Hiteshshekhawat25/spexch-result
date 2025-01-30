@@ -163,13 +163,13 @@ const AccountStatement = () => {
                     <td className="px-4 py-3 text-sm text-center">
                       {formatDateTime(item.createdAt)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center">
+                    <td className="px-4 py-3 text-sm text-center font-bold">
                       {item.transactionType === "credit" ? item.amount : "-"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center">
+                    <td className="px-4 py-3 text-sm text-center font-bold text-red-600">
                       {item.transactionType === "debit" ? item.amount : "-"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center">
+                    <td className="px-4 py-3 text-sm text-center font-bold">
                       {item.currentMainWallet}
                     </td>
                     <td className="px-4 py-3 text-sm text-center">
