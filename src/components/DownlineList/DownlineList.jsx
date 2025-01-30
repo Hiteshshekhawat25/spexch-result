@@ -101,32 +101,31 @@ const DownlineList = () => {
   };
 
   const handleArrowClick = (item) => {
-    console.log("Selected User Data:", item); 
+    // console.log("Selected User Data:", item);
     navigate(ROUTES_CONST.MyAccount, {
       state: {
         selectedUser: item,
-        selectedPage: "profitLoss", 
+        selectedPage: "profitLoss",
       },
     });
   };
 
   const handleHistoryClick = (item) => {
-    console.log("Selected User Data:", item); 
+    // console.log("Selected User Data:", item);
     navigate(ROUTES_CONST.MyAccount, {
       state: {
         selectedUser: item,
-        selectedPage: "bethistory", 
+        selectedPage: "bethistory",
       },
     });
   };
 
-
   const handleProfileClick = (item) => {
-    console.log("Selected User Data:", item); 
+    // console.log("Selected User Data:", item);
     navigate(ROUTES_CONST.MyAccount, {
       state: {
         selectedUser: item,
-        selectedPage: "myProfile", 
+        selectedPage: "myProfile",
       },
     });
   };
@@ -193,6 +192,61 @@ const DownlineList = () => {
   const filteredData = downlineData.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  // useEffect(() => {
+  //   if (location.pathname === "/master-downline-list") {
+  //     const fetchUserRoles = async () => {
+  //       try {
+  //         const token = localStorage.getItem("authToken");
+  //         if (token) {
+  //           const rolesArray = await fetchRoles(token);
+  //           if (Array.isArray(rolesArray)) {
+  //             const rolesData = rolesArray.map((role) => ({
+  //               role_name: role.role_name,
+  //               role_id: role._id,
+  //             }));
+  //             setRoles(rolesData);
+  
+  //             // Case-insensitive check for 'master' or 'agent'
+  //             const masterAgentRoles = rolesData.filter(
+  //               (role) =>
+  //                 role.role_name.toLowerCase() === "master" ||
+  //                 role.role_name.toLowerCase() === "agent"
+  //             );
+  
+  //             if (masterAgentRoles.length > 0) {
+  //               const fetchPromises = masterAgentRoles.map((role) =>
+  //                 fetchDownlineData(currentPage, entriesToShow, role.role_id)
+  //               );
+  
+  //               const results = await Promise.all(fetchPromises);
+  
+  //               const combinedData = results.flatMap((result) => result.data || []);
+  
+  //               const startIndex = (currentPage - 1) * entriesToShow;
+  //               const endIndex = startIndex + entriesToShow;
+  //               const paginatedData = combinedData.slice(startIndex, endIndex);
+  
+  //               dispatch(setDownlineData(paginatedData));
+  
+  //               // Calculate total users
+  //               const totalUsers = combinedData.length;
+  //               setTotalUsers(totalUsers);
+  //             } else if (rolesData.length > 0) {
+  //               // Fallback to the first role if no master/agent roles are found
+  //               setRoleId(rolesData[0].role_id);
+  //             }
+  //           } else {
+  //             setError("Roles data is not an array.");
+  //           }
+  //         }
+  //       } catch (error) {
+  //         setError(error.message || "Failed to fetch roles.");
+  //       }
+  //     };
+  
+  //     fetchUserRoles();
+  //   }
+  // }, [token, location.pathname, currentPage, entriesToShow, dispatch]);
 
   useEffect(() => {
     if (location.pathname === "/master-downline-list") {
@@ -201,22 +255,41 @@ const DownlineList = () => {
           const token = localStorage.getItem("authToken");
           if (token) {
             const rolesArray = await fetchRoles(token);
-
             if (Array.isArray(rolesArray)) {
               const rolesData = rolesArray.map((role) => ({
                 role_name: role.role_name,
                 role_id: role._id,
               }));
               setRoles(rolesData);
-              const userRole = rolesData.find(
+  
+              const masterAgentRoles = rolesData.filter(
                 (role) =>
-                  role.role_name === "master" || role.role_name === "agent"
+                  role.role_name.toLowerCase() === "master" ||
+                  role.role_name.toLowerCase() === "agent"
               );
-              if (userRole) {
-                setRoleId(userRole.role_id);
+  
+              if (masterAgentRoles.length > 0) {
+                // Fetch all data for each role without pagination
+                const fetchPromises = masterAgentRoles.map((role) =>
+                  fetchDownlineData(1, 10000, role.role_id) // High limit to get all data
+                );
+  
+                const results = await Promise.all(fetchPromises);
+  
+                const combinedData = results.flatMap((result) => result.data || []);
+  
+                // Calculate total users based on combined data
+                const totalUsers = combinedData.length;
+                setTotalUsers(totalUsers);
+  
+                // Apply client-side pagination
+                const startIndex = (currentPage - 1) * entriesToShow;
+                const endIndex = startIndex + entriesToShow;
+                const paginatedData = combinedData.slice(startIndex, endIndex);
+  
+                dispatch(setDownlineData(paginatedData));
               } else if (rolesData.length > 0) {
                 setRoleId(rolesData[0].role_id);
-                window.location.reload();
               }
             } else {
               setError("Roles data is not an array.");
@@ -226,11 +299,11 @@ const DownlineList = () => {
           setError(error.message || "Failed to fetch roles.");
         }
       };
-
+  
       fetchUserRoles();
     }
-  }, [token, location.pathname]);
-
+  }, [token, location.pathname, currentPage, entriesToShow, dispatch]); 
+  
   useEffect(() => {
     if (location.pathname === "/user-downline-list") {
       const fetchUserRoles = async () => {
@@ -238,15 +311,15 @@ const DownlineList = () => {
           const token = localStorage.getItem("authToken");
           if (token) {
             const rolesArray = await fetchRoles(token);
-
             if (Array.isArray(rolesArray)) {
               const rolesData = rolesArray.map((role) => ({
                 role_name: role.role_name,
                 role_id: role._id,
               }));
               setRoles(rolesData);
+              // Case-insensitive check for 'user'
               const userRole = rolesData.find(
-                (role) => role.role_name === "user"
+                (role) => role.role_name.toLowerCase() === "user"
               );
               if (userRole) {
                 setRoleId(userRole.role_id);
@@ -265,9 +338,8 @@ const DownlineList = () => {
       fetchUserRoles();
     }
   }, [token, location.pathname]);
-
   const sortedData = useMemo(() => {
-    console.log("filteredData", filteredData);
+    // console.log("filteredData", filteredData);
     if (!sortConfig.key) return filteredData;
 
     return [...filteredData].sort((a, b) => {
@@ -336,7 +408,9 @@ const DownlineList = () => {
   if (error) {
     console.error("Error fetching user:", error);
     return (
-      <div className="text-red-500 font-custom font-bold">An error occurred: {error}</div>
+      <div className="text-red-500 font-custom font-bold">
+        An error occurred: {error}
+      </div>
     );
   }
   const handleDeleteModalClose = () => {
@@ -352,7 +426,7 @@ const DownlineList = () => {
 
   const handleDeleteConfirm = () => {
     if (userToDelete) {
-      console.log("Deleting user:", userToDelete.username);
+      // console.log("Deleting user:", userToDelete.username);
     }
     setIsDeleteModalOpen(false);
     setUserToDelete(null);
@@ -511,7 +585,9 @@ const DownlineList = () => {
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
               {/* Show Entries Dropdown */}
               <div className="p-2 rounded-md flex items-center w-full sm:w-auto">
-                <label className="mr-2 text-sm font-custom font-medium">Show</label>
+                <label className="mr-2 text-sm font-custom font-medium">
+                  Show
+                </label>
                 <select
                   value={entriesToShow}
                   onChange={handleEntriesChange}
@@ -524,7 +600,9 @@ const DownlineList = () => {
                     </option>
                   ))}
                 </select>
-                <label className="ml-2 text-sm font-custom font-medium">entries</label>
+                <label className="ml-2 text-sm font-custom font-medium">
+                  entries
+                </label>
               </div>
 
               {/* Filters and Search */}
@@ -570,7 +648,7 @@ const DownlineList = () => {
                         ? [{ key: "partnership", label: "Partnership" }]
                         : []),
                       { key: "balance", label: "Balance" },
-                      { key: "exposures", label: "Exposures" },
+                      { key: "exposure", label: "Exposure" },
                       ...(!isMasterDownlineList
                         ? [{ key: "exposure", label: "Exposure Limit" }]
                         : []),
@@ -708,8 +786,8 @@ const DownlineList = () => {
                             )}
                           </td>
                         )}
-                        <td className="border border-gray-400 px-4 py-2 text-sm font-custom  font-semibold">
-                          0
+                        <td className="border border-gray-400 px-4 py-2 text-sm text-red-700 font-custom  font-semibold">
+                          ({item.exposure})
                         </td>
                         {!isMasterDownlineList && (
                           <td className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-semibold">
@@ -797,11 +875,13 @@ const DownlineList = () => {
                             >
                               <MdSettings className="text-darkgray" />
                             </div>
-                          
-                            
-  <div  onClick={() => handleProfileClick(item)} className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer">
-    <FaUserAlt className="text-darkgray" />
-  </div>
+
+                            <div
+                              onClick={() => handleProfileClick(item)}
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                            >
+                              <FaUserAlt className="text-darkgray" />
+                            </div>
 
                             <div
                               onClick={() => handleOpenSettings(item)}

@@ -10,7 +10,7 @@ import {
   setStartFetchData,
 } from "../../Store/Slice/downlineSlice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
-import { IoClose, IoEye, IoEyeOff } from 'react-icons/io5'; 
+import { IoClose, IoEye, IoEyeOff } from "react-icons/io5";
 
 export const AddClientForm = ({ closeModal }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,9 +19,9 @@ export const AddClientForm = ({ closeModal }) => {
   const [token, setToken] = useState(null);
   const [userRoleId, setUserRoleId] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
-const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-const [showMasterPassword, setShowMasterPassword] = useState(false);
-const [isFormValid, setIsFormValid] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [showMasterPassword, setShowMasterPassword] = useState(false);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -36,12 +36,12 @@ const [isFormValid, setIsFormValid] = useState(false);
     password: "",
     confirmPassword: "",
     rollingCommission: {
-      fancy: 0,
-      matka: 0,
-      casino: 0,
-      binary: 0,
-      sportbook: 0,
-      bookmaker: 0,
+      fancy: "0",
+      matka: "0",
+      casino: "0",
+      binary: "0",
+      sportbook: "0",
+      bookmaker: "0",
     },
     masterPassword: "",
   };
@@ -62,9 +62,9 @@ const [isFormValid, setIsFormValid] = useState(false);
         exposureLimit,
         password,
         confirmPassword,
-        masterPassword
+        masterPassword,
       } = formData;
-  
+
       const isValid =
         username &&
         name &&
@@ -78,14 +78,15 @@ const [isFormValid, setIsFormValid] = useState(false);
         masterPassword &&
         password === confirmPassword &&
         /^\d{10}$/.test(mobileNumber) &&
-        commission >= 0 && commission <= 100 &&
+        commission >= 0 &&
+        commission <= 100 &&
         openingBalance >= 0 &&
         creditReference >= 0 &&
         exposureLimit >= 0;
-  
+
       setIsFormValid(isValid);
     };
-  
+
     checkFormValidity();
   }, [formData]);
 
@@ -103,7 +104,6 @@ const [isFormValid, setIsFormValid] = useState(false);
     }
   }, []);
 
-  // Fetch roles and extract user role ID
   useEffect(() => {
     if (token) {
       const fetchRoles = async () => {
@@ -124,6 +124,15 @@ const [isFormValid, setIsFormValid] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    if (name === "username") {
+      const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, "");
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: sanitizedValue,
+      }));
+      return;
+    }
 
     if (name === "rollingCommissionChecked") {
       setFormData((prevData) => ({
@@ -150,6 +159,7 @@ const [isFormValid, setIsFormValid] = useState(false);
 
   const validateForm = () => {
     let errors = {};
+
     if (!formData.username) errors.username = "Username is required.";
     if (!formData.name) errors.name = "Name is required.";
     if (formData.commission < 0 || formData.commission > 100)
@@ -162,9 +172,17 @@ const [isFormValid, setIsFormValid] = useState(false);
       errors.mobileNumber = "Mobile number must be 10 digits.";
     if (formData.exposureLimit < 0)
       errors.exposureLimit = "Exposure limit must be a positive number.";
-    if (!formData.password) errors.password = "Password is required.";
+
+    if (!formData.password) {
+      errors.password = "Password is required.";
+    } else if (!/(?=.*[a-z])(?=.*[A-Z])/.test(formData.password)) {
+      errors.password =
+        "Password must contain at least one uppercase and one lowercase letter.";
+    }
+
     if (formData.password !== formData.confirmPassword)
       errors.confirmPassword = "Passwords must match.";
+
     if (!formData.masterPassword)
       errors.masterPassword = "Master password is required.";
 
@@ -209,23 +227,25 @@ const [isFormValid, setIsFormValid] = useState(false);
         dataWithAccountType,
         token
       );
+      console.log(response);
 
-      toast.success(response.data.message || "Client created successfully!");
+      // toast.success(response.data.message || "Client created successfully!");
       // window.location.reload();
 
-      // setTimeout(() => {
-      handleCloseModal();
-      dispatch(setStartFetchData());
-      // }, 2000);
+      setTimeout(() => {
+        handleCloseModal();
+        dispatch(setStartFetchData());
+      }, 2000);
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
           "An error occurred while creating the client."
       );
-      toast.error("Cannot create duplicate username");
+      // toast.error("Cannot create duplicate username");
     } finally {
       setIsSubmitting(false);
     }
+    // handleCloseModal();
   };
 
   const handleCloseModal = () => {
@@ -241,9 +261,9 @@ const [isFormValid, setIsFormValid] = useState(false);
       <h2 className=" flex text-white font-custom font-semibold mb-4 py-2 px-2 bg-gradient-blue">
         Add User
         <IoClose
-                    onClick={closeModal}
-                    className="cursor-pointer text-white text-2xl ml-auto"
-                  />
+          onClick={closeModal}
+          className="cursor-pointer text-white text-2xl ml-auto"
+        />
       </h2>
       <form onSubmit={handleSubmit} className="space-y-2 px-6 ">
         <div className="w-full flex flex-col md:flex-row justify-between">
@@ -366,58 +386,69 @@ const [isFormValid, setIsFormValid] = useState(false);
           <div className="text-red-500">{formErrors.exposureLimit}</div>
         )}
         <div className="flex flex-col md:flex-row justify-between">
-  <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-    Password<span className="text-red-500">*</span>
-  </label>
-  <div className="relative w-full md:w-2/3">
-    <input
-      type={showPassword ? "text" : "password"}
-      name="password"
-      value={formData.password}
-      placeholder="Password.."
-      onChange={handleChange}
-      className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-      required
-    />
-    <span
-      onClick={() => setShowPassword(!showPassword)}
-      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
-    >
-      {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-    </span>
-  </div>
-</div>
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+            Password<span className="text-red-500">*</span>
+          </label>
+          <div className="relative w-full md:w-2/3">
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              // pattern="^(?=.*[a-z])(?=.*[A-Z]).{2,}$"
+              placeholder="Password.."
+              onChange={handleChange}
+              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              required
+            />
+            <span
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+            >
+              {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+            </span>
+          </div>
+        </div>
         {formErrors.password && (
           <div className="text-red-500">{formErrors.password}</div>
         )}
         <div className="flex flex-col md:flex-row justify-between">
-  <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-    Confirm Password<span className="text-red-500">*</span>
-  </label>
-  <div className="relative w-full md:w-2/3">
-    <input
-      type={showConfirmPassword ? "text" : "password"}
-      name="confirmPassword"
-      value={formData.confirmPassword}
-      placeholder="ConfirmPassword.."
-      onChange={handleChange}
-      className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-      required
-    />
-    <span
-      onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
-    >
-      {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-    </span>
-  </div>
-</div>
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+            Confirm Password<span className="text-red-500">*</span>
+          </label>
+          <div className="relative w-full md:w-2/3">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              name="confirmPassword"
+              value={formData.confirmPassword}
+              // pattern="^(?=.*[a-z])(?=.*[A-Z]).{2,}$"
+              placeholder="ConfirmPassword.."
+              onChange={handleChange}
+              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              required
+            />
+              {formErrors.confirmPassword && (
+          <div className="text-red-500">{formErrors.confirmPassword}</div>
+        )}
+            <span
+              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+            >
+              {showConfirmPassword ? (
+                <IoEyeOff size={20} />
+              ) : (
+                <IoEye size={20} />
+              )}
+            </span>
+          </div>
+        </div>
         {formErrors.confirmPassword && (
           <div className="text-red-500">{formErrors.confirmPassword}</div>
         )}
 
-<div className="flex items-center">
-<label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">Rolling Commission</label>
+        <div className="flex items-center">
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+            Rolling Commission
+          </label>
           {/* <input
             type="checkbox"
             name="rollingCommissionChecked"
@@ -425,98 +456,118 @@ const [isFormValid, setIsFormValid] = useState(false);
             onChange={handleChange}
           /> */}
           <div
-  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
-    formData.rollingCommissionChecked ? "bg-gradient-seablue" : "bg-white"
-  }`}
-  onClick={() => handleChange({ target: { name: "rollingCommissionChecked", checked: !formData.rollingCommissionChecked } })}
->
-  
-  <span
-    className={`absolute right-2 text-sm font-bold ${
-      formData.rollingCommissionChecked ? "text-transparent" : "text-whiteGray"
-    }`}
-  >
-    ✗
-  </span>
+            className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+              formData.rollingCommissionChecked
+                ? "bg-gradient-seablue"
+                : "bg-white"
+            }`}
+            onClick={() =>
+              handleChange({
+                target: {
+                  name: "rollingCommissionChecked",
+                  checked: !formData.rollingCommissionChecked,
+                },
+              })
+            }
+          >
+            <span
+              className={`absolute right-2 text-sm font-bold ${
+                formData.rollingCommissionChecked
+                  ? "text-transparent"
+                  : "text-whiteGray"
+              }`}
+            >
+              ✗
+            </span>
 
+            <span
+              className={`absolute left-2 text-sm font-bold ${
+                formData.rollingCommissionChecked
+                  ? "text-white"
+                  : "text-transparent"
+              }`}
+            >
+              ✓
+            </span>
 
-  <span
-    className={`absolute left-2 text-sm font-bold ${
-      formData.rollingCommissionChecked ? "text-white" : "text-transparent"
-    }`}
-  >
-    ✓
-  </span>
-
-  <span
-    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
-      formData.rollingCommissionChecked ? "translate-x-9" : "translate-x-1"
-    }`}
-  ></span>
-</div>
-
+            <span
+              className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+                formData.rollingCommissionChecked
+                  ? "translate-x-9"
+                  : "translate-x-1"
+              }`}
+            ></span>
+          </div>
         </div>
 
         {formData.rollingCommissionChecked && (
           <div className="space-y-2">
             <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">Fancy</label>
-              <input
-                type="text"
-                name="rollingCommission.fancy"
-                value={formData.rollingCommission.fancy}
-                onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-              />
-            </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">Matka</label>
-              <input
-                type="text"
-                name="rollingCommission.matka"
-                value={formData.rollingCommission.matka}
-                onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-              />
-            </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">Casino</label>
-              <input
-                type="text"
-                name="rollingCommission.casino"
-                value={formData.rollingCommission.casino}
-                onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-              />
-            </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">Binary</label>
-              <input
-                type="text"
-                name="rollingCommission.binary"
-                value={formData.rollingCommission.binary}
-                onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-              />
-            </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-1/3 text-left font-custom ">
-                Sportbook
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">
+                Fancy
               </label>
               <input
                 type="text"
-                name="rollingCommission.sportbook"
-                value={formData.rollingCommission.sportbook}
+                name="rollingCommission.fancy"
+                value={formData.rollingCommission.fancy || 0}
                 onChange={handleChange}
                 className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
             </div>
             <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom ">Bookmaker</label>
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">
+                Matka
+              </label>
+              <input
+                type="text"
+                name="rollingCommission.matka"
+                value={formData.rollingCommission.matka || 0}
+                onChange={handleChange}
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">
+                Casino
+              </label>
+              <input
+                type="text"
+                name="rollingCommission.casino"
+                value={formData.rollingCommission.casino || 0}
+                onChange={handleChange}
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">
+                Binary
+              </label>
+              <input
+                type="text"
+                name="rollingCommission.binary"
+                value={formData.rollingCommission.binary || 0}
+                onChange={handleChange}
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-1/3 text-left font-custom ">Sportbook</label>
+              <input
+                type="text"
+                name="rollingCommission.sportbook"
+                value={formData.rollingCommission.sportbook || 0}
+                onChange={handleChange}
+                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              />
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
+              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom ">
+                Bookmaker
+              </label>
               <input
                 type="text"
                 name="rollingCommission.bookmaker"
-                value={formData.rollingCommission.bookmaker}
+                value={formData.rollingCommission.bookmaker || 0}
                 onChange={handleChange}
                 className="w-full sm:w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
@@ -524,43 +575,52 @@ const [isFormValid, setIsFormValid] = useState(false);
           </div>
         )}
         <div className="flex flex-col md:flex-row justify-between">
-  <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-    Master Password<span className="text-red-500">*</span>
-  </label>
-  <div className="relative w-full md:w-2/3">
-    <input
-      type={showMasterPassword ? "text" : "password"}
-      name="masterPassword"
-      value={formData.masterPassword}
-      placeholder="MasterPassword.."
-      onChange={handleChange}
-      className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-      required
-    />
-    <span
-      onClick={() => setShowMasterPassword(!showMasterPassword)}
-      className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
-    >
-      {showMasterPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
-    </span>
-  </div>
-</div>
+          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+            Master Password<span className="text-red-500">*</span>
+          </label>
+          <div className="relative w-full md:w-2/3">
+            <input
+              type={showMasterPassword ? "text" : "password"}
+              name="masterPassword"
+              value={formData.masterPassword}
+              // pattern="^(?=.*[a-z])(?=.*[A-Z]).{2,}$"
+              placeholder="MasterPassword.."
+              onChange={handleChange}
+              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              required
+            />
+            <span
+              onClick={() => setShowMasterPassword(!showMasterPassword)}
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+            >
+              {showMasterPassword ? (
+                <IoEyeOff size={20} />
+              ) : (
+                <IoEye size={20} />
+              )}
+            </span>
+          </div>
+        </div>
         {formErrors.masterPassword && (
           <div className="text-red-500">{formErrors.masterPassword}</div>
         )}
-        
-        <div className="flex justify-center mt-4">
-         
-        <button
-  type="submit"
-  disabled={!isFormValid || isSubmitting}
-  className={`px-4 py-2 text-white rounded mb-2 ${
-    isFormValid ? "bg-gradient-seablue hover:bg-gradient-seablue" : "bg-gray-400 cursor-not-allowed"
-  } ${isSubmitting || !isFormValid ? "opacity-50 cursor-not-allowed" : ""}`}
->
-  {isSubmitting ? "Submitting..." : "Create"}
-</button>
 
+        <div className="flex justify-center mt-4">
+          <button
+            type="submit"
+            disabled={!isFormValid || isSubmitting}
+            className={`px-4 py-2 text-white rounded mb-2 ${
+              isFormValid
+                ? "bg-gradient-seablue hover:bg-gradient-seablue"
+                : "bg-gray-400 cursor-not-allowed"
+            } ${
+              isSubmitting || !isFormValid
+                ? "opacity-50 cursor-not-allowed"
+                : ""
+            }`}
+          >
+            {isSubmitting ? "Submitting..." : "Create"}
+          </button>
         </div>
       </form>
 

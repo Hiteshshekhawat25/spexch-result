@@ -29,6 +29,9 @@ import EventProfitLoss  from "../components/MyReport/EventProfitLoss";
 import Dashboard from "../components/Dashboard/dashboard";
 import Banking from "../components/Banking/Banking";
 import PasswordHistory from "../components/PasswordHistory/Passwordhistory";
+import RestoreUser from "../components/RestoreUser/RestoreUser";
+import MarketAnalysis from "../components/MarketAnalysis/MarketAnalysis";
+import MarketAnalysisInner from "../components/MarketAnalysis/MarketAnalysisInner";
 import ChangePasswordModal from "../components/Modal/ChangePasswordModal";
 import ChangePassword from "../components/ChangePassword/ChangePassword";
 
@@ -162,7 +165,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-        path={ROUTES_CONST.MatchOddsBets}
+        path={`${ROUTES_CONST.MatchOddsBets}/:matchId`}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
@@ -314,6 +317,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
     </Routes>
+    
   );
 };
 
