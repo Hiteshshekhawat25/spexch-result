@@ -77,7 +77,7 @@ export const AddClientForm = ({ closeModal }) => {
         confirmPassword &&
         masterPassword &&
         password === confirmPassword &&
-        /^\d{10}$/.test(mobileNumber) &&
+        // /^\d{10}$/.test(mobileNumber) &&
         commission >= 0 &&
         commission <= 100 &&
         openingBalance >= 0 &&
@@ -168,8 +168,11 @@ export const AddClientForm = ({ closeModal }) => {
       errors.openingBalance = "Opening balance must be a positive number.";
     if (formData.creditReference < 0)
       errors.creditReference = "Credit reference must be a positive number.";
-    if (!/^\d{10}$/.test(formData.mobileNumber))
-      errors.mobileNumber = "Mobile number must be 10 digits.";
+    // if (!/^\d{10}$/.test(formData.mobileNumber))
+    //   errors.mobileNumber = "Mobile number must be 10 digits.";
+    if (!formData.mobileNumber) {
+      errors.mobileNumber = "Mobile number is required.";
+    }
     if (formData.exposureLimit < 0)
       errors.exposureLimit = "Exposure limit must be a positive number.";
 
