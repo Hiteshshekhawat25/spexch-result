@@ -176,7 +176,10 @@ const DepositModal = ({
               value={amount}
               onChange={(e) => {
                 const value = e.target.value;
-                setAmount(Number(value));  // Removes the length restriction
+                if (value === "" || !isNaN(value)) {
+                  setAmount(value); // Set the amount as string to handle input
+                }
+               
               }}
               className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
             />
