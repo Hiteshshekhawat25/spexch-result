@@ -94,43 +94,7 @@ const Banking = () => {
     });
   };
 
-  // const handleButtonClick = (status, index) => {
-  //   setEditedData((prevState) => {
-  //     const updatedData = [...prevState];
-      
-      
-  //     if (selectedButtonRow !== null && selectedButtonRow !== index) {
-  //       updatedData[selectedButtonRow] = {
-  //         ...updatedData[selectedButtonRow],
-  //         depositwithdrawStatus: "", 
-  //         highlightFull: false, 
-  //       };
-  //     }
-  
-  //         // Now set the current selected button
-  //     if (status === "Full") {
-  //             updatedData[index] = {
-  //               ...updatedData[index],
-  //               depositwithdraw: filteredData[index]?.totalBalance || "",
-  //               highlightFull: true,
-  //             };
-  //     } else {
-  //             updatedData[index] = {
-  //               ...updatedData[index],
-  //               depositwithdrawStatus: status,
-  //               highlightFull:
-  //                 status === "W" ? true : updatedData[index]?.highlightFull,
-  //             };
-  //     }
-  
-  //     return updatedData;
-  //   });
-  
-    
-  //   setSelectedButtonRow(index);
-  //   setSelectedButtonStatus(status);
-  // };
-   
+     
   const handleButtonClick = (status, index) => {
     setEditedData((prevState) => {
       const updatedData = [...prevState];
@@ -144,24 +108,24 @@ const Banking = () => {
         };
       }
   
-      // Ensure the row exists in updatedData
+      
       if (!updatedData[index]) {
         updatedData[index] = { depositwithdrawStatus: "", highlightFull: false };
       }
 
      
 
-      // If switching between "W" and "D", clear the previous selection
+      
       if (updatedData[index].depositwithdrawStatus && updatedData[index].depositwithdrawStatus !== status) {
-        updatedData[index].depositwithdrawStatus = ""; // Clear previous selection before setting new one
+        updatedData[index].depositwithdrawStatus = ""; 
       }
   
-      // Toggle selection for "W" and "D"
+      
       updatedData[index] = {
         ...updatedData[index],
         depositwithdrawStatus:
-          updatedData[index].depositwithdrawStatus === status ? "" : status, // Unselect if the same button is clicked again
-        highlightFull: status === "W" ? true : false, // Highlight if "W" is selected, unhighlight otherwise
+          updatedData[index].depositwithdrawStatus === status ? "" : status,
+        highlightFull: status === "W" ? true : false, 
       };
 	  
       
