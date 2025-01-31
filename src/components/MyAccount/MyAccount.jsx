@@ -1,27 +1,25 @@
-
-
 import { ClipLoader } from "react-spinners";
-import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import MyProfile from './MyProfile';
-import AccountStatement from './AccountStatement';
-import ActivityLog from './ActivityLog';
-import EventProfitLoss from '../MyReport/EventProfitLoss';
-import BetList from '../BetList/BetList';
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import MyProfile from "./MyProfile";
+import AccountStatement from "./AccountStatement";
+import ActivityLog from "./ActivityLog";
+import EventProfitLoss from "../MyReport/EventProfitLoss";
+import BetList from "../BetList/BetList";
 
 const MyAccount = () => {
   const location = useLocation();
   const selectedUser = location.state?.selectedUser;
-  const initialPage = location.state?.selectedPage || 'myProfile';
+  const initialPage = location.state?.selectedPage || "myProfile";
 
   const [selectedPage, setSelectedPage] = useState(initialPage);
   const [loading, setLoading] = useState(false);
 
-  const role_name=location.state?.selectedUser?.role_name;
-  console.log(role_name)
+  const role_name = location.state?.selectedUser?.role_name;
+  console.log(role_name);
 
-  const Userid= location.state?.selectedUser?._id;
-  console.log(Userid)
+  const Userid = location.state?.selectedUser?._id;
+  console.log(Userid);
 
   useEffect(() => {
     if (loading) {
@@ -34,7 +32,7 @@ const MyAccount = () => {
   }, [loading]);
 
   const handleSelection = (page) => {
-    console.log('Page Selected:', page); 
+    console.log("Page Selected:", page);
     setLoading(true);
     setSelectedPage(page);
   };
@@ -42,7 +40,7 @@ const MyAccount = () => {
   let content;
   switch (selectedPage) {
     case "myProfile":
-      content = <MyProfile Userid={Userid} Role={role_name}/>;
+      content = <MyProfile key={Userid} Userid={Userid} Role={role_name} />;
       break;
     case "accountStatement":
       content = <AccountStatement />;
@@ -50,18 +48,19 @@ const MyAccount = () => {
     case "activityLog":
       content = <ActivityLog />;
       break;
-    case 'bethistory':
+    case "bethistory":
       content = <BetList />;
       break;
-    case 'profitLoss':
+    case "profitLoss":
       content = <EventProfitLoss />;
       break;
     default:
       content = <MyProfile Userid={Userid} Role={role_name} />;
   }
 
-  
-  const containerHeight = selectedUser ? 'max-h-[calc(5.3*2.6rem)]' : 'max-h-[calc(3.5*2.6rem)]';
+  const containerHeight = selectedUser
+    ? "max-h-[calc(5.3*2.6rem)]"
+    : "max-h-[calc(3.5*2.6rem)]";
 
   return (
     <div className="md:flex sm:0 justify-center mt-6">
@@ -77,14 +76,18 @@ const MyAccount = () => {
         </div>
       ) : (
         <>
-          <div className={`sm:w-1/4 border border-gray-400 mx-4 sm:mx-8 bg-white ${containerHeight} overflow-hidden mb-3`}>
+          <div
+            className={`sm:w-1/4 border border-gray-400 mx-4 sm:mx-8 bg-white ${containerHeight} overflow-hidden mb-3`}
+          >
             <h2 className="text-sm text-white bg-gradient-seablue font-custom font-bold py-2 px-4">
               My Account
             </h2>
 
             <div className="w-full border-collapse">
               <div
-                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === "myProfile" ? "font-custom bg-bluehover" : ""}`}
+                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${
+                  selectedPage === "myProfile" ? "font-custom bg-bluehover" : ""
+                }`}
                 onClick={() => handleSelection("myProfile")}
               >
                 <div className="flex justify-between py-2 px-4 text-sm font-custom">
@@ -92,20 +95,27 @@ const MyAccount = () => {
                 </div>
               </div>
 
-                         
-              {selectedUser && role_name === "user" &&  (
+              {selectedUser && role_name === "user" && (
                 <>
                   <div
-                    className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === 'bethistory' ? 'font-custom bg-bluehover' : ''}`}
-                    onClick={() => handleSelection('bethistory')}
+                    className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${
+                      selectedPage === "bethistory"
+                        ? "font-custom bg-bluehover"
+                        : ""
+                    }`}
+                    onClick={() => handleSelection("bethistory")}
                   >
                     <div className="flex justify-between py-2 px-4 text-sm">
                       <span>Bet History</span>
                     </div>
                   </div>
                   <div
-                    className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === 'profitLoss' ? 'font-custom bg-bluehover' : ''}`}
-                    onClick={() => handleSelection('profitLoss')}
+                    className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${
+                      selectedPage === "profitLoss"
+                        ? "font-custom bg-bluehover"
+                        : ""
+                    }`}
+                    onClick={() => handleSelection("profitLoss")}
                   >
                     <div className="flex justify-between py-2 px-4 text-sm">
                       <span>Profit & Loss</span>
@@ -114,8 +124,12 @@ const MyAccount = () => {
                 </>
               )}
 
-<div
-                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${selectedPage === "accountStatement" ? "font-custom bg-bluehover" : ""}`}
+              <div
+                className={`cursor-pointer text-left border-b border-gray-300 hover:bg-lime ${
+                  selectedPage === "accountStatement"
+                    ? "font-custom bg-bluehover"
+                    : ""
+                }`}
                 onClick={() => handleSelection("accountStatement")}
               >
                 <div className="flex justify-between py-2 px-4 text-sm font-custom">
@@ -124,14 +138,17 @@ const MyAccount = () => {
               </div>
 
               <div
-                className={`cursor-pointer text-left  border-b border-gray-300 hover:bg-lime ${selectedPage === "activityLog" ? "font-custom bg-bluehover" : ""}`}
+                className={`cursor-pointer text-left  border-b border-gray-300 hover:bg-lime ${
+                  selectedPage === "activityLog"
+                    ? "font-custom bg-bluehover"
+                    : ""
+                }`}
                 onClick={() => handleSelection("activityLog")}
               >
                 <div className="flex justify-between py-2 px-4 text-sm font-custom">
                   <span>Activity Log</span>
                 </div>
               </div>
-
             </div>
           </div>
 

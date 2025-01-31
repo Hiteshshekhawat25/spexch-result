@@ -16,45 +16,44 @@ import RollingCommisionModal from "../Modal/RollingCommisionModal";
 import AgentRollingCommisionModal from "../Modal/AgentRollingCommisionModal";
 import ChangePasswordModal from "../Modal/ChangePasswordModal";
 import EditRollingCommissionModal from "../Modal/EditRollingCommisionModal";
-import EditCommissionModal from  "../Modal/EditCommisionModal";
+import EditCommissionModal from "../Modal/EditCommisionModal";
 import EditExposureLimitModal from "../Modal/EditExposureLimitModal";
 
-const MyProfile = ({ Userid , Role }) => {
+const MyProfile = ({ Userid, Role }) => {
   const dispatch = useDispatch();
   const profile = useSelector(selectProfileData);
   const profileStatus = useSelector(selectProfileStatus);
   const profileError = useSelector(selectProfileError);
 
-  
   const [isRollingModalOpen, setIsRollingModalOpen] = useState(false);
   const [isAgentRollingModalOpen, setIsAgentRollingModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState(false);
   const [isEditRollingModalOpen, setIsEditRollingModalOpen] = useState(false);
-  const [isEditExposureLimitModalOpen, setIsEditExposureLimitModalOpen] = useState(false);
-  const [isEditCommissionModalOpen, setIsEditCommissionModalOpen] = useState(false);
+  const [isEditExposureLimitModalOpen, setIsEditExposureLimitModalOpen] =
+    useState(false);
+  const [isEditCommissionModalOpen, setIsEditCommissionModalOpen] =
+    useState(false);
   const [modalData, setModalData] = useState(null);
 
   console.log("Userid passed to MyProfile:", Userid);
-  console.log("Role",Role)
-  
-const ID = Userid || JSON.parse(localStorage.getItem("userData"))?.data?._id;
-console.log("Final ID being used:", ID);
+  console.log("Role", Role);
+
+  const ID = Userid || JSON.parse(localStorage.getItem("userData"))?.data?._id;
+  console.log("Final ID being used:", ID);
 
   useEffect(() => {
-
-   
-    if (profileStatus === "idle") {
+    if (ID) {
       console.log("Setting profile to loading...");
       dispatch(setProfileLoading());
-
+  
       const fetchProfileData = async () => {
         try {
-                    const response = await getUserData(`user/get-user/${ID}`);
+          const response = await getUserData(`user/get-user/${ID}`);
           console.log("API Response:", response.data);
-
+  
           dispatch(updateProfile(response.data.data));
-
+  
           dispatch(setRollingCommission(response.data.rollingCommission));
           dispatch(
             setAgentRollingCommission({
@@ -62,7 +61,7 @@ console.log("Final ID being used:", ID);
               commissionRates: response.data.agentRollingCommission,
             })
           );
-
+  
           setModalData(response.data.data);
         } catch (error) {
           console.error("Fetch Profile Error:", error);
@@ -71,10 +70,10 @@ console.log("Final ID being used:", ID);
           );
         }
       };
-
+  
       fetchProfileData();
     }
-  }, [profileStatus, dispatch, ID]);
+  }, [ID, dispatch]); // Add ID to the dependency array
   // Handle loading and error states
   if (profileStatus === "loading") {
     return <div>Loading...</div>;
@@ -94,38 +93,35 @@ console.log("Final ID being used:", ID);
   const handleOpenEditRollingModal = () => {
     if (modalData) {
       console.log("Edit button clicked!");
-      setIsEditRollingModalOpen(true); 
+      setIsEditRollingModalOpen(true);
     }
   };
-
 
   const handleOpenEditExposureModal = () => {
     if (modalData) {
       console.log("Edit button clicked!");
-      setIsEditExposureLimitModalOpen(true); 
+      setIsEditExposureLimitModalOpen(true);
     }
   };
 
   const handleOpenEditCommissionModal = () => {
     if (modalData) {
       console.log("Edit button clicked!");
-      setIsEditCommissionModalOpen(true); 
+      setIsEditCommissionModalOpen(true);
     }
   };
 
-
-
-  
   const handleOpenAgentRollingModal = () => {
     if (modalData) {
       setIsAgentRollingModalOpen(true);
     }
   };
 
-  
   const handleOpenChangePasswordModal = () => {
     setIsChangePasswordModalOpen(true);
   };
+
+  
 
   return (
     <div className="border border-gray-400 rounded-lg bg-white shadow-sm">
@@ -144,13 +140,13 @@ console.log("Final ID being used:", ID);
           <span className="font-custom w-48">Commission</span>
           <span className="text-left ml-4">{profile.commission}%</span>
           {Userid && (
-    <span className="text-left ml-4 flex items-center">
-      <FaEdit
-        className="ml-2 text-blue cursor-pointer"
-        onClick={handleOpenEditCommissionModal}
-      />
-    </span>
-  )}
+            <span className="text-left ml-4 flex items-center">
+              <FaEdit
+                className="ml-2 text-blue cursor-pointer"
+                onClick={handleOpenEditCommissionModal}
+              />
+            </span>
+          )}
         </div>
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Rolling Commission</span>
@@ -168,32 +164,31 @@ console.log("Final ID being used:", ID);
           </span>
         </div>
         {Role !== "user" && (
-        <div className="flex border-b py-3 px-4">
-          <span className="font-custom w-48">Agent Rolling Commission</span>
-          <span className="text-left ml-4 flex items-center">
-            <FaEye
-              className="ml-2 text-blue cursor-pointer"
-              onClick={handleOpenAgentRollingModal}
-            />
-          </span>
-        </div>
+          <div className="flex border-b py-3 px-4">
+            <span className="font-custom w-48">Agent Rolling Commission</span>
+            <span className="text-left ml-4 flex items-center">
+              <FaEye
+                className="ml-2 text-blue cursor-pointer"
+                onClick={handleOpenAgentRollingModal}
+              />
+            </span>
+          </div>
         )}
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Currency</span>
           <span className="text-left ml-4">IRP{profile.currency}</span>
-          
         </div>
 
         {Role === "user" && (
-  <div className="flex border-b py-3 px-4">
-    <span className="font-custom w-48">Exposure Limit</span>
-    <span className="text-left ml-4">{profile.exposureLimit}</span>
-    <FaRegEdit
+          <div className="flex border-b py-3 px-4">
+            <span className="font-custom w-48">Exposure Limit</span>
+            <span className="text-left ml-4">{profile.exposureLimit}</span>
+            <FaRegEdit
               className="text-blue cursor-pointer"
               onClick={handleOpenEditExposureModal}
             />
-  </div>
-)}
+          </div>
+        )}
         <div className="flex border-b py-3 px-4">
           <span className="font-custom w-48">Partnership</span>
           <span className="text-left ml-4">{profile.partnership}</span>
@@ -243,8 +238,7 @@ console.log("Final ID being used:", ID);
         />
       )}
 
-
-{isEditCommissionModalOpen && modalData && (
+      {isEditCommissionModalOpen && modalData && (
         <EditCommissionModal
           username={modalData.username}
           userId={ID}
@@ -261,19 +255,18 @@ console.log("Final ID being used:", ID);
           onCancel={() => setIsChangePasswordModalOpen(false)}
         />
       )}
-     {isEditExposureLimitModalOpen && modalData && (
-  <EditExposureLimitModal
-    username={modalData.username}
-    currentExposureLimit={modalData.exposureLimit}
-    userId={ID}
-    onCancel={() =>  setIsEditExposureLimitModalOpen(false)}// Close modal handler
-    onSubmit={(updatedData) => {
-      console.log("Updated Exposure Data:", updatedData);
-      setIsEditCommissionModalOpen(false);
-    }}
-  />
-)}
-                
+      {isEditExposureLimitModalOpen && modalData && (
+        <EditExposureLimitModal
+          username={modalData.username}
+          currentExposureLimit={modalData.exposureLimit}
+          userId={ID}
+          onCancel={() => setIsEditExposureLimitModalOpen(false)} // Close modal handler
+          onSubmit={(updatedData) => {
+            console.log("Updated Exposure Data:", updatedData);
+            setIsEditCommissionModalOpen(false);
+          }}
+        />
+      )}
     </div>
   );
 };
