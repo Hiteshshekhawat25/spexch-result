@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { IoClose,IoEye, IoEyeOff } from "react-icons/io5";
 import { toast } from "react-toastify";
+import { FaLock ,FaCheckCircle} from "react-icons/fa";
+import { AiOutlineStop } from "react-icons/ai";
 
 import {
   resetStatusState,
@@ -198,61 +200,36 @@ const AccountStatus = ({
           </div>
 
           {/* Status Buttons */}
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 px-4 space-x-4">
+           
             <div
-              onClick={() => handleStatusChange("active")}
-              className={`flex flex-col items-center justify-center w-1/3 p-4 rounded-lg cursor-pointer ${
-                status === "active"
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className="w-8 h-8 mb-2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 0C5.372 0 0 5.373 0 12s5.372 12 12 12 12-5.373 12-12S18.628 0 12 0zm5.707 8.293l-6.707 6.707L6.293 10.293l1.414-1.414L11 10.586l5.293-5.293 1.414 1.414z" />
-              </svg>
-              <span className="font-medium">Active</span>
-            </div>
-            <div
-              onClick={() => handleStatusChange("suspended")}
-              className={`flex flex-col items-center justify-center w-1/3 p-4 rounded-lg cursor-pointer ${
-                status === "suspended"
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className="w-8 h-8 mb-2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 0C5.372 0 0 5.373 0 12s5.372 12 12 12 12-5.373 12-12S18.628 0 12 0zm-1 6h2v6h-2zm1 12c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5z" />
-              </svg>
-              <span className="font-custom font-medium">Suspend</span>
-            </div>
-            <div
-              onClick={() => handleStatusChange("locked")}
-              className={`flex flex-col items-center justify-center w-1/3 p-4 rounded-lg cursor-pointer ${
-                status === "locked"
-                  ? "bg-gray-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className="w-8 h-8 mb-2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2C9.243 2 7 4.243 7 7v3h2V7c0-1.654 1.346-3 3-3s3 1.346 3 3v3h2V7c0-2.757-2.243-5-5-5zm4 9H8c-1.103 0-2 .897-2 2v6c0 1.103.897 2 2 2h8c1.103 0 2-.897 2-2v-6c0-1.103-.897-2-2-2zm-4 6c-.828 0-1.5-.672-1.5-1.5S11.172 14 12 14s1.5.672 1.5 1.5S12.828 17 12 17z" />
-              </svg>
-              <span className="font-custom font-medium">Locked</span>
-            </div>
+  onClick={() => handleStatusChange("active")}
+  className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
+    ${
+      status === "active"
+        ? "bg-white text-green-500 border-green-500"
+        : "bg-white text-green-300 border-green-300"
+    }`}
+>
+<FaCheckCircle className={`w-8 h-8 mb-2 ${status === "active" ? "text-green-500" : "text-green-300"}`} />
+  <span className="font-medium">Active</span>
+</div>
+<div
+  onClick={() => handleStatusChange("suspended")}
+  className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
+    ${status === "suspended" ? "bg-white text-red-500 border-red-500" : "bg-white text-red-300 border-red-300"}`}
+>
+  <AiOutlineStop className={`w-8 h-8 mb-2 ${status === "suspended" ? "text-red-500" : "text-red-300"}`} />
+  <span className="font-custom font-medium">Suspend</span>
+</div>
+<div
+  onClick={() => handleStatusChange("locked")}
+  className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
+    ${status === "locked" ? "bg-white text-gray-600 border-gray-600" : "bg-white text-gray-300 border-gray-300"}`}
+>
+  <FaLock className={`w-8 h-8 mb-2 ${status === "locked" ? "text-gray-500" : "text-whiteGray"}`} />
+  <span className="font-custom font-medium">Locked</span>
+</div>
           </div>
 
           <div className="w-full md:w-auto flex flex-col md:flex-row items-center md:space-x-4">
@@ -281,7 +258,7 @@ const AccountStatus = ({
     onClick={handleSubmit}
     disabled={!password}
     className={`w-full md:w-64 py-2 px-4 font-custom font-bold rounded-lg mt-4 md:mt-0
-      ${password ? "bg-red-500" : "bg-ashGray"} text-white`}
+      ${password ? "bg-gradient-seablue" : "bg-ashGray"} text-white`}
   >
     Change
   </button>
