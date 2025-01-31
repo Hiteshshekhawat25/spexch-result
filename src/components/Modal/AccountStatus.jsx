@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5";
+import { IoClose,IoEye, IoEyeOff } from "react-icons/io5";
 import { toast } from "react-toastify";
+import { FaLock ,FaCheckCircle} from "react-icons/fa";
+import { AiOutlineStop } from "react-icons/ai";
+
 import {
   resetStatusState,
   updateUserStatusThunk,
@@ -24,6 +27,7 @@ const AccountStatus = ({
   const [status, setStatus] = useState("active");
   const [password, setPassword] = useState("");
   const [userName, setUserName] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [roles, setRoles] = useState([]);
   const dispatch = useDispatch();
   const { error, successMessage } = useSelector((state) => state.accountStatus);
@@ -142,7 +146,7 @@ const AccountStatus = ({
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-12">
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-3">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-sm font-custom font-semibold w-full p-2">
           <span>Change Status</span>
           <IoClose
             onClick={onClose}
@@ -155,9 +159,9 @@ const AccountStatus = ({
           <div className="flex justify-between items-center mb-4">
             {/* Amount Field */}
             <div className="flex justify-between">
-              <div>
+              <div className="text-xs">
                 <span
-                  className="bg-green-500 text-white px-1 py-1 mr-1 rounded  font-custom font-bold text-l"
+                  className="bg-green-500 text-white px-1 py-1 mr-1 rounded  font-custom font-bold text-xs"
                   // onClick={() => handleUsernameList(item)}
                 >
                   {user.role_name.toUpperCase()}
@@ -165,114 +169,101 @@ const AccountStatus = ({
                 {user.username}
               </div>
             </div>
-            {/* <div className="font-medium text-lg font-bold">
-              <span className="bg-green-500 text-white px-2 py-1 mr-1 rounded">
-                User
-              </span>
-              {userName}
-            </div> */}
             <div
-              className={`text-${
-                status === "active"
-                  ? "green"
-                  : status === "suspended"
-                  ? "red"
-                  : "gray"
-              }-500`}
-            >
-              {status === "active"
-                ? "Active"
-                : status === "suspended"
-                ? "Suspended"
-                : "Locked"}
-            </div>
+  className={`px-1 border rounded-sm text-center text-bold text-${
+    status === "active"
+      ? "green"
+      : status === "suspended"
+      ? "red"
+      : "gray"
+  }-500 bg-${
+    status === "active"
+      ? "green"
+      : status === "suspended"
+      ? "red"
+      : "gray"
+  }-100 border-${
+    status === "active"
+      ? "green"
+      : status === "suspended"
+      ? "red"
+      : "gray"
+  }-500`}
+>
+  {status === "active"
+    ? "active"
+    : status === "suspended"
+    ? "suspended"
+    : "locked"}
+</div>
+
           </div>
 
           {/* Status Buttons */}
-          <div className="flex justify-between mb-4">
+          <div className="flex justify-between mb-4 px-4 space-x-4">
+           
             <div
-              onClick={() => handleStatusChange("active")}
-              className={`flex flex-col items-center justify-center w-1/3 p-4 rounded-lg cursor-pointer ${
-                status === "active"
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className="w-8 h-8 mb-2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 0C5.372 0 0 5.373 0 12s5.372 12 12 12 12-5.373 12-12S18.628 0 12 0zm5.707 8.293l-6.707 6.707L6.293 10.293l1.414-1.414L11 10.586l5.293-5.293 1.414 1.414z" />
-              </svg>
-              <span className="font-medium">Active</span>
-            </div>
-            <div
-              onClick={() => handleStatusChange("suspended")}
-              className={`flex flex-col items-center justify-center w-1/3 p-4 rounded-lg cursor-pointer ${
-                status === "suspended"
-                  ? "bg-red-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className="w-8 h-8 mb-2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 0C5.372 0 0 5.373 0 12s5.372 12 12 12 12-5.373 12-12S18.628 0 12 0zm-1 6h2v6h-2zm1 12c-.828 0-1.5-.672-1.5-1.5s.672-1.5 1.5-1.5 1.5.672 1.5 1.5-.672 1.5-1.5 1.5z" />
-              </svg>
-              <span className="font-custom font-medium">Suspend</span>
-            </div>
-            <div
-              onClick={() => handleStatusChange("locked")}
-              className={`flex flex-col items-center justify-center w-1/3 p-4 rounded-lg cursor-pointer ${
-                status === "locked"
-                  ? "bg-gray-500 text-white"
-                  : "bg-gray-200 text-gray-700"
-              }`}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor"
-                className="w-8 h-8 mb-2"
-                viewBox="0 0 24 24"
-              >
-                <path d="M12 2C9.243 2 7 4.243 7 7v3h2V7c0-1.654 1.346-3 3-3s3 1.346 3 3v3h2V7c0-2.757-2.243-5-5-5zm4 9H8c-1.103 0-2 .897-2 2v6c0 1.103.897 2 2 2h8c1.103 0 2-.897 2-2v-6c0-1.103-.897-2-2-2zm-4 6c-.828 0-1.5-.672-1.5-1.5S11.172 14 12 14s1.5.672 1.5 1.5S12.828 17 12 17z" />
-              </svg>
-              <span className="font-custom font-medium">Locked</span>
-            </div>
+  onClick={() => handleStatusChange("active")}
+  className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
+    ${
+      status === "active"
+        ? "bg-white text-green-500 border-green-500"
+        : "bg-white text-green-300 border-green-300"
+    }`}
+>
+<FaCheckCircle className={`w-8 h-8 mb-2 ${status === "active" ? "text-green-500" : "text-green-300"}`} />
+  <span className="font-medium">Active</span>
+</div>
+<div
+  onClick={() => handleStatusChange("suspended")}
+  className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
+    ${status === "suspended" ? "bg-white text-red-500 border-red-500" : "bg-white text-red-300 border-red-300"}`}
+>
+  <AiOutlineStop className={`w-8 h-8 mb-2 ${status === "suspended" ? "text-red-500" : "text-red-300"}`} />
+  <span className="font-custom font-medium">Suspend</span>
+</div>
+<div
+  onClick={() => handleStatusChange("locked")}
+  className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
+    ${status === "locked" ? "bg-white text-gray-600 border-gray-600" : "bg-white text-gray-300 border-gray-300"}`}
+>
+  <FaLock className={`w-8 h-8 mb-2 ${status === "locked" ? "text-gray-500" : "text-whiteGray"}`} />
+  <span className="font-custom font-medium">Locked</span>
+</div>
           </div>
 
-          <div className="flex items-center mb-6 space-x-4">
-            {/* Password Field */}
-            <div className="flex-1">
-              <label
-                htmlFor="password"
-                className="block text-sm font-custom font-medium mb-1"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                value={password}
-                onChange={handlePasswordChange}
-                className="w-full p-2 border border-gray-300 rounded-lg"
-                // placeholder="Enter Password"
-              />
-            </div>
+          <div className="w-full md:w-auto flex flex-col md:flex-row items-center md:space-x-4">
+  {/* Password Field */}
+  <div className="flex-1 relative w-full md:w-auto">
+    
+    
+    <input
+      type={showPassword ? "text" : "password"}
+      id="password"
+      placeholder="Password..."
+      value={password}
+      onChange={handlePasswordChange}
+      className="w-full md:w-64 p-2 border border-gray-300 rounded-lg"
+    />
+    <span
+      onClick={() => setShowPassword(!showPassword)}
+      className="absolute right-2 top-5 transform -translate-y-1/2 cursor-pointer text-blue"
+    >
+      {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+    </span>
+  </div>
 
-            {/* Submit Button */}
-            <button
-              onClick={handleSubmit}
-              className="py-2 px-4 bg-NavyBlue text-white font-custom font-medium rounded-lg mt-5"
-            >
-              Change Status
-            </button>
-          </div>
+  {/* Submit Button */}
+  <button
+    onClick={handleSubmit}
+    disabled={!password}
+    className={`w-full md:w-64 py-2 px-4 font-custom font-bold rounded-lg mt-4 md:mt-0
+      ${password ? "bg-gradient-seablue" : "bg-ashGray"} text-white`}
+  >
+    Change
+  </button>
+</div>
+
         </div>
       </div>
     </div>
