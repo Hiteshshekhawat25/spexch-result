@@ -16,6 +16,7 @@ const AccountStatementFilter = ({
   currentPage,
   setIsDataFetched,
   setCurrentPage,
+  Userid,
 }) => {
   const dispatch = useDispatch();
   const { dataSource, fromDate, toDate } = useSelector(
@@ -32,7 +33,6 @@ const AccountStatementFilter = ({
 
   useEffect(() => {
     if (!dataSource) {
-      // Set default data source to "live" and default dates to today
       dispatch(setDataSource("live"));
       dispatch(setFromDate(today));
       dispatch(setToDate(today));
@@ -73,7 +73,10 @@ const AccountStatementFilter = ({
     }
 
     try {
-      const url = `user/get-transaction?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&dataSource=${dataSource}`;
+      // const url = `user/get-transaction?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&dataSource=${dataSource}`;
+      const url = Userid
+        ? `user/get-transaction?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&dataSource=${dataSource}&userId=${Userid}`
+        : `user/get-transaction?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&dataSource=${dataSource}`;
       const response = await getAccountStatementData(url);
 
       if (response?.data) {
@@ -86,7 +89,7 @@ const AccountStatementFilter = ({
         setIsDataFetched(false);
       }
     } catch (error) {
-      console.error("Error fetching account statement data:", error);
+      // console.error("Error fetching account statement data:", error);
       setIsDataFetched(false);
     }
   };

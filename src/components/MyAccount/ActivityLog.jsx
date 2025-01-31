@@ -31,7 +31,7 @@ const ActivityLog = () => {
           const response = await getUserData(
             `user/login-activity/${userId}?page=${currentPage}&limit=${entriesToShow}`
           );
-          console.log(response.data);
+          // console.log(response.data);
           dispatch(
             setActivityLogs({
               logs: response.data.data,

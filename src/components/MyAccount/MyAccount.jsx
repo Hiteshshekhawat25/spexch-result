@@ -16,10 +16,10 @@ const MyAccount = () => {
   const [loading, setLoading] = useState(false);
 
   const role_name = location.state?.selectedUser?.role_name;
-  console.log(role_name);
+  // console.log(role_name);
 
   const Userid = location.state?.selectedUser?._id;
-  console.log(Userid);
+  // console.log(Userid);
 
   useEffect(() => {
     if (loading) {
@@ -32,7 +32,7 @@ const MyAccount = () => {
   }, [loading]);
 
   const handleSelection = (page) => {
-    console.log("Page Selected:", page);
+    // console.log("Page Selected:", page);
     setLoading(true);
     setSelectedPage(page);
   };
@@ -43,7 +43,9 @@ const MyAccount = () => {
       content = <MyProfile key={Userid} Userid={Userid} Role={role_name} />;
       break;
     case "accountStatement":
-      content = <AccountStatement />;
+      content = (
+        <AccountStatement key={Userid} Userid={Userid} Role={role_name} />
+      );
       break;
     case "activityLog":
       content = <ActivityLog />;

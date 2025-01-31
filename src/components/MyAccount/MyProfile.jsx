@@ -18,6 +18,7 @@ import ChangePasswordModal from "../Modal/ChangePasswordModal";
 import EditRollingCommissionModal from "../Modal/EditRollingCommisionModal";
 import EditCommissionModal from "../Modal/EditCommisionModal";
 import EditExposureLimitModal from "../Modal/EditExposureLimitModal";
+import { ClipLoader } from "react-spinners";
 
 const MyProfile = ({ Userid, Role }) => {
   const dispatch = useDispatch();
@@ -46,14 +47,14 @@ const MyProfile = ({ Userid, Role }) => {
     if (ID) {
       console.log("Setting profile to loading...");
       dispatch(setProfileLoading());
-  
+
       const fetchProfileData = async () => {
         try {
           const response = await getUserData(`user/get-user/${ID}`);
           console.log("API Response:", response.data);
-  
+
           dispatch(updateProfile(response.data.data));
-  
+
           dispatch(setRollingCommission(response.data.rollingCommission));
           dispatch(
             setAgentRollingCommission({
@@ -61,7 +62,7 @@ const MyProfile = ({ Userid, Role }) => {
               commissionRates: response.data.agentRollingCommission,
             })
           );
-  
+
           setModalData(response.data.data);
         } catch (error) {
           console.error("Fetch Profile Error:", error);
@@ -70,13 +71,16 @@ const MyProfile = ({ Userid, Role }) => {
           );
         }
       };
-  
+
       fetchProfileData();
     }
-  }, [ID, dispatch]); // Add ID to the dependency array
-  // Handle loading and error states
+  }, [ID, dispatch]);
   if (profileStatus === "loading") {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <ClipLoader />
+      </div>
+    );
   }
 
   if (profileStatus === "failed") {
@@ -120,8 +124,6 @@ const MyProfile = ({ Userid, Role }) => {
   const handleOpenChangePasswordModal = () => {
     setIsChangePasswordModalOpen(true);
   };
-
-  
 
   return (
     <div className="border border-gray-400 rounded-lg bg-white shadow-sm">

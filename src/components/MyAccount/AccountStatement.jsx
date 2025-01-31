@@ -3,7 +3,7 @@ import AccountStatementFilter from "./AccountStatementFilter";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { useSelector } from "react-redux";
 
-const AccountStatement = () => {
+const AccountStatement = ({ Userid }) => {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalTransactions, setTotalTransactions] = useState(0);
@@ -14,7 +14,7 @@ const AccountStatement = () => {
     key: "createdAt", // Default sort by date
     direction: "ascending",
   });
-  const { userData} = useSelector((state) => state.user);
+  const { userData } = useSelector((state) => state.user);
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
@@ -48,8 +48,9 @@ const AccountStatement = () => {
   });
 
   useEffect(() => {
-    // Handle actions when currentPage changes
-  }, [currentPage]);
+    // Fetch data when currentPage or Userid changes
+    // fetchData();
+  }, [currentPage, Userid]);
 
   const formatDateTime = (date) => {
     const formattedDate = new Date(date).toLocaleDateString("en-GB", {
@@ -76,6 +77,7 @@ const AccountStatement = () => {
         currentPage={currentPage}
         setIsDataFetched={setIsDataFetched}
         setCurrentPage={setCurrentPage}
+        Userid={Userid}
       />
 
       <div className="border border-gray-300 rounded-md bg-white">
@@ -85,7 +87,9 @@ const AccountStatement = () => {
 
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
-            <label className="mr-2 text-sm font-custom font-medium text-black">Show</label>
+            <label className="mr-2 text-sm font-custom font-medium text-black">
+              Show
+            </label>
             <select
               value={entriesToShow}
               onChange={(e) => {
@@ -125,31 +129,31 @@ const AccountStatement = () => {
                   >
                     <div className="flex justify-between items-center">
                       <span className="text-center">{label}</span>
-                      
+
                       <div className="flex flex-col items-center ml-2">
-                      <FaSortUp
-                        className={`${
-                          sortConfig.key === key &&
-                          sortConfig.direction === "ascending"
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                        style={{
-                          marginBottom: "-6px",
-                        }} 
-                      />
-                      <FaSortDown
-                        className={`${
-                          sortConfig.key === key &&
-                          sortConfig.direction === "descending"
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                        style={{
-                          marginTop: "-6px",
-                        }} 
-                      />
-                    </div>
+                        <FaSortUp
+                          className={`${
+                            sortConfig.key === key &&
+                            sortConfig.direction === "ascending"
+                              ? "text-black"
+                              : "text-gray-400"
+                          }`}
+                          style={{
+                            marginBottom: "-6px",
+                          }}
+                        />
+                        <FaSortDown
+                          className={`${
+                            sortConfig.key === key &&
+                            sortConfig.direction === "descending"
+                              ? "text-black"
+                              : "text-gray-400"
+                          }`}
+                          style={{
+                            marginTop: "-6px",
+                          }}
+                        />
+                      </div>
                     </div>
                   </th>
                 ))}
@@ -173,8 +177,8 @@ const AccountStatement = () => {
                       {item.currentMainWallet}
                     </td>
                     <td className="px-4 py-3 text-sm text-center">
-  {item.description || userData?.data?.username}
-</td>
+                      {item.description || userData?.data?.username}
+                    </td>
                     <td className="px-4 py-3 text-sm text-center">
                       {item.from_To}
                     </td>
@@ -191,8 +195,7 @@ const AccountStatement = () => {
           </table>
         </div>
         <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
-        <div className="text-sm text-gray-600 mb-2 sm:mb-0">
-        
+          <div className="text-sm text-gray-600 mb-2 sm:mb-0">
             Showing {(currentPage - 1) * entriesToShow + 1} to{" "}
             {Math.min(currentPage * entriesToShow, totalTransactions)} of{" "}
             {totalTransactions} entries
