@@ -462,14 +462,17 @@ const DownlineList = () => {
   };
 
   const handleUsernameList = async (item) => {
-    console.log("it is to fetch nested users", item);
-    if (item.role_name === "master") {
-      try {
+    // console.log("Fetching nested users for:", item);
+    try {
+      if (item.role_name === "master") {
         const data = await fetchallUsers(item._id);
         setUserFetchList(data);
-      } catch (error) {
-        console.error("Error fetching details:", error);
+      } else if (item.role_name === "agent") {
+        const data = await fetchallUsers(item._id);
+        setUserFetchList(data);
       }
+    } catch (error) {
+      console.error("Error fetching details:", error);
     }
   };
 
@@ -737,7 +740,7 @@ const DownlineList = () => {
                                   : ""
                               }`}
                             >
-                              {item.role_name.toUpperCase()}
+                              {item.role_name?.toUpperCase()}
                             </span>
                             <span className="text-black font-custom font-semibold">
                               {item.username}
