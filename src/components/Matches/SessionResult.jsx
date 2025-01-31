@@ -149,7 +149,7 @@ const SessionResult = () => {
             className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
           >
             <option value="">Select Session</option>
-            {filteredSessions.map((session, index) => (
+            {filteredSessions.filter((session) => !session.result).map((session, index) => (
               <option key={index} value={session.marketId}>
                 {session.marketName}
               </option>
@@ -213,7 +213,7 @@ const SessionResult = () => {
             </tr>
           </thead>
           <tbody>
-            {selectedMatch ? sessions?.sessions?.length ? sessions?.sessions?.map((session, index) => (
+            {selectedMatch ? sessions?.sessions?.length ? sessions?.sessions .filter((session) => session.result) .map((session, index) => (
               <tr key={session?.marketId}>
                 <td className="px-4 py-2">{session.catagory}</td>
                 <td className="px-4 py-2">{session.marketName}</td>
