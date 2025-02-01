@@ -7,8 +7,9 @@ import {
   setActivityLogsError,
 } from "../../Store/Slice/activityLogSlice";
 import { getUserData } from "../../Services/Downlinelistapi";
+import { ClipLoader } from "react-spinners";
 
-const ActivityLog = () => {
+const ActivityLog = ({ Userid }) => {
   const dispatch = useDispatch();
   const logs = useSelector(selectActivityLogs);
   const activityLogsStatus = useSelector((state) => state.activityLog.status);
@@ -31,7 +32,6 @@ const ActivityLog = () => {
           const response = await getUserData(
             `user/login-activity/${userId}?page=${currentPage}&limit=${entriesToShow}`
           );
-          // console.log(response.data);
           dispatch(
             setActivityLogs({
               logs: response.data.data,
@@ -81,7 +81,11 @@ const ActivityLog = () => {
   };
 
   if (activityLogsStatus === "loading") {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <ClipLoader />
+      </div>
+    );
   }
 
   if (activityLogsStatus === "failed") {

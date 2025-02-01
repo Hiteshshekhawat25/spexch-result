@@ -66,7 +66,7 @@ export const AddClientForm = ({ closeModal }) => {
       } = formData;
 
       const isValid =
-        username &&
+        username.length >= 4 &&
         name &&
         commission &&
         openingBalance &&
@@ -127,10 +127,12 @@ export const AddClientForm = ({ closeModal }) => {
 
     if (name === "username") {
       const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, "");
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: sanitizedValue,
-      }));
+      if (sanitizedValue.length <= 4) {
+        setFormData((prevData) => ({
+          ...prevData,
+          [name]: sanitizedValue,
+        }));
+      }
       return;
     }
 
@@ -160,7 +162,12 @@ export const AddClientForm = ({ closeModal }) => {
   const validateForm = () => {
     let errors = {};
 
-    if (!formData.username) errors.username = "Username is required.";
+    if (!formData.username) {
+      errors.username = "Username is required.";
+    } else if (formData.username.length < 4) {
+      errors.username = "Username must be at least 4 characters long.";
+    }
+
     if (!formData.name) errors.name = "Name is required.";
     if (formData.commission < 0 || formData.commission > 100)
       errors.commission = "Commission must be between 0 and 100.";
@@ -168,8 +175,6 @@ export const AddClientForm = ({ closeModal }) => {
       errors.openingBalance = "Opening balance must be a positive number.";
     if (formData.creditReference < 0)
       errors.creditReference = "Credit reference must be a positive number.";
-    // if (!/^\d{10}$/.test(formData.mobileNumber))
-    //   errors.mobileNumber = "Mobile number must be 10 digits.";
     if (!formData.mobileNumber) {
       errors.mobileNumber = "Mobile number is required.";
     }
@@ -273,20 +278,25 @@ export const AddClientForm = ({ closeModal }) => {
           <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
             Username<span className="text-red-500">*</span>
           </label>
-
           <input
             type="text"
             name="username"
             value={formData.username}
             placeholder="Username..."
             onChange={handleChange}
-            // className="w-2/3 border p-1"
             className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
             required
           />
         </div>
+        {formData.username.length > 0 && formData.username.length < 4 && (
+          <div className="text-red-500 text-sm ml-[33%]">
+            Username must be at least 4 character
+          </div>
+        )}
         {formErrors.username && (
-          <div className="text-red-500">{formErrors.username}</div>
+          <div className="text-red-500 text-sm ml-[33%]">
+            {formErrors.username}
+          </div>
         )}
         <div className="flex flex-col md:flex-row justify-between">
           <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
@@ -429,9 +439,9 @@ export const AddClientForm = ({ closeModal }) => {
               className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               required
             />
-              {formErrors.confirmPassword && (
-          <div className="text-red-500">{formErrors.confirmPassword}</div>
-        )}
+            {formErrors.confirmPassword && (
+              <div className="text-red-500">{formErrors.confirmPassword}</div>
+            )}
             <span
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"

@@ -48,10 +48,10 @@ const MyAccount = () => {
       );
       break;
     case "activityLog":
-      content = <ActivityLog />;
+      content = <ActivityLog Userid={Userid} />;
       break;
     case "bethistory":
-      content = <BetList />;
+      content = <BetList Userid={Userid} Role={role_name} />;
       break;
     case "profitLoss":
       content = <EventProfitLoss />;

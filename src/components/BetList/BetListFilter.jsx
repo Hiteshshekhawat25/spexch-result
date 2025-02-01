@@ -18,6 +18,7 @@ const BetListFilter = ({
   currentPage,
   setIsDataFetched,
   setCurrentPage,
+  userID, // userID is passed as a prop
 }) => {
   const dispatch = useDispatch();
   const { type, sport, fromDate, toDate } = useSelector(selectBetListFilter);
@@ -57,7 +58,7 @@ const BetListFilter = ({
     try {
       const url = `user/get-bet-list?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&type=${type}${
         sport ? `&sport=${sport}` : ""
-      }`;
+      }${userID ? `&userId=${userID}` : ""}`;
       console.log("Fetching data with URL:", url);
 
       const response = await getBetlistData(url);
@@ -66,10 +67,10 @@ const BetListFilter = ({
         console.log("Fetched data:", response.data);
         const { pagination, data } = response.data;
 
-        setBetlistData(data); // Set the fetched data to the Parent state
-        setTotalBets(pagination?.totalBets || 0); // Update total transactions
-        setTotalPages(pagination?.totalPages || 1); // Update total pages
-        setIsDataFetched(true); // Mark that data has been fetched
+        setBetlistData(data);
+        setTotalBets(pagination?.totalBets || 0);
+        setTotalPages(pagination?.totalPages || 1);
+        setIsDataFetched(true);
       } else {
         console.error("No data found in response");
         setIsDataFetched(false);
@@ -80,13 +81,12 @@ const BetListFilter = ({
     }
   };
 
-  // Fetch data automatically when filters change
   useEffect(() => {
     if (fromDate && toDate) {
-      console.log("Fetching data due to filter change");
+      console.log("Fetching data due to filter change or userID update");
       handleGetHistory();
     }
-  }, [type, sport, fromDate, toDate, currentPage, entriesToShow]);
+  }, [type, sport, fromDate, toDate, currentPage, entriesToShow, userID]); // Add userID to the dependency array
 
   return (
     <div className="flex flex-wrap items-start space-y-4 sm:space-y-0 sm:space-x-4 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">

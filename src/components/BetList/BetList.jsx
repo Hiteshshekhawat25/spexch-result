@@ -12,7 +12,7 @@ import UserHierarchyModal from "../Modal/UserHierarchyModal";
 import BetListFilter from "./BetListFilter";
 import { ClipLoader } from "react-spinners";
 
-const BetList = () => {
+const BetList = ({ Userid }) => {
   const dispatch = useDispatch();
   const data = useSelector(selectBetListData);
   const loading = useSelector(selectBetListLoading);
@@ -120,6 +120,7 @@ const BetList = () => {
             currentPage={currentPage}
             setIsDataFetched={(isFetched) => console.log(isFetched)}
             setCurrentPage={setCurrentPage}
+            userID={Userid}
           />
 
           <div className="border border-gray-300 rounded-md bg-white">

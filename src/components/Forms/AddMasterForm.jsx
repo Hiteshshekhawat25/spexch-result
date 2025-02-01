@@ -112,7 +112,12 @@ export const AddMasterForm = ({ closeModal }) => {
   // Validatio
   const validate = () => {
     const newErrors = {};
-    if (!formData.username.trim()) newErrors.username = "Username is required.";
+    if (!formData.username.trim()) {
+      newErrors.username = "Username is required.";
+    } else if (formData.username.length < 4) {
+      newErrors.username = "Username must be at least 4 characters long.";
+    }
+
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.role) newErrors.role = "Role selection is required.";
     if (formData.commission < 0 || formData.commission > 100)
@@ -268,6 +273,11 @@ export const AddMasterForm = ({ closeModal }) => {
                 required
                 className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
+              {formData.username.length > 0 && formData.username.length < 4 && (
+                <div className="text-red-500 text-sm">
+                  Username must be at least 4 characters long.
+                </div>
+              )}
               {errors.username && (
                 <div className="text-red-500 text-sm">{errors.username}</div>
               )}
