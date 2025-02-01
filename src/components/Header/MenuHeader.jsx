@@ -134,7 +134,7 @@ const MenuHeader = () => {
   }, []);
 
   return (
-    <div className="bg-gradient-green text-black font-bold px-2 relative">
+    <div className="bg-gradient-green text-black font-bold">
       <div
         className="lg:hidden overflow-x-auto whitespace-nowrap"
         ref={menuWrapperRef}
@@ -195,11 +195,9 @@ const MenuHeader = () => {
                     to={subItem.link}
                     onClick={() => setActiveSubMenu(null)}
                     onMouseEnter={() => {
-                      // On hover, show the submenu
                       item.subMenu && toggleSubMenu(item.name, index);
                     }}
                     onMouseLeave={() => {
-                      // On hover out, hide the submenu
                       setActiveSubMenu(null);
                     }}
                     className="block px-4 py-2 hover:bg-gradient-green text-white w-auto text-xs lg:text-sm"
@@ -214,7 +212,7 @@ const MenuHeader = () => {
         )}
       </div>
 
-      <ul className="hidden lg:flex justify-center lg:justify-start ml-24 mr-4 text-lg">
+      <ul className="hidden lg:flex justify-center lg:justify-start text-lg">
         {menuItems.map((item, index) => (
           <li
             key={index}
@@ -223,10 +221,10 @@ const MenuHeader = () => {
             {item.name === "Logout" ? (
               <button
                 onClick={item.onClick}
-                className="py-1 px-2 ml-24 block border-b-2 bg-gradient-green text-black border-transparent hover:border-gray-600"
+                className="py-1 px-2 mr-24 block border-b-2 bg-gradient-green text-black border-transparent hover:border-gray-600"
               >
                 {item.name}
-                <IoLogOutOutline className="inline ml-2" />
+                <IoLogOutOutline className="inline" />
               </button>
             ) : (
               <Link
