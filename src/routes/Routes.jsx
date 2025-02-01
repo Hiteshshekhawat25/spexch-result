@@ -25,7 +25,7 @@ import SessionResult from "../components/Matches/SessionResult";
 import ProfitLoss from "../components/MyReport/ProfitLoss";
 import BetList from "../components/BetList/BetList";
 import MyAccount from "../components/MyAccount/MyAccount";
-import EventProfitLoss  from "../components/MyReport/EventProfitLoss";
+import EventProfitLoss from "../components/MyReport/EventProfitLoss";
 import Dashboard from "../components/Dashboard/dashboard";
 import Banking from "../components/Banking/Banking";
 import PasswordHistory from "../components/PasswordHistory/Passwordhistory";
@@ -72,7 +72,7 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-         <Route
+      <Route
         path={ROUTES_CONST.userbanking}
         element={
           <ProtectedRoutes>
@@ -245,7 +245,7 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-       <Route
+      <Route
         path={ROUTES_CONST.EventProfitLoss}
         element={
           <ProtectedRoutes>
@@ -255,7 +255,7 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-       <Route
+      <Route
         path={ROUTES_CONST.EventProfitLoss}
         element={
           <ProtectedRoutes>
@@ -286,7 +286,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-       path={ROUTES_CONST.dashboardPage}
+        path={ROUTES_CONST.dashboardPage}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
@@ -296,7 +296,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-       path={ROUTES_CONST.passwordHistory}
+        path={ROUTES_CONST.passwordHistory}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
@@ -306,28 +306,37 @@ const RoutesComp = ({ socket }) => {
         }
       />
 
-<Route
+      <Route
         path={ROUTES_CONST.changePassword}
         element={
           <ProtectedRoutes>
-          <LayoutHeader>
-            <ChangePassword />
-          </LayoutHeader>
-        </ProtectedRoutes>
+            <LayoutHeader>
+              <ChangePassword />
+            </LayoutHeader>
+          </ProtectedRoutes>
         }
       />
       <Route
         path={ROUTES_CONST.restoreUser}
         element={
           <ProtectedRoutes>
-          <LayoutHeader>
-            <RestoreUser />
-          </LayoutHeader>
-        </ProtectedRoutes>
+            <LayoutHeader>
+              <RestoreUser />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={ROUTES_CONST.marketAnalysis}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <MarketAnalysis />
+            </LayoutHeader>
+          </ProtectedRoutes>
         }
       />
     </Routes>
-    
   );
 };
 
