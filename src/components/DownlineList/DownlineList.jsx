@@ -857,18 +857,68 @@ const DownlineList = () => {
                         </td>
                         <td className="px-4 py-2 text-sm">
                           <div className="flex space-x-2">
-                            {/* Icons remain unchanged */}
+                            <div
+                              onClick={() => handleIconClick(item)}
+                              title="Banking"
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                            >
+                              <AiFillDollarCircle className="text-darkgray" />
+                            </div>
+                            {!isMasterDownlineList && (
+                              <div
+                                onClick={() => handleArrowClick(item)}
+                                className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                              >
+                                <RiArrowUpDownFill className="text-darkgray" />
+                              </div>
+                            )}
+                            {!isMasterDownlineList && (
+                              <div
+                                onClick={() => handleHistoryClick(item)}
+                                className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                              >
+                                <MdManageHistory className="text-darkgray" />
+                              </div>
+                            )}
+                            <div
+                              onClick={() => statushandlechange(item)}
+                              title="Change status"
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                            >
+                              <MdSettings className="text-darkgray" />
+                            </div>
+
+                            <div
+                              onClick={() => handleProfileClick(item)}
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                            >
+                              <FaUserAlt className="text-darkgray" />
+                            </div>
+
+                            <div
+                              onClick={() => handleOpenSettings(item)}
+                              title="Sports Settings"
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                            >
+                              <BsBuildingFillLock className="text-darkgray" />
+                            </div>
+                            <div
+                              onClick={() => handleDeleteClick(item)}
+                              title="Delete"
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                            >
+                              <MdDelete
+                                className="text-"
+                                onClick={() => handleDelete(item)}
+                              />
+                            </div>
                           </div>
                         </td>
                       </tr>
                     ))
                   ) : (
                     <tr>
-                      <td
-                        colSpan={10}
-                        className="text-center p-6"
-                        style={{ fontFamily: "Tahoma, Helvetica, sans-serif" }}
-                      >
+                      <td colSpan={10} className="text-center p-6">
                         No Data Available
                       </td>
                     </tr>
