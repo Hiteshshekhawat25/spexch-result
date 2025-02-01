@@ -15,7 +15,7 @@ module.exports = {
         lime: '#ecfccb',
         lightred: '#f86c6b ',
         customGray: '#2d2d2d',
-        ashGray:"#899499",
+        ashGray: "#899499",
         darkgray: "#404040",
         whiteGray: "#d7dede",
         white: '#FFFFFF',
@@ -35,7 +35,7 @@ module.exports = {
         theme4: '#14213d',
         theme5: '#72bbef',
         theme6: '#faa9ba',
-        theme7 : '#14213d',
+        theme7: '#14213d',
 
       },
       backgroundImage: {
@@ -45,15 +45,14 @@ module.exports = {
         'gradient-blue-hover': 'linear-gradient(#14213d 0%, #315195 100%)',
         'gradient-seablue': 'linear-gradient(-180deg, #2E4B5E 0%, #243A48 82%) ',
         'gradient-green2': 'linear-gradient(180deg,#0a92a5 15%,#076875 100%)',
-        'gradient-black':'linear-gradient(#535353 0%, #000000 80%)',
+        'gradient-black': 'linear-gradient(#535353 0%, #000000 80%)',
       },
-      // Custom spacing for positioning toasts
       spacing: {
-        'top-4': '1rem', // Position from top
-        'right-4': '1rem', // Position from right
+        'top-4': '1rem',
+        'right-4': '1rem', 
       },
       boxShadow: {
-        toast: '0 4px 6px rgba(0, 0, 0, 0.1)', // Toast shadow
+        toast: '0 4px 6px rgba(0, 0, 0, 0.1)', 
       },
       fontWeight: {
         light: '300',
@@ -62,7 +61,7 @@ module.exports = {
         bold: '700',
         black: '900',
       },
-      fontFamily: {        
+      fontFamily: {
         custom: ['Tahoma', 'Helvetica', 'sans-serif'],
       },
       keyframes: {
