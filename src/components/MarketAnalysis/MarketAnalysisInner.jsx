@@ -12,6 +12,9 @@ import { SOCKET_ROUTES } from "../../Constant/Api"
 import MarketBetModal from "../marketBetModal/MarketBetModal"
 import { fetchMarketBets } from "../../Store/Slice/marketBetsSlice"
 import UserHistoryModal from "../marketBetModal/UserHistoryModal"
+import BookModal from "../marketBetModal/BookModal"
+import { fetchUserBook } from "../../Store/Slice/UserBookSlice"
+import MarketListModal from "../marketBetModal/MarketListModal"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -20,6 +23,9 @@ const MarketAnalysisInner = () => {
   const [showBetsModal, setShowBetsModal] = useState(false)
   const [activeOdds, setActiveOdds] = useState('all')
   const [liveBets, setLiveBets] = useState(false)
+  const [books,setbooks] = useState('');
+  const [marketListModal,setMarketListModal] = useState(false);
+  const [type,setType] = useState('')
   const [partnershipBook, setPartnershipBook] = useState(false)
   const [betData, setBetData] = useState({
     stake : 0, 
@@ -36,8 +42,10 @@ const MarketAnalysisInner = () => {
   const dispatch = useDispatch()
   const openBets = useSelector(state => state?.openBets)
   const {data : backBets} = useSelector(state => state?.marketBetList)
+  const {data : userBooks} = useSelector(state => state?.userBookList)
     const [showUser, setShowUser] = useState(false)
     const [selectedUser, setSelectedUser] = useState({})
+    const [showUserBook,setShowUserBook] = useState(false)
 
     console.log('matchBetsData', matchBetsData)
 
@@ -46,6 +54,7 @@ const MarketAnalysisInner = () => {
         socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId });
 
         const matchUpdateListener = (data) => {
+          console.log({data},'data')
           setMatchBetsData(data);
         };
         socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
@@ -63,6 +72,14 @@ const MarketAnalysisInner = () => {
             dispatch(fetchMarketBets(gameId))
           }
         },[liveBets])
+
+        useEffect(()=> {
+          if(showUserBook) {
+            dispatch(fetchUserBook({page : 1,limit : 100,type : type,matchId : gameId}))
+          }
+        },[showUserBook])
+
+        console.log({gameId,showUserBook,userBooks})
 
   return (
     <>
@@ -139,6 +156,31 @@ const MarketAnalysisInner = () => {
             </>
             : ''
           }
+          <div>
+            <div className="bg-gradient-blue text-white text-sm font-semibold px-2 py-1 rounded mb-1 cursor-pointer">
+              Book
+            </div>
+            <div className="flex justify-around gap-5">
+              <div className="bg-gradient-blue text-white text-center text-sm font-semibold px-2 py-1 w-full rounded mb-1 cursor-pointer"
+               onClick={()=>{
+                setbooks('master')
+                setMarketListModal(true)
+                }}
+              >
+                Master Book
+              </div>
+              <div className="bg-gradient-blue text-white text-center text-sm font-semibold w-full px-2 py-1 rounded mb-1 cursor-pointer" 
+              onClick={()=>{
+                setbooks('user')
+                setMarketListModal(true)
+                }}
+                >
+                User Book
+              </div>
+            </div>
+          </div>
+
+
           <div className="bg-gradient-blue text-white text-sm font-semibold px-2 py-1 rounded mb-1 cursor-pointer flex justify-between">
             <div className="flex">
               <div className="flex gap-1.5 items-center">
@@ -204,6 +246,19 @@ const MarketAnalysisInner = () => {
       {/* <MatchRulesModal/> */}
       <MarketBetModal matchId={gameId} show={showBetsModal} setShow={setShowBetsModal} setShowUser={setShowUser} setSelectedUser={setSelectedUser}/>
       <UserHistoryModal showUser={showUser} setShowUser={setShowUser} selectedUser={selectedUser}/>
+      <MarketListModal 
+      showUser={marketListModal} 
+      setShowUser={setMarketListModal} 
+      setType={setType}
+      setShowBookModal={setShowUserBook}
+      />
+      <BookModal 
+      showUser={showUserBook} 
+      setShowUser={setShowUserBook} 
+      matchBetsData={matchBetsData} 
+      book={books} 
+      userBookList={userBooks}
+      />
     </>
   )
 }
