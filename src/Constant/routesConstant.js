@@ -11,6 +11,7 @@ export const ROUTES_CONST = {
   TransferMatchCoins: "/TransferMatchCoins",
   PendingLiability: "/PendingLiability",
   CoinLog: "/CoinLog",
+  ManageBets : '/manageBets',
   MatchOddsBets: "/MatchOddsBets",
   TossMatchList: "/TossMatchList",
   MultipleSession: "/MultipleSession",

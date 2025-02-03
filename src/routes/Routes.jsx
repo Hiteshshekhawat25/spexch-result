@@ -34,6 +34,7 @@ import MarketAnalysis from "../components/MarketAnalysis/MarketAnalysis";
 import MarketAnalysisInner from "../components/MarketAnalysis/MarketAnalysisInner";
 import ChangePasswordModal from "../components/Modal/ChangePasswordModal";
 import ChangePassword from "../components/ChangePassword/ChangePassword";
+import ManageBets from "../components/ManageBets/ManageBets";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -52,6 +53,7 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
+      
       <Route
         path={ROUTES_CONST.masterdownlineList}
         element={
@@ -118,6 +120,16 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <AllMatches />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+       <Route
+        path={ROUTES_CONST.ManageBets}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <ManageBets />
             </LayoutHeader>
           </ProtectedRoutes>
         }
