@@ -211,7 +211,7 @@ const EventProfitLoss = () => {
 
                 {profitLossData.length > 0 && (
                   <tfoot>
-                    {console.log("totalData",totalData)}
+                    {console.log("totalData", totalData)}
                     <tr className="bg-gray-300 text-black">
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                         {totalData.sportName}

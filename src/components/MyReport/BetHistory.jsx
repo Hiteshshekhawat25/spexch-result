@@ -1,4 +1,3 @@
-
 import React, { useEffect, useMemo, useState } from "react";
 import { BASE_URL } from "../../Constant/Api";
 import { useNavigate, useParams } from "react-router-dom";
@@ -235,7 +234,10 @@ const BetHistory = () => {
                     ))
                   ) : (
                     <tr>
-                      <td colSpan="11" className="px-4 py-3 text-sm text-center">
+                      <td
+                        colSpan="11"
+                        className="px-4 py-3 text-sm text-center"
+                      >
                         No data available
                       </td>
                     </tr>

@@ -212,8 +212,13 @@ const ProfitLossUser = () => {
                     paginatedData.map((item, index) => (
                       <tr key={index} className="border-b border-gray-400">
                         <td
-                          onClick={() => handleRowClick(item.matchDetails._id,item.selectionId)}
-                          className="px-4 py-3 text-sm text-center text-red-600 border-r border-gray-400 cursor-pointer"
+                          onClick={() =>
+                            handleRowClick(
+                              item.matchDetails._id,
+                              item.selectionId
+                            )
+                          }
+                          className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
                         >
                           {item.username}
                         </td>
@@ -248,7 +253,7 @@ const ProfitLossUser = () => {
                     </tr>
                   )}
                 </tbody>
-
+                {/* 
                 {profitLossData.length > 0 && (
                   <tfoot>
                     <tr className="bg-gray-300 text-black">
@@ -267,6 +272,7 @@ const ProfitLossUser = () => {
                     </tr>
                   </tfoot>
                 )}
+                  */}
               </table>
             </div>
 

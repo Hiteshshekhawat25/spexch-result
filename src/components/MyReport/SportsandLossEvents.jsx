@@ -159,7 +159,7 @@ const SportsandLossEvents = () => {
               <tr key={index} className="border-b border-gray-400">
                 <td className="px-4 py-2 text-center">{item.sport}</td>
                 <td
-                  className="px-4 py-2 text-center text-red-600 cursor-pointer"
+                  className="px-4 py-2 text-center text-lightblue cursor-pointer"
                   onClick={() => handleMatchClick(item._id)}
                 >
                   {item.match}

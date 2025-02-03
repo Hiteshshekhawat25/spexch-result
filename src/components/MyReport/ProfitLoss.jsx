@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PLFilter from "./PLFilter";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
+import { BASE_URL } from "../../Constant/Api";
+import axios from "axios";
 
 const ProfitLoss = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -10,17 +12,44 @@ const ProfitLoss = () => {
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
+  const [expandedRows, setExpandedRows] = useState([]);
   const [sortConfig, setSortConfig] = useState({
     key: "username",
     direction: "ascending",
   });
 
+  // Sort Function
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
     }
     setSortConfig({ key, direction });
+  };
+
+  // Fetch Expanded Data for a User
+  const fetchUserData = async (userId) => {
+    const token = localStorage.getItem("authToken");
+    setLocalLoading(true);
+
+    try {
+      const response = await axios.get(`${BASE_URL}/user/get-profit-loss`, {
+        params: { page: 1, limit: 10, userId },
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = response.data.data;
+      console.log("data", data);
+      setExpandedRows(data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    } finally {
+      setLocalLoading(false);
+    }
   };
 
   const sortedData = [...profitLossData].sort((a, b) => {
@@ -31,13 +60,7 @@ const ProfitLoss = () => {
     return 0;
   });
 
-  console.log("Current Page: ", currentPage);
-  console.log("Entries to Show: ", entriesToShow);
-  console.log("Total Entries: ", totalEntries);
-
   const paginatedData = sortedData;
-
-  console.log("Paginated Data: ", paginatedData);
 
   const totalData = {
     username: "Total",
@@ -51,7 +74,6 @@ const ProfitLoss = () => {
 
   return (
     <div className="p-4">
-      {/* Filter Component */}
       <PLFilter
         setPLData={setProfitLossData}
         setTotalTransactions={setTotalEntries}
@@ -68,31 +90,7 @@ const ProfitLoss = () => {
           Profit Loss
         </h1>
 
-        <div className="flex justify-between items-center mb-4 p-4">
-          <div className="flex items-center">
-            <label className="mr-2 text-sm  font-custom font-medium text-black">
-              Show
-            </label>
-            <select
-              value={entriesToShow}
-              onChange={(e) => {
-                setEntriesToShow(Number(e.target.value));
-                setCurrentPage(1);
-              }}
-              className="border rounded px-2 py-1 text-sm"
-            >
-              {[10, 25, 50, 100].map((number) => (
-                <option key={number} value={number}>
-                  {number}
-                </option>
-              ))}
-            </select>
-            <label className="ml-2 text-sm font-custom font-medium text-black">
-              entries
-            </label>
-          </div>
-        </div>
-
+        {/* Table Header */}
         <div className="overflow-x-auto my-4 mx-4">
           <table className="w-full table-auto border-collapse border border-gray-400">
             <thead className="border border-gray-400 bg-gray-200 text-black text-center">
@@ -140,15 +138,63 @@ const ProfitLoss = () => {
               </tr>
             </thead>
             <tbody>
-              {paginatedData.length > 0 ? (
+              {expandedRows.length > 0 ? (
+                expandedRows.map(
+                  (row, index) => (
+                    console.log("row", row),
+                    (
+                      <tr key={index} className="border-b border-gray-400">
+                        <td
+                          className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium text-lightblue cursor-pointer"
+                          onClick={() => fetchUserData(row._id)}
+                        >
+                          {row.username ? row.username.toUpperCase() : ""}
+                        </td>
+                        <td
+                          className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                            row.totalUplineProfitLoss < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
+                        >
+                          {Math.abs(row.totalUplineProfitLoss)}
+                        </td>
+                        <td
+                          className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                            row.totalDownlineProfitLoss < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
+                        >
+                          {Math.abs(row.totalDownlineProfitLoss)}
+                        </td>
+                        <td
+                          className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                            row.commission < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
+                        >
+                          {0}
+                        </td>
+                      </tr>
+                    )
+                  )
+                )
+              ) : paginatedData.length > 0 ? (
                 paginatedData.map((item, index) => (
                   <tr key={index} className="border-b border-gray-400">
-                    <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500 text-blue">
+                    <td
+                      className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium text-lightblue cursor-pointer"
+                      onClick={() => fetchUserData(item._id)}
+                    >
                       {item.username ? item.username.toUpperCase() : ""}
                     </td>
                     <td
                       className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                        item.totalUplineProfitLoss < 0 ? "text-red-500" : "text-green-500"
+                        item.totalUplineProfitLoss < 0
+                          ? "text-red-500"
+                          : "text-green-500"
                       }`}
                     >
                       {Math.abs(item.totalUplineProfitLoss)}
@@ -167,7 +213,8 @@ const ProfitLoss = () => {
                         item.commission < 0 ? "text-red-500" : "text-green-500"
                       }`}
                     >
-                      {Math.abs(item.commission)}
+                      {/* {Math.abs(item.commission)} */}
+                      {0}
                     </td>
                   </tr>
                 ))
@@ -179,47 +226,44 @@ const ProfitLoss = () => {
                 </tr>
               )}
             </tbody>
-            {paginatedData.length > 0 && (
-              <tfoot>
-                <tr className="bg-gray-300 text-black">
-                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500">
-                    {totalData.username ? totalData.username.toUpperCase() : ""}
-                  </td>
-                  <td
-                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.profitLoss < 0
-                        ? "text-red-500"
-                        : "text-green-500"
-                    }`}
-                  >
-                    {Math.abs(totalData.profitLoss)}
-                  </td>
-                  <td
-                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.downlineProfitLoss < 0
-                        ? "text-red-500"
-                        : "text-green-500"
-                    }`}
-                  >
-                    {Math.abs(totalData.downlineProfitLoss)}
-                  </td>
-                  <td
-                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.commission < 0
-                        ? "text-red-500"
-                        : "text-green-500"
-                    }`}
-                  >
-                    {Math.abs(totalData.commission)}
-                  </td>
-                </tr>
-              </tfoot>
-            )}
+
+            {/* Footer */}
+            <tfoot>
+              <tr className="bg-gray-300 text-black">
+                {console.log("totalllllllllllllll", totalData)}
+                <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500">
+                  {totalData.username ? totalData.username.toUpperCase() : ""}
+                </td>
+                <td
+                  className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                    totalData.profitLoss < 0 ? "text-red-500" : "text-green-500"
+                  }`}
+                >
+                  {Math.abs(totalData.profitLoss)}
+                </td>
+                <td
+                  className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                    totalData.downlineProfitLoss < 0
+                      ? "text-red-500"
+                      : "text-green-500"
+                  }`}
+                >
+                  {Math.abs(totalData.downlineProfitLoss)}
+                </td>
+                <td
+                  className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                    totalData.commission < 0 ? "text-red-500" : "text-green-500"
+                  }`}
+                >
+                  {Math.abs(totalData.commission)}
+                </td>
+              </tr>
+            </tfoot>
           </table>
         </div>
 
         {/* Pagination */}
-        <div className="flex justify-between items-center mt-4  flex-col sm:flex-row">
+        <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
           <div className="text-sm text-gray-600 sm:mb-0">
             Showing{" "}
             {totalEntries > 0

@@ -88,9 +88,8 @@ const MatchProfitandLoss = () => {
   );
   const handleMarketNameClick = (id, selectionId) => {
     navigate(`/profit-loss-user/${selectionId}/${id}`);
-    // console.log(`/profit-loss-user/${selectionId}/${id}`);
   };
-  
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -163,8 +162,10 @@ const MatchProfitandLoss = () => {
                 <td className="px-4 py-2 text-center">{item.sport}</td>
                 <td className="px-4 py-2 text-center">{item.match}</td>
                 <td
-                  className="px-4 py-2 text-center text-red-500 cursor-pointer"
-                  onClick={() => handleMarketNameClick(item._id,item.selectionId)}
+                  className="px-4 py-2 text-center text-lightblue cursor-pointer"
+                  onClick={() =>
+                    handleMarketNameClick(item._id, item.selectionId)
+                  }
                 >
                   {" "}
                   {item.matchDetails.marketName}
