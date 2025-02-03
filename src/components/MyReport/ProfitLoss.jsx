@@ -148,19 +148,19 @@ const ProfitLoss = () => {
                     </td>
                     <td
                       className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                        item.profitLoss < 0 ? "text-red-500" : "text-green-500"
+                        item.totalUplineProfitLoss < 0 ? "text-red-500" : "text-green-500"
                       }`}
                     >
-                      {Math.abs(item.profitLoss)}
+                      {Math.abs(item.totalUplineProfitLoss)}
                     </td>
                     <td
                       className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                        item.downlineProfitLoss < 0
+                        item.totalDownlineProfitLoss < 0
                           ? "text-red-500"
                           : "text-green-500"
                       }`}
                     >
-                      {Math.abs(item.downlineProfitLoss)}
+                      {Math.abs(item.totalDownlineProfitLoss)}
                     </td>
                     <td
                       className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${

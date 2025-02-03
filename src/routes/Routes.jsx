@@ -34,6 +34,10 @@ import MarketAnalysis from "../components/MarketAnalysis/MarketAnalysis";
 import MarketAnalysisInner from "../components/MarketAnalysis/MarketAnalysisInner";
 import ChangePasswordModal from "../components/Modal/ChangePasswordModal";
 import ChangePassword from "../components/ChangePassword/ChangePassword";
+import SportsandLossEvents from "../components/MyReport/SportsandLossEvents";
+import MatchProfitandLoss from "../components/MyReport/MatchProfitandLoss";
+import ProfitLossUser from "../components/MyReport/ProfitLossUser";
+import BetHistory from "../components/MyReport/BetHistory";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -251,6 +255,47 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <EventProfitLoss />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={`${ROUTES_CONST.SportsandLossEvents}/:gameId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <SportsandLossEvents />
+            </LayoutHeader>{" "}
+          </ProtectedRoutes>
+        }
+      />
+
+      <Route
+        path="/match-bet-profit-loss/:matchId"
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <MatchProfitandLoss />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={`${ROUTES_CONST.ProfitLossUser}/:selectionId/:id`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <ProfitLossUser />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={`${ROUTES_CONST.BetHistory}/:selectionId/:id`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <BetHistory/>
             </LayoutHeader>
           </ProtectedRoutes>
         }
