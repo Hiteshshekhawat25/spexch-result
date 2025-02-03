@@ -381,6 +381,16 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
+      <Route
+        path={`${ROUTES_CONST.marketAnalysis}/:gameId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <MarketAnalysisInner />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
     </Routes>
   );
 };

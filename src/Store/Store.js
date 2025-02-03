@@ -35,6 +35,7 @@ import sessionReducer from '../Store/Slice/SessionSlice';
 import partnershipReducer from '../Store/Slice/updatePartnershipSlice'
 import { marketListReducer } from './Slice/marketAnalysisSlice';
 import { marketBetsReducer } from './Slice/marketBetsSlice';
+import { userBookReducer } from './Slice/UserBookSlice';
 
 
 export const store = configureStore({
@@ -72,7 +73,8 @@ export const store = configureStore({
     sessions: sessionReducer,
     partnership: partnershipReducer,
     marketList : marketListReducer,
-    marketBetList : marketBetsReducer
+    marketBetList : marketBetsReducer,
+    userBookList : userBookReducer
   },
 });
 
