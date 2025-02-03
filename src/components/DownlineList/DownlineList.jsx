@@ -856,7 +856,7 @@ const DownlineList = () => {
                           </span>
                         </td>
                         <td className="px-4 py-2 text-sm">
-                          <div className="flex space-x-2">
+                          <div className="flex space-x-4">
                             <div
                               onClick={() => handleIconClick(item)}
                               title="Banking"

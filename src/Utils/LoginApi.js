@@ -14,7 +14,9 @@ export const loginUser = async (username, password) => {
       headers: {
         'Content-Type': 'application/json',
       },
+      
       body: JSON.stringify({ username, password }), // Send the data as a JSON string
+      
     });
 
     // Check if the response status is okay (status 200-299)
@@ -27,6 +29,7 @@ export const loginUser = async (username, password) => {
 
     // Parse the successful response
     const data = await response.json();
+    console.log("login user new",data);
     return data; // Returns user data if successful
 
   } catch (error) {

@@ -1,11 +1,9 @@
-import React, { useState, useMemo } from "react";
-import { useSelector } from "react-redux";
-import EventPLFilter from "./EventPLFilter";
-import { FaSortUp, FaSortDown } from "react-icons/fa";
-import { ROUTES_CONST } from "../../Constant/routesConstant";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { BASE_URL } from "../../Constant/Api";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaSortDown, FaSortUp } from "react-icons/fa";
 
-const EventProfitLoss = () => {
+const BetHistory = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalEntries, setTotalEntries] = useState(0);
@@ -13,6 +11,8 @@ const EventProfitLoss = () => {
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
+  const { selectionId, id } = useParams();
+  console.log(selectionId, id);
 
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
@@ -64,8 +64,39 @@ const EventProfitLoss = () => {
   };
 
   const handleRowClick = (gameId) => {
-    navigate(`${ROUTES_CONST.SportsandLossEvents}/${gameId}`);
+    navigate(`/bet-history/${gameId}`);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLocalLoading(true);
+      try {
+        const token = localStorage.getItem("authToken");
+        const response = await fetch(
+          `${BASE_URL}/user/get-selection-amount-profit-loss?page=1&limit=200&selectionId=${selectionId}&matchId=${id}`,
+          {
+            headers: {
+              "Content-Type": "application/json; charset=utf-8",
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await response.json();
+        setProfitLossData(data.data);
+        setTotalEntries(data.total);
+        setTotalPages(data.totalPages);
+        setIsDataFetched(true);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLocalLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="p-4">
       {localLoading ? (
@@ -80,20 +111,9 @@ const EventProfitLoss = () => {
         </div>
       ) : (
         <>
-          <EventPLFilter
-            setPLData={setProfitLossData}
-            setTotalTransactions={setTotalEntries}
-            setTotalPages={setTotalPages}
-            setIsDataFetched={setIsDataFetched}
-            entriesToShow={entriesToShow}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-            setLocalLoading={setLocalLoading}
-          />
-          {/* Data Table */}
           <div className="border border-gray-300 rounded-md bg-white">
-            <h1 className="text-xl bg-gradient-blue text-white font-bold">
-              Event Profit Loss
+            <h1 className="text-xl bg-gradient-blue text-white font-bold p-4">
+              Profit Loss User
             </h1>
 
             <div className="flex justify-between items-center mb-4 p-4">
@@ -125,10 +145,17 @@ const EventProfitLoss = () => {
                 <thead className="border border-gray-400 bg-gray-300 text-black text-center">
                   <tr>
                     {[
-                      "sportName",
-                      "uplineProfitLoss",
-                      "downlineProfitLoss",
-                      "commission",
+                      "Sport Name",
+                      "Event Name",
+                      "Market Name",
+                      "Runner Name",
+                      "Bet Type",
+                      "User Price",
+                      "Amount",
+                      "PL",
+                      "Place Date",
+                      "Match Date",
+                      "Details",
                     ].map((key) => (
                       <th
                         key={key}
@@ -136,15 +163,7 @@ const EventProfitLoss = () => {
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between items-center text-center">
-                          <span>
-                            {key === "sportName"
-                              ? "Sport Name"
-                              : key === "uplineProfitLoss"
-                              ? "Upline Profit/Loss"
-                              : key === "downlineProfitLoss"
-                              ? "Downline Profit/Loss"
-                              : "Commission"}
-                          </span>
+                          <span>{key}</span>
                           <div className="flex flex-col items-center ml-2">
                             <FaSortUp
                               className={`${
@@ -176,58 +195,54 @@ const EventProfitLoss = () => {
                 </thead>
                 <tbody>
                   {profitLossData.length > 0 ? (
-                    paginatedData.map(
-                      (item, index) => (
-                        console.log("item", item),
-                        (
-                          <tr key={index} className="border-b border-gray-400">
-                            <td
-                              onClick={() => handleRowClick(item.gameId)}
-                              className="px-4 py-3 text-sm text-center text-red-600 border-r border-gray-400 cursor-pointer"
-                            >
-                              {item._id}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                              {item.totalUplineProfitLoss}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                              {item.totalDownlineProfitLoss}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-center">
-                              {item.totalCommission}
-                            </td>
-                          </tr>
-                        )
-                      )
-                    )
+                    paginatedData.map((item, index) => (
+                      <tr key={index} className="border-b border-gray-400">
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.matchDetails.sport}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.matchDetails.match}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.matchDetails.marketName}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.matchDetails.runnerName}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.betType}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.userPrice}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.amount}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.pl}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.placeDate}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.matchDate}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {item.details}
+                        </td>
+                      </tr>
+                    ))
                   ) : (
                     <tr>
-                      <td colSpan="4" className="px-4 py-3 text-sm text-center">
+                      <td
+                        colSpan="11"
+                        className="px-4 py-3 text-sm text-center"
+                      >
                         No data available
                       </td>
                     </tr>
                   )}
                 </tbody>
-
-                {profitLossData.length > 0 && (
-                  <tfoot>
-                    {console.log("totalData", totalData)}
-                    <tr className="bg-gray-300 text-black">
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.sportName}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.uplineProfitLoss}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.downlineProfitLoss}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-center">
-                        {totalData.commission}
-                      </td>
-                    </tr>
-                  </tfoot>
-                )}
               </table>
             </div>
 
@@ -284,4 +299,4 @@ const EventProfitLoss = () => {
   );
 };
 
-export default EventProfitLoss;
+export default BetHistory;

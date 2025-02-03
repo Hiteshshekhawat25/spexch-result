@@ -77,7 +77,6 @@ export const AddClientForm = ({ closeModal }) => {
         confirmPassword &&
         masterPassword &&
         password === confirmPassword &&
-        // /^\d{10}$/.test(mobileNumber) &&
         commission >= 0 &&
         commission <= 100 &&
         openingBalance >= 0 &&

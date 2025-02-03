@@ -51,11 +51,57 @@ const EventPLFilter = ({
       handleGetPL();
       setLocalLoadingState(false);
     }
-  }, [currentPage, fromDate, toDate, fromTime, toTime, dataSource, entriesToShow]);
+  }, [
+    currentPage,
+    fromDate,
+    toDate,
+    fromTime,
+    toTime,
+    dataSource,
+    entriesToShow,
+  ]);
+
+  // Function to dynamically calculate date range based on data source
+  const getDateRange = (source) => {
+    const today = new Date();
+    let fromDate, toDate;
+
+    switch (source) {
+      case "live":
+        // For live data, use today's date
+        fromDate = today.toISOString().split("T")[0];
+        toDate = today.toISOString().split("T")[0];
+        break;
+      case "backup":
+        // For backup data, use the last 3 months
+        toDate = today.toISOString().split("T")[0];
+        const threeMonthsAgo = new Date(today);
+        threeMonthsAgo.setMonth(today.getMonth() - 3);
+        fromDate = threeMonthsAgo.toISOString().split("T")[0];
+        break;
+      case "old":
+        // For old data, use the last 1 year
+        toDate = today.toISOString().split("T")[0];
+        const oneYearAgo = new Date(today);
+        oneYearAgo.setFullYear(today.getFullYear() - 1);
+        fromDate = oneYearAgo.toISOString().split("T")[0];
+        break;
+      default:
+        // Default to today's date
+        fromDate = today.toISOString().split("T")[0];
+        toDate = today.toISOString().split("T")[0];
+    }
+
+    return { fromDate, toDate };
+  };
 
   const handleGetPL = async () => {
     try {
-      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&fromTime=${fromTime}&toTime=${toTime}&dataSource=${dataSource}`;
+      // Get the dynamically calculated date range based on the selected data source
+      const { fromDate: adjustedFromDate, toDate: adjustedToDate } =
+        getDateRange(dataSource);
+
+      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}`;
       const response = await getProfitLossData(url);
 
       if (response && response.data) {
@@ -76,7 +122,9 @@ const EventPLFilter = ({
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
       <div className="flex flex-col items-start">
-        <label className="text-sm font-custom text-black mb-2">Data Source</label>
+        <label className="text-sm font-custom text-black mb-2">
+          Data Source
+        </label>
         <select
           value={dataSource || "live"}
           onChange={(e) => dispatch(setDataSource(e.target.value))}

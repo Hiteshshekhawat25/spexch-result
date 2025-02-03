@@ -1,3 +1,6 @@
+import BetHistory from "../components/MyReport/BetHistory";
+import ProfitLossUser from "../components/MyReport/ProfitLossUser";
+
 export const ROUTES_CONST = {
   login: "/",
   dashboard: "/dashboard",
@@ -28,5 +31,8 @@ export const ROUTES_CONST = {
   passwordHistory: "/password-history",
   restoreUser: "/restore-user",
   marketAnalysis: '/market-analysis',
-  changePassword: "/changePassword"
+  changePassword: "/changePassword" ,
+  SportsandLossEvents: "/sportsandlossevents",
+  ProfitLossUser: '/profit-loss-user',
+  BetHistory :"/bet-history"  
 };

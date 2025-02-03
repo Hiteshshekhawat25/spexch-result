@@ -28,6 +28,8 @@ const BetList = ({ Userid }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUsername, setSelectedUsername] = useState(null);
+  const [hoverTimeout, setHoverTimeout] = useState(null);
+
 
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [sortConfig, setSortConfig] = useState({
@@ -80,6 +82,26 @@ const BetList = ({ Userid }) => {
     setBetlistData(data.data || []);
   };
 
+  const handleMouseEnter = (item) => {
+    // Set a timeout to show the modal after 500ms
+    const timeout = setTimeout(() => {
+      setSelectedUserId(item.createdBy);
+      setSelectedUsername(item.username);
+      setIsModalOpen(true);
+    }, 500);
+    setHoverTimeout(timeout);
+  };
+
+  const handleMouseLeave = () => {
+    // Clear the timeout if the user stops hovering
+    // if (hoverTimeout) {
+    //   clearTimeout(hoverTimeout);
+    // }
+    // setIsModalOpen(false);
+    // setSelectedUserId(null);
+    // setSelectedUsername(null);
+  };
+
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -97,6 +119,7 @@ const BetList = ({ Userid }) => {
   });
 
   useEffect(() => {}, [currentPage]);
+  
 
   return (
     <div className="p-4">
@@ -248,10 +271,9 @@ const BetList = ({ Userid }) => {
                       sortedData.map((item, index) => (
                         <tr key={index}>
                           <td
+                           onMouseEnter={() => handleMouseEnter(item)}
+                           onMouseLeave={handleMouseLeave}
                             onClick={() => {
-                              console.log("Clicked Item:", item); // Log the entire item object
-                              console.log("Selected User ID:", item.createdBy);
-                              console.log("Selected User Name:", item.username);
                               setSelectedUserId(item.createdBy);
                               setSelectedUsername(item.username);
                               setIsModalOpen(true);

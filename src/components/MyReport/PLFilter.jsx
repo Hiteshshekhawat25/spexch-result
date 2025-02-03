@@ -22,7 +22,8 @@ const PLFilter = ({
 }) => {
   const dispatch = useDispatch();
   const plFilterState = useSelector((state) => state.plFilter);
-  const { dataSource, fromDate, toDate, fromTime, toTime } = plFilterState || {};
+  const { dataSource, fromDate, toDate, fromTime, toTime } =
+    plFilterState || {};
 
   const today = new Date().toISOString().split("T")[0];
 
