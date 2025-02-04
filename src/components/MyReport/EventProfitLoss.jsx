@@ -183,7 +183,7 @@ const EventProfitLoss = () => {
                           <tr key={index} className="border-b border-gray-400">
                             <td
                               onClick={() => handleRowClick(item.gameId)}
-                              className="px-4 py-3 text-sm text-center text-red-600 border-r border-gray-400 cursor-pointer"
+                              className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
                             >
                               {item._id}
                             </td>
