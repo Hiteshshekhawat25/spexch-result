@@ -155,36 +155,36 @@ function ManageBetFilter({
             </select>
           </div>
           {/* Choose Sport */}
-          <div className="flex flex-col w-full sm:w-auto">
-          <label className="text-sm font-medium text-black mb-1">
+          <div className="flex flex-col mb-6">
+        <label className="text-sm font-medium text-black mb-1">
               Select Odds
             </label>
-            <select
-              value={sport}
-              onChange={(e) => dispatch(setSport(e.target.value))}
-              className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-8"
+            <select className="border p-2 rounded" 
+            value={sport} 
+            onChange={handleSportChange}
             >
               <option value="">Select Odds</option>
-              {[{name : 'Match Odds',_id : 1}, {name : 'Bookmakers',_id:2},{name : 'Toss',_id :3}].map((sport) => (
-                <option key={sport._id} value={sport.name}>
-                  {sport.name}
-                </option>
-              ))}
+              {loading ? (
+                <option value="">Loading...</option>
+              ) : (
+                [{name : 'Match Odds',_id : 1}, {name : 'Bookmakers',_id:2},{name : 'Toss',_id :3}].map((sport) => (
+                  <option key={sport._id} value={sport.name}>
+                    {sport.name}
+                  </option>
+                ))
+              )}
             </select>
           </div>
 
-          <div className="w-1/4">
-          <label
-            htmlFor="session"
-            className="block text-md font-bold text-gray-700 mb-1 text-left"
-          >
-            Select Session
-          </label>
+          <div className="flex flex-col">
+          <label className="text-sm font-medium text-black mb-1">
+              Select Odds
+            </label>
           <select
             value={setSelectedSession}
             onChange={(e)=>setSelectedSession(e.target.value)}
             id="session"
-            className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
+            className="border p-2 rounded"
           >
             <option value="">Select Session</option>
             {filteredSessions.filter((session) => !session.result).map((session, index) => (
