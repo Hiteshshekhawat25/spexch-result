@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import {
@@ -42,7 +41,6 @@ const Banking = () => {
   const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const [selectedButtonRow, setSelectedButtonRow] = useState(null);
   const [selectedButtonStatus, setSelectedButtonStatus] = useState(null);
-
 
   const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
@@ -94,67 +92,64 @@ const Banking = () => {
     });
   };
 
-     
   const handleButtonClick = (status, index) => {
     setEditedData((prevState) => {
       const updatedData = [...prevState];
-	  
-	        if (selectedButtonRow !== null && selectedButtonRow !== index) {
+
+      if (selectedButtonRow !== null && selectedButtonRow !== index) {
         updatedData[selectedButtonRow] = {
           ...updatedData[selectedButtonRow],
-          depositwithdrawStatus: "", 
+          depositwithdrawStatus: "",
           highlightFull: false,
-          depositwithdraw: "", 
+          depositwithdraw: "",
         };
       }
-  
-      
+
       if (!updatedData[index]) {
-        updatedData[index] = { depositwithdrawStatus: "", highlightFull: false };
+        updatedData[index] = {
+          depositwithdrawStatus: "",
+          highlightFull: false,
+        };
       }
 
-     
-
-      
-      if (updatedData[index].depositwithdrawStatus && updatedData[index].depositwithdrawStatus !== status) {
-        updatedData[index].depositwithdrawStatus = ""; 
+      if (
+        updatedData[index].depositwithdrawStatus &&
+        updatedData[index].depositwithdrawStatus !== status
+      ) {
+        updatedData[index].depositwithdrawStatus = "";
       }
-  
-      
+
       updatedData[index] = {
         ...updatedData[index],
         depositwithdrawStatus:
           updatedData[index].depositwithdrawStatus === status ? "" : status,
-        highlightFull: status === "W" ? true : false, 
+        highlightFull: status === "W" ? true : false,
       };
-	  
-      
-  
-	  if (status === "Full" ) {
-              updatedData[index] = {
-                ...updatedData[index],
-                depositwithdrawStatus: "W",
-                depositwithdraw: filteredData[index]?.totalBalance || "",
-                highlightFull: true,
-              };
+
+      if (status === "Full") {
+        updatedData[index] = {
+          ...updatedData[index],
+          depositwithdrawStatus: "W",
+          depositwithdraw: filteredData[index]?.totalBalance || "",
+          highlightFull: true,
+        };
       } else {
-              updatedData[index] = {
-                ...updatedData[index],
-                depositwithdrawStatus: status,
-                highlightFull:
-                  status === "W" ? true : updatedData[index]?.highlightFull,
-                  depositwithdraw: "",
-              };
+        updatedData[index] = {
+          ...updatedData[index],
+          depositwithdrawStatus: status,
+          highlightFull:
+            status === "W" ? true : updatedData[index]?.highlightFull,
+          depositwithdraw: "",
+        };
       }
-       
+
       return updatedData;
     });
-  
+
     setSelectedButtonRow(index);
     setSelectedButtonStatus(status);
   };
-  
-  
+
   const handleSubmitPaymentFunction = (data) => {
     if (!password) {
       toast.error("Please enter the password.");
@@ -209,7 +204,7 @@ const Banking = () => {
             depositwithdraw: "",
             remark: "",
             depositwithdrawStatus: "",
-            
+
             highlightFull: false,
           };
           return updatedData;
@@ -512,14 +507,13 @@ const Banking = () => {
                     </span>
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(item.openingBalance)}
+                    {new Intl.NumberFormat("en-IN").format(item.totalBalance+item.exposure)}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                     {new Intl.NumberFormat("en-IN").format(item.totalBalance)}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
-                    {/* {new Intl.NumberFormat("en-IN").format(item.exposure)} */}
-                    {"(0)"}
+                    {new Intl.NumberFormat("en-IN").format(item.exposure)}
                   </td>
                   <td className=" px-4 py-2 text-md text-blue font-semibold flex items-center">
                     {new Intl.NumberFormat("en-IN").format(
@@ -530,13 +524,13 @@ const Banking = () => {
                       onClick={() => handleEditClick(item)}
                     />
                   </td>
-<td
-  className={`border border-gray-400 px-4 py-2 text-sm font-bold ${
-    item.profit_loss < 0 ? "text-red-500" : "text-green-500"
-  }`}
->
-  {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
-</td>
+                  <td
+                    className={`border border-gray-400 px-4 py-2 text-sm font-bold ${
+                      item.profit_loss < 0 ? "text-red-500" : "text-green-500"
+                    }`}
+                  >
+                    {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
+                  </td>
                   <td className="border border-gray-400 px-4 py-2 text-md">
                     <div className="flex items-center space-x-2">
                       <button
@@ -581,7 +575,8 @@ const Banking = () => {
                           editedData[index]?.highlightFull
                             ? "bg-gradient-blue text-white"
                             : "bg-gray-400 text-white"
-                        } border border-black `}disabled={!editedData[index]?.highlightFull} 
+                        } border border-black `}
+                        disabled={!editedData[index]?.highlightFull}
                       >
                         Full
                       </button>
@@ -659,8 +654,8 @@ const Banking = () => {
             <button
               onClick={() => handleSubmitPaymentForRow()}
               className={`px-3 py-1 lg:px-32 lg:py-2 ${
-    isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
-  } text-white text-sm lg:text-md font-medium rounded-md w-full sm:w-auto`}
+                isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
+              } text-white text-sm lg:text-md font-medium rounded-md w-full sm:w-auto`}
             >
               Submit Payment
             </button>
@@ -688,4 +683,3 @@ const Banking = () => {
 };
 
 export default Banking;
-

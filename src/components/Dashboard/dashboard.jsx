@@ -32,9 +32,9 @@ const Dashboard = () => {
     datasets: [
       {
         label: "Backup Sports Profit",
-        data: [0],
-        backgroundColor: ["#f3f4f6"],
-        borderColor: ["#d1d5db"],
+        data: [50],
+        backgroundColor: ["#ffffff"],
+        borderColor: ["#3b82f6"],
         borderWidth: 2,
       },
     ],

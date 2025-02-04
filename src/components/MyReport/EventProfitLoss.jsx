@@ -51,16 +51,19 @@ const EventProfitLoss = () => {
   );
 
   const totalData = {
-    sportName: "Total",
-    uplineProfitLoss: sortedData.reduce(
-      (sum, row) => sum + row.uplineProfitLoss,
+    username: "Total",
+    profitLoss: sortedData.reduce(
+      (sum, row) => sum + (Number(row.totalUplineProfitLoss) || 0),
       0
     ),
     downlineProfitLoss: sortedData.reduce(
-      (sum, row) => sum + row.downlineProfitLoss,
+      (sum, row) => sum + (Number(row.totalDownlineProfitLoss) || 0),
       0
     ),
-    commission: sortedData.reduce((sum, row) => sum + row.commission, 0),
+    commission: sortedData.reduce(
+      (sum, row) => sum + (Number(row.totalCommission) || 0),
+      0
+    ),
   };
 
   const handleRowClick = (gameId) => {
@@ -180,20 +183,23 @@ const EventProfitLoss = () => {
                       (item, index) => (
                         console.log("item", item),
                         (
-                          <tr key={index} className="border-b border-gray-400">
+                          <tr
+                            key={index}
+                            className="border-b border-gray-400 font-medium"
+                          >
                             <td
                               onClick={() => handleRowClick(item.gameId)}
-                              className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
+                              className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer font-medium"
                             >
                               {item._id}
                             </td>
                             <td
-                              className="px-4 py-3 text-sm text-center border-r border-gray-400"
+                              className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
                               style={{
                                 color:
                                   item.totalUplineProfitLoss < 0
-                                    ? "red"
-                                    : "green",
+                                    ? "text-red-500"
+                                    : "text-green-500",
                               }}
                             >
                               {item.totalUplineProfitLoss < 0
@@ -204,12 +210,12 @@ const EventProfitLoss = () => {
                             </td>
 
                             <td
-                              className="px-4 py-3 text-sm text-center border-r border-gray-400"
+                              className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
                               style={{
                                 color:
                                   item.totalDownlineProfitLoss < 0
-                                    ? "red"
-                                    : "green",
+                                    ? "text-red-500"
+                                    : "text-green-500",
                               }}
                             >
                               {item.totalDownlineProfitLoss < 0
@@ -219,16 +225,8 @@ const EventProfitLoss = () => {
                                 : item.totalDownlineProfitLoss.toFixed(2)}
                             </td>
 
-                            <td
-                              className="px-4 py-3 text-sm text-center"
-                              style={{
-                                color:
-                                  item.totalCommission < 0 ? "red" : "green",
-                              }}
-                            >
-                              {item.totalCommission < 0
-                                ? Math.abs(item.totalCommission.toFixed(2))
-                                : item.totalCommission.toFixed(2)}
+                            <td className="px-4 py-3 text-sm text-center font-medium">
+                              {Math.abs(item.totalCommission.toFixed(2))}
                             </td>
                           </tr>
                         )
@@ -245,18 +243,33 @@ const EventProfitLoss = () => {
 
                 {profitLossData.length > 0 && (
                   <tfoot>
-                    {console.log("totalData", totalData)}
-                    <tr className="bg-gray-300 text-black">
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.sportName}
+                    <tr className="bg-gray-300 text-black font-medium">
+                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                        {totalData.username}
                       </td>
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.uplineProfitLoss}
+                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                        <span
+                          className={`${
+                            totalData.profitLoss < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
+                        >
+                          {Math.abs(totalData.profitLoss)}
+                        </span>
                       </td>
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.downlineProfitLoss}
+                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                        <span
+                          className={`${
+                            totalData.downlineProfitLoss < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                          }`}
+                        >
+                          {Math.abs(totalData.downlineProfitLoss)}
+                        </span>
                       </td>
-                      <td className="px-4 py-3 text-sm text-center">
+                      <td className="px-4 py-3 text-sm text-center font-medium">
                         {totalData.commission}
                       </td>
                     </tr>
