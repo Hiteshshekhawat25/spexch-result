@@ -137,7 +137,7 @@ const MenuHeader = () => {
   return (
     <div className="bg-gradient-green text-black font-bold">
       <div
-        className="lg:hidden overflow-x-auto whitespace-nowrap"
+        className="xl:hidden overflow-x-auto whitespace-nowrap"
         ref={menuWrapperRef}
       >
         <ul className="flex">
@@ -150,7 +150,7 @@ const MenuHeader = () => {
               {item.name === "Logout" ? (
                 <button
                   onClick={item.onClick}
-                  className="py-1 px-2  block border-b-2 bg-gradient-green text-black border-transparent hover:underline hover:decoration-black"
+                  className="py-1 px-2 block border-b-2 bg-gradient-green text-black border-transparent hover:underline hover:decoration-black"
                 >
                   {item.name}
                   <IoLogOutOutline className="inline ml-2" />
@@ -162,7 +162,7 @@ const MenuHeader = () => {
                     setActiveMenu(item.name);
                     item.subMenu && toggleSubMenu(item.name, index);
                   }}
-                  className={`block border-b-2 ${
+                  className={` border-b-2 h-full flex items-center px-2 py-1.5 text-[13px] ${
                     activeMenu === item.name
                       ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
                       : "border-transparent hover:underline hover:decoration-black"
@@ -201,7 +201,7 @@ const MenuHeader = () => {
                     onMouseLeave={() => {
                       setActiveSubMenu(null);
                     }}
-                    className="block px-4 py-2 hover:bg-gradient-green text-white w-auto text-xs lg:text-sm"
+                    className="block px-4 xl:py-1 py-2 hover:bg-gradient-green text-white w-auto text-[13px] lg:text-sm"
                     style={{ whiteSpace: "nowrap" }}
                   >
                     {subItem.name}
@@ -213,19 +213,19 @@ const MenuHeader = () => {
         )}
       </div>
 
-      <ul className="hidden lg:flex justify-center lg:justify-start text-lg">
+      <ul className="hidden xl:flex justify-center lg:justify-start text-lg ps-2">
         {menuItems.map((item, index) => (
           <li
             key={index}
-            className="relative group border-l border-r border-gray-400 text-sm"
+            className="relative group border-r border-gray-500 text-[12.5px] text-nowrap"
           >
             {item.name === "Logout" ? (
               <button
                 onClick={item.onClick}
-                className="py-1 px-2 mr-24 block border-b-2 bg-gradient-green text-black border-transparent hover:border-gray-600"
+                className="py-1 px-1.5 ml-5 block border-b-2 text-black border-transparent hover:border-gray-600"
               >
                 {item.name}
-                <IoLogOutOutline className="inline" />
+                <IoLogOutOutline className="inline ml-1 -mt-0.5" />
               </button>
             ) : (
               <Link
@@ -239,7 +239,7 @@ const MenuHeader = () => {
               >
                 {item.name}
                 {item.subMenu && (
-                  <TbTriangleInvertedFilled className="inline ml-2 size-2" />
+                  <TbTriangleInvertedFilled className="inline ml-2 size-2 -mt-0.5" />
                 )}
               </Link>
             )}
@@ -256,7 +256,7 @@ const MenuHeader = () => {
                         setActiveSubMenu(null);
                       }}
                       to={subItem.link}
-                      className="block px-4 py-2 hover:bg-gradient-green text-white"
+                      className="block px-4 py-[3px] hover:bg-gradient-green text-white"
                     >
                       {subItem.name}
                     </Link>

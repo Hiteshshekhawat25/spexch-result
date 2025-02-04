@@ -213,20 +213,37 @@ const BetHistory = () => {
                           {item.betType}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.userPrice}
+                          {item.odds}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.amount}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.pl}
+                          {item.totalDownlineProfitLoss}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.placeDate}
+                          {new Date(item.createdAt).toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDate}
+                          {new Date(
+                            item.matchDetails.marketStartTime
+                          ).toLocaleString("en-US", {
+                            year: "numeric",
+                            month: "short",
+                            day: "2-digit",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            hour12: true,
+                          })}
                         </td>
+
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.details}
                         </td>
