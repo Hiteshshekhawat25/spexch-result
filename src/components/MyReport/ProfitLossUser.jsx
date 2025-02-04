@@ -249,7 +249,7 @@ const ProfitLossUser = () => {
                         </td>
 
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {0}
+                          {item.totalCommission.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.createdAt}

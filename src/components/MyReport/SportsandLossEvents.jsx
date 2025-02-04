@@ -190,9 +190,9 @@ const SportsandLossEvents = () => {
                     color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
                   }}
                 >
-                  {item.totalDownlineProfitLoss < 0
-                    ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
-                    : item.totalDownlineProfitLoss.toFixed(2)}
+                  {item.totalCommission < 0
+                    ? Math.abs(item.totalCommission.toFixed(2))
+                    : item.totalCommission.toFixed(2)}
                 </td>
               </tr>
             ))}

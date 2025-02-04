@@ -64,13 +64,22 @@ const ProfitLoss = () => {
 
   const totalData = {
     username: "Total",
-    profitLoss: sortedData.reduce((sum, row) => sum + row.profitLoss, 0),
-    downlineProfitLoss: sortedData.reduce(
-      (sum, row) => sum + row.downlineProfitLoss,
+    profitLoss: sortedData.reduce(
+      (sum, row) => sum + (Number(row.totalUplineProfitLoss) || 0),
       0
     ),
-    commission: sortedData.reduce((sum, row) => sum + row.commission, 0),
+    downlineProfitLoss: sortedData.reduce(
+      (sum, row) => sum + (Number(row.totalDownlineProfitLoss) || 0),
+      0
+    ),
+    commission: sortedData.reduce(
+      (sum, row) => sum + (Number(row.totalCommission) || 0),
+      0
+    ),
   };
+
+  console.log("Sorted Data:", sortedData);
+  console.log("Total Data:", totalData);
 
   return (
     <div className="p-4">
@@ -213,8 +222,7 @@ const ProfitLoss = () => {
                         item.commission < 0 ? "text-red-500" : "text-green-500"
                       }`}
                     >
-                      {/* {Math.abs(item.commission)} */}
-                      {0}
+                      {Math.abs(item.totalCommission.toFixed(2))}
                     </td>
                   </tr>
                 ))
@@ -239,7 +247,7 @@ const ProfitLoss = () => {
                     totalData.profitLoss < 0 ? "text-red-500" : "text-green-500"
                   }`}
                 >
-                  {Math.abs(totalData.profitLoss)}
+                  {Math.abs(totalData.profitLoss.toFixed(2))}
                 </td>
                 <td
                   className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
@@ -248,7 +256,7 @@ const ProfitLoss = () => {
                       : "text-green-500"
                   }`}
                 >
-                  {Math.abs(totalData.downlineProfitLoss)}
+                  {Math.abs(totalData.downlineProfitLoss.toFixed(2))}
                 </td>
                 <td
                   className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
