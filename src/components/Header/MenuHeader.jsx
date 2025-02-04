@@ -36,6 +36,7 @@ const MenuHeader = () => {
       ],
     },
     { name: "My Account", link: "/MyAccount" },
+    { name: "Manage Bets", link: "/manageBets" },
     {
       name: "My Report",
       link: "#",
