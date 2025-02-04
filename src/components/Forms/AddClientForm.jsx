@@ -126,12 +126,10 @@ export const AddClientForm = ({ closeModal }) => {
 
     if (name === "username") {
       const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, "");
-      if (sanitizedValue.length <= 4) {
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: sanitizedValue,
-        }));
-      }
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: sanitizedValue,
+      }));
       return;
     }
 
@@ -289,7 +287,7 @@ export const AddClientForm = ({ closeModal }) => {
         </div>
         {formData.username.length > 0 && formData.username.length < 4 && (
           <div className="text-red-500 text-sm ml-[33%]">
-            Username must be at least 4 character
+            Username must be at least 4 characters long.
           </div>
         )}
         {formErrors.username && (

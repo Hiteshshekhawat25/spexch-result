@@ -273,6 +273,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 required
                 className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
               />
+              {/* Validation messages */}
               {formData.username.length > 0 && formData.username.length < 4 && (
                 <div className="text-red-500 text-sm">
                   Username must be at least 4 characters long.
