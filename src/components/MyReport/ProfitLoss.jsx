@@ -197,7 +197,7 @@ const ProfitLoss = () => {
                           : "text-green-500"
                       }`}
                     >
-                      {Math.abs(item.totalUplineProfitLoss)}
+                      {Math.abs(item.totalUplineProfitLoss.toFixed(2))}
                     </td>
                     <td
                       className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
@@ -206,7 +206,7 @@ const ProfitLoss = () => {
                           : "text-green-500"
                       }`}
                     >
-                      {Math.abs(item.totalDownlineProfitLoss)}
+                      {Math.abs(item.totalDownlineProfitLoss.toFixed(2))}
                     </td>
                     <td
                       className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${

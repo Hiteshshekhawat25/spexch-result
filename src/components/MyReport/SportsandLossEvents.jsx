@@ -164,14 +164,35 @@ const SportsandLossEvents = () => {
                 >
                   {item.match}
                 </td>
-                <td className="px-4 py-2 text-center">
-                  {item.totalUplineProfitLoss}
+                <td
+                  className="px-4 py-2 text-center"
+                  style={{
+                    color: item.totalUplineProfitLoss < 0 ? "red" : "green",
+                  }}
+                >
+                  {item.totalUplineProfitLoss < 0
+                    ? Math.abs(item.totalUplineProfitLoss.toFixed(2))
+                    : item.totalUplineProfitLoss.toFixed(2)}
                 </td>
-                <td className="px-4 py-2 text-center">
-                  {item.totalDownlineProfitLoss}
+                <td
+                  className="px-4 py-2 text-center"
+                  style={{
+                    color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
+                  }}
+                >
+                  {item.totalDownlineProfitLoss < 0
+                    ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
+                    : item.totalDownlineProfitLoss.toFixed(2)}
                 </td>
-                <td className="px-4 py-2 text-center">
-                  {item.totalDownlineProfitLoss}
+                <td
+                  className="px-4 py-2 text-center"
+                  style={{
+                    color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
+                  }}
+                >
+                  {item.totalDownlineProfitLoss < 0
+                    ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
+                    : item.totalDownlineProfitLoss.toFixed(2)}
                 </td>
               </tr>
             ))}

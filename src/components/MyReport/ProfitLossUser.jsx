@@ -234,9 +234,20 @@ const ProfitLossUser = () => {
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.matchDetails.status}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.totalDownlineProfitLoss}
+                        <td
+                          className="px-4 py-3 text-sm text-center border-r border-gray-400"
+                          style={{
+                            color:
+                              item.totalDownlineProfitLoss < 0
+                                ? "red"
+                                : "green",
+                          }}
+                        >
+                          {item.totalDownlineProfitLoss < 0
+                            ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
+                            : item.totalDownlineProfitLoss.toFixed(2)}
                         </td>
+
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {0}
                         </td>

@@ -173,10 +173,24 @@ const MatchProfitandLoss = () => {
                 <td className="px-4 py-2 text-center">
                   {item.matchDetails.result}
                 </td>
-                <td className="px-4 py-2 text-center">{item.amount}</td>
-                <td className="px-4 py-2 text-center">
-                  {item.totalUplineProfitLoss}
+                <td
+                  className="px-4 py-2 text-center"
+                  style={{ color: item.amount < 0 ? "red" : "green" }}
+                >
+                  {item.amount < 0 ? Math.abs(item.amount) : item.amount}
                 </td>
+
+                <td
+                  className="px-4 py-2 text-center"
+                  style={{
+                    color: item.totalUplineProfitLoss < 0 ? "red" : "green",
+                  }}
+                >
+                  {item.totalUplineProfitLoss < 0
+                    ? Math.abs(item.totalUplineProfitLoss.toFixed(2))
+                    : item.totalUplineProfitLoss.toFixed(2)}
+                </td>
+
                 <td className="px-4 py-2 text-center">
                   {new Date(item.createdAt).toLocaleString("en-GB", {
                     day: "2-digit",
