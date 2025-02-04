@@ -1,5 +1,3 @@
-import BetHistory from "../components/MyReport/BetHistory";
-import ProfitLossUser from "../components/MyReport/ProfitLossUser";
 
 export const ROUTES_CONST = {
   login: "/",
