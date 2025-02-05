@@ -290,11 +290,11 @@ const Banking = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("Token not found. Please log in again.");
-          return;
-        }
+        // const token = localStorage.getItem("authToken");
+        // if (!token) {
+        //   console.error("Token not found. Please log in again.");
+        //   return;
+        // }
 
         dispatch(setLoading(true));
 
@@ -326,33 +326,53 @@ const Banking = () => {
         const token = localStorage.getItem("authToken");
         if (!token) {
           console.error("Token not found. Please log in again.");
+          navigate("/login"); // Redirect to login if token is not found
           return;
         }
+
         const rolesArray = await fetchRoles(token);
 
-        if (Array.isArray(rolesArray)) {
-          const rolesData = rolesArray.map((role) => ({
-            role_name: role.role_name,
-            role_id: role._id,
-          }));
-          setRoles(rolesData);
-          if (location.pathname === "/master-banking") {
-            const masterRole = rolesData.find(
-              (role) => role.role_name === "master"
-            );
-            if (masterRole) {
-              setRoleId(masterRole.role_id);
-            }
-          } else if (location.pathname === "/user-banking") {
-            const userRole = rolesData.find(
-              (role) => role.role_name === "user"
-            );
-            if (userRole) {
-              setRoleId(userRole.role_id);
-            }
-          }
-        } else {
+        if (!Array.isArray(rolesArray)) {
           setError("Roles data is not an array.");
+          return;
+        }
+
+        const rolesData = rolesArray.map((role) => ({
+          role_name: role.role_name,
+          role_id: role._id,
+        }));
+
+        setRoles(rolesData);
+
+        if (location.pathname === "/master-banking") {
+          const masterAgentRoles = rolesData.filter(
+            (role) =>
+              role.role_name.toLowerCase() === "master" ||
+              role.role_name.toLowerCase() === "agent"
+          );
+          if (masterAgentRoles.length > 0) {
+            const fetchPromises = masterAgentRoles.map(
+              (role) => fetchDownlineData(1, 10000, role.role_id) // High limit to get all data
+            );
+            const results = await Promise.all(fetchPromises);
+
+            const combinedData = results.flatMap((result) => result.data || []);
+            const totalUsers = combinedData.length;
+            setTotalUsers(totalUsers);
+
+            const startIndex = (currentPage - 1) * entriesToShow;
+            const endIndex = startIndex + entriesToShow;
+            const paginatedData = combinedData.slice(startIndex, endIndex);
+
+            dispatch(setDownlineData(paginatedData));
+          } else if (rolesData.length > 0) {
+            setRoleId(rolesData[0].role_id);
+          }
+        } else if (location.pathname === "/user-banking") {
+          const userRole = rolesData.find((role) => role.role_name === "user");
+          if (userRole) {
+            setRoleId(userRole.role_id);
+          }
         }
       } catch (error) {
         setError(error.message || "Failed to fetch roles.");
@@ -507,7 +527,9 @@ const Banking = () => {
                     </span>
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(item.totalBalance+item.exposure)}
+                    {new Intl.NumberFormat("en-IN").format(
+                      item.totalBalance + item.exposure
+                    )}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                     {new Intl.NumberFormat("en-IN").format(item.totalBalance)}

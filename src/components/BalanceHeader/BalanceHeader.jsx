@@ -6,18 +6,15 @@ import { getBalanceData } from "../../Services/Downlinelistapi";
 const BalanceHeader = () => {
   const dispatch = useDispatch();
   const balanceData = useSelector((state) => state.balance);
-  const [data,setData] = useState([]);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getBalanceData("user/user-data-summary");
-        // setData(response?.data?.data);
-        // console.log("setData",setData);
-        setData(response?.data?.data)
+        setData(response?.data?.data);
         if (response?.data?.success) {
           dispatch(setBalanceData(response?.data?.data));
-          // setData(response?.data?.data)
         } else {
           console.error(
             "Failed to fetch balance data: ",
@@ -78,8 +75,7 @@ const BalanceHeader = () => {
         </div>
         {/* Available Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
-          IRP{" "}
-          {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
         </div>
         {/* Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
@@ -126,8 +122,7 @@ const BalanceHeader = () => {
           Available Balance
         </div>
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
-          IRP{" "}
-          {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
 

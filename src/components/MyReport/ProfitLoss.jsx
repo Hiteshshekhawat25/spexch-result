@@ -27,10 +27,11 @@ const ProfitLoss = () => {
     setSortConfig({ key, direction });
   };
 
-  const fetchUserData = async (userId, roleId) => {
+  const fetchUserData = async (userId, role_name) => {
+    console.log("roleId",role_name);
     const token = localStorage.getItem("authToken");
     setLocalLoading(true);
-    // if (roleId) {
+    // if (role_name) {
 
     // }
 
@@ -234,8 +235,8 @@ const ProfitLoss = () => {
             </tbody>
 
             {/* Footer */}
-            {(expandedRows[0]?.role_name === "master" ||
-              paginatedData[0]?.role_name === "master") && (
+            {/* {(expandedRows[0]?.role_name === "master" ||
+              paginatedData[0]?.role_name === "master") && ( */}
               <tfoot>
                 <tr className="bg-gray-300 text-black">
                   <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500">
@@ -266,7 +267,7 @@ const ProfitLoss = () => {
                   </td>
                 </tr>
               </tfoot>
-            )}
+            {/* )} */}
           </table>
         </div>
 

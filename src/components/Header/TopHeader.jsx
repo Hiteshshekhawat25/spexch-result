@@ -40,48 +40,46 @@ const TopHeader = () => {
   }, [dispatch, location.pathname]);
 
   return (
-    <div className="w-full bg-gradient-blue text-white py-6 px-4 lg:px-32 flex justify-between items-center">
+    <div className="w-full bg-gradient-blue text-white md:py-6 py-4 md:px-4 px-3 lg:px-[35px] flex justify-between items-center">
       <div className="flex items-center justify-between w-full lg:w-auto">
-        <div className="text-xl font-bold flex-shrink-0">
-          <img src={spexec} alt="Logo" height={80} width={80} />
+        <div className="text-xl font-bold flex-shrink-0 md:h-[40px] h-[30px]">
+          <img src={spexec} alt="Logo" className="h-full" />
         </div>
-<div className="lg:hidden flex flex-col items-end space-y-1">
-  {loading ? (
-    <div className="flex items-center">
-      <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Loading...</span>
-      <FaSyncAlt className="text-white animate-spin ml-1" />
-    </div>
-  ) : error ? (
-    <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Error: {error}</span>
-  ) : userData ? (
-    <div className="flex flex-col items-end space-y-1">
-      <div className="flex items-center space-x-1">
-        <span className="bg-darkgray text-white text-xs font-custom font-bold px-1 rounded-md">
-          {userData?.data?.role_name?.toUpperCase()}
-        </span>
-        <span className="text-white text-sm font-custom font-bold px-1 rounded-md">
-          {userData?.data?.username}
-        </span>
+        <div className="lg:hidden flex flex-col items-end space-y-1">
+          {loading ? (
+            <div className="flex items-center">
+              <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Loading...</span>
+              <FaSyncAlt className="text-white animate-spin ml-1" />
+            </div>
+          ) : error ? (
+            <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Error: {error}</span>
+          ) : userData ? (
+            <div className="flex flex-col items-end gap-2">
+              <div className="flex items-center space-x-1">
+                <span className="bg-gray-800 text-white text-[9px] font-custom py-1 px-2 rounded-md">
+                  {userData?.data?.role_name?.toUpperCase()}
+                </span>
+                <span className="text-white md:text-sm text-[13px] font-custom font-bold px-1 rounded-md">
+                  {userData?.data?.username}
+                </span>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-white rounded-md font-custom font-bold md:text-[16px] text-[14px]">
+                  IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
+                </span>
+                <button
+                  onClick={refreshData}
+                  className="bg-gray-800 text-white p-1 rounded-md hover:bg-gray-700"
+                  title="Refresh"
+                >
+                  <MdRefresh />
+                </button>
+              </div>
+            </div>
+          ) : null}
+        </div>
       </div>
-      <div className="flex items-center space-x-1">
-        <span className="text-white px-1 py-0.5 rounded-md font-custom font-bold">
-          IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
-        </span>
-        <button
-          onClick={refreshData}
-          className="bg-darkgray text-white p-0.5 rounded-md hover:bg-gray-700"
-          title="Refresh"
-        >
-          <MdRefresh />
-        </button>
-      </div>
-    </div>
-  ) : null}
-</div>
-
-
-      </div>
-      <div className="hidden lg:flex flex-col lg:flex-row items-center lg:space-x-2">
+      <div className="hidden lg:flex flex-col lg:flex-row items-center gap-3">
         {loading ? (
           <div className="flex items-center">
             <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Loading...</span>
@@ -91,21 +89,21 @@ const TopHeader = () => {
           <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Error: {error}</span>
         ) : userData ? (
           <>
-            <div className="flex items-center space-x-1 mb-1 lg:mb-0">
-              <span className="bg-darkgray text-white text-xs font-custom font-bold px-1 rounded-md">
+            <div className="flex items-center gap-1 mb-1 lg:mb-0">
+              <span className="bg-gray-800 text-white text-[10px] font-custom py-1 px-2 rounded-md">
                 {userData?.data?.role_name?.toUpperCase()}
               </span>
-              <span className="text-white text-sm font-custom font-bold px-1 rounded-md">
+              <span className="text-white md:text-sm text-[13px] font-custom font-bold px-1 rounded-md">
                 {userData?.data?.username}
               </span>
             </div>
-            <div className="flex items-center space-x-1">
-              <span className="text-white px-1 py-0.5 rounded-md  font-custom font-bold">
+            <div className="flex items-center gap-2">
+              <span className="text-white rounded-md font-custom font-bold">
                 IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
               </span>
               <button
                 onClick={refreshData}
-                className="bg-darkgray text-white p-0.5 rounded-md hover:bg-gray-700"
+                className="bg-gray-800 text-white p-1 rounded-md hover:bg-gray-700"
                 title="Refresh"
               >
                 <MdRefresh />
