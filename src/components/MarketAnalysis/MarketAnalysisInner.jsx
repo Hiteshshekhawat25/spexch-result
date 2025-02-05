@@ -254,6 +254,7 @@ const MarketAnalysisInner = () => {
       />
       <BookModal 
       showUser={showUserBook} 
+      type={type}
       setShowUser={setShowUserBook} 
       matchBetsData={matchBetsData} 
       book={books} 

@@ -182,3 +182,29 @@ export const getSingleMatch = async (id) => {
     throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }
 };
+
+
+
+export const transferSessionCoins = async (matchId,selectionId) => {
+  try {
+    const token = localStorage.getItem("authToken");
+
+    const response = await axios.post(
+      `${BASE_URL}/user/transfer-session-coin`,
+      {
+        matchId,
+        selectionId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating session result:", error);
+    throw error;
+  }
+};

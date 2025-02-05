@@ -166,7 +166,6 @@ const TransferMatchCoins = () => {
     try {
       const response = await axios.post(`${BASE_URL}/user/transfer-bookmakers-coin/`, body, {
         headers: {
-
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
