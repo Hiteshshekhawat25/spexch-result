@@ -164,7 +164,7 @@ const TransferMatchCoins = () => {
       // status : formValue?.selectionId === 'ABANDONED' ? 'ABANDONED' : formValue?.selectionId === 'TIE' ? 'TIE' : 'WINNER'
     }
     try {
-      const response = await axios.post(`${BASE_URL}/user/transfer-odds-coin/`, body, {
+      const response = await axios.post(`${BASE_URL}/user/transfer-bookmakers-coin/`, body, {
         headers: {
 
           Accept: "application/json",
