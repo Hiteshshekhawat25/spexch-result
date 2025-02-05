@@ -27,10 +27,12 @@ const ProfitLoss = () => {
     setSortConfig({ key, direction });
   };
 
- 
-  const fetchUserData = async (userId) => {
+  const fetchUserData = async (userId, roleId) => {
     const token = localStorage.getItem("authToken");
     setLocalLoading(true);
+    // if (roleId) {
+
+    // }
 
     try {
       const response = await axios.get(`${BASE_URL}/user/get-profit-loss`, {
@@ -155,7 +157,7 @@ const ProfitLoss = () => {
                       >
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium text-lightblue cursor-pointer"
-                          onClick={() => fetchUserData(row._id)}
+                          onClick={() => fetchUserData(row._id, row.role_name)}
                         >
                           {row.username ? row.username.toUpperCase() : ""}
                         </td>
@@ -170,18 +172,14 @@ const ProfitLoss = () => {
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                            row.totalDownlineProfitLoss < 0
-                              ? "text-red-500"
-                              : "text-green-500"
+                            row.totalDownlineProfitLoss < 0 ? "red" : "green"
                           }`}
                         >
                           {Math.abs(row.totalDownlineProfitLoss)}
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                            row.commission < 0
-                              ? "text-red-500"
-                              : "text-green-500"
+                            row.commission < 0 ? "red" : "green"
                           }`}
                         >
                           {0}
@@ -236,7 +234,8 @@ const ProfitLoss = () => {
             </tbody>
 
             {/* Footer */}
-            {(expandedRows[0]?.role_name === "master" || paginatedData[0]?.role_name ==="master") && (
+            {(expandedRows[0]?.role_name === "master" ||
+              paginatedData[0]?.role_name === "master") && (
               <tfoot>
                 <tr className="bg-gray-300 text-black">
                   <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500">
@@ -244,9 +243,7 @@ const ProfitLoss = () => {
                   </td>
                   <td
                     className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.profitLoss < 0
-                        ? "text-red-500"
-                        : "text-green-500"
+                      totalData.profitLoss < 0 ? "red" : "green"
                     }`}
                   >
                     {Math.abs(totalData.profitLoss.toFixed(2))}
@@ -254,7 +251,7 @@ const ProfitLoss = () => {
                   <td
                     className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
                       totalData.downlineProfitLoss < 0
-                        ? "text-red-500"
+                        ? "red"
                         : "text-green-500"
                     }`}
                   >
@@ -262,16 +259,14 @@ const ProfitLoss = () => {
                   </td>
                   <td
                     className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.commission < 0
-                        ? "text-red-500"
-                        : "text-green-500"
+                      totalData.commission < 0 ? "red" : "green"
                     }`}
                   >
                     {Math.abs(totalData.commission.toFixed(2))}
                   </td>
                 </tr>
               </tfoot>
-             )}
+            )}
           </table>
         </div>
 
