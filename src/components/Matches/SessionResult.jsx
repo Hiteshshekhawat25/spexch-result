@@ -3,8 +3,9 @@ import { ImBook } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSessions, selectSessions } from "../../Store/Slice/SessionSlice";
 import { FaEdit } from "react-icons/fa";
-import { getMatchList, updateSessionResult } from "../../Services/Newmatchapi";
+import { getMatchList, transferSessionCoins, updateSessionResult } from "../../Services/Newmatchapi";
 import { toast } from "react-toastify";
+import SessionEditModal from "./SessionEditModal";
 
 const SessionResult = () => {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ const SessionResult = () => {
   const [editingRow, setEditingRow] = useState(null);
   const [tempResult, setTempResult] = useState("");
   const [matchList, setMatchList] = useState([]);
+  const [openModal,setOpenModal] = useState(false);
   const [matchLoading, setMatchLoading] = useState(false);
   const [matchError, setMatchError] = useState("");
   const [selectedMatch, setSelectedMatch] = useState("");
@@ -50,6 +52,23 @@ const SessionResult = () => {
     setEditingRow(null);
   };
 
+  const handleTransferCoins = async (marketId) => {
+    // console.log("selectedSession", selectedSession, tempResult);
+    // if (!selectedSession || !tempResult) {
+    //   toast.error("Please select a match & session and enter a result.");
+    //   return;
+    // }
+    console.log("selectedMatch, marketId",selectedMatch, marketId);
+    try {
+      await transferSessionCoins(selectedMatch, marketId);
+      toast.success("transfer successfully!");
+      dispatch(fetchSessions(selectedMatch));
+    } catch (error) {
+      toast.error("Failed to update the session result. Please try again.");
+    }
+  };
+
+
   const handleMatchSelectFocus = async () => {
     if (matchList.length > 0) return;
     setMatchLoading(true);
@@ -82,6 +101,7 @@ const SessionResult = () => {
 
     try {
       await updateSessionResult(selectedMatch,selectedSession, tempResult);
+      setOpenModal(false)
       toast.success("Result updated successfully!");
       dispatch(fetchSessions(selectedMatch));
     } catch (error) {
@@ -206,9 +226,9 @@ const SessionResult = () => {
               <th className="px-4 py-2 text-left">Session ID</th>
               {/* <th className="px-4 py-2 text-left">Coin Transferred</th> */}
               <th className="px-4 py-2 text-left">Date</th>
-              {/* <th className="px-4 py-2 text-left">Session Book</th>
+              {/* <th className="px-4 py-2 text-left">Session Book</th> */}
               <th className="px-4 py-2 text-left">Transfer Coins</th>
-              <th className="px-4 py-2 text-left">Coin Log</th>
+              {/* <th className="px-4 py-2 text-left">Coin Log</th>
               <th className="px-4 py-2 text-left">Result Log</th> */}
             </tr>
           </thead>
@@ -241,6 +261,7 @@ const SessionResult = () => {
                     className="cursor-pointer text-blue-500"
                     // onClick={() => handleEditClick(index, session.result)}
                     onClick={()=> {
+                      setOpenModal(true)
                       setSelectedMatch(selectedMatch)
                       setSelectedSession(session?.marketId)
                       setTempResult(session?.result ? session?.result : 0)
@@ -250,11 +271,35 @@ const SessionResult = () => {
                 <td className="px-4 py-2">{session.marketId}</td>
                 {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
                 <td className="px-4 py-2">{session.marketTime}</td>
+                <td className="px-4 py-2">
+                      <button
+                        className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                        onClick={()=>handleTransferCoins(session.marketId)}
+                        disabled={!session?.result || session?.transferredCoin}
+                      >
+                        Transfer coins
+                      </button>
+                    </td>
               </tr>
-            )) : <tr><td colSpan={5} className="text-center py-5 border">No data found</td></tr> : <tr><td colSpan={5} className="text-center py-5 border">Please Select Match</td></tr>}
+            )) : <tr><td colSpan={5} className="text-center py-5 border">No data found</td></tr> : <tr><td colSpan={7} className="text-center py-5 border">Please Select Match</td></tr>}
           </tbody>
         </table>
       </div>
+      <SessionEditModal
+       onChange={handleMatchChange}
+       value={selectedMatch}
+       disabled={matchLoading}
+       matchError={matchError}
+       matchList={matchList}
+       handleSubmit={handleSubmit}
+       tempResult={tempResult}
+       setShowUser = {setOpenModal}
+       handleResultChange={handleResultChange}
+       filteredSessions={filteredSessions}
+       selectedSession={selectedSession}
+       setSelectedSession={setSelectedSession}
+      showUser={openModal}
+      />
     </div>
   );
 };

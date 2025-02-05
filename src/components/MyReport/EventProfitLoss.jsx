@@ -5,7 +5,7 @@ import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
 import { useNavigate } from "react-router-dom";
 
-const EventProfitLoss = () => {
+const EventProfitLoss = ({Userid}) => {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalEntries, setTotalEntries] = useState(0);
@@ -91,6 +91,7 @@ const EventProfitLoss = () => {
             entriesToShow={entriesToShow}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
+            Userid={Userid}
             setLocalLoading={setLocalLoading}
           />
           {/* Data Table */}

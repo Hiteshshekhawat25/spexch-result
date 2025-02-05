@@ -35,7 +35,11 @@ const MarketAnalysis = () => {
                 : ""}
             </React.Fragment>
           ))
-        : ""}
+        : 
+        <div className="text-slate-500 text-xl font-bold w-full border border-slate-500 p-2 rounded-md text-center">
+        No Bets Found!
+      </div>
+        }
     </>
   );
 };
