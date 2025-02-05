@@ -5,14 +5,17 @@ import { useLocation } from "react-router-dom";
 import { AddClientForm } from "../../components/Forms/AddClientForm";
 import { AddMasterForm } from "./AddMasterForm";
 import { FaUserPlus } from "react-icons/fa";
+import { useSelector } from "react-redux";
 
 const AddClientButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { userData, loading, error } = useSelector((state) => state.user);
   const location = useLocation();
   const modalRef = useRef(null);
 
-  const handleOpenDialog = () => setIsDialogOpen(true);
+  console.log("userData in add client button", userData?.data?.role_name);
 
+  const handleOpenDialog = () => setIsDialogOpen(true);
   const handleCloseDialog = () => setIsDialogOpen(false);
 
   useEffect(() => {
@@ -29,10 +32,7 @@ const AddClientButton = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isDialogOpen]);
 
   const buttonText =
@@ -47,15 +47,20 @@ const AddClientButton = () => {
 
   return (
     <div className="flex justify-end items-center gap-2 mb-6">
-      {location.pathname === "/master-downline-list" ? (
-        <button
-          onClick={handleOpenDialog}
-          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"
-        >
-          <FaUserPlus />
-          {buttonText}
-        </button>
-      ) : (
+      {/* Hide Add Master button if the role is agent */}
+      {location.pathname === "/master-downline-list" &&
+        userData?.data?.role_name !== "agent" && (
+          <button
+            onClick={handleOpenDialog}
+            className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"
+          >
+            <FaUserPlus />
+            {buttonText}
+          </button>
+        )}
+
+      {/* Add User button (always visible) */}
+      {location.pathname !== "/master-downline-list" && (
         <button
           onClick={handleOpenDialog}
           className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"

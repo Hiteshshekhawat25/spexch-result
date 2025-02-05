@@ -109,7 +109,7 @@ export const AddMasterForm = ({ closeModal }) => {
     }
   };
 
-  // Validatio
+  // Validation
   const validate = () => {
     const newErrors = {};
     if (!formData.username.trim()) {
@@ -117,7 +117,6 @@ export const AddMasterForm = ({ closeModal }) => {
     } else if (formData.username.length < 4) {
       newErrors.username = "Username must be at least 4 characters long.";
     }
-
     if (!formData.name.trim()) newErrors.name = "Name is required.";
     if (!formData.role) newErrors.role = "Role selection is required.";
     if (formData.commission < 0 || formData.commission > 100)
@@ -156,6 +155,9 @@ export const AddMasterForm = ({ closeModal }) => {
       const fetchRolesData = async () => {
         try {
           const rolesArray = await fetchRoles(token);
+          console.log("Roles:", rolesArray);
+
+          // Set all roles without filtering
           setRole(rolesArray || []);
         } catch {
           toast.error("Failed to fetch roles.");
@@ -165,9 +167,9 @@ export const AddMasterForm = ({ closeModal }) => {
     }
   }, [token]);
 
-  //  to select the role
+  // Handle role selection
   const handleRoleSelection = (roleId) => {
-    console.log("role id", roleId);
+    console.log("Selected Role ID:", roleId);
     setFormData((prevData) => ({
       ...prevData,
       role: roleId,
@@ -326,8 +328,9 @@ export const AddMasterForm = ({ closeModal }) => {
                 {role
                   ?.filter(
                     ({ role_name }) =>
-                      userData?.data?.role_name !== "master" ||
-                      role_name !== "master"
+                      (userData?.data?.role_name !== "master" ||
+                        role_name !== "master") &&
+                      role_name !== "user" 
                   )
                   .map(({ _id, role_name }, index) => (
                     <option key={index} value={_id}>
@@ -335,6 +338,7 @@ export const AddMasterForm = ({ closeModal }) => {
                     </option>
                   ))}
               </select>
+
               {errors.role && (
                 <div className="text-red-500 text-sm">{errors.role}</div>
               )}
@@ -519,10 +523,9 @@ export const AddMasterForm = ({ closeModal }) => {
                   : "bg-white"
               }`}
               onClick={() => {
-                // Manually toggle the value of `rollingCommissionChecked`
                 setFormData({
                   ...formData,
-                  rollingCommissionChecked: !formData.rollingCommissionChecked, // toggle the value
+                  rollingCommissionChecked: !formData.rollingCommissionChecked,
                 });
               }}
             >
@@ -607,11 +610,10 @@ export const AddMasterForm = ({ closeModal }) => {
                   : "bg-white"
               }`}
               onClick={() => {
-                // Manually toggle the value of `agentRollingCommissionChecked`
                 setFormData({
                   ...formData,
                   agentRollingCommissionChecked:
-                    !formData.agentRollingCommissionChecked, // toggle the value
+                    !formData.agentRollingCommissionChecked, 
                 });
               }}
             >
