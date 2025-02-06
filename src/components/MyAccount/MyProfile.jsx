@@ -253,7 +253,7 @@ const MyProfile = ({ Userid, Role }) => {
       )}
 
       {isChangePasswordModalOpen && (
-        <ChangePasswordModal
+        <ChangePasswordModal userId={Userid}
           onCancel={() => setIsChangePasswordModalOpen(false)}
         />
       )}

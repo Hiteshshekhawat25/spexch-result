@@ -529,47 +529,51 @@ const DownlineList = () => {
           ) : (
             ""
           )}
-          <div className="p-4 border border-gray-200 rounded-md bg-white">
+          <div className="md:p-4 p-3 border border-gray-200 rounded-md bg-white">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
-              {/* Show Entries Dropdown */}
-              <div className="p-2 rounded-md flex items-center w-full sm:w-auto">
-                <label className="mr-2 text-sm font-custom font-medium">
-                  Show
-                </label>
-                <select
-                  value={entriesToShow}
-                  onChange={handleEntriesChange}
-                  // className="border border-gray-300 rounded px-2 py-1 text-sm w-full sm:w-auto"
-                  className="border rounded px-2 py-1 text-sm  sm:w-auto"
-                >
-                  {[10, 25, 50, 100].map((number) => (
-                    <option key={number} value={number}>
-                      {number}
-                    </option>
-                  ))}
-                </select>
-                <label className="ml-2 text-sm font-custom font-medium">
-                  entries
-                </label>
+              <div className="flex items-center flex-1 w-full">
+                {/* Show Entries Dropdown */}
+                <div className="rounded-md flex items-center w-full sm:w-auto">
+                  <label className="mr-2 text-sm font-custom font-medium">
+                    Show
+                  </label>
+                  <select
+                    value={entriesToShow}
+                    onChange={handleEntriesChange}
+                    // className="border border-gray-300 rounded px-2 py-1 text-sm w-full sm:w-auto"
+                    className="border rounded px-2 py-1 text-sm  sm:w-auto"
+                  >
+                    {[10, 25, 50, 100].map((number) => (
+                      <option key={number} value={number}>
+                        {number}
+                      </option>
+                    ))}
+                  </select>
+                  <label className="ml-2 text-sm font-custom font-medium">
+                    entries
+                  </label>
+                </div>
+
+                {/* Filter Dropdown */}
+                <div className="flex-1 md:mr-2">
+                  <div className="rounded-md w-full sm:w-28 ml-auto">
+                    <select
+                      value={selectedFilter}
+                      onChange={handleFilterChange}
+                      // className="border rounded py-1 px-2 text-sm bg-gray-200 text-black border-gray-400 sm:ml-10 "
+                      className="border rounded py-1 px-2 text-sm bg-gray-200 text-black border-gray-400"
+                    >
+                      <option value="">Status</option>
+                      <option value="active">Active</option>
+                      <option value="suspended">Suspended</option>
+                      <option value="locked">Locked</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
               {/* Filters and Search */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 w-full sm:w-auto">
-                {/* Filter Dropdown */}
-                <div className="rounded-md w-full sm:w-28 px-3">
-                  <select
-                    value={selectedFilter}
-                    onChange={handleFilterChange}
-                    // className="border rounded py-1 px-2 text-sm bg-gray-200 text-black border-gray-400 sm:ml-10 "
-                    className="border rounded py-1 px-2 text-sm bg-gray-200 text-black border-gray-400 sm:ml-0 ml-10"
-                  >
-                    <option value="">Status</option>
-                    <option value="active">Active</option>
-                    <option value="suspended">Suspended</option>
-                    <option value="locked">Locked</option>
-                  </select>
-                </div>
-
                 {/* Search Input */}
                 <div className="flex w-full sm:flex-row sm:items-center sm:space-x-2">
                   <label className="text-sm p-1">Search:</label>
@@ -588,7 +592,7 @@ const DownlineList = () => {
             <div className="overflow-x-auto">
               <table className="w-full table-auto border-collapse border border-gray-300">
                 <thead className="border border-gray-300">
-                  <tr className="bg-gray-300">
+                  <tr className="bg-gray-200">
                     {[
                       { key: "username", label: "Username" },
                       { key: "creditRef", label: "CreditRef" },
@@ -609,7 +613,7 @@ const DownlineList = () => {
                     ].map(({ key, label }) => (
                       <th
                         key={key}
-                        className="border border-gray-400 text-left px-4 p-2 text-sm  font-custom  text-black cursor-pointer"
+                        className="border border-gray-400 text-left px-3 p-2 text-[12.5px] text-nowrap text-black cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between">
@@ -667,7 +671,7 @@ const DownlineList = () => {
                         key={item?._id}
                         className="border border-gray-400 bg-white"
                       >
-                        <td className="px-4 py-2 text-sm">
+                        <td className="px-3 py-2 text-[13px] text-nowrap">
                           <div
                             onClick={() => handleUsernameList(item)}
                             className={`${
@@ -677,7 +681,7 @@ const DownlineList = () => {
                             }`}
                           >
                             <span
-                              className={`bg-green-500 text-white px-2 py-1 text-xs mr-1 rounded font-custom font-medium text-l ${
+                              className={`bg-green-500 text-white px-2 py-1 text-[10.5px] mr-1 rounded font-custom font-semibold text-l ${
                                 item.role_name === "master"
                                   ? "cursor-pointer"
                                   : ""
@@ -686,7 +690,7 @@ const DownlineList = () => {
                               {item.role_name?.toUpperCase()}
                             </span>
                             <span
-                              className="text-black font-custom font-semibold"
+                              className="text-[#2789ce] font-custom font-semibold"
                               style={{
                                 fontFamily: "Tahoma, Helvetica, sans-serif",
                               }}
@@ -696,29 +700,31 @@ const DownlineList = () => {
                           </div>
                         </td>
                         <td
-                          className="border border-gray-400 px-4 py-2 text-md text-blue-700 font-medium"
+                          className="border border-gray-400 px-4 py-2 text-[13px] text-blue-700 font-semibold text-nowrap"
                           style={{
                             fontFamily: "Tahoma, Helvetica, sans-serif",
                           }}
                         >
-                          {new Intl.NumberFormat("en-IN", {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 2,
-                          }).format(item.creditReference)}
-                          <div className="ml-2 inline-flex space-x-2">
-                            <FaEdit
-                              className="text-blue cursor-pointer"
-                              onClick={() => handleEditClick(item)}
-                            />
-                            <FaEye
-                              className="text-blue cursor-pointer"
-                              onClick={() => handleListView(item)}
-                            />
-                          </div>
+                          <span className="flex items-center">
+                            {new Intl.NumberFormat("en-IN", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }).format(item.creditReference)}
+                            <span className="ml-2 inline-flex space-x-2">
+                              <FaEdit
+                                className="text-[#315195] cursor-pointer"
+                                onClick={() => handleEditClick(item)}
+                              />
+                              <FaEye
+                                className="text-[#315195] cursor-pointer"
+                                onClick={() => handleListView(item)}
+                              />
+                            </span>
+                          </span>
                         </td>
                         {!isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-medium"
+                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
                             style={{
                               fontFamily: "Tahoma, Helvetica, sans-serif",
                             }}
@@ -731,26 +737,28 @@ const DownlineList = () => {
                         )}
                         {isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-medium"
+                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
                             style={{
                               fontFamily: "Tahoma, Helvetica, sans-serif",
                             }}
                           >
-                            {new Intl.NumberFormat("en-IN", {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }).format(item.partnership)}
-                            <div className="ml-2 inline-flex space-x-2">
-                              <FaEdit
-                                className="text-blue cursor-pointer"
-                                onClick={() => handleUpdatePartnership(item)}
-                              />
-                            </div>
+                            <span className="flex items-center">
+                              {new Intl.NumberFormat("en-IN", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 2,
+                              }).format(item.partnership)}
+                              <span className="ml-2 inline-flex space-x-2">
+                                <FaEdit
+                                  className="text-[#315195] cursor-pointer"
+                                  onClick={() => handleUpdatePartnership(item)}
+                                />
+                              </span>
+                            </span>
                           </td>
                         )}
                         {isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-medium"
+                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
                             style={{
                               fontFamily: "Tahoma, Helvetica, sans-serif",
                             }}
@@ -762,7 +770,7 @@ const DownlineList = () => {
                           </td>
                         )}
                         <td
-                          className="border border-gray-400 px-4 py-2 text-sm text-red-700 font-custom font-medium"
+                          className="border border-gray-400 px-4 py-2 text-[13px] text-red-700 font-custom font-semibold"
                           style={{
                             fontFamily: "Tahoma, Helvetica, sans-serif",
                           }}
@@ -776,25 +784,27 @@ const DownlineList = () => {
                         </td>
                         {!isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-medium"
+                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
                             style={{
                               fontFamily: "Tahoma, Helvetica, sans-serif",
                             }}
                           >
-                            {new Intl.NumberFormat("en-IN", {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }).format(item.exposureLimit)}
-                            <div className="ml-2 inline-flex space-x-2">
-                              <FaEdit
-                                className="text-blue cursor-pointer"
-                                onClick={() => handleExposureEditClick(item)}
-                              />
-                            </div>
+                            <span className="flex items-center">
+                              {new Intl.NumberFormat("en-IN", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 2,
+                              }).format(item.exposureLimit)}
+                              <span className="ml-2 inline-flex space-x-2">
+                                <FaEdit
+                                  className="text-[#315195]  cursor-pointer"
+                                  onClick={() => handleExposureEditClick(item)}
+                                />
+                              </span>
+                            </span>
                           </td>
                         )}
                         <td
-                          className="border border-gray-400 px-4 py-2 text-sm font-custom font-medium"
+                          className="border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold"
                           style={{
                             fontFamily: "Tahoma, Helvetica, sans-serif",
                           }}
@@ -805,7 +815,7 @@ const DownlineList = () => {
                           }).format(item.totalBalance || 0)}
                         </td>
                         <td
-                          className={`border border-gray-400 px-4 py-2 text-sm font-custom font-medium ${
+                          className={`border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold ${
                             item.profit_loss < 0 ? "text-red-500" : ""
                           }`}
                           style={{
@@ -824,7 +834,7 @@ const DownlineList = () => {
                         </td>
                         {!isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-sm text-blue-900 font-custom font-medium"
+                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
                             style={{
                               fontFamily: "Tahoma, Helvetica, sans-serif",
                             }}
@@ -842,7 +852,7 @@ const DownlineList = () => {
                           }}
                         >
                           <span
-                            className={`p-1 rounded border ${
+                            className={`px-2 py-[4px] rounded-[5px] border text-[11px] capitalize ${
                               item.status === "active"
                                 ? "text-green-600 border-green-600 bg-green-100"
                                 : item.status === "suspended"
@@ -856,7 +866,7 @@ const DownlineList = () => {
                           </span>
                         </td>
                         <td className="px-4 py-2 text-sm">
-                          <div className="flex space-x-4">
+                          <div className="flex md:space-x-2.5 space-x-2">
                             <div
                               onClick={() => handleIconClick(item)}
                               title="Banking"

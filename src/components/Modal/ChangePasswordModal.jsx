@@ -1,57 +1,65 @@
-import React, { useState } from 'react';
-import { IoClose, IoEye, IoEyeOff } from 'react-icons/io5';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from "react";
+import { IoClose, IoEye, IoEyeOff } from "react-icons/io5";
+import { useDispatch, useSelector } from "react-redux";
 import {
   setChangePasswordLoading,
   setChangePasswordSuccess,
   setChangePasswordError,
   selectChangePasswordStatus,
   selectChangePasswordError,
-} from '../../Store/Slice/profileSlice';
-import { clearUserData } from '../../Store/Slice/userInfoSlice'; 
+} from "../../Store/Slice/profileSlice";
+import { clearUserData } from "../../Store/Slice/userInfoSlice";
 import { toast } from "react-toastify";
-import { changeUserPassword } from '../../Services/UserInfoApi';
+import {
+  changeOwnPassword,
+  changeUserPassword,
+} from "../../Services/UserInfoApi";
 
-const ChangePasswordModal = ({ onCancel }) => {
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
-  const [showCurrentPassword, setShowCurrentPassword] = useState(false); 
-  const [showNewPassword, setShowNewPassword] = useState(false); 
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
+const ChangePasswordModal = ({ userId, onCancel }) => {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useDispatch();
   const changePasswordStatus = useSelector(selectChangePasswordStatus);
   const changePasswordError = useSelector(selectChangePasswordError);
+  console.log("userrrrrrrrrrrrr", userId);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async ({ userId }) => {
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setError('All fields are required');
+      setError("All fields are required");
       return;
     }
+
     if (newPassword !== confirmPassword) {
-      setError('New password and confirm password do not match');
+      setError("New password and confirm password do not match");
       return;
     }
 
     dispatch(setChangePasswordLoading());
 
     try {
-      // Use the utility function for API call
-      await changeUserPassword(currentPassword, newPassword);
+      if (userId) {
+        await changeUserPassword(currentPassword, newPassword, userId);
+      } else {
+        await changeOwnPassword(currentPassword, newPassword);
+      }
+
       dispatch(setChangePasswordSuccess());
+      toast.success("Password changed successfully!");
 
-      toast.success('Password changed successfully!', {});
-
-      // Clear user data and logout
       dispatch(clearUserData());
       localStorage.clear();
       window.location.reload();
+      // window.location.href = "/";
     } catch (err) {
       dispatch(setChangePasswordError(err.message));
       setError(err.message);
-      toast.error('Failed to change password. Please try again.', {});
+      toast.error("Failed to change password. Please try again.");
     }
   };
 
@@ -73,7 +81,7 @@ const ChangePasswordModal = ({ onCancel }) => {
             </label>
             <div className="relative">
               <input
-                type={showCurrentPassword ? 'text' : 'password'}
+                type={showCurrentPassword ? "text" : "password"}
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
@@ -82,7 +90,11 @@ const ChangePasswordModal = ({ onCancel }) => {
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
               >
-                {showCurrentPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+                {showCurrentPassword ? (
+                  <IoEyeOff size={20} />
+                ) : (
+                  <IoEye size={20} />
+                )}
               </span>
             </div>
           </div>
@@ -93,7 +105,7 @@ const ChangePasswordModal = ({ onCancel }) => {
             </label>
             <div className="relative">
               <input
-                type={showNewPassword ? 'text' : 'password'}
+                type={showNewPassword ? "text" : "password"}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
@@ -113,16 +125,20 @@ const ChangePasswordModal = ({ onCancel }) => {
             </label>
             <div className="relative">
               <input
-                type={showConfirmPassword ? 'text' : 'password'}
+                type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
-                 />
+              />
               <span
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
               >
-                {showConfirmPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+                {showConfirmPassword ? (
+                  <IoEyeOff size={20} />
+                ) : (
+                  <IoEye size={20} />
+                )}
               </span>
             </div>
           </div>
@@ -137,14 +153,14 @@ const ChangePasswordModal = ({ onCancel }) => {
             <button
               onClick={handleSubmit}
               className="bg-ashGray text-white font-bold font-custom px-2 py-2 rounded"
-              disabled={changePasswordStatus === 'loading'}
+              disabled={changePasswordStatus === "loading"}
             >
-              {changePasswordStatus === 'loading' ? 'Processing...' : 'Confirm'}
+              {changePasswordStatus === "loading" ? "Processing..." : "Confirm"}
             </button>
             <button
               onClick={onCancel}
               className="bg-gray-400 text-darkGray px-2 py-2 rounded font-bold font-custom"
-              disabled={changePasswordStatus === 'loading'}
+              disabled={changePasswordStatus === "loading"}
             >
               No
             </button>

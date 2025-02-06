@@ -5,17 +5,14 @@ import { useLocation } from "react-router-dom";
 import { AddClientForm } from "../../components/Forms/AddClientForm";
 import { AddMasterForm } from "./AddMasterForm";
 import { FaUserPlus } from "react-icons/fa";
-import { useSelector } from "react-redux";
 
 const AddClientButton = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const { userData, loading, error } = useSelector((state) => state.user);
   const location = useLocation();
   const modalRef = useRef(null);
 
-  console.log("userData in add client button", userData?.data?.role_name);
-
   const handleOpenDialog = () => setIsDialogOpen(true);
+
   const handleCloseDialog = () => setIsDialogOpen(false);
 
   useEffect(() => {
@@ -32,7 +29,10 @@ const AddClientButton = () => {
     };
 
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [isDialogOpen]);
 
   const buttonText =
@@ -46,36 +46,31 @@ const AddClientButton = () => {
     );
 
   return (
-    <div className="flex justify-end items-center gap-2 mb-6">
-      {/* Hide Add Master button if the role is agent */}
-      {location.pathname === "/master-downline-list" &&
-        userData?.data?.role_name !== "agent" && (
-          <button
-            onClick={handleOpenDialog}
-            className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"
-          >
-            <FaUserPlus />
-            {buttonText}
-          </button>
-        )}
-
-      {/* Add User button (always visible) */}
-      {location.pathname !== "/master-downline-list" && (
+    <div className="flex justify-end items-center gap-2 md:mb-6 mb-4">
+      {location.pathname === "/master-downline-list" ? (
         <button
           onClick={handleOpenDialog}
-          className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold"
+          className="px-3 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold text-[14px]"
+        >
+          <FaUserPlus />
+          {buttonText}
+        </button>
+      ) : (
+        <button
+          onClick={handleOpenDialog}
+          className="px-3 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold text-[14px]"
         >
           <FaUserPlus />
           {buttonText}
         </button>
       )}
 
-      <button className="px-2 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200">
+      <button className="px-3 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200">
         <RiResetLeftLine />
       </button>
 
       {isDialogOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 sm:px-0 px-2">
           <div
             ref={modalRef}
             className="bg-white rounded-lg shadow-lg max-h-[95vh] overflow-y-auto w-full max-w-lg"
