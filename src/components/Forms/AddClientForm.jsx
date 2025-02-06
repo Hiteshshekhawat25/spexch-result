@@ -263,17 +263,20 @@ export const AddClientForm = ({ closeModal }) => {
 
   return (
     <div className="bg-white shadow-lg">
-      <h2 className=" flex text-white font-custom font-semibold mb-4 py-2 px-2 bg-gradient-blue">
+      <h2 className="flex text-white font-custom text-[15px] font-semibold mb-4 py-2 px-2 bg-gradient-blue">
         Add User
         <IoClose
           onClick={closeModal}
           className="cursor-pointer text-white text-2xl ml-auto"
         />
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-2 px-6 ">
-        <div className="w-full flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Username<span className="text-red-500">*</span>
+      <form
+        onSubmit={handleSubmit}
+        className="gap-2.5 md:px-6 px-4 flex flex-col"
+      >
+        <div className="w-full flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Username<span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="text"
@@ -281,22 +284,22 @@ export const AddClientForm = ({ closeModal }) => {
             value={formData.username}
             placeholder="Username..."
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
             required
           />
         </div>
         {formData.username.length > 0 && formData.username.length < 4 && (
-          <div className="text-red-500 text-sm ml-[33%]">
+          <div className="text-red-500 ml-1 text-sm ml-[33%]">
             Username must be at least 4 characters long.
           </div>
         )}
         {formErrors.username && (
-          <div className="text-red-500 text-sm ml-[33%]">
+          <div className="text-red-500 ml-1 text-sm ml-[33%]">
             {formErrors.username}
           </div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
             Name
           </label>
           <input
@@ -305,14 +308,14 @@ export const AddClientForm = ({ closeModal }) => {
             value={formData.name}
             placeholder="Name..."
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
             required
           />
         </div>
 
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Commission(%)<span className="text-red-500">*</span>
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Commission(%)<span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="text"
@@ -320,16 +323,16 @@ export const AddClientForm = ({ closeModal }) => {
             value={formData.commission}
             placeholder="Commission.."
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
             required
           />
         </div>
         {formErrors.commission && (
-          <div className="text-red-500">{formErrors.commission}</div>
+          <div className="text-red-500 ml-1">{formErrors.commission}</div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Opening Balance<span className="text-red-500">*</span>
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Opening Balance<span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="text"
@@ -337,16 +340,16 @@ export const AddClientForm = ({ closeModal }) => {
             placeholder="OpeningBalance.."
             value={formData.openingBalance}
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
             required
           />
         </div>
         {formErrors.openingBalance && (
-          <div className="text-red-500">{formErrors.openingBalance}</div>
+          <div className="text-red-500 ml-1">{formErrors.openingBalance}</div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Credit Reference<span className="text-red-500">*</span>
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Credit Reference<span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="text"
@@ -354,16 +357,16 @@ export const AddClientForm = ({ closeModal }) => {
             placeholder="CreditReference.."
             value={formData.creditReference}
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
             required
           />
         </div>
         {formErrors.creditReference && (
-          <div className="text-red-500">{formErrors.creditReference}</div>
+          <div className="text-red-500 ml-1">{formErrors.creditReference}</div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Mobile Number<span className="text-red-500">*</span>
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Mobile Number<span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="text"
@@ -371,16 +374,16 @@ export const AddClientForm = ({ closeModal }) => {
             value={formData.mobileNumber}
             placeholder="Mobile Number.."
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
             required
           />
         </div>
         {formErrors.mobileNumber && (
-          <div className="text-red-500">{formErrors.mobileNumber}</div>
+          <div className="text-red-500 ml-1">{formErrors.mobileNumber}</div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Exposure Limit<span className="text-red-500">*</span>
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Exposure Limit<span className="text-red-500 ml-1">*</span>
           </label>
           <input
             type="text"
@@ -388,16 +391,16 @@ export const AddClientForm = ({ closeModal }) => {
             value={formData.exposureLimit}
             placeholder="ExposureLimit.."
             onChange={handleChange}
-            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+            className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
             required
           />
         </div>
         {formErrors.exposureLimit && (
-          <div className="text-red-500">{formErrors.exposureLimit}</div>
+          <div className="text-red-500 ml-1">{formErrors.exposureLimit}</div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Password<span className="text-red-500">*</span>
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Password<span className="text-red-500 ml-1">*</span>
           </label>
           <div className="relative w-full md:w-2/3">
             <input
@@ -407,23 +410,23 @@ export const AddClientForm = ({ closeModal }) => {
               // pattern="^(?=.*[a-z])(?=.*[A-Z]).{2,}$"
               placeholder="Password.."
               onChange={handleChange}
-              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               required
             />
             <span
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
             >
               {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
             </span>
           </div>
         </div>
         {formErrors.password && (
-          <div className="text-red-500">{formErrors.password}</div>
+          <div className="text-red-500 ml-1">{formErrors.password}</div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Confirm Password<span className="text-red-500">*</span>
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Confirm Password<span className="text-red-500 ml-1">*</span>
           </label>
           <div className="relative w-full md:w-2/3">
             <input
@@ -433,15 +436,17 @@ export const AddClientForm = ({ closeModal }) => {
               // pattern="^(?=.*[a-z])(?=.*[A-Z]).{2,}$"
               placeholder="ConfirmPassword.."
               onChange={handleChange}
-              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               required
             />
             {formErrors.confirmPassword && (
-              <div className="text-red-500">{formErrors.confirmPassword}</div>
+              <div className="text-red-500 ml-1">
+                {formErrors.confirmPassword}
+              </div>
             )}
             <span
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
             >
               {showConfirmPassword ? (
                 <IoEyeOff size={20} />
@@ -452,11 +457,11 @@ export const AddClientForm = ({ closeModal }) => {
           </div>
         </div>
         {formErrors.confirmPassword && (
-          <div className="text-red-500">{formErrors.confirmPassword}</div>
+          <div className="text-red-500 ml-1">{formErrors.confirmPassword}</div>
         )}
 
         <div className="flex items-center">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
             Rolling Commission
           </label>
           {/* <input
@@ -466,7 +471,7 @@ export const AddClientForm = ({ closeModal }) => {
             onChange={handleChange}
           /> */}
           <div
-            className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+            className={`relative inline-flex items-center rounded-[4px] h-7 w-14 p-[2px] border border-whiteGray cursor-pointer transition-colors ${
               formData.rollingCommissionChecked
                 ? "bg-gradient-seablue"
                 : "bg-white"
@@ -501,19 +506,19 @@ export const AddClientForm = ({ closeModal }) => {
             </span>
 
             <span
-              className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+              className={`inline-block size-[21px] border rounded-[2px] border-whiteGray bg-white transform transition-transform ${
                 formData.rollingCommissionChecked
-                  ? "translate-x-9"
-                  : "translate-x-1"
+                  ? "translate-x-7"
+                  : "translate-x-[1.5px]"
               }`}
             ></span>
           </div>
         </div>
 
         {formData.rollingCommissionChecked && (
-          <div className="space-y-2">
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">
+          <div className="flex flex-col gap-2.5">
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label className="w-full md:w-1/3 capitalize text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
                 Fancy
               </label>
               <input
@@ -521,11 +526,11 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.fancy"
                 value={formData.rollingCommission.fancy || 0}
                 onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
             </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label className="w-full md:w-1/3 capitalize text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
                 Matka
               </label>
               <input
@@ -533,11 +538,11 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.matka"
                 value={formData.rollingCommission.matka || 0}
                 onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
             </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label className="w-full md:w-1/3 capitalize text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
                 Casino
               </label>
               <input
@@ -545,11 +550,11 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.casino"
                 value={formData.rollingCommission.casino || 0}
                 onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
             </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom">
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label className="w-full md:w-1/3 capitalize text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
                 Binary
               </label>
               <input
@@ -557,21 +562,23 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.binary"
                 value={formData.rollingCommission.binary || 0}
                 onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
             </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-1/3 text-left font-custom ">Sportbook</label>
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label className="w-full md:w-1/3 capitalize text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+                Sportbook
+              </label>
               <input
                 type="text"
                 name="rollingCommission.sportbook"
                 value={formData.rollingCommission.sportbook || 0}
                 onChange={handleChange}
-                className="w-full sm:w-2/3  p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
             </div>
-            <div className="flex flex-col sm:flex-row justify-between items-center sm:items-start">
-              <label className="w-full sm:w-1/3 text-center sm:text-left font-custom ">
+            <div className="flex flex-col md:flex-row md:items-center">
+              <label className="w-full md:w-1/3 capitalize text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1 ">
                 Bookmaker
               </label>
               <input
@@ -579,14 +586,14 @@ export const AddClientForm = ({ closeModal }) => {
                 name="rollingCommission.bookmaker"
                 value={formData.rollingCommission.bookmaker || 0}
                 onChange={handleChange}
-                className="w-full sm:w-2/3 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
             </div>
           </div>
         )}
-        <div className="flex flex-col md:flex-row justify-between">
-          <label className="w-full md:w-1/3 text-center md:text-left font-custom text-sm font-medium">
-            Master Password<span className="text-red-500">*</span>
+        <div className="flex flex-col md:flex-row justify-between md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+            Master Password<span className="text-red-500 ml-1">*</span>
           </label>
           <div className="relative w-full md:w-2/3">
             <input
@@ -596,12 +603,12 @@ export const AddClientForm = ({ closeModal }) => {
               // pattern="^(?=.*[a-z])(?=.*[A-Z]).{2,}$"
               placeholder="MasterPassword.."
               onChange={handleChange}
-              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+              className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               required
             />
             <span
               onClick={() => setShowMasterPassword(!showMasterPassword)}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer text-black"
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-gray-500"
             >
               {showMasterPassword ? (
                 <IoEyeOff size={20} />
@@ -612,14 +619,14 @@ export const AddClientForm = ({ closeModal }) => {
           </div>
         </div>
         {formErrors.masterPassword && (
-          <div className="text-red-500">{formErrors.masterPassword}</div>
+          <div className="text-red-500 ml-1">{formErrors.masterPassword}</div>
         )}
 
         <div className="flex justify-center mt-4">
           <button
             type="submit"
             disabled={!isFormValid || isSubmitting}
-            className={`px-4 py-2 text-white rounded mb-2 ${
+            className={`px-7 py-2 text-white rounded mb-2 ${
               isFormValid
                 ? "bg-gradient-seablue hover:bg-gradient-seablue"
                 : "bg-gray-400 cursor-not-allowed"

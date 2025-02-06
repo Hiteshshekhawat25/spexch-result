@@ -244,7 +244,7 @@ const ProfitLoss = () => {
                   </td>
                   <td
                     className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.profitLoss < 0 ? "red" : "green"
+                      totalData.profitLoss < 0 ? "text-red-500" : "text-green-500"
                     }`}
                   >
                     {Math.abs(totalData.profitLoss.toFixed(2))}
@@ -252,7 +252,7 @@ const ProfitLoss = () => {
                   <td
                     className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
                       totalData.downlineProfitLoss < 0
-                        ? "red"
+                        ? "text-red-500"
                         : "text-green-500"
                     }`}
                   >
