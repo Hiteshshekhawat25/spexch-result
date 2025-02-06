@@ -102,6 +102,7 @@ export const changeUserPassword = async (currentPassword, newPassword, userId) =
     throw new Error(error.response?.data?.message || "Failed to change password. Please try again.");
   }
 };
+
 export const changeOwnPassword = async (currentPassword, newPassword) => {
   const token = localStorage.getItem("authToken");
 

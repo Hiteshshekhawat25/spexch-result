@@ -83,9 +83,9 @@ const MyProfile = ({ Userid, Role }) => {
     );
   }
 
-  if (profileStatus === "failed") {
-    return <div>Error: {profileError}</div>;
-  }
+  // if (profileStatus === "failed") {
+  //   return <div>Error: {profileError}</div>;
+  // }
 
   // Open Rolling Commission modal
   const handleOpenRollingModal = () => {
@@ -262,7 +262,7 @@ const MyProfile = ({ Userid, Role }) => {
           username={modalData.username}
           currentExposureLimit={modalData.exposureLimit}
           userId={ID}
-          onCancel={() => setIsEditExposureLimitModalOpen(false)} // Close modal handler
+          onCancel={() => setIsEditExposureLimitModalOpen(false)} 
           onSubmit={(updatedData) => {
             console.log("Updated Exposure Data:", updatedData);
             setIsEditCommissionModalOpen(false);

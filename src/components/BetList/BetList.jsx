@@ -200,7 +200,7 @@ const BetList = ({ Userid }) => {
                         "selection",
                         "Type",
                         "oddsReq",
-                        "stack",
+                        "stake",
                         "placeTime",
                         "settleTime",
                       ].map((key) => (
@@ -226,8 +226,8 @@ const BetList = ({ Userid }) => {
                                   ? "Type"
                                   : key === "oddsReq"
                                   ? "Odds Req"
-                                  : key === "stack"
-                                  ? "Stack"
+                                  : key === "stake"
+                                  ? "Stake"
                                   : key === "placeTime"
                                   ? "Place Time"
                                   : key === "settleTime"

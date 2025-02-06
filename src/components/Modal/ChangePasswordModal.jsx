@@ -23,46 +23,87 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [parentPassword, setParentPassword] = useState("");
 
   const dispatch = useDispatch();
   const changePasswordStatus = useSelector(selectChangePasswordStatus);
   const changePasswordError = useSelector(selectChangePasswordError);
   console.log("userrrrrrrrrrrrr", userId);
 
-  const handleSubmit = async ({ userId }) => {
+  // const handleSubmit = async ( userId ) => {
+  //   console.log("userIDdd",userId)
+  //   if (!currentPassword || !newPassword || !confirmPassword) {
+  //     setError("All fields are required");
+  //     return;
+  //   }
+
+  //   if (newPassword !== confirmPassword) {
+  //     setError("New password and confirm password do not match");
+  //     return;
+  //   }
+
+  //   dispatch(setChangePasswordLoading());
+
+  //   try {
+  //     if (userId) {
+  //       console.log("hi")
+  //       await changeUserPassword(currentPassword, newPassword, userId);
+  //     } else {
+  //       console.log("bye")
+  //       await changeOwnPassword(currentPassword, newPassword);
+  //     }
+
+  //     dispatch(setChangePasswordSuccess());
+  //     toast.success("Password changed successfully!");
+
+  //     dispatch(clearUserData());
+  //     localStorage.clear();
+  //     window.location.reload();
+  //     // window.location.href = "/";
+  //   } catch (err) {
+  //     dispatch(setChangePasswordError(err.message));
+  //     setError(err.message);
+  //     toast.error("Failed to change password. Please try again.");
+  //   }
+  // };
+
+  const handleSubmit = async () => {
+    console.log("userID:", userId);
+  
     if (!currentPassword || !newPassword || !confirmPassword) {
       setError("All fields are required");
       return;
     }
-
+  
     if (newPassword !== confirmPassword) {
       setError("New password and confirm password do not match");
       return;
     }
-
+  
     dispatch(setChangePasswordLoading());
-
+  
     try {
       if (userId) {
+        console.log("Changing password for user:", userId);
         await changeUserPassword(currentPassword, newPassword, userId);
       } else {
+        console.log("Changing own password");
         await changeOwnPassword(currentPassword, newPassword);
       }
-
+  
       dispatch(setChangePasswordSuccess());
       toast.success("Password changed successfully!");
-
+  
       dispatch(clearUserData());
       localStorage.clear();
       window.location.reload();
-      // window.location.href = "/";
     } catch (err) {
       dispatch(setChangePasswordError(err.message));
       setError(err.message);
       toast.error("Failed to change password. Please try again.");
     }
   };
-
+  
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-20">
@@ -82,7 +123,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
             <div className="relative">
               <input
                 type={showCurrentPassword ? "text" : "password"}
-                value={currentPassword}
+                value={password}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
               />
@@ -120,7 +161,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
           </div>
 
           <div>
-            <label className="text-sm font-custom font-medium text-gray-700">
+            <label className="text-sm font-custom font-medium text-gray-700" onClick={() => handleSubmit(userId)}>
               Confirm Password <span className="text-red-600">*</span>
             </label>
             <div className="relative">
