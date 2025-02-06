@@ -87,7 +87,7 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
           </div>
         </div>
         {
-          matchBetsData?.bookmakersOdds?.length ? matchBetsData?.bookmakersOdds?.map((item, pIndex) => {
+          matchBetsData?.bookmakersOdds?.length ? matchBetsData?.bookmakersOdds?.sort((a,b)=>a.selectionName - b.selectionName)?.map((item, pIndex) => {
             let exposerval = returnExposerAmount(item?.selectionId)
             return (
             <React.Fragment key={item?.selectionId}>

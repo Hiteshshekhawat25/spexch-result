@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, type }) {
 
-  const [betList,setBetList] = useState([]);
+  const [betList, setBetList] = useState([]);
 
   const handleClose = () => {
     setShowUser(false)
@@ -10,43 +10,20 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
 
 
   const returnSortedArr = () => {
-    const newArr = []
-    let result =[]
-    let left = []
-    
-     userBookList.forEach((item)=>{
-         newArr.push(item)
-         const data = newArr.filter((itm)=> item.id == itm.id)
-         const data2 = newArr.filter((itm)=> item.id !== itm.id)
-        
-         if(data?.length > 0){
-            result = [...data]
-         }
-         if(data2?.length){
-             left = [...data2]
-         }
-     })
-     
-     let add = 0
-     let sum = result.map((item)=>{
-         console.log({item})
-         return add += item.amount
-     }) 
-     
-     let obj = {}
-     
-     obj.id = result?.[0]?.id,
-     obj.name = result?.[0]?.name,
-     obj.amount = add
-     setBetList([...left,obj].sort((a,b)=>a.id - b.id))
-     console.log([...left,obj].sort((a,b)=>a.id - b.id))
+    let temp = []
+  const uniq = userBookList?.map((item)=>{
+    temp.push(item)
+    let cond = temp?.filter((itm)=>item.userId !== itm.userId )
+    console.log({temp},'function')
+   
+  })
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     returnSortedArr()
-  },[])
+  }, [userBookList])
 
-  console.log({ userBookList,betList }, 'userBookList')
+  console.log({ userBookList, betList }, 'item')
   return (
     <>
       <div onClick={handleClose} className={`h-dvh w-full fixed z-[500] top-0 left-0 items-center justify-center bg-black/40 transition-all duration-500 ease-in-out ${showUser ? 'flex' : 'hidden'}`} style={{ backdropFilter: 'blur(4px)' }}>

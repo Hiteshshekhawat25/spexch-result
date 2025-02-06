@@ -8,13 +8,14 @@ import { useDispatch, useSelector } from "react-redux"
 // import { fetchTvUrl } from "../../store/slices/tvUrl/TvUrlSlice"
 import MobileStream from "./components/MobileStream"
 import { socket } from "../../Services/socket"
-import { SOCKET_ROUTES } from "../../Constant/Api"
+import { BASE_URL, SOCKET_ROUTES } from "../../Constant/Api"
 import MarketBetModal from "../marketBetModal/MarketBetModal"
 import { fetchMarketBets } from "../../Store/Slice/marketBetsSlice"
 import UserHistoryModal from "../marketBetModal/UserHistoryModal"
 import BookModal from "../marketBetModal/BookModal"
 import { fetchUserBook } from "../../Store/Slice/UserBookSlice"
 import MarketListModal from "../marketBetModal/MarketListModal"
+import axios from "axios"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -40,14 +41,48 @@ const MarketAnalysisInner = () => {
   })
   const {gameId} = useParams()
   const dispatch = useDispatch()
-  const openBets = useSelector(state => state?.openBets)
+  const openBets = useSelector(state => state?.betList)
   const {data : backBets} = useSelector(state => state?.marketBetList)
   const {data : userBooks} = useSelector(state => state?.userBookList)
+  const [page,setPage] = useState(1)
     const [showUser, setShowUser] = useState(false)
     const [selectedUser, setSelectedUser] = useState({})
+    const [betList,setBetList] = useState([]);
     const [showUserBook,setShowUserBook] = useState(false)
 
-    console.log('matchBetsData', matchBetsData)
+    const getBetList = async () => {
+
+      const token = localStorage.getItem("authToken");
+
+      try {
+        const response = await axios.get(`${BASE_URL}/user/get-odds-bet-list?matchId=${gameId}&limit=10&page=${page}`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("response",response);
+        if(response?.data?.success) {
+          setBetList(response?.data?.data)
+          // setTotalPage(response?.data?.pagination?.totalPages)
+        }
+      } catch (error) {
+        // Handle specific token expiry case
+        if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+          localStorage.clear();
+          alert("Session expired. Please log in again.");
+        }
+        // Handle other API errors
+        toast.error(error?.response?.data?.message)
+        console.error("API error:", error);
+        // throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+      }
+    };
+
+
+    useEffect(()=>{
+      getBetList()
+    },[])
 
       useEffect(() => {
         socket.connect()
@@ -73,13 +108,15 @@ const MarketAnalysisInner = () => {
           }
         },[liveBets])
 
+        
+
         useEffect(()=> {
           if(showUserBook) {
             dispatch(fetchUserBook({page : 1,limit : 100,type : type,matchId : gameId}))
           }
         },[showUserBook])
 
-        console.log({gameId,showUserBook,userBooks})
+        console.log({openBets},'function')
 
   return (
     <>
@@ -107,7 +144,7 @@ const MarketAnalysisInner = () => {
             <div className={`${(activeOdds === 'all' || activeOdds === 'odds') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && matchBetsData?.matchodds?.length ? 
-                  <OddsSection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} openBets={openBets?.data}/>
+                  <OddsSection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} betList={betList} openBets={openBets?.data}/>
                 : ''
               }
             </div>

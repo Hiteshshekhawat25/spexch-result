@@ -135,6 +135,9 @@ const MatchOddsBets = () => {
         }
       };
 
+
+      console.log({betList},'function')
+
   return (
     <div className="w-full p-4">
       {/* Title Section */}
