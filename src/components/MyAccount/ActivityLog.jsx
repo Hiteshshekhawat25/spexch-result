@@ -24,13 +24,13 @@ const ActivityLog = ({ Userid }) => {
   const userId = userData?.data?._id;
 
   useEffect(() => {
-    if (userId) {
+    if (Userid) {
       dispatch(setActivityLogsLoading());
 
       const fetchActivityLogs = async () => {
         try {
           const response = await getUserData(
-            `user/login-activity/${userId}?page=${currentPage}&limit=${entriesToShow}`
+            `user/login-activity/${Userid}?page=${currentPage}&limit=${entriesToShow}`
           );
           dispatch(
             setActivityLogs({
@@ -54,7 +54,7 @@ const ActivityLog = ({ Userid }) => {
 
       fetchActivityLogs();
     }
-  }, [userId, currentPage, entriesToShow, dispatch]);
+  }, [Userid, currentPage, entriesToShow, dispatch]);
 
   const handleEntriesChange = (event) => {
     setEntriesToShow(Number(event.target.value));
