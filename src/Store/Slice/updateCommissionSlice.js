@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 export const updateCommission = createAsyncThunk(
   'commission/updateCommission',
   async ({ newCommission, password, userId }, { rejectWithValue }) => {
+    console.log("apiiiiiiiiiiiiiiiiiiiiiiii",userId)
     try {
       const token = localStorage.getItem('authToken');
 
@@ -15,7 +16,7 @@ export const updateCommission = createAsyncThunk(
       }
 
       const response = await axios.put(
-        `${BASE_URL}/update-commission`,
+        `${BASE_URL}/user/update-commission`,
         {
           newCommission,
           password,
