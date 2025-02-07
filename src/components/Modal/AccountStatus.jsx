@@ -140,6 +140,10 @@ const AccountStatus = ({
       setLoading(false);
     }
   };
+
+
+
+  console.log({user},'user')
   
   
 
@@ -164,37 +168,38 @@ const AccountStatus = ({
                   className="bg-green-500 text-white px-1 py-1 mr-1 rounded  font-custom font-bold text-xs"
                   // onClick={() => handleUsernameList(item)}
                 >
-                  {user.role_name.toUpperCase()}
+                  {user?.role_name.toUpperCase()}
                 </span>
                 {user.username}
               </div>
             </div>
             <div
   className={`px-1 border rounded-sm text-center text-bold text-${
-    status === "active"
+    user?.status === "active"
       ? "green"
       : status === "suspended"
       ? "red"
       : "gray"
   }-500 bg-${
-    status === "active"
+    user?.status === "active"
       ? "green"
       : status === "suspended"
       ? "red"
       : "gray"
   }-100 border-${
-    status === "active"
+    user?.status === "active"
       ? "green"
-      : status === "suspended"
+      : user?.status === "suspended"
       ? "red"
       : "gray"
   }-500`}
 >
-  {status === "active"
+  {/* {status === "active"
     ? "active"
     : status === "suspended"
     ? "suspended"
-    : "locked"}
+    : "locked"} */}
+    {user?.status}
 </div>
 
           </div>

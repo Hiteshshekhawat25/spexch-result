@@ -496,6 +496,7 @@ const DownlineList = () => {
     }
   };
 
+  console.log({downlineData},'downlineData')
   return (
     <>
       {loading ? (
@@ -726,7 +727,7 @@ const DownlineList = () => {
                             {new Intl.NumberFormat("en-IN", {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 2,
-                            }).format(item.openingBalance)}
+                            }).format(item.totalOpeningBalance)}
                           </td>
                         )}
                         {isMasterDownlineList && (
@@ -758,7 +759,7 @@ const DownlineList = () => {
                             {new Intl.NumberFormat("en-IN", {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 2,
-                            }).format(item.openingBalance)}
+                            }).format(item.totalOpeningBalance)}
                           </td>
                         )}
                         <td
@@ -771,7 +772,7 @@ const DownlineList = () => {
                           {new Intl.NumberFormat("en-IN", {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 2,
-                          }).format(item.exposure)}
+                          }).format(item.totalExposureBalance)}
                           )
                         </td>
                         {!isMasterDownlineList && (
@@ -802,7 +803,7 @@ const DownlineList = () => {
                           {new Intl.NumberFormat("en-IN", {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 2,
-                          }).format(item.totalBalance || 0)}
+                          }).format(item.totalAvailableBalance || 0)}
                         </td>
                         <td
                           className={`border border-gray-400 px-4 py-2 text-sm font-custom font-medium ${
@@ -820,7 +821,7 @@ const DownlineList = () => {
                             : new Intl.NumberFormat("en-IN", {
                                 minimumFractionDigits: 0,
                                 maximumFractionDigits: 2,
-                              }).format(item.profit_loss)}
+                              }).format(item?.totalOpeningBalance - item?.creditReference )}
                         </td>
                         {!isMasterDownlineList && (
                           <td

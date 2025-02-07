@@ -116,12 +116,12 @@ const MarketAnalysisInner = () => {
           }
         },[showUserBook])
 
-        console.log({openBets},'function')
+        console.log({betList},'function')
 
   return (
     <>
     <div className="grid grid-cols-12 gap-4">
-      <div className="col-span-8">
+      <div className="col-span-12 md:col-span-8">
         <div className="pb-6">
             <div className="hidden flex items-center gap-2 p-2">
               <div onClick={()=> setActiveOdds('all')} className={`${activeOdds === 'all' ? 'active' : ''} cursor-pointer flex items-center justify-center text-sm font-bold bg-gradient text-white h-10 px-3 rounded-[50px] border border-[#000000] [&.active]:bg-gradient-green`}>All</div>
@@ -164,7 +164,7 @@ const MarketAnalysisInner = () => {
             </div>
         </div>
       </div>
-      <div className="col-span-4">
+      <div className="col-span-12 md:col-span-4">
           {
             matchBetsData && matchBetsData?.liveTv ? 
             <>

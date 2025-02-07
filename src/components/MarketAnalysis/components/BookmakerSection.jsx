@@ -92,7 +92,7 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
             return (
             <React.Fragment key={item?.selectionId}>
               <div className="flex items-center justify-between border-t border-[#7e97a7] bg-[#faf8d8]">
-                <div className="px-4">
+                <div className="px-2 sm:px-4">
                   <div className="text-xs font-semibold">{item?.selectionName}</div>
                   <div className={`text-[0.625rem] font-semibold ${returnExposerAmount(item?.selectionId) > 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {returnExposerAmount(item?.selectionId)?.toFixed(0)}

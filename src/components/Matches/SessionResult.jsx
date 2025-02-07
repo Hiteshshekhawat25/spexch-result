@@ -3,7 +3,7 @@ import { ImBook } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSessions, selectSessions } from "../../Store/Slice/SessionSlice";
 import { FaEdit } from "react-icons/fa";
-import { getMatchList, transferSessionCoins, updateSessionResult } from "../../Services/Newmatchapi";
+import { getMatchList, RevertSessionCoins, transferSessionCoins, updateSessionResult } from "../../Services/Newmatchapi";
 import { toast } from "react-toastify";
 import SessionEditModal from "./SessionEditModal";
 
@@ -51,6 +51,25 @@ const SessionResult = () => {
   const handleSaveResult = (id) => {
     setEditingRow(null);
   };
+
+  const handleRevertCoins = async (marketId) => {
+    // console.log("selectedSession", selectedSession, tempResult);
+    // if (!selectedSession || !tempResult) {
+    //   toast.error("Please select a match & session and enter a result.");
+    //   return;
+    // }
+    console.log("selectedMatch, marketId",selectedMatch, marketId);
+    try {
+      await RevertSessionCoins(selectedMatch, marketId);
+      toast.success("Revert successfully!");
+      dispatch(fetchSessions(selectedMatch));
+    } catch (error) {
+      console.log({error})
+      toast.error("Failed to update the session result. Please try again.");
+    }
+  };
+
+
 
   const handleTransferCoins = async (marketId) => {
     // console.log("selectedSession", selectedSession, tempResult);
@@ -272,13 +291,22 @@ const SessionResult = () => {
                 {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
                 <td className="px-4 py-2">{session.marketTime}</td>
                 <td className="px-4 py-2">
-                      <button
+                    {session?.transferredCoin ? 
+                     <button
+                     className="px-4 py-2 bg-red-700 text-white font-semibold rounded hover:bg-red-500 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                     onClick={()=>handleRevertCoins(session.marketId)}
+                   >
+                     Revert coins
+                   </button>
+                    
+                  :  <button
                         className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
                         onClick={()=>handleTransferCoins(session.marketId)}
                         disabled={!session?.result || session?.transferredCoin}
                       >
                         Transfer coins
                       </button>
+                      }
                     </td>
               </tr>
             )) : <tr><td colSpan={5} className="text-center py-5 border">No data found</td></tr> : <tr><td colSpan={7} className="text-center py-5 border">Please Select Match</td></tr>}
