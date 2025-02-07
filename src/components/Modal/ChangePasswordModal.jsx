@@ -23,7 +23,6 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [parentPassword, setParentPassword] = useState("");
 
   const dispatch = useDispatch();
   const changePasswordStatus = useSelector(selectChangePasswordStatus);
@@ -123,7 +122,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
             <div className="relative">
               <input
                 type={showCurrentPassword ? "text" : "password"}
-                value={password}
+                value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 className="w-full p-2 border border-gray-300 rounded mt-1"
               />

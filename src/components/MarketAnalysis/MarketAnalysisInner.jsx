@@ -8,14 +8,13 @@ import { useDispatch, useSelector } from "react-redux"
 // import { fetchTvUrl } from "../../store/slices/tvUrl/TvUrlSlice"
 import MobileStream from "./components/MobileStream"
 import { socket } from "../../Services/socket"
-import { BASE_URL, SOCKET_ROUTES } from "../../Constant/Api"
+import { SOCKET_ROUTES } from "../../Constant/Api"
 import MarketBetModal from "../marketBetModal/MarketBetModal"
 import { fetchMarketBets } from "../../Store/Slice/marketBetsSlice"
 import UserHistoryModal from "../marketBetModal/UserHistoryModal"
 import BookModal from "../marketBetModal/BookModal"
 import { fetchUserBook } from "../../Store/Slice/UserBookSlice"
 import MarketListModal from "../marketBetModal/MarketListModal"
-import axios from "axios"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -41,48 +40,14 @@ const MarketAnalysisInner = () => {
   })
   const {gameId} = useParams()
   const dispatch = useDispatch()
-  const openBets = useSelector(state => state?.betList)
+  const openBets = useSelector(state => state?.openBets)
   const {data : backBets} = useSelector(state => state?.marketBetList)
   const {data : userBooks} = useSelector(state => state?.userBookList)
-  const [page,setPage] = useState(1)
     const [showUser, setShowUser] = useState(false)
     const [selectedUser, setSelectedUser] = useState({})
-    const [betList,setBetList] = useState([]);
     const [showUserBook,setShowUserBook] = useState(false)
 
-    const getBetList = async () => {
-
-      const token = localStorage.getItem("authToken");
-
-      try {
-        const response = await axios.get(`${BASE_URL}/user/get-odds-bet-list?matchId=${gameId}&limit=10&page=${page}`, {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("response",response);
-        if(response?.data?.success) {
-          setBetList(response?.data?.data)
-          // setTotalPage(response?.data?.pagination?.totalPages)
-        }
-      } catch (error) {
-        // Handle specific token expiry case
-        if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
-          localStorage.clear();
-          alert("Session expired. Please log in again.");
-        }
-        // Handle other API errors
-        toast.error(error?.response?.data?.message)
-        console.error("API error:", error);
-        // throw new Error(error.response?.data?.message || "An error occurred, please try again.");
-      }
-    };
-
-
-    useEffect(()=>{
-      getBetList()
-    },[])
+    console.log('matchBetsData', matchBetsData)
 
       useEffect(() => {
         socket.connect()
@@ -108,21 +73,19 @@ const MarketAnalysisInner = () => {
           }
         },[liveBets])
 
-        
-
         useEffect(()=> {
           if(showUserBook) {
             dispatch(fetchUserBook({page : 1,limit : 100,type : type,matchId : gameId}))
           }
         },[showUserBook])
 
-        console.log({openBets},'function')
+        console.log({gameId,showUserBook,userBooks})
 
   return (
     <>
-    <div className="grid grid-cols-12 gap-4">
-      <div className="col-span-7">
-        <div className="pb-6">
+    <div className="grid lg:grid-cols-12 grid-cols-1 gap-4">
+      <div className="lg:col-span-8 col-span-1">
+        <div className="flex flex-col md:gap-6 gap-5">
             <div className="hidden flex items-center gap-2 p-2">
               <div onClick={()=> setActiveOdds('all')} className={`${activeOdds === 'all' ? 'active' : ''} cursor-pointer flex items-center justify-center text-sm font-bold bg-gradient text-white h-10 px-3 rounded-[50px] border border-[#000000] [&.active]:bg-gradient-green`}>All</div>
               {
@@ -144,7 +107,7 @@ const MarketAnalysisInner = () => {
             <div className={`${(activeOdds === 'all' || activeOdds === 'odds') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && matchBetsData?.matchodds?.length ? 
-                  <OddsSection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} betList={betList} openBets={openBets?.data}/>
+                  <OddsSection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} openBets={openBets?.data}/>
                 : ''
               }
             </div>
@@ -164,11 +127,11 @@ const MarketAnalysisInner = () => {
             </div>
         </div>
       </div>
-      <div className="col-span-5">
+      <div className="lg:col-span-4 col-span-1">
           {
             matchBetsData && matchBetsData?.liveTv ? 
             <>
-              <div onClick={()=> setShowLiveStreaming(!showLiveStreaming)} className="bg-gradient-blue text-white text-sm font-semibold px-2 py-1 rounded mb-1 cursor-pointer">Live Streaming</div>
+              <div onClick={()=> setShowLiveStreaming(!showLiveStreaming)} className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer">Live Streaming</div>
               {
                 showLiveStreaming ? 
                   <div className="w-full aspect-video bg-[#141435] overflow-hidden rounded mb-4">
@@ -182,7 +145,7 @@ const MarketAnalysisInner = () => {
           {
             matchBetsData && matchBetsData?.scoreUrl ? 
             <>
-              <div onClick={()=> setShowScore(!showScore)} className="bg-gradient-blue text-white text-sm font-semibold px-2 py-1 rounded mb-1 cursor-pointer">Score Card</div>
+              <div onClick={()=> setShowScore(!showScore)} className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer">Score Card</div>
               {
                 showScore ? 
                   <div className="w-full h-[200px] bg-[#141435] overflow-hidden rounded ">
@@ -194,11 +157,11 @@ const MarketAnalysisInner = () => {
             : ''
           }
           <div>
-            <div className="bg-gradient-blue text-white text-sm font-semibold px-2 py-1 rounded mb-1 cursor-pointer">
+            <div className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer">
               Book
             </div>
-            <div className="flex justify-around gap-5">
-              <div className="bg-gradient-blue text-white text-center text-sm font-semibold px-2 py-1 w-full rounded mb-1 cursor-pointer"
+            <div className="flex justify-around gap-5 mb-2">
+              <div className="bg-gradient-blue text-white text-center text-[13px] font-semibold px-2 py-1.5 w-full rounded cursor-pointer"
                onClick={()=>{
                 setbooks('master')
                 setMarketListModal(true)
@@ -206,7 +169,7 @@ const MarketAnalysisInner = () => {
               >
                 Master Book
               </div>
-              <div className="bg-gradient-blue text-white text-center text-sm font-semibold w-full px-2 py-1 rounded mb-1 cursor-pointer" 
+              <div className="bg-gradient-blue text-white text-center text-[13px] font-semibold w-full px-2 py-1.5 rounded cursor-pointer" 
               onClick={()=>{
                 setbooks('user')
                 setMarketListModal(true)
@@ -218,24 +181,24 @@ const MarketAnalysisInner = () => {
           </div>
 
 
-          <div className="bg-gradient-blue text-white text-sm font-semibold px-2 py-1 rounded mb-1 cursor-pointer flex justify-between">
+          <div className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 gap-2 rounded mb-1 cursor-pointer sm:flex justify-between">
             <div className="flex">
               <div className="flex gap-1.5 items-center">
                 <label htmlFor="liveBets">Live Bets</label>
                 <input type="checkbox" className="hidden" id="liveBets" checked={liveBets} onChange={()=>setLiveBets(!liveBets)}/>
-                <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${liveBets ? 'before:left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="liveBets"></label>
+                <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${liveBets ? 'before:!left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="liveBets"></label>
               </div>
               <div className="flex gap-1.5 items-center ml-4">
                 <label htmlFor="partnership">Partnership Book</label>
                 <input type="checkbox" className="hidden" id="partnership" checked={partnershipBook} onChange={()=>setPartnershipBook(!partnershipBook)}/>
-                <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${partnershipBook ? 'before:left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="partnership"></label>
+                <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${partnershipBook ? 'before:!left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="partnership"></label>
               </div>
             </div>
-            <div onClick={()=> setShowBetsModal(true)} className="text-xs cursor-pointer">View More</div>
+            <div onClick={()=> setShowBetsModal(true)} className="text-xs cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center">View More</div>
           </div>
           {
               liveBets && backBets?.data?.length ? 
-                <div className="mt-2">
+                <div className="mt-2 bg-white">
                   <table className="w-full">
                     <thead>
                       <tr>
@@ -291,7 +254,6 @@ const MarketAnalysisInner = () => {
       />
       <BookModal 
       showUser={showUserBook} 
-      type={type}
       setShowUser={setShowUserBook} 
       matchBetsData={matchBetsData} 
       book={books} 

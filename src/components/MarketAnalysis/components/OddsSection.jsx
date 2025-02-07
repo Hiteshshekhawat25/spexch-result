@@ -73,15 +73,13 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
         }
       }
       total = wintotal + amounttotal
-
-      console.log({matchBetsData},'matchBetsData')
       return total
     }
   }
 
   return (
     <>
-      <div className="mt-5 bg-white">
+      <div className=" bg-white shadow-md overflow-hidden rounded-md">
         <div className="flex align-center justify-between bg-white pr-2 flex-wrap">
           <SportsHeading title={'Match Odds'}/>
           <div className="text-xs  flex gap-1 items-center">
@@ -104,13 +102,12 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
           </div>
         </div>
         {
-          matchBetsData?.matchodds?.length ? matchBetsData?.matchodds?.sort((a,b)=>a.runnerName.localeCompare(b.runnerName))?.map((item,pIndex) => {
+          matchBetsData?.matchodds?.length ? matchBetsData?.matchodds?.map((item,pIndex) => {
             let exposerval = returnExposerAmount(item?.selectionId)?.toFixed(0)
-            console.log({item},'oddsection')
             if (item?.runnerName) return (
             <React.Fragment key={`${item?.selectionId}`}>
               <div className="flex items-center justify-between border-t border-[#7e97a7]">
-                <div className="px-4">
+                <div className="md:px-4 px-3">
                   <div className="text-xs font-semibold">{item?.runnerName}</div>
                   <div className={`text-[0.625rem] font-semibold ${returnExposerAmount(item?.selectionId) > 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {returnExposerAmount(item?.selectionId)?.toFixed(0)}

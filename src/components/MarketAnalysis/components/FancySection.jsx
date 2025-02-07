@@ -178,13 +178,13 @@ const FancySection = ({matchBetsData, setBetData, betData, openBets}) => {
             return (
             <React.Fragment key={item?.marketId}>
               <div className={`flex items-center justify-between border-t border-[#7e97a7] ${((activeTab !== "ALL") && (item?.catagory !== activeTab)) ? 'hidden' : ''}`}>
-                <div className="px-4">
+                <div className="md:px-4 px-3">
                   <div className="text-xs font-semibold">{item?.marketName}</div>
                   <div className="text-[0.625rem] font-semibold text-red-600">{returnExposerAmount(item?.marketId)}</div>
                 </div>
                 <div className="flex items-center">
                   <div className="md:hidden relative">
-                    <img src="assets/img/info.png" className="brightness-0 h-5 mr-3 peer" alt="" />
+                    <img src="assets/img/info.png" className="brightness-0 md:h-5 h-4 md:mr-3 peer" alt="" />
                     <div className="absolute bg-gray-100 p-2 text-xs text-medium text-nowrap right-[115%] peer-hover:block rounded top-1/2 -translate-y-1/2 hidden">
                       Min/Max : 100-1000
                     </div>
