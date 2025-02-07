@@ -3,15 +3,7 @@ import { ImBook } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSessions, selectSessions } from "../../Store/Slice/SessionSlice";
 import { FaEdit } from "react-icons/fa";
-<<<<<<< HEAD
 import { getMatchList, RevertSessionCoins, transferSessionCoins, updateSessionResult } from "../../Services/Newmatchapi";
-=======
-import {
-  getMatchList,
-  transferSessionCoins,
-  updateSessionResult,
-} from "../../Services/Newmatchapi";
->>>>>>> d7d76d5547d462597417a3db02f2b29c45097337
 import { toast } from "react-toastify";
 import SessionEditModal from "./SessionEditModal";
 
