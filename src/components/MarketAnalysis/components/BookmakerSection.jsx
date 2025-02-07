@@ -71,10 +71,10 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
 
   return (
     <>
-      <div className="mt-5 bg-white">
-        <div className="flex align-center justify-between bg-white pr-2 flex-wrap">
+      <div className="bg-white shadow-md overflow-hidden rounded-md">
+        <div className="flex align-center justify-between bg-white pr-2 flex-wrap gap-2 sm:pb-0 pb-2">
           <SportsHeading title={"Bookmaker (0% Commission Fast Bet Confirm)"}/>
-          <div className="text-xs flex gap-1 items-center">
+          <div className="text-xs flex gap-1 sm:pl-0 pl-2 items-center">
             Matched 
             <span className="font-semibold">€ 170.5 K</span>
           </div>
@@ -87,12 +87,12 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
           </div>
         </div>
         {
-          matchBetsData?.bookmakersOdds?.length ? matchBetsData?.bookmakersOdds?.sort((a,b)=>a.selectionName - b.selectionName)?.map((item, pIndex) => {
+          matchBetsData?.bookmakersOdds?.length ? matchBetsData?.bookmakersOdds?.map((item, pIndex) => {
             let exposerval = returnExposerAmount(item?.selectionId)
             return (
             <React.Fragment key={item?.selectionId}>
               <div className="flex items-center justify-between border-t border-[#7e97a7] bg-[#faf8d8]">
-                <div className="px-2 sm:px-4">
+                <div className="md:px-4 px-3">
                   <div className="text-xs font-semibold">{item?.selectionName}</div>
                   <div className={`text-[0.625rem] font-semibold ${returnExposerAmount(item?.selectionId) > 0 ? 'text-green-600' : 'text-red-600'}`}>
                     {returnExposerAmount(item?.selectionId)?.toFixed(0)}

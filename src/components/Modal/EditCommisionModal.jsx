@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
-import { updateCommission } from "../../Store/Slice/updateCommissionSlice"; 
-import { IoClose, IoEye, IoEyeOff } from "react-icons/io5"; 
+import { updateCommission } from "../../Store/Slice/updateCommissionSlice";
+import { IoClose, IoEye, IoEyeOff } from "react-icons/io5";
+import { updateProfile } from "../../Store/Slice/profileSlice";
 
-const EditCommisionModal = ({ username, onCancel, currentCommission, userId }) => {
+const EditCommisionModal = ({
+  username,
+  onCancel,
+  currentCommission,
+  userId,
+}) => {
   const dispatch = useDispatch();
 
   const [newCommission, setNewCommission] = useState(currentCommission);
   const [password, setPassword] = useState("");
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); 
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    
     if (!newCommission || !password) {
       toast.error("Both commission and password are required.");
       return;
@@ -25,14 +30,16 @@ const EditCommisionModal = ({ username, onCancel, currentCommission, userId }) =
       return;
     }
 
-    
     try {
       const result = await dispatch(
         updateCommission({ newCommission, password, userId })
       );
+      console.log("result", result);
+      window.location.reload();
       if (result.payload) {
         toast.success("Commission updated successfully.");
-        onCancel(); // Close modal after success
+        // dispatch(updateProfile(userId))
+        onCancel();
       }
     } catch (error) {
       toast.error("Error updating commission. Please try again.");
@@ -75,13 +82,13 @@ const EditCommisionModal = ({ username, onCancel, currentCommission, userId }) =
               Your Password <span className="text-red-500">*</span>
             </label>
             <input
-              type={showConfirmPassword ? "text" : "password"} 
+              type={showConfirmPassword ? "text" : "password"}
               value={password}
               placeholder="Your Password.."
               onChange={(e) => setPassword(e.target.value)}
               className="p-2 border border-whiteGray rounded-lg text-gray-700"
             />
-           
+
             <span
               onClick={() => setShowConfirmPassword(!showConfirmPassword)}
               className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
@@ -98,14 +105,19 @@ const EditCommisionModal = ({ username, onCancel, currentCommission, userId }) =
           <div className="flex justify-end space-x-4 mt-4">
             <button
               type="submit"
-              className="px-2 py-2 bg-gray-400 text-white rounded-lg"
+              className={`px-4 py-2 rounded-lg ${
+                newCommission && password
+                  ? "bg-gradient-seablue text-white"
+                  : "bg-gray-400 text-gray-700 cursor-not-allowed"
+              }`}
+              disabled={!newCommission || !password}
             >
               Yes
             </button>
             <button
               type="button"
-              onClick={onCancel} // Call onCancel to close the modal
-              className="px-2 py-2 bg-gray-400 text-black rounded-lg"
+              onClick={onCancel}
+              className="px-4 py-2 bg-gray-400 text-black rounded-lg"
             >
               No
             </button>
@@ -117,4 +129,3 @@ const EditCommisionModal = ({ username, onCancel, currentCommission, userId }) =
 };
 
 export default EditCommisionModal;
-

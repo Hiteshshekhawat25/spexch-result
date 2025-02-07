@@ -3,7 +3,15 @@ import { ImBook } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSessions, selectSessions } from "../../Store/Slice/SessionSlice";
 import { FaEdit } from "react-icons/fa";
+<<<<<<< HEAD
 import { getMatchList, RevertSessionCoins, transferSessionCoins, updateSessionResult } from "../../Services/Newmatchapi";
+=======
+import {
+  getMatchList,
+  transferSessionCoins,
+  updateSessionResult,
+} from "../../Services/Newmatchapi";
+>>>>>>> d7d76d5547d462597417a3db02f2b29c45097337
 import { toast } from "react-toastify";
 import SessionEditModal from "./SessionEditModal";
 
@@ -13,33 +21,29 @@ const SessionResult = () => {
   const [editingRow, setEditingRow] = useState(null);
   const [tempResult, setTempResult] = useState("");
   const [matchList, setMatchList] = useState([]);
-  const [openModal,setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const [matchLoading, setMatchLoading] = useState(false);
   const [matchError, setMatchError] = useState("");
   const [selectedMatch, setSelectedMatch] = useState("");
   const [filteredSessions, setFilteredSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState("");
 
-
-
-  useEffect(()=>{
-    if(selectedMatch) {
+  useEffect(() => {
+    if (selectedMatch) {
       dispatch(fetchSessions(selectedMatch));
     }
-  },[dispatch, selectedMatch])
-
+  }, [dispatch, selectedMatch]);
 
   useEffect(() => {
     if (selectedMatch) {
       const match = matchList.find((match) => match._id === selectedMatch);
       const matchSessions = match?.Fancy?.Fancy || [];
-      console.log("matchSessions",matchSessions);
       setFilteredSessions(matchSessions);
     } else {
-      setFilteredSessions([]); 
+      setFilteredSessions([]);
     }
   }, [selectedMatch, matchList]);
-  
+
   const handleMatchChange = (e) => {
     setSelectedMatch(e.target.value);
   };
@@ -77,7 +81,6 @@ const SessionResult = () => {
     //   toast.error("Please select a match & session and enter a result.");
     //   return;
     // }
-    console.log("selectedMatch, marketId",selectedMatch, marketId);
     try {
       await transferSessionCoins(selectedMatch, marketId);
       toast.success("transfer successfully!");
@@ -86,7 +89,6 @@ const SessionResult = () => {
       toast.error("Failed to update the session result. Please try again.");
     }
   };
-
 
   const handleMatchSelectFocus = async () => {
     if (matchList.length > 0) return;
@@ -103,24 +105,23 @@ const SessionResult = () => {
     }
   };
 
-  useEffect(()=> {
-    handleMatchSelectFocus()
-  }, [])
+  useEffect(() => {
+    handleMatchSelectFocus();
+  }, []);
 
   const handleEditClick = (index, result) => {
     setEditingRow(index);
     setTempResult(result);
   };
   const handleSubmit = async () => {
-    console.log("selectedSession",selectedSession, tempResult)
     if (!selectedSession || !tempResult) {
       toast.error("Please select a match & session and enter a result.");
       return;
     }
 
     try {
-      await updateSessionResult(selectedMatch,selectedSession, tempResult);
-      setOpenModal(false)
+      await updateSessionResult(selectedMatch, selectedSession, tempResult);
+      setOpenModal(false);
       toast.success("Result updated successfully!");
       dispatch(fetchSessions(selectedMatch));
     } catch (error) {
@@ -165,7 +166,7 @@ const SessionResult = () => {
             ) : (
               matchList.map((match) => (
                 <option key={match._id} value={match._id}>
-                  {match.match} {match?.inPlay ? '(In Play)' : ''}
+                  {match.match} {match?.inPlay ? "(In Play)" : ""}
                 </option>
               ))
             )}
@@ -173,7 +174,6 @@ const SessionResult = () => {
         </div>
 
         {/* Select Session Dropdown */}
-        {console.log("matchhhhhhh",matchList)}
         <div className="w-1/4">
           <label
             htmlFor="session"
@@ -183,12 +183,12 @@ const SessionResult = () => {
           </label>
           <select
             value={selectedSession}
-            onChange={(e)=>setSelectedSession(e.target.value)}
+            onChange={(e) => setSelectedSession(e.target.value)}
             id="session"
             className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
           >
             <option value="">Select Session</option>
-            {filteredSessions.filter((session) => !session.result).map((session, index) => (
+            {sessions.sessions.map((session, index) => (
               <option key={index} value={session.marketId}>
                 {session.marketName}
               </option>
@@ -213,7 +213,10 @@ const SessionResult = () => {
               className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
             />
           </div>
-          <button className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600" onClick={handleSubmit}>
+          <button
+            className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600"
+            onClick={handleSubmit}
+          >
             Submit
           </button>
         </div>
@@ -252,28 +255,77 @@ const SessionResult = () => {
             </tr>
           </thead>
           <tbody>
-            {selectedMatch ? sessions?.sessions?.length ? sessions?.sessions .filter((session) => session.result) .map((session, index) => (
-              <tr key={session?.marketId}>
-                <td className="px-4 py-2">{session.catagory}</td>
-                <td className="px-4 py-2">{session.marketName}</td>
-                <td className="px-4 py-2">
-                  {editingRow === index ? (
-                    <>
-                      <input
-                        type="text"
-                        value={tempResult}
-                        onChange={handleResultChange}
-                        // onBlur={() => handleSaveResult(session.id)}
-                        className="px-2 py-1 border rounded"
-                        autoFocus
-                      />
-                      <button className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600" onClick={handleSubmit}>
-                      Submit
-                    </button>
-                    </>
-                  ) : (
-                    session.result
-                  )}
+            {selectedMatch ? (
+              sessions?.sessions?.length ? (
+                sessions?.sessions
+                  .filter((session) => session.result)
+                  .map((session, index) => (
+                    <tr key={session?.marketId}>
+                      <td className="px-4 py-2">{session.catagory}</td>
+                      <td className="px-4 py-2">{session.marketName}</td>
+                      <td className="px-4 py-2">
+                        {editingRow === index ? (
+                          <>
+                            <input
+                              type="text"
+                              value={tempResult}
+                              onChange={handleResultChange}
+                              // onBlur={() => handleSaveResult(session.id)}
+                              className="px-2 py-1 border rounded"
+                              autoFocus
+                            />
+                            <button
+                              className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600"
+                              onClick={handleSubmit}
+                            >
+                              Submit
+                            </button>
+                          </>
+                        ) : (
+                          session.result
+                        )}
+                      </td>
+                      <td className="px-4 py-2">
+                        <FaEdit
+                          className="cursor-pointer text-blue-500"
+                          // onClick={() => handleEditClick(index, session.result)}
+                          onClick={() => {
+                            setOpenModal(true);
+                            setSelectedMatch(selectedMatch);
+                            setSelectedSession(session?.marketId);
+                            setTempResult(
+                              session?.result ? session?.result : 0
+                            );
+                          }}
+                        />
+                      </td>
+                      <td className="px-4 py-2">{session.marketId}</td>
+                      {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
+                      <td className="px-4 py-2">{session.marketTime}</td>
+                      <td className="px-4 py-2">
+                        <button
+                          className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                          onClick={() => handleTransferCoins(session.marketId)}
+                          disabled={
+                            !session?.result || session?.transferredCoin
+                          }
+                        >
+                          Transfer coins
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="text-center py-5 border">
+                    No data found
+                  </td>
+                </tr>
+              )
+            ) : (
+              <tr>
+                <td colSpan={7} className="text-center py-5 border">
+                  Please Select Match
                 </td>
                 <td className="px-4 py-2">
                   <FaEdit
@@ -309,24 +361,24 @@ const SessionResult = () => {
                       }
                     </td>
               </tr>
-            )) : <tr><td colSpan={5} className="text-center py-5 border">No data found</td></tr> : <tr><td colSpan={7} className="text-center py-5 border">Please Select Match</td></tr>}
+            )}
           </tbody>
         </table>
       </div>
       <SessionEditModal
-       onChange={handleMatchChange}
-       value={selectedMatch}
-       disabled={matchLoading}
-       matchError={matchError}
-       matchList={matchList}
-       handleSubmit={handleSubmit}
-       tempResult={tempResult}
-       setShowUser = {setOpenModal}
-       handleResultChange={handleResultChange}
-       filteredSessions={filteredSessions}
-       selectedSession={selectedSession}
-       setSelectedSession={setSelectedSession}
-      showUser={openModal}
+        onChange={handleMatchChange}
+        value={selectedMatch}
+        disabled={matchLoading}
+        matchError={matchError}
+        matchList={matchList}
+        handleSubmit={handleSubmit}
+        tempResult={tempResult}
+        setShowUser={setOpenModal}
+        handleResultChange={handleResultChange}
+        sessions={sessions}
+        selectedSession={selectedSession}
+        setSelectedSession={setSelectedSession}
+        showUser={openModal}
       />
     </div>
   );

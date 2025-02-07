@@ -10,7 +10,7 @@ import {
 } from "../../Store/Slice/profileSlice";
 import { clearUserData } from "../../Store/Slice/userInfoSlice";
 import { toast } from "react-toastify";
-import { changeUserPassword } from "../../Services/UserInfoApi";
+import { changeOwnPassword, changeUserPassword } from "../../Services/UserInfoApi";
 
 const ChangePassword = () => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -38,7 +38,7 @@ const ChangePassword = () => {
     dispatch(setChangePasswordLoading());
 
     try {
-      await changeUserPassword(currentPassword, newPassword);
+      await changeOwnPassword(currentPassword, newPassword);
       dispatch(setChangePasswordSuccess());
 
       toast.success("Password changed successfully!", {});

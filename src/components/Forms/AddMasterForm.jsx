@@ -250,18 +250,18 @@ export const AddMasterForm = ({ closeModal }) => {
 
   return (
     <div className=" bg-white rounded shadow-lg ">
-      <h2 className="flex text-white  font-custom font-semibold mb-4 py-2 px-2 bg-gradient-blue">
+      <h2 className="flex text-white font-custom text-[15px] font-semibold mb-4 py-2 px-2 bg-gradient-blue">
         Add Master
         <IoClose
           onClick={closeModal}
           className="cursor-pointer text-white text-2xl ml-auto"
         />
       </h2>
-      <form onSubmit={handleSubmit} className="px-4">
-        <div className="space-y-4">
+      <form onSubmit={handleSubmit} className="md:px-6 px-4">
+        <div className="flex flex-col gap-2.5">
           {/* Username */}
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Username <span className="text-red-500">*</span>
             </label>
             <div className="flex-1">
@@ -271,7 +271,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.username}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               {/* Validation messages */}
               {formData.username.length > 0 && formData.username.length < 4 && (
@@ -286,8 +286,8 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Name */}
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Name
             </label>
             <div className="flex-1">
@@ -297,7 +297,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               {errors.name && (
                 <div className="text-red-500 text-sm">{errors.name}</div>
@@ -306,8 +306,46 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Account Type */}
-          <div className="flex flex-col sm:flex-row sm:items-center mb-4">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
+              Account Type <span className="text-red-500">*</span>
+            </label>
+            <div className="flex-1">
+              <select
+                name="role"
+                value={formData.role || ""}
+                onChange={(e) => {
+                  handleChange(e);
+                  handleRoleSelection(e.target.value);
+                }}
+                className="w-full h-8 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
+              >
+                <option value="" disabled>
+                  Select Role
+                </option>
+                {role
+                  ?.filter(
+                    ({ role_name }) =>
+                      (userData?.data?.role_name !== "master" ||
+                        role_name !== "master") &&
+                      role_name !== "user"
+                  )
+                  .map(({ _id, role_name }, index) => (
+                    <option key={index} value={_id}>
+                      {role_name}
+                    </option>
+                  ))}
+              </select>
+              {errors.role && (
+                <div className="text-red-500 text-sm">{errors.role}</div>
+              )}
+            </div>
+          </div>
+
+          {/* Account Type */}
+
+          {/* <div className="flex flex-col md:flex-row md:items-center">
+          <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Account Type <span className="text-red-500">*</span>
             </label>
             <div className="flex-1">
@@ -326,8 +364,9 @@ export const AddMasterForm = ({ closeModal }) => {
                 {role
                   ?.filter(
                     ({ role_name }) =>
-                      userData?.data?.role_name !== "master" ||
-                      role_name !== "master"
+                      (userData?.data?.role_name !== "master" ||
+                        role_name !== "master") &&
+                      role_name !== "user"
                   )
                   .map(({ _id, role_name }, index) => (
                     <option key={index} value={_id}>
@@ -339,11 +378,11 @@ export const AddMasterForm = ({ closeModal }) => {
                 <div className="text-red-500 text-sm">{errors.role}</div>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Commission */}
-          <div className="flex flex-col sm:flex-row sm:items-center mb-4">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Commission (%) <span className="text-red-500">*</span>
             </label>
             <div className="flex-1">
@@ -353,7 +392,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.commission}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               {errors.commission && (
                 <div className="text-red-500 text-sm">{errors.commission}</div>
@@ -362,8 +401,8 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Opening Balance */}
-          <div className="flex flex-col sm:flex-row sm:items-center mb-4">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Opening Balance <span className="text-red-500">*</span>
             </label>
             <div className="flex-1">
@@ -373,7 +412,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.openingBalance}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               {errors.openingBalance && (
                 <div className="text-red-500 text-sm">
@@ -384,8 +423,8 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Credit Reference */}
-          <div className="flex flex-col sm:flex-row sm:items-center mb-4">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Credit Reference <span className="text-red-500">*</span>
             </label>
             <div className="flex-1">
@@ -395,7 +434,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.creditReference}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               {errors.creditReference && (
                 <div className="text-red-500 text-sm">
@@ -406,8 +445,8 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Mobile Number */}
-          <div className="flex flex-col sm:flex-row sm:items-center mb-4">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Mobile Number <span className="text-red-500">*</span>
             </label>
             <div className="flex-1">
@@ -417,7 +456,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.mobileNumber}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               {errors.mobileNumber && (
                 <div className="text-red-500 text-sm">
@@ -428,8 +467,8 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Partnership */}
-          <div className="flex flex-col sm:flex-row sm:items-center mb-4">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Partnership <span className="text-red-500">*</span>
             </label>
             <div className="flex-1">
@@ -439,7 +478,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.partnership}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               {errors.partnership && (
                 <div className="text-red-500 text-sm">{errors.partnership}</div>
@@ -448,8 +487,8 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Password */}
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Password <span className="text-red-500">*</span>
             </label>
             <div className="relative flex-1">
@@ -459,7 +498,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               <button
                 type="button"
@@ -475,8 +514,8 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Confirm Password */}
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <label className=" font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className=" w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Confirm Password <span className="text-red-500">*</span>
             </label>
             <div className="relative flex-1">
@@ -486,7 +525,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               <button
                 type="button"
@@ -508,12 +547,12 @@ export const AddMasterForm = ({ closeModal }) => {
           </div>
 
           {/* Rolling Commission Checkbox */}
-          <div className="py-2">
-            <label className="font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-row items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Rolling Commission
             </label>
             <div
-              className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+              className={`relative inline-flex items-center rounded-[4px] h-7 w-14 p-[2px] border border-whiteGray cursor-pointer transition-colors ${
                 formData.rollingCommissionChecked
                   ? "bg-gradient-seablue"
                   : "bg-white"
@@ -559,10 +598,10 @@ export const AddMasterForm = ({ closeModal }) => {
 
               {/* Toggle Knob */}
               <span
-                className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+                className={`inline-block size-[21px] rounded-[2px] border border-whiteGray bg-white transform transition-transform ${
                   formData.rollingCommissionChecked
-                    ? "translate-x-9"
-                    : "translate-x-1"
+                    ? "translate-x-7"
+                    : "translate-x-[1.5px]"
                 }`}
               ></span>
             </div>
@@ -570,7 +609,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
           {/* Conditional Rendering for Rolling Commission Fields */}
           {formData.rollingCommissionChecked && (
-            <div className="space-y-4">
+            <div className="flex flex-col gap-2.5">
               {[
                 "fancy",
                 "matka",
@@ -579,29 +618,34 @@ export const AddMasterForm = ({ closeModal }) => {
                 "sportbook",
                 "bookmaker",
               ].map((field) => (
-                <div key={field} className="flex flex-col">
-                  <label className="capitalize  font-custom font-semibold sm:text-left text-center sm:w-1/3 w-full">
+                <div
+                  key={field}
+                  className="flex flex-col md:flex-row md:items-center"
+                >
+                  <label className=" w-full md:w-1/3 capitalize text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
                     {field}
                   </label>
-                  <input
-                    type="text"
-                    name={`rollingCommission.${field}`}
-                    value={formData.rollingCommission[field] || ""}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-                  />
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      name={`rollingCommission.${field}`}
+                      value={formData.rollingCommission[field] || ""}
+                      onChange={handleChange}
+                      className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           )}
 
           {/* Agent Rolling Commission Checkbox */}
-          <div className="py-2">
-            <label className="inline-flex items-center font-custom font-bold">
+          <div className="flex flex-row items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Agent Rolling Commission
             </label>
             <div
-              className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
+              className={`relative inline-flex items-center rounded-[4px] h-7 w-14 p-[2px] border border-whiteGray cursor-pointer transition-colors ${
                 formData.agentRollingCommissionChecked
                   ? "bg-gradient-seablue"
                   : "bg-white"
@@ -648,10 +692,10 @@ export const AddMasterForm = ({ closeModal }) => {
 
               {/* Toggle Knob */}
               <span
-                className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
+                className={`inline-block size-[21px] rounded-[2px] border border-whiteGray bg-white transform transition-transform ${
                   formData.agentRollingCommissionChecked
-                    ? "translate-x-9"
-                    : "translate-x-1"
+                    ? "translate-x-7"
+                    : "translate-x-[1.5px]"
                 }`}
               ></span>
             </div>
@@ -668,7 +712,7 @@ export const AddMasterForm = ({ closeModal }) => {
 
           {/* Conditional Rendering for Agent Rolling Commission Fields */}
           {formData.agentRollingCommissionChecked && (
-            <div className="space-y-4">
+            <div className="flex flex-col gap-2.5">
               {[
                 "fancy",
                 "matka",
@@ -677,25 +721,30 @@ export const AddMasterForm = ({ closeModal }) => {
                 "sportbook",
                 "bookmaker",
               ].map((field) => (
-                <div key={field} className="flex flex-col">
-                  <label className="capitalize font-custom font-bold sm:text-left text-center sm:w-1/3 w-full">
+                <div
+                  key={field}
+                  className="flex flex-col md:flex-row md:items-center"
+                >
+                  <label className="w-full md:w-1/3 capitalize text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
                     {field}
                   </label>
-                  <input
-                    type="text"
-                    name={`agentRollingCommission.${field}`}
-                    value={formData.agentRollingCommission[field] || ""}
-                    onChange={handleChange}
-                    className="w-full p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
-                  />
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      name={`agentRollingCommission.${field}`}
+                      value={formData.agentRollingCommission[field] || ""}
+                      onChange={handleChange}
+                      className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
+                    />
+                  </div>
                 </div>
               ))}
             </div>
           )}
 
           {/* Master Password */}
-          <div className="flex flex-col sm:flex-row sm:items-center">
-            <label className="font-custom font-bold sm:text-left text-center sm:w-1/3 w-full">
+          <div className="flex flex-col md:flex-row md:items-center">
+            <label className="w-full md:w-1/3 text-left md:text-left font-custom text-[13px] font-semibold text-[#333] md:mb-0 mb-1">
               Master Password <span className="text-red-500">*</span>
             </label>
             <div className="relative flex-1">
@@ -705,11 +754,11 @@ export const AddMasterForm = ({ closeModal }) => {
                 value={formData.masterPassword}
                 onChange={handleChange}
                 required
-                className="w-full p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700"
+                className="w-full h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               />
               <button
                 type="button"
-                className="absolute right-3 top-3 text-gray-500"
+                className="absolute right-2 top-2 text-gray-500"
                 onClick={() => setShowMasterPassword(!showMasterPassword)}
               >
                 {showMasterPassword ? (
@@ -729,7 +778,7 @@ export const AddMasterForm = ({ closeModal }) => {
           <div className="flex justify-center mt-4">
             <button
               type="submit"
-              className={`px-4 py-2 text-white rounded mb-2 ${
+              className={`px-6 py-2 text-white rounded mb-2 ${
                 isFormValid()
                   ? "bg-gradient-seablue hover:bg-gradient-seablue"
                   : "bg-gray-400 cursor-not-allowed"

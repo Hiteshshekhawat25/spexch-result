@@ -35,6 +35,7 @@ const MyProfile = ({ Userid, Role }) => {
     useState(false);
   const [isEditCommissionModalOpen, setIsEditCommissionModalOpen] =
     useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
   const [modalData, setModalData] = useState(null);
 
   console.log("Userid passed to MyProfile:", Userid);
@@ -44,17 +45,16 @@ const MyProfile = ({ Userid, Role }) => {
   console.log("Final ID being used:", ID);
 
   useEffect(() => {
-    if (ID) {
+    if (Userid) {
       console.log("Setting profile to loading...");
       dispatch(setProfileLoading());
-
+  
       const fetchProfileData = async () => {
         try {
-          const response = await getUserData(`user/get-user/${ID}`);
+          const response = await getUserData(`user/get-user/${Userid}`);
           console.log("API Response:", response.data);
-
+          console.log("response for commission", response);
           dispatch(updateProfile(response.data.data));
-
           dispatch(setRollingCommission(response.data.rollingCommission));
           dispatch(
             setAgentRollingCommission({
@@ -62,7 +62,7 @@ const MyProfile = ({ Userid, Role }) => {
               commissionRates: response.data.agentRollingCommission,
             })
           );
-
+  
           setModalData(response.data.data);
         } catch (error) {
           console.error("Fetch Profile Error:", error);
@@ -71,10 +71,11 @@ const MyProfile = ({ Userid, Role }) => {
           );
         }
       };
-
+  
       fetchProfileData();
     }
-  }, [ID, dispatch]);
+  }, [Userid, dispatch]);
+
   if (profileStatus === "loading") {
     return (
       <div>
@@ -83,9 +84,9 @@ const MyProfile = ({ Userid, Role }) => {
     );
   }
 
-  if (profileStatus === "failed") {
-    return <div>Error: {profileError}</div>;
-  }
+  // if (profileStatus === "failed") {
+  //   return <div>Error: {profileError}</div>;
+  // }
 
   // Open Rolling Commission modal
   const handleOpenRollingModal = () => {
@@ -108,7 +109,8 @@ const MyProfile = ({ Userid, Role }) => {
     }
   };
 
-  const handleOpenEditCommissionModal = () => {
+  const handleOpenEditCommissionModal = (id) => {
+    setSelectedUserId(id);
     if (modalData) {
       console.log("Edit button clicked!");
       setIsEditCommissionModalOpen(true);
@@ -145,7 +147,7 @@ const MyProfile = ({ Userid, Role }) => {
             <span className="text-left ml-4 flex items-center">
               <FaEdit
                 className="ml-2 text-blue cursor-pointer"
-                onClick={handleOpenEditCommissionModal}
+                onClick={() => handleOpenEditCommissionModal(Userid)}
               />
             </span>
           )}
@@ -243,7 +245,8 @@ const MyProfile = ({ Userid, Role }) => {
       {isEditCommissionModalOpen && modalData && (
         <EditCommissionModal
           username={modalData.username}
-          userId={ID}
+          // userId={ID}
+          userId={selectedUserId}
           onCancel={() => setIsEditCommissionModalOpen(false)}
           onSubmit={(updatedData) => {
             console.log("Updated Rolling Commission Data:", updatedData);
@@ -254,6 +257,7 @@ const MyProfile = ({ Userid, Role }) => {
 
       {isChangePasswordModalOpen && (
         <ChangePasswordModal
+          userId={Userid}
           onCancel={() => setIsChangePasswordModalOpen(false)}
         />
       )}
@@ -262,7 +266,7 @@ const MyProfile = ({ Userid, Role }) => {
           username={modalData.username}
           currentExposureLimit={modalData.exposureLimit}
           userId={ID}
-          onCancel={() => setIsEditExposureLimitModalOpen(false)} // Close modal handler
+          onCancel={() => setIsEditExposureLimitModalOpen(false)}
           onSubmit={(updatedData) => {
             console.log("Updated Exposure Data:", updatedData);
             setIsEditCommissionModalOpen(false);

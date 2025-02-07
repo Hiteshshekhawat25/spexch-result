@@ -33,9 +33,9 @@ const BalanceHeader = () => {
   }, [dispatch]);
 
   return (
-    <div className="bg-white shadow-md rounded-md p-2 w-full mx-[5px] border border-gray-300">
+    <div className="bg-white shadow-md rounded-md md:p-3 p-2 w-full border border-gray-300">
       {/* Large Screen Grid */}
-      <div className="hidden md:grid grid-cols-7 divide-x divide-gray-200">
+      <div className="hidden md:grid lg:grid-cols-7 md:grid-cols-6 divide-x divide-gray-200">
         {/* Total Balance */}
         <div className="text-left py-1 text-gray-500 text-sm font-medium pl-2">
           Total Balance
@@ -64,38 +64,38 @@ const BalanceHeader = () => {
         <div className="text-left py-1 text-xs font-medium pl-2"></div>
       </div>
       {/* Large Screen Values */}
-      <div className="hidden md:grid grid-cols-7 divide-x divide-gray-200">
+      <div className="hidden md:grid lg:grid-cols-7 md:grid-cols-6 divide-x divide-gray-200">
         {/* Total Balance Value */}
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP {new Intl.NumberFormat("en-IN").format(data?.totalBalance)}
         </div>
         {/* Total Exposure Value */}
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP{" "}
           <span className="text-red-500">
             ({new Intl.NumberFormat("en-IN").format(data?.totalExposure)})
           </span>
         </div>
         {/* Available Balance Value */}
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP{" "}
           {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
         </div>
         {/* Balance Value */}
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP {new Intl.NumberFormat("en-IN").format(data?.balance)}
         </div>
         {/* Total Available Balance Value */}
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP{" "}
           {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance)}
         </div>
         {/* Upline P/L Value */}
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP {new Intl.NumberFormat("en-IN").format(data?.uplineProfitLoss)}
         </div>
         {/* Empty space */}
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2"></div>
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]"></div>
       </div>
 
       {/* Mobile and Tablet Stack */}
@@ -104,7 +104,7 @@ const BalanceHeader = () => {
         <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
           Total Balance
         </div>
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
           IRP {new Intl.NumberFormat("en-IN").format(data?.totalBalance)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
@@ -113,7 +113,7 @@ const BalanceHeader = () => {
         <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
           Total Exposure
         </div>
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
           IRP{" "}
           <span className="text-red-500">
             ({new Intl.NumberFormat("en-IN").format(data?.totalExposure)})
@@ -125,7 +125,7 @@ const BalanceHeader = () => {
         <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
           Available Balance
         </div>
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
           IRP{" "}
           {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
         </div>
@@ -135,7 +135,7 @@ const BalanceHeader = () => {
         <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
           Balance
         </div>
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
           IRP {new Intl.NumberFormat("en-IN").format(data?.balance)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
@@ -144,7 +144,7 @@ const BalanceHeader = () => {
         <div className="text-left py-1 text-gray-500 text-sm font-medium pl-1">
           Total Avail. Bal
         </div>
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
           IRP{" "}
           {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance)}
         </div>
@@ -154,7 +154,7 @@ const BalanceHeader = () => {
         <div className="text-left py-1 text-xs font-medium text-gray-500 pl-1">
           Upline P/L
         </div>
-        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1">
+        <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
           IRP {new Intl.NumberFormat("en-IN").format(data?.uplineProfitLoss)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
