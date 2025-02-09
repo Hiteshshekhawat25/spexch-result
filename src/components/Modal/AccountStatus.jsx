@@ -114,6 +114,7 @@ const AccountStatus = ({
       console.log("fetchResult", fetchResult);
   
       if (fetchResult.message) {
+        dispatch(setLoading(false));
         toast.error(
           fetchResult.payload ||
             "An error occurred while updating the credit reference."
@@ -125,6 +126,7 @@ const AccountStatus = ({
           roleId
         );
         if (result && result.data) {
+          dispatch(setLoading(false));
           dispatch(setDownlineData(result.data));
           setPassword("");
           toast.success("Status updated successfully.");
@@ -134,10 +136,11 @@ const AccountStatus = ({
       }
     } catch (error) {
       console.error("Error fetching downline data:", error);
+      dispatch(setLoading(false));
       dispatch(setError(error.message || "Failed to fetch the downline data."));
       toast.error(error.message || "An error occurred while fetching the downline data.");
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
 

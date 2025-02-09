@@ -89,13 +89,16 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
         {
           matchBetsData?.bookmakersOdds?.length ? matchBetsData?.bookmakersOdds?.map((item, pIndex) => {
             let exposerval = returnExposerAmount(item?.selectionId)
-            return (
+            let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.selectionName )?.[0]?.totalAmount
+            let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.selectionName )?.[0]?.totalPotentialWin
+            let price = p2 > 0 ? p2 : 0 -  p1 > 0 ? p1 : 0
+            return ( 
             <React.Fragment key={item?.selectionId}>
               <div className="flex items-center justify-between border-t border-[#7e97a7] bg-[#faf8d8]">
                 <div className="md:px-4 px-3">
                   <div className="text-xs font-semibold">{item?.selectionName}</div>
-                  <div className={`text-[0.625rem] font-semibold ${returnExposerAmount(item?.selectionId) > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {returnExposerAmount(item?.selectionId)?.toFixed(0)}
+                  <div className={`text-[0.625rem] font-semibold ${price > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {price?.toFixed(2) || '0'}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

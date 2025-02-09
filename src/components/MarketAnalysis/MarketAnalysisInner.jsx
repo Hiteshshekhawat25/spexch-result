@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import OddsSection from "./components/OddsSection"
 import BookmakerSection from "./components/BookmakerSection"
 import FancySection from "./components/FancySection"
@@ -41,6 +41,7 @@ const MarketAnalysisInner = () => {
   const {gameId} = useParams()
   const dispatch = useDispatch()
   const openBets = useSelector(state => state?.openBets)
+  const iframeRef = useRef()
   const {data : backBets} = useSelector(state => state?.marketBetList)
   const {data : userBooks} = useSelector(state => state?.userBookList)
     const [showUser, setShowUser] = useState(false)
@@ -48,6 +49,21 @@ const MarketAnalysisInner = () => {
     const [showUserBook,setShowUserBook] = useState(false)
 
     console.log('matchBetsData', matchBetsData)
+
+
+    const handleFullscreen = () => {
+      if (iframeRef.current) {
+        if (iframeRef.current.requestFullscreen) {
+          iframeRef.current.requestFullscreen();
+        } else if (iframeRef.current.mozRequestFullScreen) {
+          iframeRef.current.mozRequestFullScreen();
+        } else if (iframeRef.current.webkitRequestFullscreen) {
+          iframeRef.current.webkitRequestFullscreen();
+        } else if (iframeRef.current.msRequestFullscreen) {
+          iframeRef.current.msRequestFullscreen();
+        }
+      }
+    };
 
       useEffect(() => {
         socket.connect()
@@ -84,7 +100,7 @@ const MarketAnalysisInner = () => {
   return (
     <>
     <div className="grid lg:grid-cols-12 grid-cols-1 gap-4">
-      <div className="lg:col-span-8 col-span-1">
+      <div className="lg:col-span-7 col-span-1">
         <div className="flex flex-col md:gap-6 gap-5">
             <div className="hidden flex items-center gap-2 p-2">
               <div onClick={()=> setActiveOdds('all')} className={`${activeOdds === 'all' ? 'active' : ''} cursor-pointer flex items-center justify-center text-sm font-bold bg-gradient text-white h-10 px-3 rounded-[50px] border border-[#000000] [&.active]:bg-gradient-green`}>All</div>
@@ -107,35 +123,73 @@ const MarketAnalysisInner = () => {
             <div className={`${(activeOdds === 'all' || activeOdds === 'odds') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && matchBetsData?.matchodds?.length ? 
-                  <OddsSection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} openBets={openBets?.data}/>
+                  <OddsSection
+                   matchBetsData={matchBetsData} 
+                   setBetData={setBetData} 
+                   betData={matchBetsData?.userBets?.filter((item)=>item?._id == 'odds')} 
+                   openBets={openBets?.data}
+                   />
                 : ''
               }
             </div>
             <div className={`${(activeOdds === 'all' || activeOdds === 'bookmaker') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && matchBetsData?.bookmakersOdds?.length ?
-                  <BookmakerSection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} openBets={openBets?.data}/>
+                  <BookmakerSection 
+                  matchBetsData={matchBetsData} 
+                  setBetData={setBetData} 
+                  betData={matchBetsData?.userBets?.filter((item)=>item?._id == "bookmakers")} 
+                  openBets={openBets?.data}
+                  />
                 : ''
               }
             </div>
             <div className={`${(activeOdds === 'all' || activeOdds === 'fancy') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && matchBetsData?.matchfancies?.length ?
-                  <FancySection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} openBets={openBets?.data}/> 
+                  <FancySection 
+                  matchBetsData={matchBetsData} 
+                  setBetData={setBetData} 
+                  betData={matchBetsData?.userBets?.filter((item)=>item?._id == "fancy")} 
+                  openBets={openBets?.data}
+                  /> 
                   : ''
               }
             </div>
         </div>
       </div>
-      <div className="lg:col-span-4 col-span-1">
+      <div className="lg:col-span-5 col-span-1">
           {
             matchBetsData && matchBetsData?.liveTv ? 
             <>
-              <div onClick={()=> setShowLiveStreaming(!showLiveStreaming)} className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer">Live Streaming</div>
+              <div onClick={()=> setShowLiveStreaming(!showLiveStreaming)} className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">Live Streaming</div>
               {
                 showLiveStreaming ? 
-                  <div className="w-full aspect-video bg-[#141435] overflow-hidden rounded mb-4">
-                    <iframe src={matchBetsData?.liveTv} className="w-full h-full" frameBorder="0"></iframe>
+                  <div className="w-full aspect-video bg-[#141435] overflow-hidden relative rounded mb-4">
+                    <iframe 
+                    src={matchBetsData?.liveTv} 
+                    className="w-full h-full" 
+                    ref={iframeRef}
+                    frameBorder="0"  
+                    allowFullScreen
+                    allow="autoplay; encrypted-media"
+                    ></iframe>
+                     <button
+                  onClick={handleFullscreen}
+                  className="absolute bottom-2 right-2 bg-black/70 text-white p-2 rounded-md"
+                >
+                  {/* Square Bracket Fullscreen Icon */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4h4M16 4h4v4M4 16v4h4m12 0h-4v-4" />
+                  </svg>
+                </button>
                   </div>
                 : ''
               }
@@ -145,7 +199,7 @@ const MarketAnalysisInner = () => {
           {
             matchBetsData && matchBetsData?.scoreUrl ? 
             <>
-              <div onClick={()=> setShowScore(!showScore)} className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer">Score Card</div>
+              <div onClick={()=> setShowScore(!showScore)} className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">Score Card</div>
               {
                 showScore ? 
                   <div className="w-full h-[200px] bg-[#141435] overflow-hidden rounded ">
@@ -157,11 +211,11 @@ const MarketAnalysisInner = () => {
             : ''
           }
           <div>
-            <div className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer">
+            <div className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">
               Book
             </div>
-            <div className="flex justify-around gap-5 mb-2">
-              <div className="bg-gradient-blue text-white text-center text-[13px] font-semibold px-2 py-1.5 w-full rounded cursor-pointer"
+            <div className="flex justify-around bg-white p-1 px-2 gap-5 mb-4">
+              <div className="bg-gradient-blue text-white text-center text-[15px] font-semibold px-2 py-2 w-full rounded cursor-pointer"
                onClick={()=>{
                 setbooks('master')
                 setMarketListModal(true)
@@ -169,7 +223,7 @@ const MarketAnalysisInner = () => {
               >
                 Master Book
               </div>
-              <div className="bg-gradient-blue text-white text-center text-[13px] font-semibold w-full px-2 py-1.5 rounded cursor-pointer" 
+              <div className="bg-gradient-blue text-white text-center text-[15px] font-semibold w-full px-2 py-2 rounded cursor-pointer" 
               onClick={()=>{
                 setbooks('user')
                 setMarketListModal(true)
@@ -181,7 +235,7 @@ const MarketAnalysisInner = () => {
           </div>
 
 
-          <div className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 gap-2 rounded mb-1 cursor-pointer sm:flex justify-between">
+          <div className="bg-gradient-blue  text-white text-[15px] font-semibold px-2 py-2 gap-2 rounded mb-1 cursor-pointer sm:flex justify-between">
             <div className="flex">
               <div className="flex gap-1.5 items-center">
                 <label htmlFor="liveBets">Live Bets</label>
@@ -194,7 +248,7 @@ const MarketAnalysisInner = () => {
                 <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${partnershipBook ? 'before:!left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="partnership"></label>
               </div>
             </div>
-            <div onClick={()=> setShowBetsModal(true)} className="text-xs cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center">View More</div>
+            <div onClick={()=> setShowBetsModal(true)} className="text-sm cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center">View More</div>
           </div>
           {
               liveBets && backBets?.data?.length ? 

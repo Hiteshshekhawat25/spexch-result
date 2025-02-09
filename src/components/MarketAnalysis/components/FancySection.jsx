@@ -7,14 +7,31 @@ import { formatNumber } from "../../../Utils/formatNumber"
 import { useDispatch } from "react-redux"
 // import { openBookModal } from "../../../store/slices/modalSlice/modalSlice"
 import { returnStatus } from "../../../Utils/returnStatus";
+import BookFancyModal from "../../FancyModal/BookModalFancy";
 
-const FancySection = ({matchBetsData, setBetData, betData, openBets}) => {
-  const [activeTab, setActiveTab] = useState('ALL')
-  const [previous, setPrevious] = useState({})
-  const [blink, setBlink] = useState(false)
-  const [fancyTabs, setFancyTabs] = useState([])
-  const [selectedFancy , setSelectedFancy] = useState('')
-  const dispatch = useDispatch()
+
+
+const fancyTabsData = [
+  { title: 'All', value: 'ALL' },
+  { title: 'Fancy', value: 'fancy' },
+  { title: 'Line Markets', value: 'line_markets' },
+  { title: 'Ball by Ball', value: 'ball_by_ball' },
+  { title: 'Meter Markets', value: 'meter_markets' },
+  { title: 'Khado Markets', value: 'khado_markets' },
+]
+
+
+
+const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
+  const [activeTab, setActiveTab] = useState('ALL');
+  const [previous, setPrevious] = useState({});
+  const [info , setInfo] = useState(false);
+  const [i,setI] = useState();
+  const [openBookModal,setOpenBookModal] = useState(false);
+  const [blink, setBlink] = useState(false);
+  const [fancyTabs, setFancyTabs] = useState([]);
+  const [selectedFancy, setSelectedFancy] = useState('');
+  const dispatch = useDispatch();
 
   // useEffect(()=> {
   //   const array = []
@@ -65,83 +82,89 @@ const FancySection = ({matchBetsData, setBetData, betData, openBets}) => {
   //           return acc;
   //         }, {});
   //         console.log('arrayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy', result)
-          
+
   //       }
   //     }
   //   }
 
   // }, [openBets])
 
+
+
+  // useEffect(() => {
+
+  //   const categorySet = new Set();
+
+  //   data?.forEach(obj => {
+  //     categorySet?.add(obj?.catagory)
+  //   })
+
+  //   console.log({data:matchBetsData?.matchfancies},'categorySet')
+  //   const categoriesArray = ["ALL", ...categorySet];
+  //   const mappedCategoryArray = categoriesArray?.map(item => ({title : item, value : item}))
+
+  //   if(mappedCategoryArray?.length !== fancyTabs?.length) {
+  //     setActiveTab('ALL')
+  //   }
+
+  //   setFancyTabs(mappedCategoryArray)
+
+  // }, [matchBetsData?.matchfancies])//eslint-disable-line
+
+
+
   useEffect(() => {
-    const data = structuredClone(matchBetsData?.matchfancies)
-    const categorySet = new Set();
+    setBlink(true);
+    let timeout = setTimeout(() => {
+      setBlink(false);
+      setPrevious(matchBetsData?.matchfancies)
+    }, 300);
 
-    data?.forEach(obj => {
-      categorySet?.add(obj?.catagory)
-    })
-
-    const categoriesArray = ["ALL", ...categorySet];
-    const mappedCategoryArray = categoriesArray?.map(item => ({title : item, value : item}))
-
-    if(mappedCategoryArray?.length !== fancyTabs?.length) {
-      setActiveTab('ALL')
+    return () => {
+      clearTimeout(timeout);
     }
+  }, [matchBetsData])//eslint-disable-line
 
-    setFancyTabs(mappedCategoryArray)
+  const handleBetData = (item, type, odds) => {
+    setBetData(prev => ({
+      ...prev,
+      matchId: matchBetsData?._id,
+      selectionId: item?.marketId,
+      type: 'fancy',
+      betType: type,
+      odds: odds,
+      marketName: item?.marketName,
+      marketId: matchBetsData?.marketId
+    }))
+  }
 
-  }, [matchBetsData?.matchfancies])//eslint-disable-line
-
-  
-  
-    useEffect(() => {
-      setBlink(true);
-      let timeout = setTimeout(() => {
-        setBlink(false);
-        setPrevious(matchBetsData?.matchfancies)
-      }, 300);
-  
-      return () => {
-        clearTimeout(timeout);
-      }
-    }, [matchBetsData])//eslint-disable-line
-
-    const handleBetData = (item, type, odds)=> {
-      setBetData(prev => ({
-        ...prev,
-        matchId : matchBetsData?._id,  
-        selectionId : item?.marketId, 
-        type : 'fancy', 
-        betType : type,
-        odds: odds,
-        marketName : item?.marketName,
-        marketId : matchBetsData?.marketId
-      }))
-    }
-
-    const returnExposerAmount = (id) => {
-      if (openBets?.length > 0) {
-        let total = 0;
-        const data = openBets?.filter((item) => item?.type === 'fancy')
-        for (let i = 0; i < data?.length; i++) {
-          if(data?.[i]?.selectionId === id) {
-            if (data?.[i]?.betType === "back" || data?.[i]?.betType === "yes") {
-              total += data?.[i]?.potentialWin
-            } else if (data?.[i]?.betType === "lay" || data?.[i]?.betType === "no") {
-              total -= data?.[i]?.potentialWin
-            }
+  const returnExposerAmount = (id) => {
+    if (openBets?.length > 0) {
+      let total = 0;
+      const data = openBets?.filter((item) => item?.type === 'fancy')
+      for (let i = 0; i < data?.length; i++) {
+        if (data?.[i]?.selectionId === id) {
+          if (data?.[i]?.betType === "back" || data?.[i]?.betType === "yes") {
+            total += data?.[i]?.potentialWin
+          } else if (data?.[i]?.betType === "lay" || data?.[i]?.betType === "no") {
+            total -= data?.[i]?.potentialWin
           }
         }
-        if (total === 0) return 0.00
-  
-        else return (
-          <span className={`backLayVal ${total > 0 ? 'blueVal' : 'pinkVal'}`}>{total?.toFixed(0)}</span>
-        )
       }
-    }
+      if (total === 0) return 0.00
 
-    const handleBookFancy = ()=> {
-      // dispatch(openBookModal())
+      else return (
+        <span className={`backLayVal ${total > 0 ? 'blueVal' : 'pinkVal'}`}>{total?.toFixed(0)}</span>
+      )
     }
+  }
+
+  const handleBookFancy = () => {
+    // dispatch(openBookModal())
+    setOpenBookModal(true)
+  }
+
+  console.log({ betData })
 
   return (
     <>
@@ -149,19 +172,19 @@ const FancySection = ({matchBetsData, setBetData, betData, openBets}) => {
         <div className="flex align-center justify-between bg-white pr-2">
           <div className="flex">
             <span className="hidden bg-[#067e8f] bg-[#e4550e]"></span>
-            <SportsHeading title={"Fancy Bet"} background={'#067e8f'} fancyBet={true} img={'assets/img/greenShape.svg'}/>
-            <SportsHeading title={"Sportsbook"} background={'#e4550e'} extraClass={'rounded-tl-md'} fancyBet={true} img={'assets/img/orangeShape.svg'}/>
+            <SportsHeading title={"Fancy Bet"} background={'#067e8f'} fancyBet={true} img={'assets/img/greenShape.svg'} />
+            <SportsHeading title={"Sportsbook"} background={'#e4550e'} extraClass={'rounded-tl-md'} fancyBet={true} img={'assets/img/orangeShape.svg'} />
           </div>
         </div>
         <div className="bg-gradient-green2 p-1 w-full flex items-center lg:justify-center">
-          <div className="bg-[#ffffff80] p-1 rounded-md max-md:w-full">
-            <Tabs data={fancyTabs} size={'sm'} activeTab={activeTab} setActiveTab={setActiveTab} fancyTabs={true}/>
+          <div className="bg-[#ffffff80] p-1 rounded-md max-md:w-full overflow-auto">
+            <Tabs data={fancyTabsData} size={'sm'} activeTab={activeTab} setActiveTab={setActiveTab} fancyTabs={true} />
           </div>
         </div>
         <div className="flex items-center justify-end border-t border-[#7e97a7]">
           <div className="w-[calc(5rem_*_6)] flex justify-end pt-2 ">
-            <div className="flex items-center justify-center text-xs font-semibold py-1 w-[5rem] rounded-tl-lg bg-[#faa9ba]">No</div>
-            <div className="flex items-center justify-center text-xs font-semibold py-1 w-[5rem] rounded-tr-lg bg-[#72bbef]">Yes</div>
+            <div className="flex items-center justify-center text-xs font-semibold py-1 md:w-[5rem] w-[4rem] rounded-tl-lg bg-[#faa9ba]">No</div>
+            <div className="flex items-center justify-center text-xs font-semibold py-1 md:w-[5rem] w-[4rem] rounded-tr-lg bg-[#72bbef]">Yes</div>
             <div className="w-[calc(5rem_*_2)] p-1 flex justify-center text-xs font-semibold max-md:hidden">
               Min/Max
             </div>
@@ -172,66 +195,85 @@ const FancySection = ({matchBetsData, setBetData, betData, openBets}) => {
             const previousOdds = previous?.[pIndex];
             const isYesBlinking = previousOdds?.runsYes !== item?.runsYes;
             const isNoBlinking = previousOdds?.runsNo !== item?.runsNo;
+            let price = betData?.[0]?.betTypesGrouped?.[pIndex]?.marketName == item?.marketName ? 
+            betData?.[0]?.betTypesGrouped?.[pIndex]?.totalAmount : 0
 
-            if(item?.statusName === "VOIDED") return
+            if (item?.statusName === "VOIDED") return
 
             return (
-            <React.Fragment key={item?.marketId}>
-              <div className={`flex items-center justify-between border-t border-[#7e97a7] ${((activeTab !== "ALL") && (item?.catagory !== activeTab)) ? 'hidden' : ''}`}>
-                <div className="md:px-4 px-3">
-                  <div className="text-xs font-semibold">{item?.marketName}</div>
-                  <div className="text-[0.625rem] font-semibold text-red-600">{returnExposerAmount(item?.marketId)}</div>
-                </div>
-                <div className="flex items-center ">
-                  <div className="md:hidden relative">
-                    <img src="assets/img/info.png" className="brightness-0 md:h-5 h-4 md:mr-3 peer" alt="" />
-                    <div className="absolute bg-gray-100 p-2 text-xs text-medium text-nowrap right-[115%] peer-hover:block rounded top-1/2 -translate-y-1/2 hidden">
-                      Min/Max : 100-1000
+              <React.Fragment key={item?.marketId}>
+                <div className={`flex items-center justify-between border-t border-[#7e97a7] ${((activeTab !== "ALL") && (item?.catagory !== activeTab)) ? 'hidden' : ''}`}>
+                  <div className="md:px-4 px-1 max-w-[100px]">
+                    <div className="text-xs font-semibold">{item?.marketName}</div>
+                    <div className="text-[0.625rem] font-semibold text-red-600">{price?.toFixed(2) || 0}</div>
+                  </div>
+                  <div className="flex items-center ">
+                    {/* <div className="md:hidden relative">
+                     {info && pIndex == i ? 
+                      <div className="" onClick={()=>{
+                        setI('')
+                        setInfo(false)
+                        }}>
+                      <svg _ngcontent-ng-c1703479958="" xmlns="http://www.w3.org/2000/svg" width="9" height="9">
+                      <path _ngcontent-ng-c1703479958="" fill="currentColor" fill-rule="evenodd" d="M9 .912L5.412 4.5 9 8.088 8.088 9 4.5 5.412.912 9 0 8.088 3.588 4.5 0 .912.912 0 4.5 3.588 8.088 0z"></path>
+                      </svg>
+                      </div>
+                      :
+                      <img src="assets/img/info.png" className="brightness-0 md:h-5 h-4 md:mr-3 " alt=""
+                       onClick={()=>{
+                        setInfo(true)
+                        setI(pIndex)
+                      }}/>
+                     }
+                      {(info && i == pIndex) &&
+                       <div className="absolute bg-gray-100 p-2 text-xs text-medium text-nowrap right-[115%]  rounded top-1/2 -translate-y-1/2 block md:hidden">
+                        Min/Max : 100-1000
+                      </div>}
+                    </div> */}
+                    <div className="">
+                      <button variant="secondary" size="sm" className="flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-blue shadow hover:bg-gradient-blue-hover text-white h-8 rounded-md px-3 text-xs w-auto mr-3" onClick={() => {
+                        handleBookFancy();
+                        setSelectedFancy(item?.marketId)
+                      }}>Book</button>
                     </div>
-                  </div>
-                  <div className="max-md:hidden">
-                    <button variant="secondary" size="sm" className="flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-blue shadow hover:bg-gradient-blue-hover text-white h-8 rounded-md px-3 text-xs w-auto mr-3" onClick={()=> {
-                      handleBookFancy();
-                      setSelectedFancy(item?.marketId)
-                    }}>Book</button>
-                  </div>
-                  <div className={`flex relative overflow-hidden group ${item?.statusName !== "ACTIVE" ? 'active' : ''}`}>
-                    <div className="flex">
-                          <div  
-                            onClick={()=> handleBetData(item, 'no', item?.oddsNo)}
-                            className={`${(blink && previous?.length && isNoBlinking) ? 'blink !bg-yellow-100' : ''} 
+                    <div className={`flex relative overflow-hidden group ${item?.statusName !== "ACTIVE" ? 'active' : ''}`}>
+                      <div className="flex">
+                        <div
+                          onClick={() => handleBetData(item, 'no', item?.oddsNo)}
+                          className={`${(blink && previous?.length && isNoBlinking) ? 'blink !bg-yellow-100' : ''} 
                               ${(item?.marketId === betData?.selectionId && betData?.betType === 'no') ? 'active' : ''}
-                              h-[2.625rem] w-[5rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#f4496d] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#faa9ba]`}>
-                            <div className="text-xs font-semibold text-[#212529]">{item?.runsNo}</div>
-                            <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsNo).toFixed(2))}</div>
-                          </div>
-                          <div  
-                            onClick={()=> handleBetData(item, 'yes', item?.oddsYes)}
-                            className={`${(blink && previous?.length && isYesBlinking) ? 'blink !bg-yellow-100' : ''} 
+                              h-[2.625rem] md:w-[5rem] w-[4rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#f4496d] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#faa9ba]`}>
+                          <div className="text-xs font-semibold text-[#212529]">{item?.runsNo}</div>
+                          <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsNo).toFixed(2))}</div>
+                        </div>
+                        <div
+                          onClick={() => handleBetData(item, 'yes', item?.oddsYes)}
+                          className={`${(blink && previous?.length && isYesBlinking) ? 'blink !bg-yellow-100' : ''} 
                             ${(item?.marketId === betData?.selectionId && betData?.betType === 'yes') ? 'active' : ''}
-                              h-[2.625rem] w-[5rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#1a8ee1] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#72bbef]`}>
-                            <div className="text-xs font-semibold text-[#212529]">{item?.runsYes}</div>
-                            <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsYes).toFixed(2))}</div>
-                          </div>
+                              h-[2.625rem] md:w-[5rem] w-[4rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#1a8ee1] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#72bbef]`}>
+                          <div className="text-xs font-semibold text-[#212529]">{item?.runsYes}</div>
+                          <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsYes).toFixed(2))}</div>
+                        </div>
+                      </div>
+                      <div className="absolute top-0 left-0 size-full items-center justify-center bg-black/20 text-xs text-gray-100 font-medium leading-[inherit] z-10 hidden group-[&.active]:flex">
+                        {returnStatus(item?.statusName)}
+                      </div>
                     </div>
-                    <div className="absolute top-0 left-0 size-full items-center justify-center bg-black/20 text-xs text-gray-100 font-medium leading-[inherit] z-10 hidden group-[&.active]:flex">
-                      {returnStatus(item?.statusName)}
+                    <div className="w-[calc(5rem_*_2)] flex justify-center text-xs font-semibold max-md:hidden">
+                      {item?.minSetting} - {item?.maxSetting}
                     </div>
-                  </div>
-                  <div className="w-[calc(5rem_*_2)] flex justify-center text-xs font-semibold max-md:hidden">
-                    {item?.minSetting} - {item?.maxSetting}
                   </div>
                 </div>
-              </div>
-              {/* {
+                {/* {
                 betData?.selectionId === item?.marketId ? 
                 <PlaceBet betData={betData} setBetData={setBetData}/> : ''
               } */}
-            </React.Fragment>
-          )}) : ''
+              </React.Fragment>
+            )
+          }) : ''
         }
       </div>
-      {/* <BookFancyModal selectedFancy={selectedFancy} openBets={openBets}/> */}
+      <BookFancyModal selectedFancy={selectedFancy} openBets={openBets} show={openBookModal} setShow={setOpenBookModal}/>
     </>
   )
 }

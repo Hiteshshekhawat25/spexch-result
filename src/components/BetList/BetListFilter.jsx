@@ -5,6 +5,7 @@ import {
   setSport,
   setFromDate,
   setToDate,
+  setDataSource,
   selectBetListFilter,
 } from "../../Store/Slice/betListFilterSlice";
 import { getBetlistData } from "../../Services/Betlistapi";
@@ -21,7 +22,7 @@ const BetListFilter = ({
   userID, // userID is passed as a prop
 }) => {
   const dispatch = useDispatch();
-  const { type, sport, fromDate, toDate } = useSelector(selectBetListFilter);
+  const { type, sport, fromDate, toDate ,dataSource } = useSelector(selectBetListFilter);
 
   const [sportsOptions, setSportsOptions] = useState([]);
 
@@ -56,7 +57,7 @@ const BetListFilter = ({
     }
 
     try {
-      const url = `user/get-bet-list?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&type=${type}${
+      const url = `user/get-bet-list?page=${currentPage}&limit=${entriesToShow}&dataSource=${dataSource}&fromDate=${fromDate}&toDate=${toDate}&type=${type}${
         sport ? `&sport=${sport}` : ""
       }${userID ? `&userId=${userID}` : ""}`;
       console.log("Fetching data with URL:", url);
@@ -81,6 +82,39 @@ const BetListFilter = ({
     }
   };
 
+
+  const calculateDate = (months) => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - months);
+    return date.toISOString().split("T")[0];
+  };
+
+
+    useEffect(() => {
+      if (!dataSource) {
+        dispatch(setDataSource("live"));
+        dispatch(setFromDate(today));
+        dispatch(setToDate(today));
+      } else {
+        switch (dataSource) {
+          case "live":
+            dispatch(setFromDate(today));
+            dispatch(setToDate(today));
+            break;
+          case "backup":
+            dispatch(setFromDate(calculateDate(3)));
+            dispatch(setToDate(today));
+            break;
+          case "old":
+            dispatch(setFromDate(calculateDate(12)));
+            dispatch(setToDate(today));
+            break;
+          default:
+            break;
+        }
+      }
+    }, [dataSource, dispatch, today]);
+
   useEffect(() => {
     if (fromDate && toDate) {
       console.log("Fetching data due to filter change or userID update");
@@ -90,6 +124,23 @@ const BetListFilter = ({
 
   return (
     <div className="flex flex-wrap items-start space-y-4 sm:space-y-0 sm:space-x-4 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
+      
+      <div className="flex flex-col items-start">
+        <label className="text-sm font-custom text-black mb-2">
+          Data Source
+        </label>
+        <select
+          value={dataSource || "live"} // Default to "live" if dataSource is empty
+          onChange={(e) => dispatch(setDataSource(e.target.value))}
+          className="border rounded px-10 py-2 "
+        >
+          <option value="">Data Source</option>
+          <option value="live">LIVE DATA</option>
+          <option value="backup">BACKUP DATA</option>
+          <option value="old">OLD DATA</option>
+        </select>
+      </div>
+
       {/* Choose Type */}
       <div className="flex flex-col w-full sm:w-auto">
         <label className="text-sm font-medium text-black mb-1">

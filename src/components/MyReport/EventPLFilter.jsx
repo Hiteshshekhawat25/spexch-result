@@ -102,7 +102,7 @@ const EventPLFilter = ({
       const { fromDate: adjustedFromDate, toDate: adjustedToDate } =
         getDateRange(dataSource);
 
-      const url = `user/get-user-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}userId=${Userid} \
+      const url = `user/get-user-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}${Userid ? `&userId=${Userid}` : ''}
 `;
       const response = await getProfitLossData(url);
 

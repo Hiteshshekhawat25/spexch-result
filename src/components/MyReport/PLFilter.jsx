@@ -39,7 +39,7 @@ const PLFilter = ({
     if (dataSource === "live" && fromDate && toDate) {
       handleGetPL();
     }
-  }, [dataSource, fromDate, toDate, fromTime, toTime, entriesToShow]);
+  }, [dataSource, fromDate, toDate,currentPage, fromTime, toTime, entriesToShow]);
 
   const handleGetPL = async () => {
     try {

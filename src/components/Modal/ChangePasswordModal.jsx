@@ -89,13 +89,10 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
         console.log("Changing own password");
         await changeOwnPassword(currentPassword, newPassword);
       }
-  
       dispatch(setChangePasswordSuccess());
+      onCancel()
       toast.success("Password changed successfully!");
-  
-      dispatch(clearUserData());
-      localStorage.clear();
-      window.location.reload();
+
     } catch (err) {
       dispatch(setChangePasswordError(err.message));
       setError(err.message);

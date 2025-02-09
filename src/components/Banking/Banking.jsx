@@ -152,23 +152,31 @@ const Banking = () => {
 
   const handleSubmitPaymentFunction = (data) => {
     if (!password) {
-      toast.error("Please enter the password.");
+      toast.error("Please enter the password.", {
+        autoClose: 5000, 
+      });
       return;
     }
 
     if (!data.userId) {
-      toast.error("Invalid data. Ensure all fields are filled correctly.");
+      toast.error("Invalid data. Ensure all fields are filled correctly.", {
+        autoClose: 5000, 
+      });
       return;
     }
 
     if (!data.depositwithdraw || !data.depositwithdrawStatus) {
-      toast.error("Amount is Mandatory");
+      toast.error("Amount is Mandatory", {
+        autoClose: 5000, 
+      });
       return;
     }
 
     const token = localStorage.getItem("authToken");
     if (!token) {
-      toast.error("Token not found. Please log in again.");
+      toast.error("Token not found. Please log in again.", {
+        autoClose: 5000, 
+      });
       return;
     }
 
@@ -178,7 +186,9 @@ const Banking = () => {
       user.totalBalance < Number(data.depositwithdraw)
     ) {
       toast.error(
-        "Insufficient balance. Withdrawal amount exceeds total balance."
+        "Insufficient balance. Withdrawal amount exceeds total balance.", {
+          autoClose: 5000, 
+        }
       );
       return;
     }
@@ -194,7 +204,9 @@ const Banking = () => {
       token
     )
       .then(() => {
-        toast.success(`Transaction was successful.`);
+        toast.success(`Transaction was successful.`, {
+          autoClose: 5000, 
+        });
         setPassword("");
 
         setEditedData((prevState) => {
@@ -227,7 +239,9 @@ const Banking = () => {
       })
       .catch((error) => {
         toast.error(
-          error.message || `Error processing transaction for ${data.userId}.`
+          error.message || `Error processing transaction for ${data.userId}.`, {
+            autoClose: 5000, 
+          }
         );
       });
   };
@@ -528,14 +542,14 @@ const Banking = () => {
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                     {new Intl.NumberFormat("en-IN").format(
-                      item.totalBalance + item.exposure
+                      item.totalOpeningBalance 
                     )}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(item.totalBalance)}
+                    {new Intl.NumberFormat("en-IN").format(item.totalAvailableBalance)}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
-                    {new Intl.NumberFormat("en-IN").format(item.exposure)}
+                    {new Intl.NumberFormat("en-IN").format(item.totalExposureBalance)}
                   </td>
                   <td className=" px-4 py-2 text-md text-blue font-semibold flex items-center">
                     {new Intl.NumberFormat("en-IN").format(
@@ -548,10 +562,10 @@ const Banking = () => {
                   </td>
                   <td
                     className={`border border-gray-400 px-4 py-2 text-sm font-bold ${
-                      item.profit_loss < 0 ? "text-red-500" : "text-green-500"
+                      (item?.totalOpeningBalance - item?.creditReference ) <= 0 ? "text-red-500" : "text-green-500"
                     }`}
                   >
-                    {new Intl.NumberFormat("en-IN").format(item.profit_loss)}
+                    {new Intl.NumberFormat("en-IN").format(item?.totalOpeningBalance - item?.creditReference )}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-md">
                     <div className="flex items-center space-x-2">

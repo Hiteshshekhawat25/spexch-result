@@ -37,7 +37,7 @@ const ProfitLoss = () => {
 
     try {
       const response = await axios.get(`${BASE_URL}/user/get-profit-loss`, {
-        params: { page: 1, limit: 10, userId },
+        params: { page: currentPage, limit: 10, userId },
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json",

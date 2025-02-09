@@ -2,14 +2,41 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateField, setFormData } from "../../../Store/Slice/SuperAdminFormSlice";
 import { globalsettingsPostAPIAuth, globalsettingsPutAPIAuth, globalsettingsGetAPIAuth } from "../../SuperAdminServices";
+import { setSport } from "../../../Store/Slice/allMatchSlice";
+import { getCreateNewMatchAPIAuth } from "../../../Services/Downlinelistapi";
 
 const SuperAdminForm = () => {
   const formData = useSelector((state) => state.superAdminForm);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+   const { sport } = useSelector((state) => state.allMatch);
   const [recordId, setRecordId] = useState(null); // Store the ID from API response
+  const [sportOptions,setSportsOptions] = useState([])
 
 
+   useEffect(() => {
+      const fetchSports = async () => {
+        setLoading(true);
+        try {
+          const response = await getCreateNewMatchAPIAuth('games/getgames');
+          if (response.status === 200) {
+            setSportsOptions(response.data.data || []);
+          }
+        } catch (error) {
+          console.error('Error fetching sports:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      fetchSports();
+    }, [dispatch, sport]);
+
+
+    const handleSportChange = (e) => {
+        const selectedSport = e.target.value;
+        dispatch(setSport(selectedSport));
+      };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -20,7 +47,7 @@ const SuperAdminForm = () => {
   
         if (response.status === 200 && response.data && response.data.data) {
           const data = response.data.data[0]; // Adjust based on the structure
-          setRecordId(data._id);
+          setRecordId(data?._id);
           console.log("Fetched data:", data);
   
           // Define the keys you expect in your formData
@@ -35,7 +62,7 @@ const SuperAdminForm = () => {
           ];
   
           // Filter out unwanted fields from the API response
-          const filteredData = Object.keys(data)
+          const filteredData = data && Object?.keys(data)
             .filter((key) => expectedKeys.includes(key))
             .reduce((obj, key) => {
               obj[key] = data[key] || "";
@@ -121,7 +148,20 @@ const SuperAdminForm = () => {
   }
 
   return (
-    <form
+    <>
+    <div className="border border-slate-500 rounded-md max-w-44 p-2 ">
+      <select value={sport} onChange={handleSportChange} className="w-full">
+        <option>
+          Select Sport
+        </option>
+        {sportOptions.map((sportOption)=>(
+          <option key={sportOption.id} value={sportOption.gameId}>
+            {sportOption.name}
+          </option>
+        ))}
+      </select>
+    </div>
+        <form
       onSubmit={handleSubmit}
       className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded"
     >
@@ -169,6 +209,8 @@ const SuperAdminForm = () => {
         </button>
       </div>
     </form>
+    </>
+
   );
 };
 

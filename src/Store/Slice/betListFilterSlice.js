@@ -6,7 +6,8 @@ const currentDate = new Date().toISOString().split('T')[0];
 const initialState = {
   type: '',
   sport: '',
-  fromDate: currentDate,  
+  fromDate: currentDate,
+  dataSource: '',  
   toDate: currentDate,    
 };
 
@@ -14,6 +15,10 @@ const betListFilterSlice = createSlice({
   name: 'betListFilter',
   initialState,
   reducers: {
+    setDataSource: (state, action) => {
+      console.log(action.payload,'actionjaction')
+      state.dataSource = action.payload;
+    },
     setType: (state, action) => {
       state.type = action.payload;
     },
@@ -35,7 +40,7 @@ const betListFilterSlice = createSlice({
   },
 });
 
-export const { setType, setSport, setFromDate, setToDate, resetBetFilters } = betListFilterSlice.actions;
+export const { setType, setSport,setDataSource, setFromDate, setToDate, resetBetFilters } = betListFilterSlice.actions;
 
 export const selectBetListFilter = (state) => state.betListFilter;
 
