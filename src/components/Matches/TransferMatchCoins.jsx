@@ -76,6 +76,7 @@ const TransferMatchCoins = () => {
       // throw new Error(error.response?.data?.message || "An error occurred, please try again.");
     }
   };
+  
 
 
   const handleBookmakerWinnerDeclare = async () => {
@@ -220,9 +221,8 @@ const TransferMatchCoins = () => {
         matchId: marketData?.[0]?._id,
       }
       const token = localStorage.getItem("authToken");
-      const response = await axios.post(`${BASE_URL}/rollback-bookmakers-coin`, body, {
+      const response = await axios.post(`${BASE_URL}/user/rollback-bookmakers-coin`, body, {
         headers: {
-
           Accept: "application/json",
           Authorization: `Bearer ${token}`,
         },
@@ -255,7 +255,7 @@ const TransferMatchCoins = () => {
         <div className="flex-1">
           <select
             value={formValue?.selectionId}
-            disabled={marketData?.[0]?.oddsResult === 1}
+            disabled={marketData?.[0]?.transferredOddsCoin === 1}
             onChange={(e) => setFormValue(prev => ({ ...prev, selectionId: e.target.value }))}
             className="w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
             <option value="" selected disabled>Select Status</option>
@@ -273,8 +273,10 @@ const TransferMatchCoins = () => {
 
         {/* Button */}
         <div className="mx-4">
-          <button disabled={marketData?.[0]?.oddsResult === 1} onClick={handleOddsWinnerDeclare} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
-            {marketData?.[0]?.oddsResult === 1 ? 'Winner Declared Already' : 'Declare Winner'}
+          <button 
+          disabled={marketData?.[0]?.transferredOddsCoin === 1} 
+          onClick={handleOddsWinnerDeclare} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
+            {marketData?.[0]?.oddsResult === 1 ? 'Re-Declare' : 'Declare Winner'}
           </button>
         </div>
 
@@ -327,8 +329,8 @@ const TransferMatchCoins = () => {
 
         {/* Button */}
         <div className="mx-4">
-          <button disabled={marketData?.[0]?.bookMakerResult === 1} onClick={handleBookmakerWinnerDeclare} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300">
-            {marketData?.[0]?.bookMakerResult === 1 ? 'Winner Declared Already' : 'Declare Winner'}
+          <button disabled={marketData?.[0]?.transferredBookmakerCoin === 1} onClick={handleBookmakerWinnerDeclare} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300">
+            {marketData?.[0]?.bookMakerResult === 1 ? 'Re-Declare' : 'Declare Winner'}
           </button>
         </div>
 

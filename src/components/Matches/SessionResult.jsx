@@ -3,11 +3,7 @@ import { ImBook } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSessions, selectSessions } from "../../Store/Slice/SessionSlice";
 import { FaEdit } from "react-icons/fa";
-import {
-  getMatchList,
-  transferSessionCoins,
-  updateSessionResult,
-} from "../../Services/Newmatchapi";
+import { getMatchList, RevertSessionCoins, transferSessionCoins, updateSessionResult } from "../../Services/Newmatchapi";
 import { toast } from "react-toastify";
 import SessionEditModal from "./SessionEditModal";
 
@@ -52,20 +48,39 @@ const SessionResult = () => {
     setEditingRow(null);
   };
 
-  const handleTransferCoins = async (marketId) => {
+  const handleRevertCoins = async (marketId) => {
     // console.log("selectedSession", selectedSession, tempResult);
     // if (!selectedSession || !tempResult) {
     //   toast.error("Please select a match & session and enter a result.");
     //   return;
     // }
+    console.log("selectedMatch, marketId",selectedMatch, marketId);
     try {
-      await transferSessionCoins(selectedMatch, marketId);
-      toast.success("transfer successfully!");
+      await RevertSessionCoins(selectedMatch, marketId);
+      toast.success("Revert successfully!");
       dispatch(fetchSessions(selectedMatch));
     } catch (error) {
+      console.log({error})
       toast.error("Failed to update the session result. Please try again.");
     }
   };
+
+
+
+  // const handleTransferCoins = async (marketId) => {
+  //   // console.log("selectedSession", selectedSession, tempResult);
+  //   // if (!selectedSession || !tempResult) {
+  //   //   toast.error("Please select a match & session and enter a result.");
+  //   //   return;
+  //   // }
+  //   try {
+  //     await transferSessionCoins(selectedMatch, marketId);
+  //     toast.success("transfer successfully!");
+  //     dispatch(fetchSessions(selectedMatch));
+  //   } catch (error) {
+  //     toast.error("Failed to update the session result. Please try again.");
+  //   }
+  // };
 
   const handleMatchSelectFocus = async () => {
     if (matchList.length > 0) return;
@@ -101,6 +116,8 @@ const SessionResult = () => {
       setOpenModal(false);
       toast.success("Result updated successfully!");
       dispatch(fetchSessions(selectedMatch));
+      setTempResult('')
+      
     } catch (error) {
       toast.error("Failed to update the session result. Please try again.");
     }
@@ -165,11 +182,13 @@ const SessionResult = () => {
             className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
           >
             <option value="">Select Session</option>
-            {sessions.sessions.map((session, index) => (
+            {sessions.sessions.filter((item)=> !item.result).map((session, index) => {
+              console.log({session},'session')
+              return (
               <option key={index} value={session.marketId}>
                 {session.marketName}
               </option>
-            ))}
+            )})}
           </select>
         </div>
 
@@ -184,7 +203,7 @@ const SessionResult = () => {
             </label>
             <input
               id="result"
-              value={tempResult}
+              value={openModal ? '' :tempResult}
               onChange={handleResultChange}
               type="number"
               className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
@@ -226,7 +245,7 @@ const SessionResult = () => {
               {/* <th className="px-4 py-2 text-left">Coin Transferred</th> */}
               <th className="px-4 py-2 text-left">Date</th>
               {/* <th className="px-4 py-2 text-left">Session Book</th> */}
-              <th className="px-4 py-2 text-left">Transfer Coins</th>
+              {/* <th className="px-4 py-2 text-left">Transfer Coins</th> */}
               {/* <th className="px-4 py-2 text-left">Coin Log</th>
               <th className="px-4 py-2 text-left">Result Log</th> */}
             </tr>
@@ -241,8 +260,8 @@ const SessionResult = () => {
                       <td className="px-4 py-2">{session.catagory}</td>
                       <td className="px-4 py-2">{session.marketName}</td>
                       <td className="px-4 py-2">
-                        {editingRow === index ? (
-                          <>
+                        {openModal && editingRow == index ? (
+                          <div className="gap-2 flex">
                             <input
                               type="text"
                               value={tempResult}
@@ -252,12 +271,12 @@ const SessionResult = () => {
                               autoFocus
                             />
                             <button
-                              className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600"
+                              className="px-4 py-1 bg-lightblue text-white font-semibold rounded hover:bg-blue-600"
                               onClick={handleSubmit}
                             >
                               Submit
                             </button>
-                          </>
+                          </div>
                         ) : (
                           session.result
                         )}
@@ -268,6 +287,7 @@ const SessionResult = () => {
                           // onClick={() => handleEditClick(index, session.result)}
                           onClick={() => {
                             setOpenModal(true);
+                            setEditingRow(index)
                             setSelectedMatch(selectedMatch);
                             setSelectedSession(session?.marketId);
                             setTempResult(
@@ -279,7 +299,7 @@ const SessionResult = () => {
                       <td className="px-4 py-2">{session.marketId}</td>
                       {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
                       <td className="px-4 py-2">{session.marketTime}</td>
-                      <td className="px-4 py-2">
+                      {/* <td className="px-4 py-2">
                         <button
                           className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
                           onClick={() => handleTransferCoins(session.marketId)}
@@ -289,7 +309,7 @@ const SessionResult = () => {
                         >
                           Transfer coins
                         </button>
-                      </td>
+                      </td> */}
                     </tr>
                   ))
               ) : (
@@ -309,21 +329,7 @@ const SessionResult = () => {
           </tbody>
         </table>
       </div>
-      <SessionEditModal
-        onChange={handleMatchChange}
-        value={selectedMatch}
-        disabled={matchLoading}
-        matchError={matchError}
-        matchList={matchList}
-        handleSubmit={handleSubmit}
-        tempResult={tempResult}
-        setShowUser={setOpenModal}
-        handleResultChange={handleResultChange}
-        sessions={sessions}
-        selectedSession={selectedSession}
-        setSelectedSession={setSelectedSession}
-        showUser={openModal}
-      />
+     
     </div>
   );
 };

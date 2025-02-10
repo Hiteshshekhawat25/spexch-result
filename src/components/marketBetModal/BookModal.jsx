@@ -3,27 +3,62 @@ import React, { useEffect, useState } from 'react'
 function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, type }) {
 
   const [betList, setBetList] = useState([]);
+  const [listData,setListData] = useState([]);
 
   const handleClose = () => {
     setShowUser(false)
   }
 
 
-  const returnSortedArr = () => {
-    let temp = []
-  const uniq = userBookList?.map((item)=>{
-    temp.push(item)
-    let cond = temp?.filter((itm)=>item.userId !== itm.userId )
-    console.log({temp},'function')
-   
-  })
-  }
+  function mergeBetsByUserAndMarket(data) {
+    const mergedData = {};
+
+    console.log({data},'data')
+    data.forEach(bet => {
+        const { username, market, stake, profitLoss } = bet;
+
+        // If the user doesn't exist in mergedData, create an entry
+        if (!mergedData[username]) {
+            mergedData[username] = {};
+        }
+
+        // If the market doesn't exist for this user, create an entry for it
+        if (!mergedData[username][market]) {
+            mergedData[username][market] = {
+                totalStake: 0,
+                totalProfitLoss: 0
+            };
+        }
+
+        // Sum the stake and profitLoss for the combined user and market
+        mergedData[username][market].totalStake += stake;
+        mergedData[username][market].totalProfitLoss += profitLoss;
+    });
+
+    // Convert the merged data into an array of objects
+    return Object.keys(mergedData).map(username => {
+        const markets = mergedData[username];
+        const marketData = Object.keys(markets).map(market => ({
+            market,
+            totalStake: markets[market].totalStake,
+            totalProfitLoss: markets[market].totalProfitLoss
+        }));
+
+        return {
+            username,
+            markets: marketData
+        };
+    });
+}
 
   useEffect(() => {
-    returnSortedArr()
+    if(userBookList?.length > 0){
+      const list =   mergeBetsByUserAndMarket(userBookList)
+      setListData(list)
+    }
   }, [userBookList])
 
-  console.log({ userBookList, betList }, 'item')
+  console.log({ type}, 'listDatalistData')
   return (
     <>
       <div onClick={handleClose} className={`h-dvh w-full fixed z-[500] top-0 left-0 items-center justify-center bg-black/40 transition-all duration-500 ease-in-out ${showUser ? 'flex' : 'hidden'}`} style={{ backdropFilter: 'blur(4px)' }}>
@@ -47,8 +82,8 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                     </tr>
                     {
                       userBookList?.length ?
-                        userBookList?.map(item => {
-                          console.log(item.stake)
+                        listData?.map(item => {
+                          console.log(item?.markets?.[0]?.totalStake ,'listlist')
 
                           return (
                             <tr key={item?._id}>
@@ -59,11 +94,38 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                                 USER
                               </td>
                               <td className="font-semibold p-2 border text-nowrap text-center">
-                                {type == 'odds' ? matchBetsData?.matchodds?.[0]?.runnerName == item?.market ? item?.stake : '-' : matchBetsData?.bookmakersOdds?.[0]?.selectionName == item?.selection ? item?.stake : '-'}
+                                {(item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName )
+                                 || (matchBetsData?.bookmakersOdds?.[0]?.selectionName  == item?.markets?.[0]?.market )
+                                  ? 
+                                  item?.markets?.[0]?.totalStake ? item?.markets?.[0]?.totalStake.toFixed(2)  : '-'
+                                  :
+                                  ( item?.markets?.[1]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName) || (matchBetsData?.bookmakersOdds?.[0]?.selectionName  == item?.markets?.[1]?.market) 
+                                  ? 
+                                  item?.markets?.[1]?.totalStake
+                                   ?
+                                    item?.markets?.[1]?.totalStake.toFixed(2)  : '-'
+                                    :'-'
+                                     }
+                                {/* {type == 'odds' ? 
+                                  item?.totalStakes
+ 
+                                }
+                                 ? item?.markets?.[0]?.totalStakes : '-' : matchBetsData?.bookmakersOdds?.[0]?.selectionName == item?.markets?.[0]?.market ? item?.markets?.[0]?.totalStake : '-'} */}
                               </td>
                               <td className="font-semibold p-2 border text-nowrap text-center">
-                                {type == 'odds' ? matchBetsData?.matchodds?.[1]?.runnerName == item?.market ? item?.stake : '-' : matchBetsData?.bookmakersOdds?.[1]?.selectionName == item?.selection ? item?.stake : '-'}
-                              </td>
+                              {(item?.markets?.[1]?.market ==  matchBetsData?.matchodds?.[1]?.runnerName )
+                                 || (matchBetsData?.bookmakersOdds?.[1]?.selectionName  == item?.markets?.[1]?.market )
+                                  ? 
+                                  item?.markets?.[1]?.totalStake ? item?.markets?.[1]?.totalStake.toFixed(2)  : '-'
+                                  :
+                                  ( item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[1]?.runnerName) || (matchBetsData?.bookmakersOdds?.[1]?.selectionName  == item?.markets?.[0]?.market) 
+                                  ? 
+                                  item?.markets?.[0]?.totalStake
+                                   ?
+                                    item?.markets?.[0]?.totalStake.toFixed(2)  : '-'
+                                    :'-'
+                                     }
+                                </td>
                             </tr>
                           )
                         })

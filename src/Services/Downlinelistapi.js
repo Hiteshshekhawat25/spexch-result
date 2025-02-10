@@ -407,11 +407,11 @@ export const getProfitLossData = async (url) => {
   }
 };
 
-export const fetchUsersByStatus = async (status) => {
+export const fetchUsersByStatus = async (status,role) => {
   const token = localStorage.getItem("authToken");
   try {
     const response = await axios.get(
-      `${BASE_URL}/user/get-user?page=1&limit=10&status=${status}`,
+      `${BASE_URL}/user/get-user?page=1&limit=10&role=${role}&status=${status == 'All'? '' : status}`,
       {
         headers: {
           "Content-Type": "application/json; charset=utf-8",

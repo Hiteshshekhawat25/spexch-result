@@ -118,6 +118,7 @@ const AccountStatus = ({
       console.log("fetchResult", fetchResult);
 
       if (fetchResult.message) {
+        dispatch(setLoading(false));
         toast.error(
           fetchResult.payload ||
             "An error occurred while updating the credit reference."
@@ -129,6 +130,7 @@ const AccountStatus = ({
           roleId
         );
         if (result && result.data) {
+          dispatch(setLoading(false));
           dispatch(setDownlineData(result.data));
           setPassword("");
           toast.success("Status updated successfully.");
@@ -138,14 +140,17 @@ const AccountStatus = ({
       }
     } catch (error) {
       console.error("Error fetching downline data:", error);
+      dispatch(setLoading(false));
       dispatch(setError(error.message || "Failed to fetch the downline data."));
       toast.error(
         error.message || "An error occurred while fetching the downline data."
       );
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
   };
+  
+  
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
@@ -168,38 +173,40 @@ const AccountStatus = ({
                   className="bg-green-500 text-white px-1 py-1 mr-1 rounded  font-custom font-bold text-xs"
                   // onClick={() => handleUsernameList(item)}
                 >
-                  {user.role_name.toUpperCase()}
+                  {user?.role_name.toUpperCase()}
                 </span>
                 {user.username}
               </div>
             </div>
             <div
-              className={`px-1 border rounded-sm text-center text-bold text-${
-                status === "active"
-                  ? "green"
-                  : status === "suspended"
-                  ? "red"
-                  : "gray"
-              }-500 bg-${
-                status === "active"
-                  ? "green"
-                  : status === "suspended"
-                  ? "red"
-                  : "gray"
-              }-100 border-${
-                status === "active"
-                  ? "green"
-                  : status === "suspended"
-                  ? "red"
-                  : "gray"
-              }-500`}
-            >
-              {status === "active"
-                ? "active"
-                : status === "suspended"
-                ? "suspended"
-                : "locked"}
-            </div>
+  className={`px-1 border rounded-sm text-center text-bold text-${
+    user?.status === "active"
+      ? "green"
+      : status === "suspended"
+      ? "red"
+      : "gray"
+  }-500 bg-${
+    user?.status === "active"
+      ? "green"
+      : status === "suspended"
+      ? "red"
+      : "gray"
+  }-100 border-${
+    user?.status === "active"
+      ? "green"
+      : user?.status === "suspended"
+      ? "red"
+      : "gray"
+  }-500`}
+>
+  {/* {status === "active"
+    ? "active"
+    : status === "suspended"
+    ? "suspended"
+    : "locked"} */}
+    {user?.status}
+</div>
+
           </div>
 
           {/* Status Buttons */}

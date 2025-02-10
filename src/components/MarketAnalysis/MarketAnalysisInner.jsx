@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
-import OddsSection from "./components/OddsSection";
-import BookmakerSection from "./components/BookmakerSection";
-import FancySection from "./components/FancySection";
-import { useParams } from "react-router";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef, useState } from "react"
+import OddsSection from "./components/OddsSection"
+import BookmakerSection from "./components/BookmakerSection"
+import FancySection from "./components/FancySection"
+import { useParams } from "react-router"
+import { useDispatch, useSelector } from "react-redux"
 // import { setMatchId } from "../../store/slices/betSlice/OpenBetsSlice"
 // import { fetchTvUrl } from "../../store/slices/tvUrl/TvUrlSlice"
 import MobileStream from "./components/MobileStream";
@@ -85,9 +85,9 @@ const MarketAnalysisInner = () => {
 
   return (
     <>
-      <div className="grid lg:grid-cols-12 grid-cols-1 gap-4">
-        <div className="lg:col-span-8 col-span-1">
-          <div className="flex flex-col md:gap-6 gap-5">
+    <div className="grid lg:grid-cols-12 grid-cols-1 gap-4">
+      <div className="lg:col-span-7 col-span-1">
+        <div className="flex flex-col md:gap-6 gap-5">
             <div className="hidden flex items-center gap-2 p-2">
               <div
                 onClick={() => setActiveOdds("all")}
@@ -134,128 +134,114 @@ const MarketAnalysisInner = () => {
                 ""
               )}
             </div>
-            <div
-              className={`${
-                activeOdds === "all" || activeOdds === "odds"
-                  ? ""
-                  : "max-lg:hidden"
-              }`}
-            >
-              {matchBetsData && matchBetsData?.matchodds?.length ? (
-                <OddsSection
-                  matchBetsData={matchBetsData}
-                  setBetData={setBetData}
-                  betData={betData}
-                  openBets={openBets?.data}
-                />
-              ) : (
-                ""
-              )}
+            <div className={`${(activeOdds === 'all' || activeOdds === 'odds') ? '' : 'max-lg:hidden'}`}>
+              {
+                matchBetsData && matchBetsData?.matchodds?.length ? 
+                  <OddsSection
+                   matchBetsData={matchBetsData} 
+                   setBetData={setBetData} 
+                   betData={matchBetsData?.userBets?.filter((item)=>item?._id == 'odds')} 
+                   openBets={openBets?.data}
+                   />
+                : ''
+              }
             </div>
-            <div
-              className={`${
-                activeOdds === "all" || activeOdds === "bookmaker"
-                  ? ""
-                  : "max-lg:hidden"
-              }`}
-            >
-              {matchBetsData && matchBetsData?.bookmakersOdds?.length ? (
-                <BookmakerSection
-                  matchBetsData={matchBetsData}
-                  setBetData={setBetData}
-                  betData={betData}
+            <div className={`${(activeOdds === 'all' || activeOdds === 'bookmaker') ? '' : 'max-lg:hidden'}`}>
+              {
+                matchBetsData && matchBetsData?.bookmakersOdds?.length ?
+                  <BookmakerSection 
+                  matchBetsData={matchBetsData} 
+                  setBetData={setBetData} 
+                  betData={matchBetsData?.userBets?.filter((item)=>item?._id == "bookmakers")} 
                   openBets={openBets?.data}
-                />
-              ) : (
-                ""
-              )}
+                  />
+                : ''
+              }
             </div>
-            <div
-              className={`${
-                activeOdds === "all" || activeOdds === "fancy"
-                  ? ""
-                  : "max-lg:hidden"
-              }`}
-            >
-              {matchBetsData && matchBetsData?.matchfancies?.length ? (
-                <FancySection
-                  matchBetsData={matchBetsData}
-                  setBetData={setBetData}
-                  betData={betData}
+            <div className={`${(activeOdds === 'all' || activeOdds === 'fancy') ? '' : 'max-lg:hidden'}`}>
+              {
+                matchBetsData && matchBetsData?.matchfancies?.length ?
+                  <FancySection 
+                  matchBetsData={matchBetsData} 
+                  setBetData={setBetData} 
+                  betData={matchBetsData?.userBets?.filter((item)=>item?._id == "fancy")} 
                   openBets={openBets?.data}
-                />
-              ) : (
-                ""
-              )}
+                  /> 
+                  : ''
+              }
             </div>
-          </div>
         </div>
-        <div className="lg:col-span-6 col-span-1">
-          {matchBetsData && matchBetsData?.liveTv ? (
+      </div>
+      <div className="lg:col-span-4 col-span-1">
+          {
+            matchBetsData && matchBetsData?.liveTv ? 
             <>
-              <div
-                onClick={() => setShowLiveStreaming(!showLiveStreaming)}
-                className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer"
-              >
-                Live Streaming
-              </div>
-              {showLiveStreaming ? (
-                <div className="w-full aspect-video bg-[#141435] overflow-hidden rounded mb-4">
-                  <iframe
-                    src={matchBetsData?.liveTv}
-                    className="w-full h-full"
-                    frameBorder="0"
-                  ></iframe>
-                </div>
-              ) : (
-                ""
-              )}
+              <div onClick={()=> setShowLiveStreaming(!showLiveStreaming)} className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">Live Streaming</div>
+              {
+                showLiveStreaming ? 
+                  <div className="w-full aspect-video bg-[#141435] overflow-hidden relative rounded mb-4">
+                    <iframe 
+                    src={matchBetsData?.liveTv} 
+                    className="w-full h-full" 
+                    ref={iframeRef}
+                    frameBorder="0"  
+                    allowFullScreen
+                    allow="autoplay; encrypted-media"
+                    ></iframe>
+                     <button
+                  onClick={handleFullscreen}
+                  className="absolute bottom-2 right-2 bg-black/70 text-white p-2 rounded-md"
+                >
+                  {/* Square Bracket Fullscreen Icon */}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="2"
+                    stroke="currentColor"
+                    className="w-4 h-4"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4h4M16 4h4v4M4 16v4h4m12 0h-4v-4" />
+                  </svg>
+                </button>
+                  </div>
+                : ''
+              }
             </>
           ) : (
             ""
           )}
           {matchBetsData && matchBetsData?.scoreUrl ? (
             <>
-              <div
-                onClick={() => setShowScore(!showScore)}
-                className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer"
-              >
-                Score Card
-              </div>
-              {showScore ? (
-                <div className="w-full h-[200px] bg-[#141435] overflow-hidden rounded ">
-                  <iframe
-                    src={matchBetsData?.scoreUrl}
-                    className="w-full h-full"
-                    frameBorder="0"
-                  ></iframe>
-                </div>
-              ) : (
-                ""
-              )}
+              <div onClick={()=> setShowScore(!showScore)} className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">Score Card</div>
+              {
+                showScore ? 
+                  <div className="w-full h-[200px] bg-[#141435] overflow-hidden rounded ">
+                    <iframe src={matchBetsData?.scoreUrl} className="w-full h-full" frameBorder="0"></iframe>
+                  </div>
+                : ''
+              }
             </>
           ) : (
             ""
           )}
           <div>
-            <div className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 rounded mb-2 cursor-pointer">
+            <div className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">
               Book
             </div>
-            <div className="flex justify-around gap-5 mb-2">
-              <div
-                className="bg-gradient-blue text-white text-center text-[13px] font-semibold px-2 py-1.5 w-full rounded cursor-pointer"
-                onClick={() => {
-                  setbooks("master");
-                  setMarketListModal(true);
+            <div className="flex justify-around bg-white p-1 px-2 gap-5 mb-4">
+              <div className="bg-gradient-blue text-white text-center text-[15px] font-semibold px-2 py-2 w-full rounded cursor-pointer"
+               onClick={()=>{
+                setbooks('master')
+                setMarketListModal(true)
                 }}
               >
                 Master Book
               </div>
-              <div
-                className="bg-gradient-blue text-white text-center text-[13px] font-semibold w-full px-2 py-1.5 rounded cursor-pointer"
-                onClick={() => {
-                  setbooks("user");
-                  setMarketListModal(true);
+              <div className="bg-gradient-blue text-white text-center text-[15px] font-semibold w-full px-2 py-2 rounded cursor-pointer" 
+              onClick={()=>{
+                setbooks('user')
+                setMarketListModal(true)
                 }}
               >
                 User Book
@@ -263,7 +249,7 @@ const MarketAnalysisInner = () => {
             </div>
           </div>
 
-          <div className="bg-gradient-blue text-white text-[13px] font-semibold px-2 py-1.5 gap-2 rounded mb-1 cursor-pointer sm:flex justify-between">
+          <div className="bg-gradient-blue  text-white text-[15px] font-semibold px-2 py-2 gap-2 rounded mb-1 cursor-pointer sm:flex justify-between">
             <div className="flex">
               <div className="flex gap-1.5 items-center">
                 <label htmlFor="liveBets">Live Bets</label>
@@ -302,12 +288,7 @@ const MarketAnalysisInner = () => {
                 ></label>
               </div>
             </div>
-            <div
-              onClick={() => setShowBetsModal(true)}
-              className="text-xs cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center"
-            >
-              View More
-            </div>
+            <div onClick={()=> setShowBetsModal(true)} className="text-sm cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center">View More</div>
           </div>
           {liveBets && backBets?.data?.length ? (
             <div className="mt-2 bg-white">

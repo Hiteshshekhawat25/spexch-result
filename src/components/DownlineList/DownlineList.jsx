@@ -131,15 +131,15 @@ const DownlineList = () => {
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      handleSearch();
-    }, 500);
-    return () => clearTimeout(timer);
+      const timer = setTimeout(() => {
+        handleSearch();
+      }, 500);
+      return () => clearTimeout(timer);
   }, [searchTerm]);
 
   const handleSearch = async () => {
     if (searchTerm?.length) {
-      try {
+     try {
         const res = await searchDownline(
           `user/get-user?page=1&limit=10&search=${searchTerm}&role=${roleId}`
         );
@@ -179,7 +179,7 @@ const DownlineList = () => {
       }
     };
 
-    fetchData();
+      fetchData();
   }, [
     dispatch,
     currentPage,
@@ -436,7 +436,7 @@ const DownlineList = () => {
   };
 
   useEffect(() => {
-    fetchUsers();
+      fetchUsers();
   }, [selectedFilter]);
 
   const handleDelete = async (item) => {
@@ -496,6 +496,7 @@ const DownlineList = () => {
     }
   };
 
+  console.log({downlineData},'downlineData')
   return (
     <>
       {loading ? (
@@ -732,7 +733,7 @@ const DownlineList = () => {
                             {new Intl.NumberFormat("en-IN", {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 2,
-                            }).format(item.openingBalance)}
+                            }).format(item.totalOpeningBalance)}
                           </td>
                         )}
                         {isMasterDownlineList && (
@@ -766,7 +767,7 @@ const DownlineList = () => {
                             {new Intl.NumberFormat("en-IN", {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 2,
-                            }).format(item.openingBalance)}
+                            }).format(item.totalOpeningBalance)}
                           </td>
                         )}
                         <td
@@ -779,7 +780,7 @@ const DownlineList = () => {
                           {new Intl.NumberFormat("en-IN", {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 2,
-                          }).format(item.exposure)}
+                          }).format(item.totalExposureBalance)}
                           )
                         </td>
                         {!isMasterDownlineList && (
@@ -812,11 +813,11 @@ const DownlineList = () => {
                           {new Intl.NumberFormat("en-IN", {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 2,
-                          }).format(item.totalBalance || 0)}
+                          }).format(item.totalAvailableBalance || 0)}
                         </td>
                         <td
                           className={`border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold ${
-                            item.profit_loss < 0 ? "text-red-500" : ""
+                            (item?.totalOpeningBalance - item?.creditReference ) < 0 ? "text-red-500" : ""
                           }`}
                           style={{
                             fontFamily: "Tahoma, Helvetica, sans-serif",
@@ -830,7 +831,7 @@ const DownlineList = () => {
                             : new Intl.NumberFormat("en-IN", {
                                 minimumFractionDigits: 0,
                                 maximumFractionDigits: 2,
-                              }).format(item.profit_loss)}
+                              }).format(item?.totalOpeningBalance - item?.creditReference )}
                         </td>
                         {!isMasterDownlineList && (
                           <td
@@ -925,8 +926,8 @@ const DownlineList = () => {
                           </div>
                         </td>
                       </tr>
-                    ))
-                  ) : (
+                    )))
+                   : (
                     <tr>
                       <td colSpan={10} className="text-center p-6">
                         No Data Available
