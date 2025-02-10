@@ -3,6 +3,8 @@ import PLFilter from "./PLFilter";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { BASE_URL } from "../../Constant/Api";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { ROUTES_CONST } from "../../Constant/routesConstant";
 
 const ProfitLoss = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -17,8 +19,7 @@ const ProfitLoss = () => {
     key: "username",
     direction: "ascending",
   });
-
-  // Sort Function
+  const navigate = useNavigate();
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -27,13 +28,17 @@ const ProfitLoss = () => {
     setSortConfig({ key, direction });
   };
 
-  const fetchUserData = async (userId, role_name) => {
-    console.log("roleId", role_name);
+  const fetchUserData = async (userId, role_name, item) => {
     const token = localStorage.getItem("authToken");
     setLocalLoading(true);
-    // if (role_name) {
-
-    // }
+    if (role_name === "user") {
+      navigate(ROUTES_CONST.MyAccount, {
+        state: {
+          selectedUser: item,
+          selectedPage: "profitLoss",
+        },
+      });
+    }
 
     try {
       const response = await axios.get(`${BASE_URL}/user/get-profit-loss`, {
@@ -182,7 +187,9 @@ const ProfitLoss = () => {
                       >
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium text-lightblue cursor-pointer"
-                          onClick={() => fetchUserData(row._id, row.role_name)}
+                          onClick={() =>
+                            fetchUserData(row._id, row.role_name, row)
+                          }
                         >
                           {row.username ? row.username.toUpperCase() : ""}
                         </td>
