@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -34,6 +35,36 @@ const EventPLFilter = ({
   const { dataSource, fromDate, toDate, fromTime, toTime } =
     eventPLFilterState || {};
 
+  // Function to dynamically calculate date range based on data source
+  const getDateRange = (source) => {
+    const today = new Date();
+    let fromDate, toDate;
+
+    switch (source) {
+      case "live":
+        fromDate = today.toISOString().split("T")[0];
+        toDate = today.toISOString().split("T")[0];
+        break;
+      case "backup":
+        toDate = today.toISOString().split("T")[0];
+        const threeMonthsAgo = new Date(today);
+        threeMonthsAgo.setMonth(today.getMonth() - 3);
+        fromDate = threeMonthsAgo.toISOString().split("T")[0];
+        break;
+      case "old":
+        toDate = today.toISOString().split("T")[0];
+        const oneYearAgo = new Date(today);
+        oneYearAgo.setFullYear(today.getFullYear() - 1);
+        fromDate = oneYearAgo.toISOString().split("T")[0];
+        break;
+      default:
+        fromDate = today.toISOString().split("T")[0];
+        toDate = today.toISOString().split("T")[0];
+    }
+
+    return { fromDate, toDate };
+  };
+
   // Set default values when component mounts
   useEffect(() => {
     if (!dataSource) dispatch(setDataSource("live"));
@@ -41,7 +72,14 @@ const EventPLFilter = ({
     if (!toDate) dispatch(setToDate(today));
     if (!fromTime) dispatch(setFromTime("00:00"));
     if (!toTime) dispatch(setToTime("23:59"));
-  }, [dataSource, fromDate, toDate, fromTime, toTime, dispatch, today]);
+  }, [dataSource, fromDate, toDate, fromTime, toTime, dispatch]);
+
+  // Update fromDate and toDate when dataSource changes
+  useEffect(() => {
+    const { fromDate, toDate } = getDateRange(dataSource);
+    dispatch(setFromDate(fromDate));
+    dispatch(setToDate(toDate));
+  }, [dataSource, dispatch]);
 
   useEffect(() => {
     setCurrentPage(1);
@@ -62,48 +100,9 @@ const EventPLFilter = ({
     entriesToShow,
   ]);
 
-  // Function to dynamically calculate date range based on data source
-  const getDateRange = (source) => {
-    const today = new Date();
-    let fromDate, toDate;
-
-    switch (source) {
-      case "live":
-        // For live data, use today's date
-        fromDate = today.toISOString().split("T")[0];
-        toDate = today.toISOString().split("T")[0];
-        break;
-      case "backup":
-        // For backup data, use the last 3 months
-        toDate = today.toISOString().split("T")[0];
-        const threeMonthsAgo = new Date(today);
-        threeMonthsAgo.setMonth(today.getMonth() - 3);
-        fromDate = threeMonthsAgo.toISOString().split("T")[0];
-        break;
-      case "old":
-        // For old data, use the last 1 year
-        toDate = today.toISOString().split("T")[0];
-        const oneYearAgo = new Date(today);
-        oneYearAgo.setFullYear(today.getFullYear() - 1);
-        fromDate = oneYearAgo.toISOString().split("T")[0];
-        break;
-      default:
-        // Default to today's date
-        fromDate = today.toISOString().split("T")[0];
-        toDate = today.toISOString().split("T")[0];
-    }
-
-    return { fromDate, toDate };
-  };
-
   const handleGetPL = async () => {
     try {
-      // Get the dynamically calculated date range based on the selected data source
-      const { fromDate: adjustedFromDate, toDate: adjustedToDate } =
-        getDateRange(dataSource);
-
-      const url = `user/get-user-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}userId=${Userid} \
-`;
+      const url = `user/get-user-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${fromDate}&toDate=${toDate}&fromTime=${fromTime}&toTime=${toTime}&userId=${Userid}`;
       const response = await getProfitLossData(url);
 
       if (response && response.data) {
@@ -181,7 +180,7 @@ const EventPLFilter = ({
       <div className="flex space-x-2 items-center">
         <button
           onClick={handleGetPL}
-          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
+          className="px-4 py-2 `bg-gradient-seablue` text-white rounded-md text-sm"
         >
           Get P & L
         </button>

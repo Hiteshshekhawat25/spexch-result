@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -18,25 +19,45 @@ const PLFilter = ({
   entriesToShow,
   currentPage,
   setCurrentPage,
-  setLocalLoading,
 }) => {
   const dispatch = useDispatch();
   const plFilterState = useSelector((state) => state.plFilter);
-  const { dataSource, fromDate, toDate, fromTime, toTime } =
-    plFilterState || {};
+  const { dataSource, fromDate, toDate, fromTime, toTime } = plFilterState || {};
 
+  // Get today's date
   const today = new Date().toISOString().split("T")[0];
 
+  // Function to get past date based on months
+  const getPastDate = (months) => {
+    const pastDate = new Date();
+    pastDate.setMonth(pastDate.getMonth() - months);
+    return pastDate.toISOString().split("T")[0];
+  };
+
+  // Function to get past date based on years
+  const getPastYearDate = () => {
+    const pastYearDate = new Date();
+    pastYearDate.setFullYear(pastYearDate.getFullYear() - 1);
+    return pastYearDate.toISOString().split("T")[0];
+  };
+
   useEffect(() => {
-    dispatch(setDataSource("live"));
-    dispatch(setFromDate(today));
+    let fromDateValue = today;
+
+    if (dataSource === "old") {
+      fromDateValue = getPastYearDate();
+    } else if (dataSource === "backup") {
+      fromDateValue = getPastDate(3);
+    }
+
+    dispatch(setFromDate(fromDateValue));
     dispatch(setToDate(today));
     dispatch(setFromTime("00:00"));
     dispatch(setToTime("23:59"));
-  }, [dispatch, today]);
+  }, [dispatch, dataSource, today]);
 
   useEffect(() => {
-    if (dataSource === "live" && fromDate && toDate) {
+    if (dataSource && fromDate && toDate) {
       handleGetPL();
     }
   }, [dataSource, fromDate, toDate, fromTime, toTime, entriesToShow]);
@@ -146,13 +167,13 @@ const PLFilter = ({
       <div className="flex space-x-2 items-center ml-auto">
         <button
           onClick={handleGetPL}
-          className="px-4 py-2 bg-darkgray text-white rounded-md text-sm"
+          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
         >
           Get P & L
         </button>
         <button
           onClick={handleReset}
-          className="px-4 py-2 bg-gradient-blue text-white rounded-md text-sm"
+          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
         >
           Reset
         </button>
