@@ -19,16 +19,14 @@ const BetListFilter = ({
   currentPage,
   setIsDataFetched,
   setCurrentPage,
-  userID, // userID is passed as a prop
+  userID,
 }) => {
   const dispatch = useDispatch();
-  const { type, sport, fromDate, toDate ,dataSource } = useSelector(selectBetListFilter);
-
+  const { type, sport, fromDate, toDate, dataSource } = useSelector(selectBetListFilter);
   const [sportsOptions, setSportsOptions] = useState([]);
 
-  const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
 
-  // Set default values when component mounts
   useEffect(() => {
     dispatch(setType("unsettled"));
     dispatch(setSport("Cricket"));
@@ -37,12 +35,11 @@ const BetListFilter = ({
   }, [dispatch, today]);
 
   useEffect(() => {
-    // Fetch sports options
     const fetchSports = async () => {
       try {
         const response = await getCreateNewMatchAPIAuth("games/getgames");
         if (response.status === 200) {
-          setSportsOptions(response.data.data || []); // Adjust based on API response
+          setSportsOptions(response.data.data || []);
         }
       } catch (error) {
         console.error("Error fetching sports:", error);
@@ -65,7 +62,6 @@ const BetListFilter = ({
       const response = await getBetlistData(url);
 
       if (response && response.data) {
-        console.log("Fetched data:", response.data);
         const { pagination, data } = response.data;
 
         setBetlistData(data);
@@ -82,64 +78,65 @@ const BetListFilter = ({
     }
   };
 
-
   const calculateDate = (months) => {
     const date = new Date();
     date.setMonth(date.getMonth() - months);
     return date.toISOString().split("T")[0];
   };
 
-
-    useEffect(() => {
-      if (!dataSource) {
-        dispatch(setDataSource("live"));
-        dispatch(setFromDate(today));
-        dispatch(setToDate(today));
-      } else {
-        switch (dataSource) {
-          case "live":
-            dispatch(setFromDate(today));
-            dispatch(setToDate(today));
-            break;
-          case "backup":
-            dispatch(setFromDate(calculateDate(3)));
-            dispatch(setToDate(today));
-            break;
-          case "old":
-            dispatch(setFromDate(calculateDate(12)));
-            dispatch(setToDate(today));
-            break;
-          default:
-            break;
-        }
+  useEffect(() => {
+    if (!dataSource) {
+      dispatch(setDataSource("live"));
+      dispatch(setFromDate(today));
+      dispatch(setToDate(today));
+    } else {
+      switch (dataSource) {
+        case "live":
+          dispatch(setFromDate(today));
+          dispatch(setToDate(today));
+          break;
+        case "backup":
+          dispatch(setFromDate(calculateDate(3)));
+          dispatch(setToDate(today));
+          break;
+        case "old":
+          dispatch(setFromDate(calculateDate(12)));
+          dispatch(setToDate(today));
+          break;
+        default:
+          break;
       }
-    }, [dataSource, dispatch, today]);
+    }
+  }, [dataSource, dispatch, today]);
 
   useEffect(() => {
     if (fromDate && toDate) {
       console.log("Fetching data due to filter change or userID update");
       handleGetHistory();
     }
-  }, [type, sport, fromDate, toDate, currentPage, entriesToShow, userID]); // Add userID to the dependency array
+  }, [type, sport, fromDate, toDate, currentPage, entriesToShow, userID]);
 
   return (
     <div className="flex flex-wrap items-start space-y-4 sm:space-y-0 sm:space-x-4 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
       
-      <div className="flex flex-col items-start">
-        <label className="text-sm font-custom text-black mb-2">
-          Data Source
-        </label>
-        <select
-          value={dataSource || "live"} // Default to "live" if dataSource is empty
-          onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-10 py-2 "
-        >
-          <option value="">Data Source</option>
-          <option value="live">LIVE DATA</option>
-          <option value="backup">BACKUP DATA</option>
-          <option value="old">OLD DATA</option>
-        </select>
-      </div>
+      {/* Show Data Source select box only for "settled" or "void" bet type */}
+      {type !== "unsettled" && (
+        <div className="flex flex-col items-start">
+          <label className="text-sm font-custom text-black mb-2">
+            Data Source
+          </label>
+          <select
+            value={dataSource || "live"}
+            onChange={(e) => dispatch(setDataSource(e.target.value))}
+            className="border rounded px-10 py-2"
+          >
+            <option value="">Data Source</option>
+            <option value="live">LIVE DATA</option>
+            <option value="backup">BACKUP DATA</option>
+            <option value="old">OLD DATA</option>
+          </select>
+        </div>
+      )}
 
       {/* Choose Type */}
       <div className="flex flex-col w-full sm:w-auto">
