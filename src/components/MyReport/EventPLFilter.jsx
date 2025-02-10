@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -67,7 +66,9 @@ const EventPLFilter = ({
 
   // Set default values when component mounts
   useEffect(() => {
-    if (!dataSource) dispatch(setDataSource("live"));
+    if (!dataSource) {
+      dispatch(setDataSource("live"));
+    }
     if (!fromDate) dispatch(setFromDate(today));
     if (!toDate) dispatch(setToDate(today));
     if (!fromTime) dispatch(setFromTime("00:00"));

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -22,7 +21,8 @@ const PLFilter = ({
 }) => {
   const dispatch = useDispatch();
   const plFilterState = useSelector((state) => state.plFilter);
-  const { dataSource, fromDate, toDate, fromTime, toTime } = plFilterState || {};
+  const { dataSource, fromDate, toDate, fromTime, toTime } =
+    plFilterState || {};
 
   // Get today's date
   const today = new Date().toISOString().split("T")[0];
@@ -60,7 +60,15 @@ const PLFilter = ({
     if (dataSource && fromDate && toDate) {
       handleGetPL();
     }
-  }, [dataSource, fromDate, toDate,currentPage, fromTime, toTime, entriesToShow]);
+  }, [
+    dataSource,
+    fromDate,
+    toDate,
+    currentPage,
+    fromTime,
+    toTime,
+    entriesToShow,
+  ]);
 
   const handleGetPL = async () => {
     try {
@@ -97,6 +105,14 @@ const PLFilter = ({
     setCurrentPage(1);
   };
 
+  const initialState = {
+    dataSource: "live", // Default to "live"
+    fromDate: "",
+    toDate: "",
+    fromTime: "00:00",
+    toTime: "23:59",
+  };
+
   return (
     <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
       <div className="flex flex-col items-start">
@@ -104,7 +120,7 @@ const PLFilter = ({
           Data Source
         </label>
         <select
-          value={dataSource}
+          value={dataSource || "live"} // Ensure "live" is selected by default
           onChange={(e) => dispatch(setDataSource(e.target.value))}
           className="border rounded px-10 py-2"
         >
