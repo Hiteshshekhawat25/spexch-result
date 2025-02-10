@@ -28,7 +28,7 @@ const ProfitLoss = () => {
   };
 
   const fetchUserData = async (userId, role_name) => {
-    console.log("roleId",role_name);
+    console.log("roleId", role_name);
     const token = localStorage.getItem("authToken");
     setLocalLoading(true);
     // if (role_name) {
@@ -101,6 +101,30 @@ const ProfitLoss = () => {
 
         {/* Table Header */}
         <div className="overflow-x-auto my-4 mx-4">
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center">
+              <label className="mr-2 text-sm font-medium text-black">
+                Show
+              </label>
+              <select
+                value={entriesToShow}
+                onChange={(e) => {
+                  setEntriesToShow(Number(e.target.value));
+                  setCurrentPage(1);
+                }}
+                className="border rounded px-2 py-1 text-sm"
+              >
+                {[10, 25, 50, 100].map((number) => (
+                  <option key={number} value={number}>
+                    {number}
+                  </option>
+                ))}
+              </select>
+              <label className="ml-2 text-sm font-medium text-black">
+                entries
+              </label>
+            </div>
+          </div>
           <table className="w-full table-auto border-collapse border border-gray-400">
             <thead className="border border-gray-400 bg-gray-200 text-black text-center">
               <tr className="relative ml-50%">
@@ -237,36 +261,36 @@ const ProfitLoss = () => {
             {/* Footer */}
             {/* {(expandedRows[0]?.role_name === "master" ||
               paginatedData[0]?.role_name === "master") && ( */}
-              <tfoot>
-                <tr className="bg-gray-300 text-black">
-                  <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500">
-                    {totalData.username ? totalData.username.toUpperCase() : ""}
-                  </td>
-                  <td
-                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.profitLoss < 0 ? "text-red-500" : "text-green-500"
-                    }`}
-                  >
-                    {Math.abs(totalData.profitLoss.toFixed(2))}
-                  </td>
-                  <td
-                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.downlineProfitLoss < 0
-                        ? "text-red-500"
-                        : "text-green-500"
-                    }`}
-                  >
-                    {Math.abs(totalData.downlineProfitLoss.toFixed(2))}
-                  </td>
-                  <td
-                    className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                      totalData.commission < 0 ? "red" : "green"
-                    }`}
-                  >
-                    {Math.abs(totalData.commission.toFixed(2))}
-                  </td>
-                </tr>
-              </tfoot>
+            <tfoot>
+              <tr className="bg-gray-300 text-black">
+                <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500">
+                  {totalData.username ? totalData.username.toUpperCase() : ""}
+                </td>
+                <td
+                  className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                    totalData.profitLoss < 0 ? "text-red-500" : "text-green-500"
+                  }`}
+                >
+                  {Math.abs(totalData.profitLoss.toFixed(2))}
+                </td>
+                <td
+                  className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                    totalData.downlineProfitLoss < 0
+                      ? "text-red-500"
+                      : "text-green-500"
+                  }`}
+                >
+                  {Math.abs(totalData.downlineProfitLoss.toFixed(2))}
+                </td>
+                <td
+                  className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
+                    totalData.commission < 0 ? "red" : "green"
+                  }`}
+                >
+                  {Math.abs(totalData.commission.toFixed(2))}
+                </td>
+              </tr>
+            </tfoot>
             {/* )} */}
           </table>
         </div>

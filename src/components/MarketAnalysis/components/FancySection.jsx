@@ -145,7 +145,7 @@ const FancySection = ({matchBetsData, setBetData, betData, openBets}) => {
 
   return (
     <>
-      <div className="mt-5 bg-white">
+      <div className="mt-2 bg-white">
         <div className="flex align-center justify-between bg-white pr-2">
           <div className="flex">
             <span className="hidden bg-[#067e8f] bg-[#e4550e]"></span>
@@ -158,78 +158,80 @@ const FancySection = ({matchBetsData, setBetData, betData, openBets}) => {
             <Tabs data={fancyTabs} size={'sm'} activeTab={activeTab} setActiveTab={setActiveTab} fancyTabs={true}/>
           </div>
         </div>
-        <div className="flex items-center justify-end border-t border-[#7e97a7]">
-          <div className="w-[calc(5rem_*_6)] flex justify-end pt-2 ">
-            <div className="flex items-center justify-center text-xs font-semibold py-1 w-[5rem] rounded-tl-lg bg-[#faa9ba]">No</div>
-            <div className="flex items-center justify-center text-xs font-semibold py-1 w-[5rem] rounded-tr-lg bg-[#72bbef]">Yes</div>
-            <div className="w-[calc(5rem_*_2)] p-1 flex justify-center text-xs font-semibold max-md:hidden">
-              Min/Max
+        <div className="overflow-x-auto">
+          <div className="flex items-center justify-end border-t border-[#7e97a7]">
+            <div className="w-[calc(5rem_*_6)] flex justify-end pt-2 ">
+              <div className="flex items-center justify-center text-xs font-semibold py-1 w-[5rem] rounded-tl-lg bg-[#faa9ba]">No</div>
+              <div className="flex items-center justify-center text-xs font-semibold py-1 w-[5rem] rounded-tr-lg bg-[#72bbef]">Yes</div>
+              <div className="w-[calc(5rem_*_2)] p-1 flex justify-center text-xs font-semibold max-md:hidden">
+                Min/Max
+              </div>
             </div>
           </div>
+          {
+            matchBetsData?.matchfancies?.length ? matchBetsData?.matchfancies?.map((item, pIndex) => {
+              const previousOdds = previous?.[pIndex];
+              const isYesBlinking = previousOdds?.runsYes !== item?.runsYes;
+              const isNoBlinking = previousOdds?.runsNo !== item?.runsNo;
+
+              if(item?.statusName === "VOIDED") return
+
+              return (
+              <React.Fragment key={item?.marketId}>
+                <div className={`flex items-center justify-between border-t border-[#7e97a7] ${((activeTab !== "ALL") && (item?.catagory !== activeTab)) ? 'hidden' : ''}`}>
+                  <div className="md:px-4 px-3 w-[calc(100%-184px)]">
+                    <div className="text-xs font-semibold">{item?.marketName}</div>
+                    <div className="text-[0.625rem] font-semibold text-red-600">{returnExposerAmount(item?.marketId)}</div>
+                  </div>
+                  <div className="flex items-center md:w-auto w-[184px]">
+                    <div className="md:hidden relative">
+                      <img src="assets/img/info.png" className="brightness-0 md:h-5 h-4 md:mr-3 mr-2 peer" alt="" />
+                      <div className="absolute bg-gray-100 p-2 text-xs text-medium text-nowrap right-[115%] peer-hover:block rounded top-1/2 -translate-y-1/2 hidden">
+                        Min/Max : 100-1000
+                      </div>
+                    </div>
+                    <div className="max-md:hidden">
+                      <button variant="secondary" size="sm" className="flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-blue shadow hover:bg-gradient-blue-hover text-white h-8 rounded-md px-3 text-xs w-auto mr-3" onClick={()=> {
+                        handleBookFancy();
+                        setSelectedFancy(item?.marketId)
+                      }}>Book</button>
+                    </div>
+                    <div className={`flex relative overflow-hidden group ${item?.statusName !== "ACTIVE" ? 'active' : ''}`}>
+                      <div className="flex">
+                            <div  
+                              onClick={()=> handleBetData(item, 'no', item?.oddsNo)}
+                              className={`${(blink && previous?.length && isNoBlinking) ? 'blink !bg-yellow-100' : ''} 
+                                ${(item?.marketId === betData?.selectionId && betData?.betType === 'no') ? 'active' : ''}
+                                h-[2.625rem] w-[5rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#f4496d] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#faa9ba]`}>
+                              <div className="text-xs font-semibold text-[#212529]">{item?.runsNo}</div>
+                              <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsNo).toFixed(2))}</div>
+                            </div>
+                            <div  
+                              onClick={()=> handleBetData(item, 'yes', item?.oddsYes)}
+                              className={`${(blink && previous?.length && isYesBlinking) ? 'blink !bg-yellow-100' : ''} 
+                              ${(item?.marketId === betData?.selectionId && betData?.betType === 'yes') ? 'active' : ''}
+                                h-[2.625rem] w-[5rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#1a8ee1] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#72bbef]`}>
+                              <div className="text-xs font-semibold text-[#212529]">{item?.runsYes}</div>
+                              <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsYes).toFixed(2))}</div>
+                            </div>
+                      </div>
+                      <div className="absolute top-0 left-0 size-full items-center justify-center bg-black/20 text-xs text-gray-100 font-medium leading-[inherit] z-10 hidden group-[&.active]:flex">
+                        {returnStatus(item?.statusName)}
+                      </div>
+                    </div>
+                    <div className="w-[calc(5rem_*_2)] flex justify-center text-xs font-semibold max-md:hidden">
+                      {item?.minSetting} - {item?.maxSetting}
+                    </div>
+                  </div>
+                </div>
+                {/* {
+                  betData?.selectionId === item?.marketId ? 
+                  <PlaceBet betData={betData} setBetData={setBetData}/> : ''
+                } */}
+              </React.Fragment>
+            )}) : ''
+          }
         </div>
-        {
-          matchBetsData?.matchfancies?.length ? matchBetsData?.matchfancies?.map((item, pIndex) => {
-            const previousOdds = previous?.[pIndex];
-            const isYesBlinking = previousOdds?.runsYes !== item?.runsYes;
-            const isNoBlinking = previousOdds?.runsNo !== item?.runsNo;
-
-            if(item?.statusName === "VOIDED") return
-
-            return (
-            <React.Fragment key={item?.marketId}>
-              <div className={`flex items-center justify-between border-t border-[#7e97a7] ${((activeTab !== "ALL") && (item?.catagory !== activeTab)) ? 'hidden' : ''}`}>
-                <div className="md:px-4 px-3">
-                  <div className="text-xs font-semibold">{item?.marketName}</div>
-                  <div className="text-[0.625rem] font-semibold text-red-600">{returnExposerAmount(item?.marketId)}</div>
-                </div>
-                <div className="flex items-center">
-                  <div className="md:hidden relative">
-                    <img src="assets/img/info.png" className="brightness-0 md:h-5 h-4 md:mr-3 peer" alt="" />
-                    <div className="absolute bg-gray-100 p-2 text-xs text-medium text-nowrap right-[115%] peer-hover:block rounded top-1/2 -translate-y-1/2 hidden">
-                      Min/Max : 100-1000
-                    </div>
-                  </div>
-                  <div className="max-md:hidden">
-                    <button variant="secondary" size="sm" className="flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-blue shadow hover:bg-gradient-blue-hover text-white h-8 rounded-md px-3 text-xs w-auto mr-3" onClick={()=> {
-                      handleBookFancy();
-                      setSelectedFancy(item?.marketId)
-                    }}>Book</button>
-                  </div>
-                  <div className={`flex relative overflow-hidden group ${item?.statusName !== "ACTIVE" ? 'active' : ''}`}>
-                    <div className="flex">
-                          <div  
-                            onClick={()=> handleBetData(item, 'no', item?.oddsNo)}
-                            className={`${(blink && previous?.length && isNoBlinking) ? 'blink !bg-yellow-100' : ''} 
-                              ${(item?.marketId === betData?.selectionId && betData?.betType === 'no') ? 'active' : ''}
-                              h-[2.625rem] w-[5rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#f4496d] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#faa9ba]`}>
-                            <div className="text-xs font-semibold text-[#212529]">{item?.runsNo}</div>
-                            <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsNo).toFixed(2))}</div>
-                          </div>
-                          <div  
-                            onClick={()=> handleBetData(item, 'yes', item?.oddsYes)}
-                            className={`${(blink && previous?.length && isYesBlinking) ? 'blink !bg-yellow-100' : ''} 
-                            ${(item?.marketId === betData?.selectionId && betData?.betType === 'yes') ? 'active' : ''}
-                              h-[2.625rem] w-[5rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#1a8ee1] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#72bbef]`}>
-                            <div className="text-xs font-semibold text-[#212529]">{item?.runsYes}</div>
-                            <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsYes).toFixed(2))}</div>
-                          </div>
-                    </div>
-                    <div className="absolute top-0 left-0 size-full items-center justify-center bg-black/20 text-xs text-gray-100 font-medium leading-[inherit] z-10 hidden group-[&.active]:flex">
-                      {returnStatus(item?.statusName)}
-                    </div>
-                  </div>
-                  <div className="w-[calc(5rem_*_2)] flex justify-center text-xs font-semibold max-md:hidden">
-                    {item?.minSetting} - {item?.maxSetting}
-                  </div>
-                </div>
-              </div>
-              {/* {
-                betData?.selectionId === item?.marketId ? 
-                <PlaceBet betData={betData} setBetData={setBetData}/> : ''
-              } */}
-            </React.Fragment>
-          )}) : ''
-        }
       </div>
       {/* <BookFancyModal selectedFancy={selectedFancy} openBets={openBets}/> */}
     </>
