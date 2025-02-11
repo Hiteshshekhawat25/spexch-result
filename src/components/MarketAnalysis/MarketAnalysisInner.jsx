@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import OddsSection from "./components/OddsSection"
 import BookmakerSection from "./components/BookmakerSection"
 import FancySection from "./components/FancySection"
@@ -8,13 +8,14 @@ import { useDispatch, useSelector } from "react-redux"
 // import { fetchTvUrl } from "../../store/slices/tvUrl/TvUrlSlice"
 import MobileStream from "./components/MobileStream"
 import { socket } from "../../Services/socket"
-import { SOCKET_ROUTES } from "../../Constant/Api"
+import { BASE_URL, SOCKET_ROUTES } from "../../Constant/Api"
 import MarketBetModal from "../marketBetModal/MarketBetModal"
 import { fetchMarketBets } from "../../Store/Slice/marketBetsSlice"
 import UserHistoryModal from "../marketBetModal/UserHistoryModal"
 import BookModal from "../marketBetModal/BookModal"
 import { fetchUserBook } from "../../Store/Slice/UserBookSlice"
 import MarketListModal from "../marketBetModal/MarketListModal"
+import axios from "axios"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -40,30 +41,48 @@ const MarketAnalysisInner = () => {
   })
   const {gameId} = useParams()
   const dispatch = useDispatch()
-  const openBets = useSelector(state => state?.openBets)
-  const iframeRef = useRef()
+  const openBets = useSelector(state => state?.betList)
   const {data : backBets} = useSelector(state => state?.marketBetList)
   const {data : userBooks} = useSelector(state => state?.userBookList)
+  const [page,setPage] = useState(1)
     const [showUser, setShowUser] = useState(false)
     const [selectedUser, setSelectedUser] = useState({})
+    const [betList,setBetList] = useState([]);
     const [showUserBook,setShowUserBook] = useState(false)
 
-    console.log('matchBetsData', matchBetsData)
+    const getBetList = async () => {
 
+      const token = localStorage.getItem("authToken");
 
-    const handleFullscreen = () => {
-      if (iframeRef.current) {
-        if (iframeRef.current.requestFullscreen) {
-          iframeRef.current.requestFullscreen();
-        } else if (iframeRef.current.mozRequestFullScreen) {
-          iframeRef.current.mozRequestFullScreen();
-        } else if (iframeRef.current.webkitRequestFullscreen) {
-          iframeRef.current.webkitRequestFullscreen();
-        } else if (iframeRef.current.msRequestFullscreen) {
-          iframeRef.current.msRequestFullscreen();
+      try {
+        const response = await axios.get(`${BASE_URL}/user/get-odds-bet-list?matchId=${gameId}&limit=10&page=${page}`, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("response",response);
+        if(response?.data?.success) {
+          setBetList(response?.data?.data)
+          // setTotalPage(response?.data?.pagination?.totalPages)
         }
+      } catch (error) {
+        // Handle specific token expiry case
+        if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+          localStorage.clear();
+          alert("Session expired. Please log in again.");
+        }
+        // Handle other API errors
+        toast.error(error?.response?.data?.message)
+        console.error("API error:", error);
+        // throw new Error(error.response?.data?.message || "An error occurred, please try again.");
       }
     };
+
+
+    useEffect(()=>{
+      getBetList()
+    },[])
 
       useEffect(() => {
         socket.connect()
@@ -89,19 +108,21 @@ const MarketAnalysisInner = () => {
           }
         },[liveBets])
 
+        
+
         useEffect(()=> {
           if(showUserBook) {
             dispatch(fetchUserBook({page : 1,limit : 100,type : type,matchId : gameId}))
           }
         },[showUserBook])
 
-        console.log({gameId,showUserBook,userBooks})
+        console.log({betList},'function')
 
   return (
     <>
-    <div className="grid lg:grid-cols-12 grid-cols-1 gap-4">
-      <div className="lg:col-span-7 col-span-1">
-        <div className="flex flex-col md:gap-6 gap-5">
+    <div className="grid grid-cols-12 gap-4">
+      <div className="col-span-12 md:col-span-8">
+        <div className="pb-6">
             <div className="hidden flex items-center gap-2 p-2">
               <div onClick={()=> setActiveOdds('all')} className={`${activeOdds === 'all' ? 'active' : ''} cursor-pointer flex items-center justify-center text-sm font-bold bg-gradient text-white h-10 px-3 rounded-[50px] border border-[#000000] [&.active]:bg-gradient-green`}>All</div>
               {
@@ -123,73 +144,35 @@ const MarketAnalysisInner = () => {
             <div className={`${(activeOdds === 'all' || activeOdds === 'odds') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && matchBetsData?.matchodds?.length ? 
-                  <OddsSection
-                   matchBetsData={matchBetsData} 
-                   setBetData={setBetData} 
-                   betData={matchBetsData?.userBets?.filter((item)=>item?._id == 'odds')} 
-                   openBets={openBets?.data}
-                   />
+                  <OddsSection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} betList={betList} openBets={openBets?.data}/>
                 : ''
               }
             </div>
             <div className={`${(activeOdds === 'all' || activeOdds === 'bookmaker') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && matchBetsData?.bookmakersOdds?.length ?
-                  <BookmakerSection 
-                  matchBetsData={matchBetsData} 
-                  setBetData={setBetData} 
-                  betData={matchBetsData?.userBets?.filter((item)=>item?._id == "bookmakers")} 
-                  openBets={openBets?.data}
-                  />
+                  <BookmakerSection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} openBets={openBets?.data}/>
                 : ''
               }
             </div>
             <div className={`${(activeOdds === 'all' || activeOdds === 'fancy') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && matchBetsData?.matchfancies?.length ?
-                  <FancySection 
-                  matchBetsData={matchBetsData} 
-                  setBetData={setBetData} 
-                  betData={matchBetsData?.userBets?.filter((item)=>item?._id == "fancy")} 
-                  openBets={openBets?.data}
-                  /> 
+                  <FancySection matchBetsData={matchBetsData} setBetData={setBetData} betData={betData} openBets={openBets?.data}/> 
                   : ''
               }
             </div>
         </div>
       </div>
-      <div className="lg:col-span-5 col-span-1">
+      <div className="col-span-12 md:col-span-4">
           {
             matchBetsData && matchBetsData?.liveTv ? 
             <>
               <div onClick={()=> setShowLiveStreaming(!showLiveStreaming)} className="bg-gradient-blue text-white text-[12px] sm:text-[15px] py-1 sm:py-2 font-semibold px-2  rounded mb-2 cursor-pointer">Live Streaming</div>
               {
                 showLiveStreaming ? 
-                  <div className="w-full aspect-video bg-[#141435] overflow-hidden relative rounded mb-4">
-                    <iframe 
-                    src={matchBetsData?.liveTv} 
-                    className="w-full h-full" 
-                    ref={iframeRef}
-                    frameBorder="0"  
-                    allowFullScreen
-                    allow="autoplay; encrypted-media"
-                    ></iframe>
-                     <button
-                  onClick={handleFullscreen}
-                  className="absolute bottom-2 right-2 bg-black/70 text-white p-2 rounded-md"
-                >
-                  {/* Square Bracket Fullscreen Icon */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="2"
-                    stroke="currentColor"
-                    className="w-4 h-4"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M4 8V4h4M16 4h4v4M4 16v4h4m12 0h-4v-4" />
-                  </svg>
-                </button>
+                  <div className="w-full aspect-video bg-[#141435] overflow-hidden rounded mb-4">
+                    <iframe src={matchBetsData?.liveTv} className="w-full h-full" frameBorder="0"></iframe>
                   </div>
                 : ''
               }
@@ -240,19 +223,19 @@ const MarketAnalysisInner = () => {
               <div className="flex  gap-1.5 items-center">
                 <label htmlFor="liveBets">Live Bets</label>
                 <input type="checkbox" className="hidden" id="liveBets" checked={liveBets} onChange={()=>setLiveBets(!liveBets)}/>
-                <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${liveBets ? 'before:!left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="liveBets"></label>
+                <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${liveBets ? 'before:left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="liveBets"></label>
               </div>
               <div className="flex gap-1.5 items-center ml-4">
                 <label htmlFor="partnership">Partnership Book</label>
                 <input type="checkbox" className="hidden" id="partnership" checked={partnershipBook} onChange={()=>setPartnershipBook(!partnershipBook)}/>
-                <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${partnershipBook ? 'before:!left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="partnership"></label>
+                <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${partnershipBook ? 'before:left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="partnership"></label>
               </div>
             </div>
             <div onClick={()=> setShowBetsModal(true)} className=" text-[12px] sm:text-sm cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center">View More</div>
           </div>
           {
               liveBets && backBets?.data?.length ? 
-                <div className="mt-2 bg-white">
+                <div className="mt-2">
                   <table className="w-full">
                     <thead>
                       <tr>
@@ -308,6 +291,7 @@ const MarketAnalysisInner = () => {
       />
       <BookModal 
       showUser={showUserBook} 
+      type={type}
       setShowUser={setShowUserBook} 
       matchBetsData={matchBetsData} 
       book={books} 

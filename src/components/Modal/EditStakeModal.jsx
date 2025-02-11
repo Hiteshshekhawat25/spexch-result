@@ -122,18 +122,18 @@ const EditStakeModal = ({ onCancel, onSubmit, match }) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
+    <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50 overflow-y-auto">
       <div className="bg-white rounded-lg w-[700px] mt-0 p-4 shadow-lg">
         {/* Header */}
-        <div className="bg-gray-100 p-3 rounded-t-lg flex justify-end items-center">
+        {/* <div className="bg-gray-100 p-3 rounded-t-lg flex justify-end items-center">
           <IoClose
             onClick={onCancel}
             className="cursor-pointer text-gray-600 text-2xl"
           />
-        </div>
+        </div> */}
 
         {/* Heading */}
-        <div className="flex justify-between items-center border-b pb-3 mt-2">
+        <div className="overflow-y-auto">
           <h2 className="text-gray-800 text-lg font-semibold">Edit Stake</h2>
         </div>
 

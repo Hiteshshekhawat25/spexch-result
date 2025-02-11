@@ -168,7 +168,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
 
   return (
     <>
-      <div className="mt-5 bg-white">
+      <div className="mt-2 bg-white">
         <div className="flex align-center justify-between bg-white pr-2">
           <div className="flex">
             <span className="hidden bg-[#067e8f] bg-[#e4550e]"></span>
