@@ -162,7 +162,7 @@ const MarketAnalysisInner = () => {
           {
             matchBetsData && matchBetsData?.liveTv ? 
             <>
-              <div onClick={()=> setShowLiveStreaming(!showLiveStreaming)} className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">Live Streaming</div>
+              <div onClick={()=> setShowLiveStreaming(!showLiveStreaming)} className="bg-gradient-blue text-white text-[12px] sm:text-[15px] py-1 sm:py-2 font-semibold px-2  rounded mb-2 cursor-pointer">Live Streaming</div>
               {
                 showLiveStreaming ? 
                   <div className="w-full aspect-video bg-[#141435] overflow-hidden relative rounded mb-4">
@@ -199,7 +199,7 @@ const MarketAnalysisInner = () => {
           {
             matchBetsData && matchBetsData?.scoreUrl ? 
             <>
-              <div onClick={()=> setShowScore(!showScore)} className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">Score Card</div>
+              <div onClick={()=> setShowScore(!showScore)} className="bg-gradient-blue text-white  text-[12px] sm:text-[15px] py-1 sm:py-2  font-semibold px-2  rounded mb-2 cursor-pointer">Score Card</div>
               {
                 showScore ? 
                   <div className="w-full h-[200px] bg-[#141435] overflow-hidden rounded ">
@@ -211,11 +211,11 @@ const MarketAnalysisInner = () => {
             : ''
           }
           <div>
-            <div className="bg-gradient-blue text-white text-[15px] font-semibold px-2 py-2 rounded mb-2 cursor-pointer">
+            <div className="bg-gradient-blue text-white  text-[12px] sm:text-[15px] py-1 sm:py-2  font-semibold px-2  rounded mb:1 sm:mb-2 cursor-pointer">
               Book
             </div>
-            <div className="flex justify-around bg-white p-1 px-2 gap-5 mb-4">
-              <div className="bg-gradient-blue text-white text-center text-[15px] font-semibold px-2 py-2 w-full rounded cursor-pointer"
+            <div className="flex justify-around bg-white p-1 px-2 gap-3 mb-1 sm:mb-4">
+              <div className="bg-gradient-blue text-white text-center  text-[12px] sm:text-[15px] py-1 sm:py-2  font-semibold px-2  w-full rounded cursor-pointer"
                onClick={()=>{
                 setbooks('master')
                 setMarketListModal(true)
@@ -223,7 +223,7 @@ const MarketAnalysisInner = () => {
               >
                 Master Book
               </div>
-              <div className="bg-gradient-blue text-white text-center text-[15px] font-semibold w-full px-2 py-2 rounded cursor-pointer" 
+              <div className="bg-gradient-blue text-white text-center  text-[12px] sm:text-[15px] py-1 sm:py-2  font-semibold w-full px-2  rounded cursor-pointer" 
               onClick={()=>{
                 setbooks('user')
                 setMarketListModal(true)
@@ -235,9 +235,9 @@ const MarketAnalysisInner = () => {
           </div>
 
 
-          <div className="bg-gradient-blue  text-white text-[15px] font-semibold px-2 py-2 gap-2 rounded mb-1 cursor-pointer sm:flex justify-between">
+          <div className="bg-gradient-blue  text-white text-[12px] sm:text-[15px] py-1 sm:py-2 font-semibold px-2  sm:gap-2 rounded mb-1 cursor-pointer sm:flex justify-between">
             <div className="flex">
-              <div className="flex gap-1.5 items-center">
+              <div className="flex  gap-1.5 items-center">
                 <label htmlFor="liveBets">Live Bets</label>
                 <input type="checkbox" className="hidden" id="liveBets" checked={liveBets} onChange={()=>setLiveBets(!liveBets)}/>
                 <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${liveBets ? 'before:!left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="liveBets"></label>
@@ -248,7 +248,7 @@ const MarketAnalysisInner = () => {
                 <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${partnershipBook ? 'before:!left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="partnership"></label>
               </div>
             </div>
-            <div onClick={()=> setShowBetsModal(true)} className="text-sm cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center">View More</div>
+            <div onClick={()=> setShowBetsModal(true)} className=" text-[12px] sm:text-sm cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center">View More</div>
           </div>
           {
               liveBets && backBets?.data?.length ? 
@@ -311,7 +311,7 @@ const MarketAnalysisInner = () => {
       setShowUser={setShowUserBook} 
       matchBetsData={matchBetsData} 
       book={books} 
-      userBookList={userBooks}
+      userBookList={books == 'user'  ? userBooks : []}
       />
     </>
   )

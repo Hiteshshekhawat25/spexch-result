@@ -32,5 +32,6 @@ export const ROUTES_CONST = {
   changePassword: "/changePassword" ,
   SportsandLossEvents: "/sportsandlossevents",
   ProfitLossUser: '/profit-loss-user',
-  BetHistory :"/bet-history"  
+  BetHistory :"/bet-history"  ,
+  Commission : "/commissions"
 };

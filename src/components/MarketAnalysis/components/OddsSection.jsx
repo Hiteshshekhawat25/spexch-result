@@ -90,8 +90,8 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
         <div className="flex items-center justify-end border-t border-[#7e97a7]">
           <div className="md:w-[calc(5rem_*_6)] flex justify-end pt-2 max-md:flex-row-reverse">
             <div className="flex">
-              <div className="flex items-center justify-center text-xs font-bold py-1 w-[5rem] bg-[#72bbef] rounded-tl-lg">Back</div>
-              <div className="flex items-center justify-center  text-xs font-bold py-1 w-[5rem] bg-[#faa9ba] rounded-tr-lg">Lay</div>
+              <div className="flex items-center justify-center text-xs font-bold py-1 w-[3rem] sm:w-[5rem] bg-[#72bbef] rounded-tl-lg">Back</div>
+              <div className="flex items-center justify-center  text-xs font-bold py-1 w-[3rem] sm:w-[5rem] bg-[#faa9ba] rounded-tr-lg">Lay</div>
             </div>
             <div className="w-[calc(5rem_*_2)] p-1">
               <div className="flex items-center justify-center gap-1 bg-[#bed5d8] text-[0.625rem] font-medium h-5 px-3 rounded-sm">
@@ -104,11 +104,12 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
         {
           matchBetsData?.matchodds?.length ? matchBetsData?.matchodds?.map((item,pIndex) => {
               let exposerval = returnExposerAmount(item?.selectionId)?.toFixed(0)
-              let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.runnerName )?.[0]?.totalAmount
-              let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.runnerName )?.[0]?.totalPotentialWin
-              let price = p2 > 0 ? p2 : 0 -  p1 > 0 ? p1 : 0
+              let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.runnerName )?.[0]
+              let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.runnerName )?.[0]
+              let price = (p2?.totalPotentialWin ?  p2?.totalPotentialWin : 0) -(p1?.totalAmount ? p1?.totalAmount : 0) 
 
-              console.log(betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.runnerName )?.[0]?.totalAmount,betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.runnerName )?.[0]?.totalPotentialWin,'price')
+
+              console.log({p1,p2},'priceOdds')
             if (item?.runnerName) return (
             <React.Fragment key={`${item?.selectionId}`}>
               <div className="flex items-center justify-between border-t border-[#7e97a7]">
@@ -188,7 +189,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
                                 }}
                                 className={`${
                                   isBlinking ? 'blink !bg-yellow-100' : ''
-                                } h-[2.625rem] w-[5rem] min-w-[5rem] flex flex-col items-center justify-center max-md:first:hidden max-md:[&:nth-child(2)]:hidden max-md:[&:nth-child(5)]:hidden max-md:last:hidden ${
+                                } h-[2.625rem] w-[3rem] sm:w-[5rem]  flex flex-col items-center justify-center max-md:first:hidden max-md:[&:nth-child(2)]:hidden max-md:[&:nth-child(5)]:hidden max-md:last:hidden ${
                                   (betData?.selectionId === item?.selectionId && betData?.betType === 'back' && betData?.index === index) ? 'active' : ''
                                 } ${
                                   index === 0
@@ -223,7 +224,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
                                   // } else return
                                 }}
                                 className={`${isBlinking ? 'blink !bg-yellow-100' : ''} 
-                                            h-[2.625rem] w-[5rem] min-w-[5rem] flex flex-col items-center justify-center 
+                                            h-[2.625rem] w-[3rem] sm:w-[5rem]  flex flex-col items-center justify-center 
                                             max-md:first:hidden max-md:[&:nth-child(2)]:hidden 
                                             max-md:[&:nth-child(5)]:hidden max-md:last:hidden 
                                             ${(betData?.selectionId === item?.selectionId && betData?.betType === 'lay' && betData?.index === index) ? 'active' : ''} 

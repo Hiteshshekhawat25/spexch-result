@@ -407,7 +407,7 @@ export const getProfitLossData = async (url) => {
   }
 };
 
-export const fetchUsersByStatus = async (status,role) => {
+export const fetchUsersByStatus = async (status) => {
   const token = localStorage.getItem("authToken");
   try {
     const response = await axios.get(

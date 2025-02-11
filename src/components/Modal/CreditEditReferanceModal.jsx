@@ -107,6 +107,7 @@ const CreditEditReferenceModal = ({
           entriesToShow,
           roleId
         );
+        console.log({result},'allOdds')
         if (result && result.data) {
           console.log("result", result.data);
           dispatch(setDownlineData(result.data));

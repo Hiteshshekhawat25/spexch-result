@@ -101,6 +101,7 @@ const EventPLFilter = ({
       // Get the dynamically calculated date range based on the selected data source
       const { fromDate: adjustedFromDate, toDate: adjustedToDate } =
         getDateRange(dataSource);
+        console.log({adjustedFromDate,adjustedToDate},'')
 
       const url = `user/get-user-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}${Userid ? `&userId=${Userid}` : ''}
 `;
@@ -122,15 +123,15 @@ const EventPLFilter = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-      <div className="flex flex-col items-start">
-        <label className="text-sm font-custom text-black mb-2">
+    <div className="grid grid-cols-12  gap-x-2 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
+      <div className=" gap-2 items-start">
+        <label className=" col-span-3 text-sm font-custom text-black mb-2">
           Data Source
         </label>
         <select
           value={dataSource || "live"}
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-10 py-2"
+          className="border w-full my-1 rounded px-10 py-2"
         >
           <option value="live">LIVE DATA</option>
           <option value="backup">BACKUP DATA</option>
@@ -138,17 +139,17 @@ const EventPLFilter = ({
         </select>
       </div>
 
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col  col-span-2  items-start">
         <label className="text-sm font-custom text-black mb-1">From Date</label>
         <input
           type="date"
           value={fromDate || today}
           onChange={(e) => dispatch(setFromDate(e.target.value))}
-          className="border rounded px-2 py-1 text-sm"
+          className="border rounded  px-1 py-1 text-sm"
         />
       </div>
 
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col  col-span-2 items-start">
         <label className="text-sm font-custom text-black mb-1">From Time</label>
         <input
           type="time"
@@ -158,7 +159,7 @@ const EventPLFilter = ({
         />
       </div>
 
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col  col-span-2 items-start">
         <label className="text-sm font-custom text-black mb-1">To Date</label>
         <input
           type="date"
@@ -168,7 +169,7 @@ const EventPLFilter = ({
         />
       </div>
 
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col  col-span-2 items-start">
         <label className="text-sm font-custom text-black mb-1">To Time</label>
         <input
           type="time"

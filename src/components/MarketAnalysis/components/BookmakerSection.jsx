@@ -89,9 +89,11 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
         {
           matchBetsData?.bookmakersOdds?.length ? matchBetsData?.bookmakersOdds?.map((item, pIndex) => {
             let exposerval = returnExposerAmount(item?.selectionId)
-            let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.selectionName )?.[0]?.totalAmount
-            let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.selectionName )?.[0]?.totalPotentialWin
-            let price = p2 > 0 ? p2 : 0 -  p1 > 0 ? p1 : 0
+            let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.selectionName )?.[0]
+            let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.selectionName )?.[0]
+            let price =  (p2?.totalPotentialWin ?  p2?.totalPotentialWin : 0) -(p1?.totalAmount ? p1?.totalAmount : 0) 
+
+            console.log((p1?.totalAmount ? p1?.totalAmount : 0) - (p2?.totalPotentialWin ?  p2?.totalPotentialWin : 0),'bookprice')
             return ( 
             <React.Fragment key={item?.selectionId}>
               <div className="flex items-center justify-between border-t border-[#7e97a7] bg-[#faf8d8]">
