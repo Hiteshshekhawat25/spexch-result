@@ -147,24 +147,22 @@ const BookFancyModal = ({openBets, selectedFancy,show,setShow}) => {
   
     if (openBets?.length) {
       // Filter and sort the data
-      const bookData = openBets
-        ?.filter((item) => item?.type === 'fancy' && item?.selectionId === selectedFancy)
-        ?.sort((a, b) => Number(a?.fancyOdds) - Number(b?.fancyOdds));
-  
+      const bookData = openBets?.[0]?.betTypesGrouped?.filter((item) =>item?.marketName == selectedFancy)
+        
       if (bookData?.length) {
         // Calculate the global range
-        const allOdds = bookData.map((item) => Number(item?.fancyOdds));
+        const allOdds = bookData.map((item) => Number(item?.potentialWin));
         const globalLowerBound = Math.min(...allOdds) - 10;
         const globalUpperBound = Math.max(...allOdds) + 10;
-  
+        
         // Create a range from the global bounds
         for (let i = 0; i < bookData.length; i++) {
           const currentOdds = Number(bookData[i]?.fancyOdds);
           const amount = bookData[i]?.amount;
           const potentialWin = bookData[i]?.potentialWin;
-
-
-          console.log('potentialWinpotentialWin', potentialWin)
+          
+          
+          console.log('potentialWinpotentialWin', allOdds,potentialWin,selectedFancy)
   
           const element = {};
   

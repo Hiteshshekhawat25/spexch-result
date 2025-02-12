@@ -578,14 +578,17 @@ const DownlineList = () => {
                 {/* Search Input */}
                 <div className="flex w-full sm:flex-row sm:items-center sm:space-x-2">
                   <label className="text-sm p-1">Search:</label>
+               {!accountStatus && 
                   <div className="rounded-md w-full sm:w-28">
                     <input
+                    id="search"
                       type="text"
                       value={searchTerm}
                       onChange={handleSearchChange}
                       className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
                     />
                   </div>
+                  }
                 </div>
               </div>
             </div>
@@ -1042,7 +1045,7 @@ const DownlineList = () => {
                 />
               </>
             )}
-            {selectedUser && (
+            {selectedUser && accountStatus && (
               <>
                 <AccountStatus
                   isOpen={accountStatus}

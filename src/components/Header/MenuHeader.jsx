@@ -55,7 +55,7 @@ const MenuHeader = () => {
         { name: "Master Banking", link: "/master-banking" },
       ],
     },
-    { name: "Commission", link: "#" },
+    { name: "Commission", link: "/commissions" },
     { name: "Password History", link: "/password-history" },
     { name: "Restore User", link: "/restore-user" },
     // {

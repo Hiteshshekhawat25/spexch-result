@@ -218,7 +218,7 @@ const ProfitLossUser = () => {
                               item.selectionId
                             )
                           }
-                          className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
+                          className="px-4 py-3 text-sm text-center text-blue-400 border-r border-gray-400 cursor-pointer"
                         >
                           {item.username}
                         </td>

@@ -237,7 +237,7 @@ const SessionResult = () => {
         <table className="min-w-full table-auto">
           <thead className="bg-black text-white">
             <tr className="text-nowrap">
-              <th className="px-4 py-2 text-left">Category</th>
+              <th className="px-4 py-2 text-left">Match</th>
               <th className="px-4 py-2 text-left">Session Name</th>
               <th className="px-4 py-2 text-left">Result</th>
               <th className="px-4 py-2 text-left">Edit/Update</th>
@@ -257,7 +257,7 @@ const SessionResult = () => {
                   .filter((session) => session.result)
                   .map((session, index) => (
                     <tr key={session?.marketId}>
-                      <td className="px-4 py-2">{session.catagory}</td>
+                      <td className="px-4 py-2">{session.match}</td>
                       <td className="px-4 py-2">{session.marketName}</td>
                       <td className="px-4 py-2">
                         {openModal && editingRow == index ? (

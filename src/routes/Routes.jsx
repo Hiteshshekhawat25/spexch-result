@@ -148,6 +148,18 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
+       <Route
+        path={ROUTES_CONST.Commission}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <div className="text-center font-bold">
+                Coming Soon...
+              </div>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
 
       <Route
         path={`${ROUTES_CONST.TransferMatchCoins}/:matchId`}

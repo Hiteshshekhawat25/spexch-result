@@ -36,7 +36,7 @@ const AccountStatus = ({
   const dispatch = useDispatch();
   const { error, successMessage } = useSelector((state) => state.accountStatus);
 
-  console.log("userID", userId);
+  console.log("Open", userId);
   useEffect(() => {
     if (isOpen) {
       fetchUserStatus();

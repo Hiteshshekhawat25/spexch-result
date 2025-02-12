@@ -77,13 +77,13 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                     <tr>
                       <th>UserName</th>
                       <th>Role</th>
-                      <th>{type == 'odds' ? matchBetsData?.matchodds?.[0]?.runnerName : matchBetsData?.bookmakersOdds?.[0]?.selectionName}</th>
-                      <th>{type == 'odds' ? matchBetsData?.matchodds?.[1]?.runnerName : matchBetsData?.bookmakersOdds?.[1]?.selectionName}</th>
+                      <th>{matchBetsData?.matchodds?.[0]?.runnerName  ? matchBetsData?.matchodds?.[0]?.runnerName : matchBetsData?.bookmakersOdds?.[0]?.selectionName}</th>
+                      <th>{matchBetsData?.matchodds?.[1]?.runnerName ? matchBetsData?.matchodds?.[1]?.runnerName : matchBetsData?.bookmakersOdds?.[1]?.selectionName}</th>
                     </tr>
                     {
                       userBookList?.length ?
                         listData?.map(item => {
-                          console.log(item?.markets?.[0]?.totalStake ,'listlist')
+                          console.log( item?.markets?.[0]?.totalStake,'listlist')
 
                           return (
                             <tr key={item?._id}>
@@ -95,15 +95,16 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                               </td>
                               <td className="font-semibold p-2 border text-nowrap text-center">
                                 {(item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName )
-                                 || (matchBetsData?.bookmakersOdds?.[0]?.selectionName  == item?.markets?.[0]?.market )
+                                 || 
+                                 (matchBetsData?.bookmakersOdds?.[0]?.selectionName  == item?.markets?.[0]?.market )
                                   ? 
                                   item?.markets?.[0]?.totalStake ? item?.markets?.[0]?.totalStake.toFixed(2)  : '-'
                                   :
-                                  ( item?.markets?.[1]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName) || (matchBetsData?.bookmakersOdds?.[0]?.selectionName  == item?.markets?.[1]?.market) 
+                                  ( item?.markets?.[1]?.market ==  matchBetsData?.matchodds?.[1]?.runnerName) || (matchBetsData?.bookmakersOdds?.[1]?.selectionName  == item?.markets?.[1]?.market) 
                                   ? 
-                                  item?.markets?.[1]?.totalStake
+                                  item?.markets?.[0]?.totalStake
                                    ?
-                                    item?.markets?.[1]?.totalStake.toFixed(2)  : '-'
+                                    item?.markets?.[0]?.totalStake.toFixed(2)  : item?.markets?.[0]?.totalStake ?  item?.markets?.[0]?.totalStake : '-'
                                     :'-'
                                      }
                                 {/* {type == 'odds' ? 

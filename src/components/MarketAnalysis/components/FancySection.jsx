@@ -164,7 +164,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
     setOpenBookModal(true)
   }
 
-  console.log({ betData })
+  console.log({ betData },'fancyprice')
 
   return (
     <>
@@ -195,8 +195,10 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
             const previousOdds = previous?.[pIndex];
             const isYesBlinking = previousOdds?.runsYes !== item?.runsYes;
             const isNoBlinking = previousOdds?.runsNo !== item?.runsNo;
-            let price = betData?.[0]?.betTypesGrouped?.[pIndex]?.marketName == item?.marketName ? 
-            betData?.[0]?.betTypesGrouped?.[pIndex]?.totalAmount : 0
+              let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.marketName )?.[0]
+              let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.marketName )?.[0]
+              let price = (p2?.totalPotentialWin ?  p2?.totalPotentialWin : 0) -(p1?.totalAmount ? p1?.totalAmount : 0) 
+
 
             if (item?.statusName === "VOIDED") return
 
@@ -233,7 +235,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
                     <div className="">
                       <button variant="secondary" size="sm" className="flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-blue shadow hover:bg-gradient-blue-hover text-white h-8 rounded-md px-3 text-xs w-auto mr-3" onClick={() => {
                         handleBookFancy();
-                        setSelectedFancy(item?.marketId)
+                        setSelectedFancy(item?.marketName)
                       }}>Book</button>
                     </div>
                     <div className={`flex relative overflow-hidden group ${item?.statusName !== "ACTIVE" ? 'active' : ''}`}>
@@ -273,7 +275,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
           }) : ''
         }
       </div>
-      <BookFancyModal selectedFancy={selectedFancy} openBets={openBets} show={openBookModal} setShow={setOpenBookModal}/>
+      <BookFancyModal selectedFancy={selectedFancy} openBets={betData} show={openBookModal} setShow={setOpenBookModal}/>
     </>
   )
 }
