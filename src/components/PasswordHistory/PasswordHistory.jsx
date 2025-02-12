@@ -181,7 +181,7 @@ const PasswordHistory = () => {
               </tbody>
             </table>
           </div>
-          <div className="flex justify-between items-center mt-4">
+          <div className="sm:flex justify-between items-center mt-4">
             <div className="text-sm text-gray-600">
               Showing{" "}
               {totalRecords === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}

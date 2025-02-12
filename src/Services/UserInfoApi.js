@@ -70,7 +70,7 @@ export const putUserPassword = async (url, params) => {
 };
 
 
-export const changeUserPassword = async (currentPassword, newPassword, userId) => {
+export const changeUserPassword = async (password, newPassword, userId) => {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
@@ -81,7 +81,7 @@ export const changeUserPassword = async (currentPassword, newPassword, userId) =
     const response = await axios.put(
       `${BASE_URL}/user/change-password`,
       {
-        currentPassword,
+        password,
         newPassword,
         userId
       },

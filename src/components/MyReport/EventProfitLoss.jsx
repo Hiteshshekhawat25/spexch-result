@@ -293,7 +293,7 @@ const EventProfitLoss = ({Userid}) => {
               <div className="flex space-x-2 sm:ml-auto">
                 <button
                   onClick={() => setCurrentPage(1)}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  className="px-3 py-1 text-gray-600 rounded text-[15px] sm:text-sm border border-gray-300"
                   disabled={currentPage === 1}
                 >
                   First

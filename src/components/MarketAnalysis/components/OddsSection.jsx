@@ -109,7 +109,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
               let price = (p2?.totalPotentialWin ?  p2?.totalPotentialWin : 0) -(p1?.totalAmount ? p1?.totalAmount : 0) 
 
 
-              console.log({p1,p2},'priceOdds')
+              console.log({p1,p2,betData},'priceOdds')
             if (item?.runnerName) return (
             <React.Fragment key={`${item?.selectionId}`}>
               <div className="flex items-center justify-between border-t border-[#7e97a7]">
