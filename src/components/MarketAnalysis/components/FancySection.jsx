@@ -275,7 +275,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
           }) : ''
         }
       </div>
-      <BookFancyModal selectedFancy={selectedFancy} openBets={betData} show={openBookModal} setShow={setOpenBookModal}/>
+      <BookFancyModal selectedFancy={selectedFancy} matchBetsData={matchBetsData} openBets={betData} show={openBookModal} setShow={setOpenBookModal}/>
     </>
   )
 }

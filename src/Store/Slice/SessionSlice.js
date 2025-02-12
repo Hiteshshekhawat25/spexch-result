@@ -16,12 +16,18 @@ export const fetchSessions = createAsyncThunk(
         }
       );
       if (!response.ok) {
+        if (response.status === 404) {
+          // If 404, return empty array
+          return [];
+        }
         throw new Error('Failed to fetch session data');
       }
-      const data = await response.json();
-      console.log("data", data.data);
+        const data = await response.json();
+      
+      console.log("data1423", response);
       return data.data; 
     } catch (error) {
+      console.log(error,'data1423')
       return rejectWithValue(error.message);
     }
   }
@@ -52,6 +58,7 @@ const sessionSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchSessions.fulfilled, (state, action) => {
+        console.log(action.payload,'data1423')
         state.loading = false;
         state.sessions = action.payload;
       })

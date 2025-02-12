@@ -137,7 +137,11 @@ const MenuHeader = () => {
   return (
     <div className="bg-gradient-green text-black font-bold">
       <div
-        className="xl:hidden overflow-x-auto whitespace-nowrap"
+        className="xl:hidden overflow-x-auto whitespace-nowrap "
+        style={{
+          scrollbarWidth: 'none', // For Firefox
+          msOverflowStyle: 'none', // For IE and Edge
+        }}
         ref={menuWrapperRef}
       >
         <ul className="flex">

@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-const BookFancyModal = ({openBets, selectedFancy,show,setShow}) => {
+const BookFancyModal = ({openBets, selectedFancy,matchBetsData,show,setShow}) => {
   const dispatch = useDispatch()
   const [bookDataArray, setBookDataArray] = useState([])
 
@@ -148,7 +148,9 @@ const BookFancyModal = ({openBets, selectedFancy,show,setShow}) => {
     if (openBets?.length) {
       // Filter and sort the data
       const bookData = openBets?.[0]?.betTypesGrouped?.filter((item) =>item?.marketName == selectedFancy)
-        
+        const fancy = matchBetsData?.matchfancies?.filter((item)=>item?.marketName == selectedFancy)  
+
+        console.log({fancy},'yuioop')
       if (bookData?.length) {
         // Calculate the global range
         const allOdds = bookData.map((item) => Number(item?.potentialWin));

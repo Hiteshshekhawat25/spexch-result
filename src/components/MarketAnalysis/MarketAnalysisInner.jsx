@@ -15,6 +15,7 @@ import UserHistoryModal from "../marketBetModal/UserHistoryModal"
 import BookModal from "../marketBetModal/BookModal"
 import { fetchUserBook } from "../../Store/Slice/UserBookSlice"
 import MarketListModal from "../marketBetModal/MarketListModal"
+import { fetchmasterBook } from "../../Store/Slice/masterListSlice"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -22,6 +23,8 @@ const MarketAnalysisInner = () => {
   const [showScore, setShowScore] = useState(false)
   const [showBetsModal, setShowBetsModal] = useState(false)
   const [activeOdds, setActiveOdds] = useState('all')
+  const userDetails = useSelector((state)=>state?.user?.userData?.data)
+  const masterBook = useSelector((state)=>state?.masterBook?.data)
   const [liveBets, setLiveBets] = useState(false)
   const [books,setbooks] = useState('');
   const [marketListModal,setMarketListModal] = useState(false);
@@ -41,14 +44,17 @@ const MarketAnalysisInner = () => {
   const {gameId} = useParams()
   const dispatch = useDispatch()
   const openBets = useSelector(state => state?.openBets)
+  const betList = useSelector(state => state?.marketBetList)
   const iframeRef = useRef()
   const {data : backBets} = useSelector(state => state?.marketBetList)
   const {data : userBooks} = useSelector(state => state?.userBookList)
     const [showUser, setShowUser] = useState(false)
     const [selectedUser, setSelectedUser] = useState({})
+    const [userId,setUserId] = useState('');
     const [showUserBook,setShowUserBook] = useState(false)
+    const [fanyBets,setFancyBets] = useState({})
 
-    console.log('matchBetsData', matchBetsData)
+    console.log('matchBetsData', masterBook)
 
 
     const handleFullscreen = () => {
@@ -72,6 +78,7 @@ const MarketAnalysisInner = () => {
         const matchUpdateListener = (data) => {
           console.log({data},'data')
           setMatchBetsData(data);
+          setFancyBets(data)
         };
         socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
 
@@ -82,6 +89,43 @@ const MarketAnalysisInner = () => {
       }, [gameId]);
 
       console.log('backBetsbackBets', backBets?.data)
+
+      
+  const [cached,setCached] =useState({});
+  const [isCached,setIsCached] =useState(false);
+  const [counter,setCounter] = useState(0);
+  const [statusSuspend,setStatusSuspend] = useState('')
+  const counterRef = useRef();
+
+  useEffect(()=>{
+    if(fanyBets?.matchfancies?.length === 0 ){
+      if(counter >= 20){
+        setStatusSuspend('SUSPEND')
+      }
+      setIsCached(true);
+      console.log("if","cached");
+    }else{
+      console.log("cached else")
+      if(fanyBets?.matchfancies?.length > 0){
+        setCached(fanyBets);
+        setStatusSuspend('')
+      }
+      setIsCached(false);
+    }
+  },[counter,fanyBets?.matchfancies])
+
+
+
+  useEffect(()=>{
+    if(fanyBets?.matchfancies?.length === 0 && counter < 60 && isCached){
+      console.log("cached interval");
+     counterRef.current =  setInterval(()=>{
+        setCounter(prev=> prev+1)
+      },1000)
+      return ()=> clearInterval(counterRef.current)
+    }
+
+  },[isCached]);
 
         useEffect(()=> {
           if(liveBets) {
@@ -95,7 +139,13 @@ const MarketAnalysisInner = () => {
           }
         },[showUserBook])
 
-        console.log({gameId,showUserBook,userBooks})
+        useEffect(()=> {
+          if(showUserBook) {
+            dispatch(fetchmasterBook({page : 1,limit : 100,type : type,masterId : userId ? userId : userDetails?._id}))
+          }
+        },[showUserBook,userId])
+
+        console.log({userId},'openBets')
 
   return (
     <>
@@ -146,9 +196,9 @@ const MarketAnalysisInner = () => {
             </div>
             <div className={`${(activeOdds === 'all' || activeOdds === 'fancy') ? '' : 'max-lg:hidden'}`}>
               {
-                matchBetsData && matchBetsData?.matchfancies?.length ?
+               matchBetsData && cached?.matchfancies?.length ?
                   <FancySection 
-                  matchBetsData={matchBetsData} 
+                  matchBetsData={cached} 
                   setBetData={setBetData} 
                   betData={matchBetsData?.userBets?.filter((item)=>item?._id == "fancy")} 
                   openBets={openBets?.data}
@@ -310,8 +360,10 @@ const MarketAnalysisInner = () => {
       showUser={showUserBook} 
       setShowUser={setShowUserBook} 
       matchBetsData={matchBetsData} 
+      userId={userId}
+      setUserId={setUserId}
       book={books} 
-      userBookList={books == 'user'  ? userBooks : []}
+      userBookList={books == 'user'  ? userBooks : masterBook}
       />
     </>
   )

@@ -36,6 +36,9 @@ import partnershipReducer from '../Store/Slice/updatePartnershipSlice'
 import { marketListReducer } from './Slice/marketAnalysisSlice';
 import { marketBetsReducer } from './Slice/marketBetsSlice';
 import { userBookReducer } from './Slice/UserBookSlice';
+import { liabilityReducer } from './Slice/liabilitySlice';
+import { matchListReducer } from './Slice/matchlistGameIdSlice';
+import {  masterBookReducer } from './Slice/masterListSlice';
 
 
 export const store = configureStore({
@@ -74,7 +77,10 @@ export const store = configureStore({
     partnership: partnershipReducer,
     marketList : marketListReducer,
     marketBetList : marketBetsReducer,
-    userBookList : userBookReducer
+    userBookList : userBookReducer,
+    liability : liabilityReducer,
+    matchlist : matchListReducer,
+    masterBook : masterBookReducer
   },
 });
 

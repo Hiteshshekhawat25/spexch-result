@@ -4,6 +4,8 @@ import { selectBetListData, selectBetListError, selectBetListLoading } from '../
 import { selectBetListFilter } from '../../Store/Slice/betListFilterSlice';
 import { FaSortDown, FaSortUp } from 'react-icons/fa';
 import ManageBetFilter from './ManageBetFilter';
+import { liabilityBook } from '../../Store/Slice/liabilitySlice';
+import { getCreateNewMatchAPIAuth, getMatchList } from '../../Services/Newmatchapi';
 
 function ManageBets({Userid}) {
 
@@ -12,12 +14,14 @@ function ManageBets({Userid}) {
   const loading = useSelector(selectBetListLoading);
   const error = useSelector(selectBetListError);
   const filters = useSelector(selectBetListFilter);
-
+  const dataLiability = useSelector((state)=>state.liability.data)
+   const { sessions, loading : loader, error : err } = useSelector((state) => state);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [betlistData, setBetlistData] = useState([]);
   const [totalBets, setTotalBets] = useState(0);
+  const [checkbox,setCheckbox] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
@@ -90,9 +94,33 @@ function ManageBets({Userid}) {
     return 0;
   });
 
-  useEffect(() => {}, [currentPage]);
+
+  const handleCheckbox=(e)=>{
+    console.log(e.target.checked,checkbox,'e.target.checked')
+    if(e.target.checked && e.target.value == 'all'){
+      const id = dataLiability?.map((item)=>{
+        return   item?._id
+      })
+      setCheckbox(id)
+      return
+    }else if(!e.target.checked && e.target.value == 'all'){
+      setCheckbox([])
+      return
+    }
+    if(e.target.checked ){
+      setCheckbox((pre)=>setCheckbox([...pre,e.target.value]))
+    }else{
+      setCheckbox(checkbox.filter((item)=> item !== e.target.value))
+    }
+  }
+
+  
 
 
+
+
+
+console.log({sessions},'dataLiability')
 
   return (
     <>
@@ -128,16 +156,15 @@ function ManageBets({Userid}) {
                           <thead className="border border-gray-400 bg-gray-300 text-black text-center">
                             <tr className="text-center">
                               {[
-                                "username",
+                                "",
                                 "sportName",
                                 "event",
-                                "market",
+                                "market type",
                                 "selection",
-                                "Type",
-                                "oddsReq",
-                                "stack",
-                                "placeTime",
-                                "settleTime",
+                                "odds",
+                                "amount",
+                                "potential",
+                                "Actions"
                               ].map((key) => (
                                 <th
                                   key={key}
@@ -147,29 +174,31 @@ function ManageBets({Userid}) {
                                   <div className="flex flex-col border-b border-gray-300 pb-2">
                                     <div className="flex justify-between items-center">
                                       <span>
-                                        {key === "username"
-                                          ? "Username"
-                                          : key === "sportName"
+                                        {key  === "sportName"
                                           ? "Sport Name"
                                           : key === "event"
                                           ? "Event"
-                                          : key === "market"
-                                          ? "Market"
+                                          : key === "market type"
+                                          ? "Market Type"
                                           : key === "selection"
                                           ? "Selection"
-                                          : key === "Type"
-                                          ? "Type"
-                                          : key === "oddsReq"
-                                          ? "Odds Req"
-                                          : key === "stack"
-                                          ? "Stack"
-                                          : key === "placeTime"
-                                          ? "Place Time"
-                                          : key === "settleTime"
-                                          ? "Settle Time"
-                                          : key}
+                                          : key === "odds"
+                                          ? "Odds"
+                                          : key === "amount"
+                                          ? "Amount"
+                                          : key === "potential"
+                                          ? "Potentialwin"
+                                          : key  === "" ? 
+                                        <input type='checkbox'
+                                        value='all'
+                                        onChange={handleCheckbox}
+                                        /> : key
+                                        }
                                       </span>
-        
+                                      {key  === "" ? 
+                                      
+                                     <></>
+                                     : 
                                       <div className="flex flex-col items-center ml-2">
                                         <FaSortUp
                                           className={`${
@@ -194,6 +223,7 @@ function ManageBets({Userid}) {
                                           }}
                                         />
                                       </div>
+                                      }
                                     </div>
                                   </div>
                                 </th>
@@ -202,9 +232,18 @@ function ManageBets({Userid}) {
                           </thead>
         
                           <tbody className="text-center">
-                            {[].length > 0 ? (
-                              [].map((item, index) => (
+                            {dataLiability?.length > 0 ? (
+                              dataLiability.map((item, index) => (
                                 <tr key={index}>
+                                  <td>
+                                  <input
+                                  type='checkbox'
+                                  checked={checkbox?.includes(item?._id) ? true : false}
+                                  value={item?._id}
+                                  onChange={handleCheckbox}
+                                  />  
+                                  </td>
+
                                   <td
                                     onClick={() => {
                                       console.log("Clicked Item:", item); // Log the entire item object
@@ -216,70 +255,37 @@ function ManageBets({Userid}) {
                                     }}
                                     className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
                                   >
-                                    {item.username}
-                                  </td>
-        
-                                  <td className="border border-gray-400 px-4 py-3">
                                     {item.sport}
                                   </td>
+        
                                   <td className="border border-gray-400 px-4 py-3">
                                     {item.event}
                                   </td>
                                   <td className="border border-gray-400 px-4 py-3">
-                                    {item.market}
+                                    {item.marketType}
                                   </td>
                                   <td className="border border-gray-400 px-4 py-3">
-                                    {item.selection}
+                                    {item.selectionId}
+                                  </td>
+                                  <td className="border border-gray-400 px-4 py-3">
+                                    {item.odds}
                                   </td>
                                   <td
-                                    className={`border border-gray-400 px-4 py-3 font-bold ${
-                                      item.type === "no" ? "text-red-600" : "text-blue"
-                                    }`}
+                                    className="border border-gray-400 px-4 py-3"
                                   >
-                                    {item.type === "no" ? "Lay" : "Back"}
+                                    {item.amount.toFixed(2) || 0}
                                   </td>
                                   <td className="border border-gray-400 px-4 py-3">
-                                    {item.oddsRequested}
+                                    {item.potentialWin.toFixed(2) || 0}
                                   </td>
-                                  <td className="border border-gray-400 px-4 py-3 font-bold">
-                                    {item.stake}
+                                  <td className='border border-gray-400 px-4 py-3'>
+                                    <div>
+                                      <button className='bg-red-500 text-white px-3 p-1 text-[12px] rounded'>
+                                        Delete
+                                      </button>
+                                    </div>
                                   </td>
-                                  <td className="border border-gray-400 px-4 py-3">
-                                    {new Date(item.placeTime).toLocaleDateString(
-                                      "en-GB",
-                                      {
-                                        day: "2-digit",
-                                        month: "2-digit",
-                                        year: "numeric",
-                                      }
-                                    )}{" "}
-                                    {new Date(item.placeTime).toLocaleTimeString(
-                                      "en-US",
-                                      {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        hour12: true,
-                                      }
-                                    )}
-                                  </td>
-                                  <td className="border border-gray-400 px-4 py-3">
-                                    {new Date(item.settleTime).toLocaleDateString(
-                                      "en-GB",
-                                      {
-                                        day: "2-digit",
-                                        month: "2-digit",
-                                        year: "numeric",
-                                      }
-                                    )}{" "}
-                                    {new Date(item.settleTime).toLocaleTimeString(
-                                      "en-US",
-                                      {
-                                        hour: "2-digit",
-                                        minute: "2-digit",
-                                        hour12: true,
-                                      }
-                                    )}
-                                  </td>
+                                 
                                 </tr>
                               ))
                             ) : (
@@ -307,7 +313,7 @@ function ManageBets({Userid}) {
                       </div>
         
                       {/* Pagination buttons */}
-                      <div className="flex space-x-2 sm:ml-auto">
+                      <div className="flex  space-x-2 sm:ml-auto">
                         <button
                           onClick={() => handlePageChange("first")}
                           className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
@@ -322,6 +328,9 @@ function ManageBets({Userid}) {
                         >
                           Prev
                         </button>
+                        <div className='text-gray-600 rounded-md border px-3'>
+                          {currentPage}
+                        </div>
                         <button
                           onClick={() => handlePageChange("next")}
                           className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
