@@ -5,7 +5,7 @@ import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
 import { useNavigate } from "react-router-dom";
 
-const EventProfitLoss = ({Userid}) => {
+const EventProfitLoss = ({ Userid }) => {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalEntries, setTotalEntries] = useState(0);
@@ -199,8 +199,8 @@ const EventProfitLoss = ({Userid}) => {
                               style={{
                                 color:
                                   item.totalUplineProfitLoss < 0
-                                    ? "text-red-500"
-                                    : "text-green-500",
+                                    ? "red"
+                                    : "green",
                               }}
                             >
                               {item.totalUplineProfitLoss < 0
@@ -215,8 +215,8 @@ const EventProfitLoss = ({Userid}) => {
                               style={{
                                 color:
                                   item.totalDownlineProfitLoss < 0
-                                    ? "text-red-500"
-                                    : "text-green-500",
+                                    ? "red"
+                                    : "green",
                               }}
                             >
                               {item.totalDownlineProfitLoss < 0

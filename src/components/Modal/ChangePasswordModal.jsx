@@ -14,6 +14,7 @@ import {
   changeOwnPassword,
   changeUserPassword,
 } from "../../Services/UserInfoApi";
+import { useNavigate } from "react-router-dom";
 
 const ChangePasswordModal = ({ userId, onCancel }) => {
   const [currentPassword, setCurrentPassword] = useState("");
@@ -28,7 +29,45 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
   const changePasswordStatus = useSelector(selectChangePasswordStatus);
   const changePasswordError = useSelector(selectChangePasswordError);
 
+  const navigate = useNavigate();
+  // const handleSubmit = async () => {
+  //   if (!currentPassword || !newPassword || !confirmPassword) {
+  //     setError("All fields are required");
+  //     return;
+  //   }
+
+  //   if (newPassword !== confirmPassword) {
+  //     setError("New password and confirm password do not match");
+  //     return;
+  //   }
+
+  //   dispatch(setChangePasswordLoading());
+
+  //   try {
+  //     if (userId) {
+  //       await changeUserPassword(currentPassword, newPassword, userId);
+  //     } else {
+  //       await changeOwnPassword(currentPassword, newPassword);
+  //       dispatch(clearUserData());
+  //       localStorage.removeItem("token");
+  //       toast.success("Your Password has been Changed Successfully !");
+  //       setTimeout(() => {
+  //         navigate("/");
+  //       }, 2000);
+  //       return;
+  //     }
+  //     dispatch(setChangePasswordSuccess());
+  //     onCancel();
+  //     toast.success("Password changed successfully!");
+  //   } catch (err) {
+  //     dispatch(setChangePasswordError(err.message));
+  //     setError(err.message);
+  //     toast.error("Failed to change password. Please try again.");
+  //   }
+  // };
   const handleSubmit = async () => {
+    console.log({ currentPassword, newPassword, confirmPassword });
+
     if (!currentPassword || !newPassword || !confirmPassword) {
       setError("All fields are required");
       return;
@@ -47,11 +86,10 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
       } else {
         await changeOwnPassword(currentPassword, newPassword);
         dispatch(clearUserData());
-        localStorage.removeItem("token"); // Remove the stored token
-        toast.success("Password changed successfully! Logging out...");
-
+        localStorage.removeItem("token");
+        toast.success("Your Password has been Changed Successfully !");
         setTimeout(() => {
-          window.location.href = "/"; // Redirect to login page
+          navigate("/");
         }, 2000);
         return;
       }
@@ -61,7 +99,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
     } catch (err) {
       dispatch(setChangePasswordError(err.message));
       setError(err.message);
-      toast.error("Failed to change password. Please try again.");
+      toast.error("Your Password does not match with system");
     }
   };
 
@@ -157,14 +195,29 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
           <div className="flex justify-end mt-4 space-x-2">
             <button
               onClick={handleSubmit}
-              className="bg-ashGray text-white font-bold font-custom px-2 py-2 rounded"
-              disabled={changePasswordStatus === "loading"}
+              className={`bg-gradient-seablue text-white font-bold font-custom px-2 py-2 rounded ${
+                !currentPassword ||
+                !newPassword ||
+                !confirmPassword ||
+                newPassword !== confirmPassword ||
+                changePasswordStatus === "loading"
+                  ? "opacity-50 cursor-not-allowed"
+                  : ""
+              }`}
+              disabled={
+                !currentPassword ||
+                !newPassword ||
+                !confirmPassword ||
+                newPassword !== confirmPassword ||
+                changePasswordStatus === "loading"
+              }
             >
-              {changePasswordStatus === "loading" ? "Processing..." : "Confirm"}
+              Confirm
             </button>
+
             <button
               onClick={onCancel}
-              className="bg-gray-400 text-darkGray px-2 py-2 rounded font-bold font-custom"
+              className="bg-gradient-seablue text-white px-2 py-2 rounded font-bold font-custom"
               disabled={changePasswordStatus === "loading"}
             >
               No
