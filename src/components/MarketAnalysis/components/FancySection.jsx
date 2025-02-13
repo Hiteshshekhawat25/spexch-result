@@ -164,7 +164,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
     setOpenBookModal(true)
   }
 
-  console.log({ betData },'fancyprice')
+  console.log({ matchBetsData },'fancyprice')
 
   return (
     <>
@@ -262,7 +262,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
                       </div>
                     </div>
                     <div className="w-[calc(5rem_*_2)] flex justify-center text-xs font-semibold max-md:hidden">
-                      {item?.minSetting} - {item?.maxSetting}
+                      {matchBetsData?.sessionMinStake} - {matchBetsData?.sessionMaxStake}
                     </div>
                   </div>
                 </div>

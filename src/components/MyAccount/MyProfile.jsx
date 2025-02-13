@@ -38,20 +38,20 @@ const MyProfile = ({ Userid, Role }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [modalData, setModalData] = useState(null);
 
-  console.log("Userid passed to MyProfile:", Userid);
+  console.log("Userid passed to MyProfile:",profile );
   console.log("Role", Role);
 
   const ID = Userid || JSON.parse(localStorage.getItem("userData"))?.data?._id;
   console.log("Final ID being used:", ID);
 
   useEffect(() => {
-    if (Userid) {
-      console.log("Setting profile to loading...");
+    console.log("Setting profile to loading...",Userid);
+    // if (Userid) {
       dispatch(setProfileLoading());
   
       const fetchProfileData = async () => {
         try {
-          const response = await getUserData(`user/get-user/${Userid}`);
+          const response = await getUserData(`user/get-user/${ID}`);
           console.log("API Response:", response.data);
           console.log("response for commission", response);
           dispatch(updateProfile(response.data.data));
@@ -73,7 +73,7 @@ const MyProfile = ({ Userid, Role }) => {
       };
   
       fetchProfileData();
-    }
+    // }
   }, [Userid, dispatch]);
 
   if (profileStatus === "loading") {
