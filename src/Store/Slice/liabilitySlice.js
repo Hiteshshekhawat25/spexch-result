@@ -4,6 +4,8 @@ import { BASE_URL } from "../../Constant/Api";
 
 const initialState = {
   data : null,
+  total : 0,
+  pages : 0,
   loading : true,
   error : null
 }
@@ -18,7 +20,7 @@ export const liabilityBook = createAsyncThunk('liability', async (data)=> {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response?.data?.data;
+    return response?.data;
   } catch (error) {
     console.log(error)
   }
@@ -34,7 +36,9 @@ export const liabilitySlice = createSlice({
     builder.addCase(liabilityBook.fulfilled, (state, action)=> {
       state.loading = false,
       state.error = null,
-      state.data = action.payload
+      state.data = action.payload?.data
+      state.total = action.payload?.pagination?.totalBets
+      state.pages = action.payload?.pagination?.totalPages
     })
     builder.addCase(liabilityBook.rejected, (state, action)=> {
       state.loading = false,

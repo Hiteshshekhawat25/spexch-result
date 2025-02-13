@@ -287,7 +287,7 @@ const ProfitLossUser = () => {
               </table>
             </div>
 
-            <div className="flex justify-between items-center mt-4  flex-col sm:flex-row">
+            <div className="flex justify-between  items-center mt-4  flex-col sm:flex-row">
               <div className="text-sm text-gray-600 sm:mb-0">
                 Showing{" "}
                 {totalEntries > 0

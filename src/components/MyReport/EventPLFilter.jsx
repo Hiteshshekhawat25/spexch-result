@@ -176,7 +176,7 @@ const EventPLFilter = ({
         />
       </div>
 
-      <div className="flex col-span-6 md:col-span-2 space-x-2 items-center">
+      <div className="flex col-span-6 md:col-span-2 space-x-2  items-center">
         <button
           onClick={handleGetPL}
           className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"

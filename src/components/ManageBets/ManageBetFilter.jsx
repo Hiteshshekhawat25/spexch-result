@@ -16,8 +16,13 @@ import { fetchSessions } from '../../Store/Slice/SessionSlice';
 function ManageBetFilter({
   setBetlistData,
   setTotalBets,
+  remarkModal,
   setTotalPages,
+  checkbox,
+  handleDeleteBet,
   entriesToShow,
+  selectFilterData,
+  setSelectFilterData,
   currentPage,
   setIsDataFetched,
   setCurrentPage,
@@ -30,14 +35,7 @@ function ManageBetFilter({
 
   const [sportsOptions, setSportsOptions] = useState([]);
   const [filteredSessions, setFilteredSessions] = useState([]);
-  const [selectFilterData,setSelectFilterData] = useState({
-    match : '',
-    sport : '4',
-    odds : '',
-    session : '',
-    date1: '',
-    date2 : ''
-  })
+ 
   const [selectedSession,setSelectedSession] = useState('')
   const [loading,setLoading] = useState(false)
   const sessions = useSelector((state)=>state.sessions)
@@ -73,14 +71,16 @@ function ManageBetFilter({
 
     
   useEffect(() => {
-    dispatch(liabilityBook({
-      page : currentPage,
-      limit : 10,
-      sport : selectFilterData?.sport == '4' ? 'Cricket' : selectFilterData?.sport == '2' ? 'Tennis' : 'Soccer' ,
-      type : selectFilterData?.odds,
-      matchId : selectFilterData?.match,
-      sessionId : selectFilterData?.session,
-     }))
+    if(remarkModal == false){
+      dispatch(liabilityBook({
+        page : currentPage,
+        limit : 10,
+        sport : selectFilterData?.sport == '4' ? 'Cricket' : selectFilterData?.sport == '2' ? 'Tennis' : 'Soccer' ,
+        type : selectFilterData?.odds,
+        matchId : selectFilterData?.match,
+        sessionId : selectFilterData?.session,
+       }))
+    }
   }, [
     selectFilterData?.sport,
     selectFilterData?.match,
@@ -88,7 +88,8 @@ function ManageBetFilter({
     selectFilterData?.date1,
     selectFilterData?.date2,
     selectFilterData?.session,
-    currentPage
+    currentPage,
+    remarkModal
   ]);
 
 
@@ -178,8 +179,8 @@ function ManageBetFilter({
               {loading ? (
                 <option value="">Loading...</option>
               ) : (
-                [{name : 'Match Odds',_id : 1}, {name : 'Bookmakers',_id:2},{name : 'Toss',_id :3}].map((sport) => (
-                  <option key={sport._id} value={sport.name}>
+                [{name : 'Match Odds',_id : 'odds'}, {name : 'Bookmakers',_id:'bookmakers'},{name : 'Fancy',_id :'fancy'},{name : 'Toss',_id :3}].map((sport) => (
+                  <option key={sport._id} value={sport._id}>
                     {sport.name}
                   </option>
                 ))
@@ -207,35 +208,7 @@ function ManageBetFilter({
           </select>
         </div> : <></>}
     
-          {/* From Date */}
-          {/* <div className="col-span-6 sm:col-span-1 w-full sm:w-auto">
-            <label className="text-[12px] sm:text-sm font-medium text-black mb-1">From</label><br/>
-            <input
-              type="date"
-              value={selectFilterData.date1}
-              onChange={(e) =>{
-                handleSportChange(e,'date1')
-                 dispatch(setFromDate(e.target.value))
-                }}
-              className="border rounded text-[12px] sm:text-sm px-4 py-2  w-full sm:w-auto sm:px-8"
-            />
-          </div>
-     */}
-          {/* To Date */}
-          {/* <div className="col-span-6 sm:col-span-1 w-full sm:w-auto">
-            <label className="text-[12px] sm:text-sm font-medium text-black mb-1">To</label><br/>
-            <input
-              type="date"
-              value={selectFilterData.date2}
-              onChange={(e) =>{
-                handleSportChange(e,'date2')
-                 dispatch(setToDate(e.target.value))
-                }}
-              className="border text-[12px] sm:text-sm rounded px-4 py-2  w-full sm:w-auto sm:px-8"
-            />
-          </div> */}
-    
-          {/* Buttons */}
+         
           <div className="col-span-12 sm:col-span-2 justify-start sm:justify-center w-full sm:w-auto mt-6">
             <button
               onClick={()=>{
@@ -252,6 +225,20 @@ function ManageBetFilter({
             >
               Get Bets
             </button>
+          </div>
+
+          <div className=' sm:col-span-4 w-full mt-5 items-end col-span-12'>
+            <div className='flex gap-x-4 justify-end'>
+              <button disabled={checkbox?.length == 0 ? true : false}
+               className='bg-red-500 text-white py-3 disabled:bg-red-400 px-5 text-center  rounded-md'
+               onClick={handleDeleteBet}
+               >
+                Delete Bets 
+              </button>
+              <button disabled={checkbox?.length == 0 ? true : false} className='bg-lightblue text-white py-3 px-5 disabled:bg-bluehover text-center  rounded-md'>
+                Revert Bets 
+              </button>
+            </div>
           </div>
         </div>
     </>

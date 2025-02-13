@@ -96,7 +96,7 @@ const EventProfitLoss = ({Userid}) => {
           />
           {/* Data Table */}
           <div className="border border-gray-300 rounded-md bg-white">
-            <h1 className="text-xl bg-gradient-blue text-white font-bold">
+            <h1 className="text-xl p-2 px-4 bg-gradient-blue text-white font-bold">
               Event Profit Loss
             </h1>
 
@@ -279,8 +279,8 @@ const EventProfitLoss = ({Userid}) => {
               </table>
             </div>
 
-            <div className="flex justify-between items-center mt-4  flex-col sm:flex-row">
-              <div className="text-sm text-gray-600 sm:mb-0">
+            <div className="flex justify-between mb-2 sm:mb-0 items-center m-4  flex-col sm:flex-row">
+              <div className="text-[12px] sm:text-sm w-full items-start mb-2 text-gray-600 sm:mb-0">
                 Showing{" "}
                 {totalEntries > 0
                   ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
@@ -293,7 +293,7 @@ const EventProfitLoss = ({Userid}) => {
               <div className="flex space-x-2 sm:ml-auto">
                 <button
                   onClick={() => setCurrentPage(1)}
-                  className="px-3 py-1 text-gray-600 rounded text-[15px] sm:text-sm border border-gray-300"
+                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm border border-gray-300"
                   disabled={currentPage === 1}
                 >
                   First
@@ -302,7 +302,7 @@ const EventProfitLoss = ({Userid}) => {
                   onClick={() =>
                     setCurrentPage((prev) => Math.max(prev - 1, 1))
                   }
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm border border-gray-300"
                   disabled={currentPage === 1}
                 >
                   Previous
@@ -311,14 +311,14 @@ const EventProfitLoss = ({Userid}) => {
                   onClick={() =>
                     setCurrentPage((prev) => Math.min(prev + 1, totalPages))
                   }
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm border border-gray-300"
                   disabled={currentPage === totalPages}
                 >
                   Next
                 </button>
                 <button
                   onClick={() => setCurrentPage(totalPages)}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm border border-gray-300"
                   disabled={currentPage === totalPages}
                 >
                   Last
