@@ -98,69 +98,69 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-black p-6">
-      <div className="w-full max-w-xl py-12 bg-gradient-black rounded-md shadow-2xl min-h-[450px]">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-black md:p-6 sm:p-4 p-2.5">
+      <div className="w-full max-w-xl md:p-12 sm:p-8 p-3 bg-gradient-black rounded-md shadow-2xl md:min-h-[450px]">
         <h1 className="text-3xl font-custom text-center text-white mb-6 mt-5">
-          Spexch
+          Spexch  
         </h1>
-        <form onSubmit={handleSubmit} className="space-y-2">
-          <div className="relative flex justify-center mb-4 px-2">
-            <input
-              type="text"
-              id="username"
-              name="username"
-              className="w-[300px] px-2 py-2.5 mt-1 text-black rounded-md border border-gray-600 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none pr-10"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Username"
-              required
-            />
-            <div className="absolute inset-y-0 right-[4%] sm:right-[4%] lg:right-[24%] flex items-center pr-3 text-gray-400">
-              <FaUser color="black" />
+        <form onSubmit={handleSubmit} className="flex flex-col gap-2 sm:items-center">
+          <div className="inline-flex flex-col">
+            <div className="relative flex justify-center">
+              <input
+                type="text"
+                id="username"
+                name="username"
+                className="sm:w-[250px] w-full px-3 py-1.5 md:h-[38px] h-[45px] md:text-[16px] text-[18px] text-black rounded-md border border-gray-600 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none pr-10"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="Username"
+                required
+              />
+              <div className="absolute inset-y-0 right-[12px] flex items-center text-gray-400">
+                <FaUser color="black" />
+              </div>
             </div>
+            {!formData.username && (
+              <p className="text-white text-sm mt-0.5">
+                Please enter username
+              </p>
+            )}
           </div>
-          {!formData.username && (
-            <p
-              className="text-white text-sm w-[300px] sm:ml-[4%] lg:ml-[24%] text-left"
-              style={{ marginTop: "-16px" }}
-            >
-              Please enter username
-            </p>
-          )}
-          <div className="relative flex justify-center mb-4">
-            <input
-              type={passwordVisible ? "text" : "password"}
-              id="password"
-              name="password"
-              className="w-[250px] px-3 py-2.5 mt-1 text-black rounded-md border border-gray-600 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none pr-10"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Password"
-              required
-            />
-            <div
-              className="absolute inset-y-0 right-[4%] sm:right-[4%] lg:right-[24%] flex items-center pr-3 text-gray-400 cursor-pointer"
-              onClick={handlePasswordVisibility}
-            >
-              {passwordVisible ? (
-                <FaEyeSlash color="black" />
-              ) : (
-                <FaEye color="black" />
-              )}
+          <div className="inline-flex flex-col">
+            <div className="relative flex justify-center">
+              <input
+                type={passwordVisible ? "text" : "password"}
+                id="password"
+                name="password"
+                className="sm:w-[250px] w-full px-3 py-1.5 md:h-[38px] h-[45px] md:text-[16px] text-[18px] mt-1 text-black rounded-md border border-gray-600 bg-white focus:ring-2 focus:ring-orange-500 focus:border-orange-500 focus:outline-none pr-10"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Password"
+                required
+              />
+              <div
+                className="absolute inset-y-0 right-[12px] flex items-center text-gray-400 cursor-pointer"
+                onClick={handlePasswordVisibility}
+              >
+                {passwordVisible ? (
+                  <FaEyeSlash color="black" />
+                ) : (
+                  <FaEye color="black" />
+                )}
+              </div>
             </div>
+            {!formData.password && (
+              <p
+                className="text-white text-sm mt-0.5"
+              >
+                Please enter Password
+              </p>
+            )}
           </div>
-          {!formData.password && (
-            <p
-              className="text-white text-sm mt-0 w-[250px] sm:ml-[4%] lg:ml-[24%] text-left"
-              style={{ marginTop: "-2px" }}
-            >
-              Please enter Password
-            </p>
-          )}
-          <div className="flex justify-center">
+          <div className="inline-flex justify-center mt-1">
             <button
               type="submit"
-              className="w-[250px] py-2.5 text-white font-bold rounded-md transition duration-300 ease-in-out transform hover:scale-105 bg-gradient-green hover:bg-gradient-green focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 text-lg"
+              className="sm:w-[250px] w-full py-1.5 md:h-[38px] h-[45px] md:text-[16px] text-[18px] text-white font-semibold rounded-md transition duration-300 ease-in-out transform hover:scale-105 bg-gradient-green hover:bg-gradient-green focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50"
             >
               Login <IoLogOutOutline color="white" className="inline ml-0" />
             </button>
