@@ -6,6 +6,8 @@ import { FaSortDown, FaSortUp } from 'react-icons/fa';
 import ManageBetFilter from './ManageBetFilter';
 import { liabilityBook } from '../../Store/Slice/liabilitySlice';
 import { getCreateNewMatchAPIAuth, getMatchList } from '../../Services/Newmatchapi';
+import RemarkModal from '../marketBetModal/RemarkModal';
+import { DeleteBet, RevertBet } from '../../Services/manageBetapi';
 
 function ManageBets({Userid}) {
 
@@ -15,16 +17,29 @@ function ManageBets({Userid}) {
   const error = useSelector(selectBetListError);
   const filters = useSelector(selectBetListFilter);
   const dataLiability = useSelector((state)=>state.liability.data)
+  const total = useSelector((state)=>state.liability?.total)
+  const pages = useSelector((state)=>state.liability?.pages)
+  const [selectFilterData,setSelectFilterData] = useState({
+    match : '',
+    sport : '4',
+    odds : '',
+    session : '',
+    date1: '',
+    date2 : ''
+  })
    const { sessions, loading : loader, error : err } = useSelector((state) => state);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [betlistData, setBetlistData] = useState([]);
+  const [remarkModal,setRemarkModal] = useState(false);
+  const [remark,setRemark] = useState('')
   const [totalBets, setTotalBets] = useState(0);
   const [checkbox,setCheckbox] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
+  const [selectBet,setSelectBet]=useState({})
   const [selectedUsername, setSelectedUsername] = useState(null);
 
   const [isDataFetched, setIsDataFetched] = useState(false);
@@ -37,25 +52,53 @@ function ManageBets({Userid}) {
     setBetlistData(newData);
   };
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedUserId(null);
-  };
+  const handleDeleteBet =async(item)=>{
+    setRemarkModal(true)
+    try{
+      const res = await DeleteBet('user/delete-bets',{
+        betIds : checkbox?.length == 0 ? selectBet?._id : checkbox,
+        matchId : selectFilterData?.match ? selectFilterData?.match :  selectBet?.matchId,
+        type : selectFilterData?.odds ? selectFilterData?.odds : selectBet?.matchType,
+        remark : remark
+      })
+      if(res?.data?.success){
+        setSelectBet({})
+        setRemarkModal(false)
+      }
+      console.log({res})
+    }catch(error){
+      setSelectBet({})
+      setRemarkModal(false)
+      console.log(error)
+    }
+  }
+
+
+  const handleRevertBet =async(item)=>{
+    try{
+      const res = await RevertBet('user/revert-delete-bets',{
+        betIds : checkbox?.length == 0 ? item?._id : checkbox,
+        matchId : selectFilterData?.match ? selectFilterData?.match :  item?.matchId,
+        type : selectFilterData?.odds ? selectFilterData?.odds : item?.matchType,
+      })
+
+      if(res?.data?.success){
+        setSelectBet({})
+        setRemarkModal(false)
+      }
+      console.log({res})
+    }catch(error){
+      console.log(error)
+    }
+  }
 
   useEffect(() => {
     setBetlistData(data);
     setCurrentPage(1);
   }, [data, filters]);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
 
-  const handleEntriesChange = (e) => {
-    setEntriesToShow(Number(e.target.value));
-    setCurrentPage(1);
-  };
+ 
 
   const handlePageChange = (direction) => {
     let newPage = currentPage;
@@ -72,11 +115,13 @@ function ManageBets({Userid}) {
   );
 
   console.log("Paginated Data:", paginatedData);
-  const handleFilterChange = (data) => {
-    setTotalBets(data.pagination.totalTransactions || 0);
-    setTotalPages(data.pagination.totalPages || 1);
-    setBetlistData(data.data || []);
-  };
+  useEffect(()=>{
+    if(total){
+      setTotalBets(total);
+        setTotalPages(pages);
+        // setBetlistData(data.data || []);
+    }
+  },[total,pages])
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -93,6 +138,7 @@ function ManageBets({Userid}) {
     if (aValue > bValue) return sortConfig.direction === "ascending" ? 1 : -1;
     return 0;
   });
+
 
 
   const handleCheckbox=(e)=>{
@@ -114,13 +160,11 @@ function ManageBets({Userid}) {
     }
   }
 
-  
 
 
 
 
-
-console.log({sessions},'dataLiability')
+console.log({pages},'dataLiability')
 
   return (
     <>
@@ -129,7 +173,13 @@ console.log({sessions},'dataLiability')
      setTotalPages={(total) => setTotalPages(total)}
      setBetlistData={handleBetlistUpdate}
      entriesToShow={entriesToShow}
+     handleDeleteBet={handleDeleteBet}
+     handleRevertBet={handleRevertBet}
+     checkbox={checkbox}
+     remarkModal={remarkModal}
      currentPage={currentPage}
+     selectFilterData={selectFilterData}
+     setSelectFilterData={setSelectFilterData}
      setIsDataFetched={(isFetched) => console.log(isFetched)}
      setCurrentPage={setCurrentPage}
      userID={Userid}
@@ -278,11 +328,25 @@ console.log({sessions},'dataLiability')
                                   <td className="border border-gray-400 px-4 py-3">
                                     {item.potentialWin.toFixed(2) || 0}
                                   </td>
-                                  <td className='border border-gray-400 px-4 py-3'>
-                                    <div>
-                                      <button className='bg-red-500 text-white px-3 p-1 text-[12px] rounded'>
+                                  <td className='border border-gray-400  py-3'>
+                                    <div className='sm:flex gap-y-2 gap-x-3 justify-center'>
+                                {item?.isDeleted ? 
+                                      <button className='bg-lightblue text-white px-3 p-1 text-[12px] rounded'
+                                      onClick={()=>handleRevertBet(item)}
+                                      >
+                                        Revert
+                                      </button>
+                                      :
+                                      <button className='bg-red-500 text-white px-3 p-1 text-[12px] rounded' 
+                                      onClick={()=>{
+                                        setRemarkModal(true)
+                                      setSelectBet(item)
+                                      }}
+                                      
+                                      >
                                         Delete
                                       </button>
+                                }
                                     </div>
                                   </td>
                                  
@@ -347,6 +411,13 @@ console.log({sessions},'dataLiability')
                         </button>
                       </div>
                     </div>
+                    <RemarkModal
+                    showUser={remarkModal}
+                    remark={remark}
+                    handleDeleteBet={handleDeleteBet}
+                    setRemark={setRemark}
+                    setShowUser={setRemarkModal}
+                    />
     </>
   )
 }

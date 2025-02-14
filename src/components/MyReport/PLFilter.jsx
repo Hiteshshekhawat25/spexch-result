@@ -114,15 +114,15 @@ const PLFilter = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-      <div className="flex flex-col items-start">
-        <label className="text-sm font-custom font-medium text-black mb-2">
+    <div className="grid grid-cols-12  gap-2 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
+      <div className="flex flex-col col-span-12 sm:col-span-2 items-start">
+        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
           Data Source
         </label>
         <select
           value={dataSource || "live"} // Ensure "live" is selected by default
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-10 py-2"
+          className="border w-full text-[12px] sm:text-sm rounded px-10 py-1"
         >
           <option value="live">LIVE DATA</option>
           <option value="backup">BACKUP DATA</option>
@@ -131,56 +131,56 @@ const PLFilter = ({
       </div>
 
       {/* Date and Time Filters */}
-      <div className="flex flex-col items-start">
-        <label className="text-sm font-custom font-medium text-black mb-1">
+      <div className="flex flex-col col-span-8 sm:col-span-2 items-start">
+        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
           From Date
         </label>
         <input
           type="date"
           value={fromDate}
           onChange={(e) => dispatch(setFromDate(e.target.value))}
-          className="border rounded px-2 py-1 text-sm"
+          className="border w-full rounded px-2 py-1 text-[12px] sm:text-sm"
         />
       </div>
 
-      <div className="flex flex-col items-start">
-        <label className="text-sm font-custom font-medium text-black mb-1">
+      <div className="flex flex-col col-span-4 sm:col-span-2 items-start">
+        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
           From Time
         </label>
         <input
           type="time"
           value={fromTime}
           onChange={(e) => dispatch(setFromTime(e.target.value))}
-          className="border rounded px-2 py-1 text-sm"
+          className="border w-full  rounded px-2 py-1 text-[12px] sm:text-sm"
         />
       </div>
 
-      <div className="flex flex-col items-start">
-        <label className="text-sm font-custom font-medium text-black mb-1">
+      <div className="flex flex-col col-span-8 sm:col-span-2 items-start">
+        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
           To Date
         </label>
         <input
           type="date"
           value={toDate}
           onChange={(e) => dispatch(setToDate(e.target.value))}
-          className="border rounded px-2 py-1 text-sm"
+          className="border  w-full rounded px-2 py-1 text-[12px] sm:text-sm"
         />
       </div>
 
-      <div className="flex flex-col items-start">
-        <label className="text-sm font-custom font-medium text-black mb-1">
+      <div className="flex flex-col col-span-4 sm:col-span-2 items-start">
+        <label className="text-[12px] sm:text-sm  font-custom font-medium text-black mb-1">
           To Time
         </label>
         <input
           type="time"
           value={toTime}
           onChange={(e) => dispatch(setToTime(e.target.value))}
-          className="border rounded px-2 py-1 text-sm"
+          className="border w-full rounded px-2 py-1 text-[12px] sm:text-sm"
         />
       </div>
 
       {/* Buttons */}
-      <div className="flex space-x-2 items-center ml-auto">
+      <div className="flex space-x-2 col-span-12 sm:col-span-2 items-center mt-5">
         <button
           onClick={handleGetPL}
           className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"

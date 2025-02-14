@@ -118,7 +118,7 @@ const AccountStatementFilter = ({
         <select
           value={dataSource || "live"} // Default to "live" if dataSource is empty
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-10 py-2 "
+          className="border rounded px-10 py-1 "
         >
           <option value="">Data Source</option>
           <option value="live">LIVE DATA</option>
@@ -137,7 +137,7 @@ const AccountStatementFilter = ({
         />
       </div>
 
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start !mt-5">
         <label className="text-sm font-custom text-black mb-1">To</label>
         <input
           type="date"
@@ -147,7 +147,7 @@ const AccountStatementFilter = ({
         />
       </div>
 
-      <div className="flex space-x-1 items-center ml-12 mt-4">
+      <div className="flex space-x-1 items-center mt-4">
         <button
           onClick={handleGetStatement}
           className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
