@@ -79,16 +79,16 @@ const BalanceHeader = () => {
         {/* Available Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP{" "}
-          {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
+          {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance) || 0}
         </div>
         {/* Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
-          IRP {new Intl.NumberFormat("en-IN").format(data?.balance)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance) || 0}
         </div>
         {/* Total Available Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP{" "}
-          {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance)}
+          {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
         </div>
         {/* Upline P/L Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">

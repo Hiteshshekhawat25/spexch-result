@@ -184,6 +184,7 @@ export const fetchDownlineData = async (currentPage, entriesToShow, roleId) => {
     const params = {
       page: currentPage,
       limit: entriesToShow,
+      roleId : roleId
     };
 
     if (roleId) {
@@ -407,7 +408,7 @@ export const getProfitLossData = async (url) => {
   }
 };
 
-export const fetchUsersByStatus = async (status) => {
+export const fetchUsersByStatus = async (status,role) => {
   const token = localStorage.getItem("authToken");
   try {
     const response = await axios.get(

@@ -203,8 +203,9 @@ const Banking = () => {
       },
       token
     )
-      .then(() => {
-        toast.success(`Transaction was successful.`, {
+      .then((res) => {
+        console.log(res.message,'ppp112221')
+        toast.success(res?.message, {
           autoClose: 5000, 
         });
         setPassword("");

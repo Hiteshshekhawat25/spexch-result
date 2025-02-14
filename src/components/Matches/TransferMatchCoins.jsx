@@ -154,7 +154,7 @@ const TransferMatchCoins = () => {
   };
 
   const handleBookmakerTransferCoin = async () => {
-    if (marketData?.[0]?.oddsResult === 0) {
+    if (marketData?.[0]?.bookMakerResult === 0) {
       toast.error('Please declare the result first')
       return
     }

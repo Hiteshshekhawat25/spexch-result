@@ -102,7 +102,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
           </div>
         </div>
         {
-          matchBetsData?.matchodds?.length ? matchBetsData?.matchodds?.map((item,pIndex) => {
+          matchBetsData?.matchodds?.length ? matchBetsData?.matchodds?.sort((a,b)=>a.runnerName?.localeCompare(b?.runnerName))?.map((item,pIndex) => {
               let exposerval = returnExposerAmount(item?.selectionId)?.toFixed(0)
               let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.runnerName )?.[0]
               let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.runnerName )?.[0]

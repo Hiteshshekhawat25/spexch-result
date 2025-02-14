@@ -424,7 +424,7 @@ const DownlineList = () => {
   const fetchUsers = async () => {
     if (!selectedFilter) return;
     try {
-      const fetchedUsers = await fetchUsersByStatus(selectedFilter);
+      const fetchedUsers = await fetchUsersByStatus(selectedFilter,roleId);
       setUserList(fetchedUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -496,7 +496,7 @@ const DownlineList = () => {
     }
   };
 
-  console.log({downlineData},'downlineData')
+  console.log({roles,roleId,role},'downlineData')
   return (
     <>
       {loading ? (
