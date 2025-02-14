@@ -8,22 +8,44 @@ const initialState = {
   error : null
 }
 
-export const fetchMarketBets = createAsyncThunk('marketBets', async (matchId)=> {
-  try {
-    const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${BASE_URL}/user/marketBetHistory?matchId=${matchId}`, {
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response?.data;
-  } catch (error) {
-    console.log(error)
+// export const fetchMarketBets = createAsyncThunk('marketBets', async (matchId)=> {
+//   try {
+//     const token = localStorage.getItem("authToken");
+//     const response = await axios.get(`${BASE_URL}/user/marketBetHistory?page=${}&perPage=${}&matchId=${matchId}`, {
+//       //  const response = await axios.get(`${BASE_URL}/user/marketBetHistory?matchId=${matchId}`, {
+//       headers: {
+//         "Content-Type": "application/json; charset=utf-8",
+//         Accept: "application/json",
+//         Authorization: `Bearer ${token}`,
+//       },
+//     });
+//     return response?.data;
+//   } catch (error) {
+//     console.log(error)
+//   }
+// })
+export const fetchMarketBets = createAsyncThunk(
+  'marketBets',
+  async ({ matchId, perPage = 1, page = 1 }) => { // Destructure the arguments
+    try {
+      const token = localStorage.getItem("authToken");
+      const response = await axios.get(
+        `${BASE_URL}/user/marketBetHistory?page=${page}&perPage=${perPage}&matchId=${matchId}`,
+        {
+          headers: {
+            "Content-Type": "application/json; charset=utf-8",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      console.log(error);
+      throw error; // Ensure the error is thrown so that the rejected action is dispatched
+    }
   }
-})
-
+);
 export const marketBetSlice = createSlice({
   name : 'marketBets',
   initialState,
