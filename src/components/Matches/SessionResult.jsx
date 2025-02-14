@@ -67,20 +67,20 @@ const SessionResult = () => {
 
 
 
-  // const handleTransferCoins = async (marketId) => {
-  //   // console.log("selectedSession", selectedSession, tempResult);
-  //   // if (!selectedSession || !tempResult) {
-  //   //   toast.error("Please select a match & session and enter a result.");
-  //   //   return;
-  //   // }
-  //   try {
-  //     await transferSessionCoins(selectedMatch, marketId);
-  //     toast.success("transfer successfully!");
-  //     dispatch(fetchSessions(selectedMatch));
-  //   } catch (error) {
-  //     toast.error("Failed to update the session result. Please try again.");
-  //   }
-  // };
+  const handleTransferCoins = async (marketId) => {
+    // console.log("selectedSession", selectedSession, tempResult);
+    // if (!selectedSession || !tempResult) {
+    //   toast.error("Please select a match & session and enter a result.");
+    //   return;
+    // }
+    try {
+      await transferSessionCoins(selectedMatch, marketId);
+      toast.success("transfer successfully!");
+      dispatch(fetchSessions(selectedMatch));
+    } catch (error) {
+      toast.error("Failed to update the session result. Please try again.");
+    }
+  };
 
   const handleMatchSelectFocus = async () => {
     if (matchList.length > 0) return;
@@ -245,7 +245,7 @@ const SessionResult = () => {
               {/* <th className="px-4 py-2 text-left">Coin Transferred</th> */}
               <th className="px-4 py-2 text-left">Date</th>
               {/* <th className="px-4 py-2 text-left">Session Book</th> */}
-              {/* <th className="px-4 py-2 text-left">Transfer Coins</th> */}
+              <th className="px-4 py-2 text-left">Actions</th>
               {/* <th className="px-4 py-2 text-left">Coin Log</th>
               <th className="px-4 py-2 text-left">Result Log</th> */}
             </tr>
@@ -299,7 +299,7 @@ const SessionResult = () => {
                       <td className="px-4 py-2">{session.marketId}</td>
                       {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
                       <td className="px-4 py-2">{session.marketTime}</td>
-                      {/* <td className="px-4 py-2">
+                      <td className="px-4 py-2">
                         <button
                           className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
                           onClick={() => handleTransferCoins(session.marketId)}
@@ -309,7 +309,7 @@ const SessionResult = () => {
                         >
                           Transfer coins
                         </button>
-                      </td> */}
+                      </td>
                     </tr>
                   ))
               ) : (

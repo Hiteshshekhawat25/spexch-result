@@ -128,7 +128,7 @@ const EventPLFilter = ({
         <select
           value={dataSource || "live"}
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border w-full my-1  rounded px-10 py-2"
+          className="text-[12px] sm:text-sm border w-full rounded px-10 py-1"
         >
           <option value="live">LIVE DATA</option>
           <option value="backup">BACKUP DATA</option>

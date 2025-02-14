@@ -81,13 +81,13 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
         </div>
         <div className="flex items-center justify-end border-t border-[#7e97a7] bg-[#faf8d8]">
           <div className="w-[calc(5rem_*_6)] flex justify-end pt-2 ">
-          <div className="flex items-center justify-center text-xs font-semibold py-1 w-[5rem] rounded-tl-lg">Back</div>
-          <div className="flex items-center justify-center text-xs font-semibold py-1 w-[5rem] rounded-tr-lg">Lay</div>
+          <div className="flex items-center justify-center text-xs font-semibold py-1 w-[3rem] sm:w-[5rem] rounded-tl-lg">Back</div>
+          <div className="flex items-center justify-center text-xs font-semibold py-1 w-[3rem] sm:w-[5rem] rounded-tr-lg">Lay</div>
           <div className="w-[calc(5rem_*_2)] p-1 max-md:hidden"></div>
           </div>
         </div>
         {
-          matchBetsData?.bookmakersOdds?.length ? matchBetsData?.bookmakersOdds?.map((item, pIndex) => {
+          matchBetsData?.bookmakersOdds?.length ? matchBetsData?.bookmakersOdds?.sort((a,b)=>a.selectionName?.localeCompare(b?.selectionName))?.map((item, pIndex) => {
             let exposerval = returnExposerAmount(item?.selectionId)
             let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.selectionName )?.[0]
             let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.selectionName )?.[0]
@@ -165,7 +165,7 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
                                 handleBetData(item, elem, 'back', item?.backOdds, index)
                               } else return
                             }}
-                            className={`${(isBlinking && index === 2)?  'blink !bg-yellow-100' : ''} h-[2.625rem] w-[5rem] flex flex-col items-center justify-center max-md:first:hidden max-md:[&:nth-child(2)]:hidden max-md:[&:nth-child(5)]:hidden max-md:last:hidden  [&.active]:bg-[#1a8ee1] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white
+                            className={`${(isBlinking && index === 2)?  'blink !bg-yellow-100' : ''} h-[2.625rem] w-[3rem] sm:w-[5rem] flex flex-col items-center justify-center max-md:first:hidden max-md:[&:nth-child(2)]:hidden max-md:[&:nth-child(5)]:hidden max-md:last:hidden  [&.active]:bg-[#1a8ee1] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white
                               ${(betData?.selectionId === item?.selectionId && betData?.betType === 'back' && betData?.index === index) ? 'active' : ''} 
                               ${index === 0 ? 'bg-[#d7e8f4]' : 
                               index === 1 ? 'bg-[#b7d5eb]' :
@@ -189,7 +189,7 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
                                 handleBetData(item, elem, 'lay', item?.layOdds, index)
                               } else return
                             }}
-                            className={`${(isBlinking && index === 0)?  'blink !bg-yellow-100' : ''} h-[2.625rem] w-[5rem] flex flex-col items-center justify-center max-md:first:hidden max-md:[&:nth-child(2)]:hidden max-md:[&:nth-child(5)]:hidden max-md:last:hidden  [&.active]:bg-[#f4496d] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white 
+                            className={`${(isBlinking && index === 0)?  'blink !bg-yellow-100' : ''} h-[2.625rem] w-[3rem] sm:w-[5rem] flex flex-col items-center justify-center max-md:first:hidden max-md:[&:nth-child(2)]:hidden max-md:[&:nth-child(5)]:hidden max-md:last:hidden  [&.active]:bg-[#f4496d] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white 
                               ${(betData?.selectionId === item?.selectionId && betData?.betType === 'lay' && betData?.index === index) ? 'active' : ''} 
                               ${index === 0 ? 'bg-[#faa9ba] cursor-pointer relative before:absolute before:w-[90%] before:h-[90%] before:top-1/2 before:left-1/2 before:border before:border-white before:-translate-x-1/2 before:-translate-y-1/2 before:rounded' 
                               : index === 1 ? 'bg-[#efd3d9]' 
