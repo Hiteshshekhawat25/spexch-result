@@ -162,9 +162,8 @@ const MarketAnalysisInner = () => {
   }, [isCached]);
 
   useEffect(() => {
-    if (liveBets) {
       dispatch(fetchMarketBets({ gameId, page: pages.viewBet ,search}))
-    }
+    
   }, [liveBets, pages.viewBet,search])
 
   useEffect(() => {
@@ -199,7 +198,7 @@ const MarketAnalysisInner = () => {
     }
   }, [backBets?.data?.length])
 
-  console.log(listData, backBets?.data?.length,arrayFunction(), 'ppppppppppppppppppppp')
+  console.log(backBets, 'ppppppppppppppppppppp')
 
   return (
     <>
@@ -230,8 +229,8 @@ const MarketAnalysisInner = () => {
                   <OddsSection
                     matchBetsData={matchBetsData}
                     setBetData={setBetData}
-                    betData={matchBetsData?.userBets?.filter((item) => item?._id == 'odds')}
-                    openBets={openBets?.data}
+                    betData={backBets?.data?.filter((item) => item?.type == 'odds')}
+                    openBets={openBets}
                   />
                   : ''
               }
@@ -242,7 +241,7 @@ const MarketAnalysisInner = () => {
                   <BookmakerSection
                     matchBetsData={matchBetsData}
                     setBetData={setBetData}
-                    betData={matchBetsData?.userBets?.filter((item) => item?._id == "bookmakers")}
+                    betData={backBets?.data?.filter((item) => item?.type == "bookmakers")}
                     openBets={openBets?.data}
                   />
                   : ''
@@ -254,7 +253,7 @@ const MarketAnalysisInner = () => {
                   <FancySection
                     matchBetsData={cached}
                     setBetData={setBetData}
-                    betData={matchBetsData?.userBets?.filter((item) => item?._id == "fancy")}
+                    betData={backBets?.data?.filter((item) => item?.type == "fancy")}
                     openBets={openBets?.data}
                   />
                   : ''

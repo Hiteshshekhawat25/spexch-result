@@ -138,26 +138,32 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
     }))
   }
 
-  const returnExposerAmount = (id) => {
-    if (openBets?.length > 0) {
-      let total = 0;
-      const data = openBets?.filter((item) => item?.type === 'fancy')
-      for (let i = 0; i < data?.length; i++) {
-        if (data?.[i]?.selectionId === id) {
-          if (data?.[i]?.betType === "back" || data?.[i]?.betType === "yes") {
-            total += data?.[i]?.potentialWin
-          } else if (data?.[i]?.betType === "lay" || data?.[i]?.betType === "no") {
-            total -= data?.[i]?.potentialWin
+  const returnExposerAmount = (sid) => {
+    let total = 0;
+    let wintotal = 0;
+    let amounttotal = 0;
+    // if (openBets?.length > 0) {
+      const marketData = betData?.filter((item) => item?.type === 'odds');
+      for (let i = 0; i < marketData?.length; i++) {
+        if (marketData?.[i]?.selectionId == sid) {
+          if (marketData?.[i]?.betType === "back") {
+            wintotal += marketData?.[i]?.potentialWin
+          } else {
+            wintotal -= marketData?.[i]?.amount
+          }
+        } else {
+          if (marketData?.[i]?.betType === "back") {
+            amounttotal -= marketData?.[i]?.amount
+          } else {
+            amounttotal += marketData?.[i]?.potentialWin
           }
         }
       }
-      if (total === 0) return 0.00
-
-      else return (
-        <span className={`backLayVal ${total > 0 ? 'blueVal' : 'pinkVal'}`}>{total?.toFixed(0)}</span>
-      )
-    }
+      total = wintotal + amounttotal
+      return total
+    // }
   }
+
 
   const handleBookFancy = () => {
     // dispatch(openBookModal())
@@ -208,7 +214,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
                 <div className={`flex items-center justify-between border-t border-[#7e97a7] ${((activeTab !== "ALL") && (item?.catagory !== activeTab)) ? 'hidden' : ''}`}>
                   <div className="md:px-4 px-1">
                     <div className="text-xs font-semibold">{item?.marketName}</div>
-                    <div className="text-[0.625rem] font-semibold text-red-600">{betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.marketName )?.length ? price?.toFixed(2) || 0 : 0}</div>
+                    <div className="text-[0.625rem] font-semibold text-red-600">{betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.marketName )?.length ? returnExposerAmount(item?.marketId)?.toFixed(2) || 0 : 0}</div>
                   </div>
                   <div className="flex items-center ">
                     {/* <div className="md:hidden relative">

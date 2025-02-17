@@ -22,16 +22,12 @@ const MarketBetModal = ({
     setShow(false);
   };
 
+  console.log(matchId,'matchId')
   // Fetch data when `show`, `currentPage`, or `entriesToShow` changes
   useEffect(() => {
     if (show) {
       dispatch(fetchMarketBets({ matchId, page: currentPage, perPage: entriesToShow }));
     }
-<<<<<<< HEAD
-  },[show])
-
-console.log(data?.pagination,'data?.pagination?.setPageNo')
-=======
   }, [show, currentPage, entriesToShow]);
 
   // Handle entries per page change
@@ -39,7 +35,6 @@ console.log(data?.pagination,'data?.pagination?.setPageNo')
     setEntriesToShow(Number(e.target.value));
     setCurrentPage(1); // Reset to the first page when entries per page changes
   };
->>>>>>> 92e0afbfcac03527f30d11bd0595c17b6eb24126
 
   // Handle pagination button clicks
   const handlePageChange = (direction) => {

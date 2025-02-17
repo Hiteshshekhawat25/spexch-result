@@ -54,8 +54,8 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
     let total = 0;
     let wintotal = 0;
     let amounttotal = 0;
-    if (openBets?.length > 0) {
-      const marketData = openBets?.filter((item) => item?.type === 'odds');
+    // if (openBets?.length > 0) {
+      const marketData = betData?.filter((item) => item?.type === 'odds');
       for (let i = 0; i < marketData?.length; i++) {
         if (marketData?.[i]?.selectionId == sid) {
           if (marketData?.[i]?.betType === "back") {
@@ -69,16 +69,18 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
           } else {
             amounttotal += marketData?.[i]?.potentialWin
           }
-
         }
       }
       total = wintotal + amounttotal
       return total
-    }
+    // }
   }
 
 
-  console.log({matchBetsData,betData},'matchBetsData123')
+
+
+
+  console.log(returnExposerAmount(),openBets,'matchBetsData123')
 
   return (
     <>
@@ -112,14 +114,14 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
               let price = (p2?.totalPotentialWin ?  p2?.totalPotentialWin : 0) -(p1?.totalAmount ? p1?.totalAmount : 0) 
 
 
-              console.log({p1,p2,betData},'priceOdds')
+              console.log(item?.selectionId,'priceOdds')
             if (item?.runnerName) return (
             <React.Fragment key={`${item?.selectionId}`}>
               <div className="flex items-center justify-between border-t border-[#7e97a7]">
                 <div className="md:px-4 px-3">
                   <div className="text-xs font-semibold">{item?.runnerName}</div>
-                  <div className={`text-[0.625rem] font-semibold ${price > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {price?.toFixed(2) || 0}
+                  <div className={`text-[0.625rem] font-semibold ${returnExposerAmount(item?.selectionId) > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                  {returnExposerAmount(item?.selectionId)?.toFixed(0)}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

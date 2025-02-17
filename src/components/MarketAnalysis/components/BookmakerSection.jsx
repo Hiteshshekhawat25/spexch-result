@@ -46,8 +46,8 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
       let total = 0;
       let wintotal = 0;
       let amounttotal = 0;
-      if (openBets?.length > 0) {
-        const marketData = openBets?.filter((item) => item?.type === 'bookmakers');
+      // if (openBets?.length > 0) {
+        const marketData = betData?.filter((item) => item?.type === 'bookmakers');
         for (let i = 0; i < marketData?.length; i++) {
           if (marketData?.[i]?.selectionId == sid) {
             if (marketData?.[i]?.betType === "back") {
@@ -61,13 +61,13 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
             } else {
               amounttotal += marketData?.[i]?.potentialWin
             }
-  
           }
         }
         total = wintotal + amounttotal
         return total
-      }
+      // }
     }
+  
 
   return (
     <>
