@@ -52,8 +52,11 @@ const ProfitLoss = () => {
       });
 
       const data = response.data.data;
-      console.log("data", data);
+      console.log("datadata", response?.data);
       setExpandedRows(data);
+      setProfitLossData(data)
+      setTotalPages(response?.data?.pagination?.totalPages)
+      setTotalEntries(response?.data?.pagination?.totalRecords)
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
@@ -87,7 +90,7 @@ const ProfitLoss = () => {
     ),
   };
 
-console.log(paginatedData,'paginatedData')
+console.log(totalData,'paginatedData')
 
 
   return (
@@ -275,30 +278,30 @@ console.log(paginatedData,'paginatedData')
             <tfoot>
               <tr className="bg-gray-300 text-black">
                 <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-bold text-blue-500">
-                  {totalData.username ? totalData.username.toUpperCase() : ""}
+                  {totalData?.username ? totalData?.username.toUpperCase() : ""}
                 </td>
                 <td
                   className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                    totalData.profitLoss < 0 ? "text-red-500" : "text-green-500"
+                    totalData?.profitLoss < 0 ? "text-red-500" : "text-green-500"
                   }`}
                 >
-                  {Math.abs(totalData.profitLoss.toFixed(2))}
+                  {Math.abs(totalData?.profitLoss?.toFixed(2) || 0)}
                 </td>
                 <td
                   className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                    totalData.downlineProfitLoss < 0
+                    totalData?.downlineProfitLoss < 0
                       ? "text-red-500"
                       : "text-green-500"
                   }`}
                 >
-                  {Math.abs(totalData.downlineProfitLoss.toFixed(2))}
+                  {Math.abs(totalData?.downlineProfitLoss?.toFixed(2) || 0)}
                 </td>
                 <td
                   className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                    totalData.commission < 0 ? "red" : "green"
+                    totalData?.commission < 0 ? "red" : "green"
                   }`}
                 >
-                  {Math.abs(totalData.commission.toFixed(2))}
+                  {Math.abs(totalData?.commission?.toFixed(2) || 0)}
                 </td>
               </tr>
             </tfoot>

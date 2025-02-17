@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const allMatchSlice = createSlice({
   name: 'allMatch',
   initialState: {
-    sport: '',
+    sport: '4',
     searchTerm: '',
     matches: [],
     totalMatches: 0,

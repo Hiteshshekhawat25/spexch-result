@@ -4,6 +4,7 @@ import { updateField, setFormData } from "../../../Store/Slice/SuperAdminFormSli
 import { globalsettingsPostAPIAuth, globalsettingsPutAPIAuth, globalsettingsGetAPIAuth } from "../../SuperAdminServices";
 import { setSport } from "../../../Store/Slice/allMatchSlice";
 import { getCreateNewMatchAPIAuth } from "../../../Services/Downlinelistapi";
+import { toast } from "react-toastify";
 
 const SuperAdminForm = () => {
   const formData = useSelector((state) => state.superAdminForm);
@@ -42,11 +43,11 @@ const SuperAdminForm = () => {
     const fetchData = async () => {
       try {
         console.log("Fetching data...");
-        const response = await globalsettingsGetAPIAuth("admin/getglobal");
-        console.log("Raw API response:", response);
-  
+        const response = await globalsettingsGetAPIAuth(`admin/getglobal?gameId=${sport}`);
+        
         if (response.status === 200 && response.data && response.data.data) {
-          const data = response.data.data[0]; // Adjust based on the structure
+          const data = response.data?.data; // Adjust based on the structure
+          console.log("Raw API response:", data);
           setRecordId(data?._id);
           console.log("Fetched data:", data);
   
@@ -88,25 +89,23 @@ const SuperAdminForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Form Data before submission:", formData);
-  
+
+    let updatedObj = {};
+
+    for (let key in formData) {
+      if (formData[key] !== undefined && formData[key] !== null && formData[key] !== '' ) {
+        updatedObj[key] = formData[key];
+      }
+    }
     try {
       let response;
   
-      if (recordId) {
         response = await globalsettingsPutAPIAuth(
           `admin/updateGlobalSettings/${recordId}`,
-          formData
+          {...updatedObj,gameId : sport}
         );
-      } else {
-        response = await globalsettingsPostAPIAuth(
-          "admin/createGlobalSettings",
-          formData
-        );
-      }
-  
+      
       if (response.status === 200 && response.data) {
-        alert("Form submitted successfully!");
-  
         const updatedData = response.data;
   
         // Filter out unwanted fields from the API response
@@ -118,9 +117,8 @@ const SuperAdminForm = () => {
             return obj;
           }, {});
   
-        console.log("Filtered updated data:", filteredUpdatedData);
-  
-        // Update the Redux state with the filtered data
+        // console.log("Filtered updated data:", );
+        toast.success(response?.data?.message)
         dispatch(setFormData({ ...formData, ...filteredUpdatedData }));
   
         if (!recordId && updatedData._id) {
@@ -149,7 +147,11 @@ const SuperAdminForm = () => {
 
   return (
     <>
-    <div className="border border-slate-500 rounded-md max-w-44 p-2 ">
+        <form
+      onSubmit={handleSubmit}
+      className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded"
+    >
+    <div className="border border-slate-500 rounded-md max-w-44 mx-3 p-2 ">
       <select value={sport} onChange={handleSportChange} className="w-full">
         <option>
           Select Sport
@@ -161,13 +163,9 @@ const SuperAdminForm = () => {
         ))}
       </select>
     </div>
-        <form
-      onSubmit={handleSubmit}
-      className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded"
-    >
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-6 md:grid-cols-4 gap-2 p-3 md:p-0 md:gap-4">
         {Object.keys(formData).map((key) => (
-          <div key={key} className="col-span-1">
+          <div key={key} className="col-span-6 md:col-span-1">
             <label className="block text-gray-700 text-lg font-bold mb-2 capitalize">
               {key.replace(/([A-Z])/g, " $1")}
             </label>
@@ -187,7 +185,7 @@ const SuperAdminForm = () => {
 <div className="col-span-1"></div>
 
 {/* Submit button */}
-<div className="col-span-1 flex items-end">
+<div className="col-span-6 md:col-span-1 flex items-end">
          
         <button
           type="submit"

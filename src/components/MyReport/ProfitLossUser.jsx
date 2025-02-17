@@ -74,7 +74,7 @@ const ProfitLossUser = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch(
-          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&selectionId=${selectionId}&matchId=${id}`,
+          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&matchId=${id}`,
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",

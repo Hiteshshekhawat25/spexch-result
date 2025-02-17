@@ -32,7 +32,7 @@ export const fetchMarketBets = createAsyncThunk(
     try {
       const token = localStorage.getItem("authToken");
       const response = await axios.get(
-        `${BASE_URL}/user/marketBetHistory?page=${data.page}&perPage=10&matchId=${data.gameId}`,
+        `${BASE_URL}/user/marketBetHistory?page=${data.page}&perPage=10&matchId=${data.gameId}${data.search ? `&search=${data.search}` : ''}`,
         {
           headers: {
             "Content-Type": "application/json; charset=utf-8",

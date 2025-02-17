@@ -354,7 +354,7 @@ const MarketAnalysisInner = () => {
             <div onClick={() => setShowBetsModal(true)} className=" text-[12px] sm:text-sm cursor-pointer sm:mt-0 mt-1.5 flex items-center justify-center">View More</div>
           </div>
           {
-            liveBets && backBets?.data?.length ?
+            liveBets &&( backBets?.data?.length || search !== '')?
               <div className="mt-2 bg-white">
                 <div className="flex justify-end mt-3">
                   <input
@@ -397,7 +397,7 @@ const MarketAnalysisInner = () => {
                               <div className="cursor-pointer" onClick={() => {
                                 setShowUser(true)
                                 setSelectedUser(item)
-                              }}>{item?.userDetails?.name}</div>
+                              }}>{item?.userDetails?.username}</div>
                             </td>
                           </tr>
                         ))
