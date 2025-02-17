@@ -20,6 +20,7 @@ function ManageBetFilter({
   setTotalPages,
   checkbox,
   handleDeleteBet,
+  handleRevertBet,
   entriesToShow,
   selectFilterData,
   setSelectFilterData,
@@ -79,12 +80,14 @@ function ManageBetFilter({
         type : selectFilterData?.odds,
         matchId : selectFilterData?.match,
         sessionId : selectFilterData?.session,
+        status : selectFilterData?.status
        }))
     }
   }, [
     selectFilterData?.sport,
     selectFilterData?.match,
     selectFilterData?.odds,
+    selectFilterData?.status,
     selectFilterData?.date1,
     selectFilterData?.date2,
     selectFilterData?.session,
@@ -219,6 +222,7 @@ function ManageBetFilter({
                   type : selectFilterData?.odds,
                   matchId : selectFilterData?.match,
                   sessionId : selectFilterData?.session,
+                  status : selectFilterData?.status
                  }))
               }}
               className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm w-full sm:w-auto sm:px-8"
@@ -227,15 +231,38 @@ function ManageBetFilter({
             </button>
           </div>
 
-          <div className=' sm:col-span-4 w-full mt-5 items-end col-span-12'>
-            <div className='flex gap-x-4 justify-end'>
-              <button disabled={checkbox?.length == 0 ? true : false}
-               className='bg-red-500 text-white py-3 disabled:bg-red-400 px-5 text-center  rounded-md'
+          <div className=' sm:col-span-4 w-full items-end col-span-12'>
+            <div className='flex gap-x-4 justify-end items-center'>
+            <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
+        <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+              Bet Status
+            </label>
+            <select className="border text-[12px] font-bold sm:text-sm p-2 w-full rounded" 
+            value={selectFilterData.status} 
+            onChange={(e)=>handleSportChange(e,'status')}
+            >
+              {loading ? (
+                <option value="">Loading...</option>
+              ) : (
+                [{name : 'Active Bets',_id : 'REVERT'}, {name : 'Delete Bets',_id:'DELETED'}].map((sport) => (
+                  <option key={sport._id} value={sport._id} className='font-bold'>
+                    {sport.name}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
+              <button disabled={checkbox?.length == 0 || selectFilterData.status == 'DELETED'? true : false}
+               className='bg-red-500  text-[12px] sm:text-sm text-white max-h-12 sm:py-3 disabled:bg-red-400 p-2 sm:px-5 text-center  rounded-md'
                onClick={handleDeleteBet}
                >
                 Delete Bets 
               </button>
-              <button disabled={checkbox?.length == 0 ? true : false} className='bg-lightblue text-white py-3 px-5 disabled:bg-bluehover text-center  rounded-md'>
+              <button 
+              disabled={checkbox?.length == 0 || selectFilterData.status == 'REVERT' ? true : false} 
+              className='bg-lightblue text-[12px] sm:text-sm max-h-12 text-white p-2 sm:py-3 sm:px-5 disabled:bg-bluehover text-center  rounded-md'
+              onClick={handleRevertBet}
+              >
                 Revert Bets 
               </button>
             </div>

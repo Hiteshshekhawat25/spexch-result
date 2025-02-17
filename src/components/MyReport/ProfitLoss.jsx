@@ -29,6 +29,7 @@ const ProfitLoss = () => {
   };
 
   const fetchUserData = async (userId, role_name, item) => {
+    console.log(role_name,'role_name')
     const token = localStorage.getItem("authToken");
     setLocalLoading(true);
     if (role_name === "user") {
@@ -85,6 +86,9 @@ const ProfitLoss = () => {
       0
     ),
   };
+
+console.log(paginatedData,'paginatedData')
+
 
   return (
     <div className="p-4">
@@ -200,14 +204,14 @@ const ProfitLoss = () => {
                               : "text-green-500"
                           }`}
                         >
-                          {Math.abs(row.totalUplineProfitLoss)}
+                          {Math.abs(row.totalUplineProfitLoss.toFixed(2))}
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
                             row.totalDownlineProfitLoss < 0 ? "red" : "green"
                           }`}
                         >
-                          {Math.abs(row.totalDownlineProfitLoss)}
+                          {Math.abs(row.totalDownlineProfitLoss.toFixed(2))}
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
@@ -225,7 +229,7 @@ const ProfitLoss = () => {
                   <tr key={index} className="border-b border-gray-400">
                     <td
                       className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium text-lightblue cursor-pointer"
-                      onClick={() => fetchUserData(item._id)}
+                      onClick={() => fetchUserData(item._id, item.role_name, item)}
                     >
                       {item.username ? item.username.toUpperCase() : ""}
                     </td>

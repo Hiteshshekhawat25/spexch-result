@@ -19,7 +19,7 @@ const MarketBetModal = ({matchId, show, setShow, showUser, setShowUser, selected
     }
   },[show])
 
-
+console.log(data?.pagination,'data?.pagination?.setPageNo')
 
 
   return (

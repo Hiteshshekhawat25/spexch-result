@@ -51,6 +51,7 @@ const MyProfile = ({ Userid, Role }) => {
   
       const fetchProfileData = async () => {
         try {
+          console.log('userHeirarchyModal','=====>>>>>>')
           const response = await getUserData(`user/get-user/${ID}`);
           console.log("API Response:", response.data);
           console.log("response for commission", response);

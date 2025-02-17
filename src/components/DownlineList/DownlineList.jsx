@@ -151,35 +151,38 @@ const DownlineList = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("authToken");
-        if (!token) {
-          console.error("Token not found. Please log in again.");
-          return;
+    if(roleId){
+      const fetchData = async () => {
+        console.log('rrrrrruuuuuunnnnnnnn3')
+        try {
+          const token = localStorage.getItem("authToken");
+          if (!token) {
+            console.error("Token not found. Please log in again.");
+            return;
+          }
+  
+          dispatch(setLoading(true));
+  
+          const result = await fetchDownlineData(
+            currentPage,
+            entriesToShow,
+            roleId
+          );
+  
+          if (result && result.data) {
+            dispatch(setDownlineData(result.data));
+            setTotalUsers(result.pagination?.totalUsers || 0);
+          }
+        } catch (err) {
+          console.error("Error fetching data:", err.message);
+          dispatch(setError(err.message));
+        } finally {
+          dispatch(setLoading(false));
         }
-
-        dispatch(setLoading(true));
-
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow,
-          roleId
-        );
-
-        if (result && result.data) {
-          dispatch(setDownlineData(result.data));
-          setTotalUsers(result.pagination?.totalUsers || 0);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err.message);
-        dispatch(setError(err.message));
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
-      fetchData();
+      };
+  
+        fetchData();
+    }
   }, [
     dispatch,
     currentPage,
@@ -196,6 +199,7 @@ const DownlineList = () => {
   useEffect(() => {
     if (location.pathname === "/master-downline-list") {
       const fetchUserRoles = async () => {
+        console.log('rrrrrruuuuuunnnnnnnn2')
         try {
           const token = localStorage.getItem("authToken");
           if (token) {
@@ -252,6 +256,7 @@ const DownlineList = () => {
   useEffect(() => {
     if (location.pathname === "/user-downline-list") {
       const fetchUserRoles = async () => {
+        console.log('rrrrrruuuuuunnnnnnnn1')
         try {
           const token = localStorage.getItem("authToken");
           if (token) {

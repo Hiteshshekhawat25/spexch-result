@@ -13,7 +13,7 @@ const initialState = {
 export const liabilityBook = createAsyncThunk('liability', async (data)=> {
   try {
     const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${BASE_URL}/user/get-pending-liability-list?page=${data.page}&limit=${data.limit}&sport=${data.sport}&matchId=${data?.matchId}&sessionId=${data?.sessionId}&type=${data?.type}`, {
+    const response = await axios.get(`${BASE_URL}/user/get-pending-liability-list?page=${data.page}&limit=${data.limit}&sport=${data.sport}&matchId=${data?.matchId}&sessionId=${data?.sessionId}&type=${data?.type}&deleteStatus=${data?.status}`, {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json",

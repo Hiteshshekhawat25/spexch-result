@@ -9,8 +9,8 @@ const Tabs = ({data, size, activeTab, setActiveTab, hasPadding, fancyTabs, highl
         data?.length ? 
           data?.map((item) => (
             <React.Fragment key={item?.value}>
-              <div onClick={()=> setActiveTab(item?.value)} className={`${inplayTab ? 'border border-[#3B5160] rounded-none max-sm:w-1/3 max-sm:h-7 max-sm:text-xs font-bold' : ''} ${inplayTab && activeTab === item?.value ? 'bg-[#3B5160]' : ''} ${casinoTab ? 'uppercase !text-sm !bg-transparent !px-2 !py-1 !font-bold !rounded-b-none !rounded-t-md' : ''} ${casinoTab && activeTab === item?.value ? " !bg-gradient-blue" : ''} ${highlightTab ? 'flex items-center gap-2 max-lg:!text-sm max-lg:!h-8 max-lg:!bg-transparent max-lg:!px-2 max-lg:!py-1 max-lg:!font-bold max-lg:!rounded-b-none max-lg:!rounded-t-md lg:!h-5 lg:!bg-gradient lg:rounded-full lg:text-white lg:!text-xs lg:!font-bold' : ''} ${highlightTab && activeTab === item?.value ? 'lg:!bg-[#dddcd6] lg:!bg-none lg:!text-black lg:rounded-t lg:rounded-b-none max-lg:!bg-gradient-blue' : ''} ${fancyTabs ? 'bg-slate-100' : 'bg-slate-100'} py-1 px-5 rounded text-nowrap flex items-center justify-center cursor-pointer leading-normal text-xs lg:text-sm font-normal ${size === 'sm' ? 'h-[22px] text-xs lg:text-sm' : ''} ${activeTab === item?.value ? 'bg-theme7 text-white' : ''}`}>
-                {
+              <div onClick={()=> setActiveTab(item?.value)} className={`${inplayTab ? 'border border-[#3B5160] rounded-none max-sm:w-1/3 max-sm:h-7 max-sm:text-xs font-bold' : ''} ${inplayTab && activeTab === item?.value ? 'bg-[#3B5160]' : ''} ${casinoTab ? 'uppercase !text-sm !bg-transparent !px-2 !py-1 !font-bold !rounded-b-none !rounded-t-md' : ''} ${casinoTab && activeTab === item?.value ? " !bg-gradient-blue" : ''} ${highlightTab ? 'flex items-center gap-2 max-lg:!text-sm max-lg:!h-8 max-lg:!bg-transparent max-lg:!px-2 max-lg:!py-1 max-lg:!font-bold max-lg:!rounded-b-none max-lg:!rounded-t-md lg:!h-5 lg:!bg-gradient lg:rounded-full lg:text-white lg:!text-xs lg:!font-bold' : ''} ${highlightTab && activeTab === item?.value ? 'lg:!bg-[#dddcd6] lg:!bg-none lg:!text-black lg:rounded-t lg:rounded-b-none max-lg:!bg-gradient-blue' : ''} ${fancyTabs && item.value == activeTab ? 'bg-white !text-black !font-bold ' : 'bg-transparent !text-black !font-bold !shadow-none'} py-1 px-5 rounded text-nowrap flex items-center justify-center cursor-pointer leading-normal text-xs lg:text-sm font-normal ${size === 'sm' ? 'h-[22px] text-xs lg:text-sm' : ''} ${activeTab === item?.value ? 'bg-theme7 text-white' : ''}`}>
+                {/* {
                   highlightTab ? 
                   item?.value === '4' ? 
                   <img className={`size-5 object-contain lg:hidden ${activeTab === item?.value ? 'invert' : ''}`} src="assets/img/cricket.png" alt="" />
@@ -22,7 +22,7 @@ const Tabs = ({data, size, activeTab, setActiveTab, hasPadding, fancyTabs, highl
                   <img className={`size-5 object-contain lg:hidden ${activeTab === item?.value ? 'invert' : ''}`} src="assets/img/tennis.png" alt="" />
                   : ''
                   : ''
-                }
+                } */}
                 {item?.title}
               </div>
             </React.Fragment>

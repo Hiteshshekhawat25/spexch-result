@@ -6,7 +6,7 @@ import {
   fetchUserDataSuccess,
 } from "../../Store/Slice/userInfoSlice";
 import { getUserData } from "../../Services/UserInfoApi";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import spexec from "../../assets/spexchlogo.png";
 import { FaSyncAlt } from "react-icons/fa";
 import { MdRefresh } from "react-icons/md";
@@ -15,12 +15,18 @@ const TopHeader = () => {
   const dispatch = useDispatch();
   const { userData, loading, error } = useSelector((state) => state.user);
   const location = useLocation();
+  const navigate = useNavigate();
   console.log("userData",userData)
 
   const refreshData = () => {
     dispatch(fetchUserDataStart());
     getUserData()
       .then((data) => {
+        console.error("Error fetching user data: Header", {data});
+        if(data?.status == 403 || data?.status == 401){
+          localStorage.clear()
+          navigate('/')
+        }
         if (data && data.data) {
           dispatch(fetchUserDataSuccess(data));
         } else {
@@ -28,7 +34,7 @@ const TopHeader = () => {
         }
       })
       .catch((err) => {
-        console.error("Error fetching user data:", err);
+        console.error("Error fetching user data: Header", {err});
         dispatch(fetchUserDataFailure(err.message));
       });
   };

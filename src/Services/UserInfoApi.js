@@ -40,7 +40,7 @@ export const getUserData = async () => {
     });
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || error.message);
+    return error;
   }
 };
 

@@ -8,7 +8,7 @@ const LayoutHeader = ({ children }) => {
     <div>
       <TopHeader />
       <MenuHeader />
-      <div className="p-4 bg-gray-150">
+      <div className="sm:p-4  py-4">
         <div>{children}</div>
       </div>
     </div>

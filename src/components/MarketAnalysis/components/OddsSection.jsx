@@ -77,6 +77,9 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
     }
   }
 
+
+  console.log({matchBetsData,betData},'matchBetsData123')
+
   return (
     <>
       <div className=" bg-white shadow-md overflow-hidden rounded-md">

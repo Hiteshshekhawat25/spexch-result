@@ -73,7 +73,7 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
     <>
       <div className="bg-white shadow-md overflow-hidden rounded-md">
         <div className="flex align-center justify-between bg-white pr-2 flex-wrap gap-2 sm:pb-0 pb-2">
-          <SportsHeading title={"Bookmaker (0% Commission Fast Bet Confirm)"}/>
+          <SportsHeading title={"Bookmaker "}/>
           <div className="text-xs flex gap-1 sm:pl-0 pl-2 items-center">
             Matched 
             <span className="font-semibold">€ 170.5 K</span>

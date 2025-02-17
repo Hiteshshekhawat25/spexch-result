@@ -8,38 +8,41 @@ import { liabilityBook } from '../../Store/Slice/liabilitySlice';
 import { getCreateNewMatchAPIAuth, getMatchList } from '../../Services/Newmatchapi';
 import RemarkModal from '../marketBetModal/RemarkModal';
 import { DeleteBet, RevertBet } from '../../Services/manageBetapi';
+import Pagination from '../pagination/Pagination';
+import moment from 'moment';
 
-function ManageBets({Userid}) {
+function ManageBets({ Userid }) {
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const data = useSelector(selectBetListData);
   const loading = useSelector(selectBetListLoading);
   const error = useSelector(selectBetListError);
   const filters = useSelector(selectBetListFilter);
-  const dataLiability = useSelector((state)=>state.liability.data)
-  const total = useSelector((state)=>state.liability?.total)
-  const pages = useSelector((state)=>state.liability?.pages)
-  const [selectFilterData,setSelectFilterData] = useState({
-    match : '',
-    sport : '4',
-    odds : '',
-    session : '',
+  const dataLiability = useSelector((state) => state.liability.data)
+  const total = useSelector((state) => state.liability)
+  const pages = useSelector((state) => state.liability?.pages)
+  const [selectFilterData, setSelectFilterData] = useState({
+    match: '',
+    sport: '4',
+    odds: '',
+    session: '',
+    status: 'REVERT',
     date1: '',
-    date2 : ''
+    date2: ''
   })
-   const { sessions, loading : loader, error : err } = useSelector((state) => state);
+  const { sessions, loading: loader, error: err } = useSelector((state) => state);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [betlistData, setBetlistData] = useState([]);
-  const [remarkModal,setRemarkModal] = useState(false);
-  const [remark,setRemark] = useState('')
+  const [remarkModal, setRemarkModal] = useState(false);
+  const [remark, setRemark] = useState('')
   const [totalBets, setTotalBets] = useState(0);
-  const [checkbox,setCheckbox] = useState([]);
+  const [checkbox, setCheckbox] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
-  const [selectBet,setSelectBet]=useState({})
+  const [selectBet, setSelectBet] = useState({})
   const [selectedUsername, setSelectedUsername] = useState(null);
 
   const [isDataFetched, setIsDataFetched] = useState(false);
@@ -52,42 +55,53 @@ function ManageBets({Userid}) {
     setBetlistData(newData);
   };
 
-  const handleDeleteBet =async(item)=>{
+  const handleDeleteBet = async (item) => {
     setRemarkModal(true)
-    try{
-      const res = await DeleteBet('user/delete-bets',{
-        betIds : checkbox?.length == 0 ? selectBet?._id : checkbox,
-        matchId : selectFilterData?.match ? selectFilterData?.match :  selectBet?.matchId,
-        type : selectFilterData?.odds ? selectFilterData?.odds : selectBet?.matchType,
-        remark : remark
-      })
-      if(res?.data?.success){
+    if(remark !== ''){
+      try {
+        const res = await DeleteBet('user/delete-bets', {
+          betIds: checkbox?.length == 0 ? selectBet?._id : checkbox,
+          matchId: selectFilterData?.match ? selectFilterData?.match : selectBet?.matchId,
+          type: selectFilterData?.odds ? selectFilterData?.odds : selectBet?.matchType,
+          remark: remark
+        })
+        if (res?.data?.success) {
+          setSelectBet({})
+          setRemark('')
+          setRemarkModal(false)
+        }
+        console.log({ res })
+      } catch (error) {
         setSelectBet({})
         setRemarkModal(false)
+        console.log(error)
       }
-      console.log({res})
-    }catch(error){
-      setSelectBet({})
-      setRemarkModal(false)
-      console.log(error)
     }
   }
 
 
-  const handleRevertBet =async(item)=>{
-    try{
-      const res = await RevertBet('user/revert-delete-bets',{
-        betIds : checkbox?.length == 0 ? item?._id : checkbox,
-        matchId : selectFilterData?.match ? selectFilterData?.match :  item?.matchId,
-        type : selectFilterData?.odds ? selectFilterData?.odds : item?.matchType,
+  const handleRevertBet = async (item) => {
+    try {
+      const res = await RevertBet('user/revert-delete-bets', {
+        betIds: checkbox?.length == 0 ? item?._id : checkbox,
+        matchId: selectFilterData?.match ? selectFilterData?.match : item?.matchId,
+        type: selectFilterData?.odds ? selectFilterData?.odds : item?.matchType,
       })
 
-      if(res?.data?.success){
+      if (res?.data?.success) {
         setSelectBet({})
-        setRemarkModal(false)
+          dispatch(liabilityBook({
+                page : currentPage,
+                limit : 10,
+                sport : selectFilterData?.sport == '4' ? 'Cricket' : selectFilterData?.sport == '2' ? 'Tennis' : 'Soccer' ,
+                type : selectFilterData?.odds,
+                matchId : selectFilterData?.match,
+                sessionId : selectFilterData?.session,
+                status : selectFilterData?.status
+               }))
       }
-      console.log({res})
-    }catch(error){
+      console.log({ res })
+    } catch (error) {
       console.log(error)
     }
   }
@@ -98,7 +112,7 @@ function ManageBets({Userid}) {
   }, [data, filters]);
 
 
- 
+
 
   const handlePageChange = (direction) => {
     let newPage = currentPage;
@@ -115,13 +129,13 @@ function ManageBets({Userid}) {
   );
 
   console.log("Paginated Data:", paginatedData);
-  useEffect(()=>{
-    if(total){
-      setTotalBets(total);
-        setTotalPages(pages);
-        // setBetlistData(data.data || []);
+  useEffect(() => {
+    if (total.total) {
+      setTotalBets(total.total);
+      setTotalPages(pages);
+      // setBetlistData(data.data || []);
     }
-  },[total,pages])
+  }, [total, pages])
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -141,22 +155,22 @@ function ManageBets({Userid}) {
 
 
 
-  const handleCheckbox=(e)=>{
-    console.log(e.target.checked,checkbox,'e.target.checked')
-    if(e.target.checked && e.target.value == 'all'){
-      const id = dataLiability?.map((item)=>{
-        return   item?._id
+  const handleCheckbox = (e) => {
+    console.log(e.target.checked, checkbox, 'e.target.checked')
+    if (e.target.checked && e.target.value == 'all') {
+      const id = dataLiability?.map((item) => {
+        return item?._id
       })
       setCheckbox(id)
       return
-    }else if(!e.target.checked && e.target.value == 'all'){
+    } else if (!e.target.checked && e.target.value == 'all') {
       setCheckbox([])
       return
     }
-    if(e.target.checked ){
-      setCheckbox((pre)=>setCheckbox([...pre,e.target.value]))
-    }else{
-      setCheckbox(checkbox.filter((item)=> item !== e.target.value))
+    if (e.target.checked) {
+      setCheckbox((pre) => setCheckbox([...pre, e.target.value]))
+    } else {
+      setCheckbox(checkbox.filter((item) => item !== e.target.value))
     }
   }
 
@@ -164,29 +178,29 @@ function ManageBets({Userid}) {
 
 
 
-console.log({pages},'dataLiability')
+  console.log({ pages }, 'dataLiability')
 
   return (
     <>
-    <ManageBetFilter
-     setTotalBets={(total) => setTotalBets(total)}
-     setTotalPages={(total) => setTotalPages(total)}
-     setBetlistData={handleBetlistUpdate}
-     entriesToShow={entriesToShow}
-     handleDeleteBet={handleDeleteBet}
-     handleRevertBet={handleRevertBet}
-     checkbox={checkbox}
-     remarkModal={remarkModal}
-     currentPage={currentPage}
-     selectFilterData={selectFilterData}
-     setSelectFilterData={setSelectFilterData}
-     setIsDataFetched={(isFetched) => console.log(isFetched)}
-     setCurrentPage={setCurrentPage}
-     userID={Userid}
-    
-    />
-      {loading ? 
-      <div className="flex justify-center items-center h-64">
+      <ManageBetFilter
+        setTotalBets={(total) => setTotalBets(total)}
+        setTotalPages={(total) => setTotalPages(total)}
+        setBetlistData={handleBetlistUpdate}
+        entriesToShow={entriesToShow}
+        handleDeleteBet={handleDeleteBet}
+        handleRevertBet={handleRevertBet}
+        checkbox={checkbox}
+        remarkModal={remarkModal}
+        currentPage={currentPage}
+        selectFilterData={selectFilterData}
+        setSelectFilterData={setSelectFilterData}
+        setIsDataFetched={(isFetched) => console.log(isFetched)}
+        setCurrentPage={setCurrentPage}
+        userID={Userid}
+
+      />
+      {loading ?
+        <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
             <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
             <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
@@ -196,228 +210,196 @@ console.log({pages},'dataLiability')
           </div>
         </div> : ""}
 
-        {loading ? (
-                      <div>Loading...</div>
-                    ) : error ? (
-                      <div className="text-red-500">{error}</div>
-                    ) : (
-                      <div className="overflow-x-auto p-4">
-                        <table className="w-full table-auto border-collapse border border-gray-400 p-2">
-                          <thead className="border border-gray-400 bg-gray-300 text-black text-center">
-                            <tr className="text-center">
-                              {[
-                                "",
-                                "sportName",
-                                "event",
-                                "market type",
-                                "selection",
-                                "odds",
-                                "amount",
-                                "potential",
-                                "Actions"
-                              ].map((key) => (
-                                <th
-                                  key={key}
-                                  className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer p-1"
-                                  onClick={() => handleSort(key)}
-                                >
-                                  <div className="flex flex-col border-b border-gray-300 pb-2">
-                                    <div className="flex justify-between items-center">
-                                      <span>
-                                        {key  === "sportName"
-                                          ? "Sport Name"
-                                          : key === "event"
-                                          ? "Event"
-                                          : key === "market type"
-                                          ? "Market Type"
-                                          : key === "selection"
-                                          ? "Selection"
-                                          : key === "odds"
-                                          ? "Odds"
-                                          : key === "amount"
-                                          ? "Amount"
-                                          : key === "potential"
-                                          ? "Potentialwin"
-                                          : key  === "" ? 
-                                        <input type='checkbox'
-                                        value='all'
-                                        onChange={handleCheckbox}
-                                        /> : key
-                                        }
-                                      </span>
-                                      {key  === "" ? 
-                                      
-                                     <></>
-                                     : 
-                                      <div className="flex flex-col items-center ml-2">
-                                        <FaSortUp
-                                          className={`${
-                                            sortConfig.key === key &&
-                                            sortConfig.direction === "ascending"
-                                              ? "text-black"
-                                              : "text-gray-400"
-                                          }`}
-                                          style={{
-                                            marginBottom: "-6px",
-                                          }}
-                                        />
-                                        <FaSortDown
-                                          className={`${
-                                            sortConfig.key === key &&
-                                            sortConfig.direction === "descending"
-                                              ? "text-black"
-                                              : "text-gray-400"
-                                          }`}
-                                          style={{
-                                            marginTop: "-6px",
-                                          }}
-                                        />
-                                      </div>
-                                      }
-                                    </div>
-                                  </div>
-                                </th>
-                              ))}
-                            </tr>
-                          </thead>
-        
-                          <tbody className="text-center">
-                            {dataLiability?.length > 0 ? (
-                              dataLiability.map((item, index) => (
-                                <tr key={index}>
-                                  <td>
-                                  <input
-                                  type='checkbox'
-                                  checked={checkbox?.includes(item?._id) ? true : false}
-                                  value={item?._id}
-                                  onChange={handleCheckbox}
-                                  />  
-                                  </td>
+      {loading ? (
+        <div>Loading...</div>
+      ) : error ? (
+        <div className="text-red-500">{error}</div>
+      ) : (
+        <div className="overflow-x-auto p-4">
+          <table className="w-full table-auto border-collapse border border-gray-400 p-2">
+            <thead className="border border-gray-400 bg-gray-300 text-black text-center">
+              <tr className="text-center">
+                {[
+                  "",
+                  "sportName",
+                  "event",
+                  "market type",
+                  "date",
+                  "odds",
+                  "amount",
+                  "potential",
+                  "Actions"
+                ].map((key) => (
+                  <th
+                    key={key}
+                    className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer p-1"
+                    onClick={() => handleSort(key)}
+                  >
+                    <div className="flex flex-col border-b border-gray-300 pb-2">
+                      <div className="flex justify-between items-center">
+                        <span>
+                          {key === "sportName"
+                            ? "Sport Name"
+                            : key === "event"
+                              ? "Event"
+                              : key === "market type"
+                                ? "Market Type"
+                                : key === "date"
+                                  ? "Date"
+                                  : key === "odds"
+                                    ? "Odds"
+                                    : key === "amount"
+                                      ? "Amount"
+                                      : key === "potential"
+                                        ? "Potentialwin"
+                                        : key === "" ?
+                                          <input type='checkbox'
+                                            value='all'
+                                            onChange={handleCheckbox}
+                                          /> : key
+                          }
+                        </span>
+                        {key === "" ?
 
-                                  <td
-                                    onClick={() => {
-                                      console.log("Clicked Item:", item); // Log the entire item object
-                                      console.log("Selected User ID:", item.createdBy);
-                                      console.log("Selected User Name:", item.username);
-                                      setSelectedUserId(item.createdBy);
-                                      setSelectedUsername(item.username);
-                                      setIsModalOpen(true);
-                                    }}
-                                    className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
-                                  >
-                                    {item.sport}
-                                  </td>
-        
-                                  <td className="border border-gray-400 px-4 py-3">
-                                    {item.event}
-                                  </td>
-                                  <td className="border border-gray-400 px-4 py-3">
-                                    {item.marketType}
-                                  </td>
-                                  <td className="border border-gray-400 px-4 py-3">
-                                    {item.selectionId}
-                                  </td>
-                                  <td className="border border-gray-400 px-4 py-3">
-                                    {item.odds}
-                                  </td>
-                                  <td
-                                    className="border border-gray-400 px-4 py-3"
-                                  >
-                                    {item.amount.toFixed(2) || 0}
-                                  </td>
-                                  <td className="border border-gray-400 px-4 py-3">
-                                    {item.potentialWin.toFixed(2) || 0}
-                                  </td>
-                                  <td className='border border-gray-400  py-3'>
-                                    <div className='sm:flex gap-y-2 gap-x-3 justify-center'>
-                                {item?.isDeleted ? 
-                                      <button className='bg-lightblue text-white px-3 p-1 text-[12px] rounded'
-                                      onClick={()=>handleRevertBet(item)}
-                                      >
-                                        Revert
-                                      </button>
-                                      :
-                                      <button className='bg-red-500 text-white px-3 p-1 text-[12px] rounded' 
-                                      onClick={()=>{
-                                        setRemarkModal(true)
-                                      setSelectBet(item)
-                                      }}
-                                      
-                                      >
-                                        Delete
-                                      </button>
-                                }
-                                    </div>
-                                  </td>
-                                 
-                                </tr>
-                              ))
-                            ) : (
-                              <tr>
-                                <td
-                                  colSpan="10"
-                                  className="border border-gray-400 px-4 py-3"
-                                >
-                                  No data !
-                                </td>
-                              </tr>
-                            )}
-                          </tbody>
-                        </table>
-                      </div>
-                    )}
-        
-                    <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
-                      {/* Showing entries text */}
-                      <div className="text-sm text-gray-600">
-                        Showing{" "}
-                        {totalBets === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
-                        {Math.min(currentPage * entriesToShow, totalBets)} of{" "}
-                        {totalBets} entries
-                      </div>
-        
-                      {/* Pagination buttons */}
-                      <div className="flex  space-x-2 sm:ml-auto">
-                        <button
-                          onClick={() => handlePageChange("first")}
-                          className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                          disabled={currentPage === 1}
-                        >
-                          First
-                        </button>
-                        <button
-                          onClick={() => handlePageChange("prev")}
-                          className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                          disabled={currentPage === 1}
-                        >
-                          Prev
-                        </button>
-                        <div className='text-gray-600 rounded-md border px-3'>
-                          {currentPage}
-                        </div>
-                        <button
-                          onClick={() => handlePageChange("next")}
-                          className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                          disabled={currentPage === totalPages}
-                        >
-                          Next
-                        </button>
-                        <button
-                          onClick={() => handlePageChange("last")}
-                          className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                          disabled={currentPage === totalPages}
-                        >
-                          Last
-                        </button>
+                          <></>
+                          :
+                          <div className="flex flex-col items-center ml-2">
+                            <FaSortUp
+                              className={`${sortConfig.key === key &&
+                                  sortConfig.direction === "ascending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                                }`}
+                              style={{
+                                marginBottom: "-6px",
+                              }}
+                            />
+                            <FaSortDown
+                              className={`${sortConfig.key === key &&
+                                  sortConfig.direction === "descending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                                }`}
+                              style={{
+                                marginTop: "-6px",
+                              }}
+                            />
+                          </div>
+                        }
                       </div>
                     </div>
-                    <RemarkModal
-                    showUser={remarkModal}
-                    remark={remark}
-                    handleDeleteBet={handleDeleteBet}
-                    setRemark={setRemark}
-                    setShowUser={setRemarkModal}
-                    />
+                  </th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody className="text-center">
+              {dataLiability?.length > 0 ? (
+                dataLiability.map((item, index) => (
+                  <tr key={index}>
+                    <td>
+                      <input
+                        type='checkbox'
+                        checked={checkbox?.includes(item?._id) ? true : false}
+                        value={item?._id}
+                        onChange={handleCheckbox}
+                      />
+                    </td>
+
+                    <td
+                      onClick={() => {
+                        console.log("Clicked Item:", item); // Log the entire item object
+                        console.log("Selected User ID:", item.createdBy);
+                        console.log("Selected User Name:", item.username);
+                        setSelectedUserId(item.createdBy);
+                        setSelectedUsername(item.username);
+                        setIsModalOpen(true);
+                      }}
+                      className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+                    >
+                      {item.sport}
+                    </td>
+
+                    <td className="border border-gray-400 px-4 py-3">
+                      {item.event}
+                    </td>
+                    <td className="border border-gray-400 px-4 py-3">
+                      {item.marketType}
+                    </td>
+                    <td className="border border-gray-400 px-4 py-3">
+                      {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                    </td>
+                    <td className="border border-gray-400 px-4 py-3">
+                      {item.odds}
+                    </td>
+                    <td
+                      className="border border-gray-400 px-4 py-3"
+                    >
+                      {item.amount.toFixed(2) || 0}
+                    </td>
+                    <td className="border border-gray-400 px-4 py-3">
+                      {item.potentialWin.toFixed(2) || 0}
+                    </td>
+                    <td className='border border-gray-400  py-3'>
+                      <div className='sm:flex gap-y-2 gap-x-3 justify-center'>
+                        {item?.isDeleted ?
+                          <button className='bg-lightblue text-white px-3 p-1 text-[12px] rounded'
+                            onClick={() => handleRevertBet(item)}
+                          >
+                            Revert
+                          </button>
+                          :
+                          <button className='bg-red-500 text-white px-3 p-1 text-[12px] rounded'
+                            onClick={() => {
+                              setRemarkModal(true)
+                              setSelectBet(item)
+                            }}
+
+                          >
+                            Delete
+                          </button>
+                        }
+                      </div>
+                    </td>
+
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan="10"
+                    className="border border-gray-400 px-4 py-3"
+                  >
+                    No data !
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
+        {/* Showing entries text */}
+        <div className="text-sm text-gray-600">
+          Showing{" "}
+          {totalBets === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+          {Math.min(currentPage * entriesToShow, totalBets)} of{" "}
+          {totalBets} entries
+        </div>
+
+        {
+          total.total < 1 ? '' :
+            <Pagination pageNo={currentPage} setPageNo={setCurrentPage} totalPages={total?.pages} />
+        }
+      </div>
+      <RemarkModal
+        showUser={remarkModal}
+        remark={remark}
+        handleDeleteBet={handleDeleteBet}
+        setRemark={setRemark}
+        setShowUser={setRemarkModal}
+      />
     </>
   )
 }

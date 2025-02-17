@@ -216,7 +216,7 @@ const BetHistory = () => {
                           {item.odds}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.amount}
+                          {item.amount?.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.totalDownlineProfitLoss}

@@ -74,7 +74,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
     }
   }, [userBookList])
 
-  console.log({ type}, 'listDatalistData')
+  console.log({ listData}, 'listDatalistData')
   return (
     <>
       <div onClick={handleClose} className={`h-dvh w-full fixed z-[500] top-0 left-0 items-center justify-center bg-black/40 transition-all duration-500 ease-in-out ${showUser ? 'flex' : 'hidden'}`} style={{ backdropFilter: 'blur(4px)' }}>
@@ -95,11 +95,12 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                       <th>Role</th>
                       <th>{matchBetsData?.matchodds?.[0]?.runnerName  ? matchBetsData?.matchodds?.[0]?.runnerName : matchBetsData?.bookmakersOdds?.[0]?.selectionName}</th>
                       <th>{matchBetsData?.matchodds?.[1]?.runnerName ? matchBetsData?.matchodds?.[1]?.runnerName : matchBetsData?.bookmakersOdds?.[1]?.selectionName}</th>
+                     
                     </tr>
                     {
                       userBookList?.length ?
                         listData?.map(item => {
-                          console.log( item?.markets?.[0]?.role,'listlist')
+                          console.log(item?.markets?.[1]?.market , matchBetsData?.matchodds?.[1]?.runnerName,'listlist')
 
                           return (
                             <tr key={item?._id}>
@@ -119,7 +120,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                                 {item?.markets?.[0]?.role == 'master' ? 'MASTER' : item?.markets?.[0]?.role == 'agent' ? 'AGENT' : 'USER'}
                               </td>
                               <td className="font-semibold p-2 border text-nowrap text-center">
-                                {(item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName )
+                                {(item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName ) ||(item?.markets?.[1]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName)
                                  || 
                                  (matchBetsData?.bookmakersOdds?.[0]?.selectionName  == item?.markets?.[0]?.market )
                                   ? 
@@ -131,6 +132,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                                    ?
                                     item?.markets?.[0]?.totalStake.toFixed(2)  : item?.markets?.[0]?.totalStake ?  item?.markets?.[0]?.totalStake : '0.00'
                                     :'0.00'
+                                    
                                      }
                                 {/* {type == 'odds' ? 
                                   item?.totalStakes
@@ -139,7 +141,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                                  ? item?.markets?.[0]?.totalStakes : '-' : matchBetsData?.bookmakersOdds?.[0]?.selectionName == item?.markets?.[0]?.market ? item?.markets?.[0]?.totalStake : '-'} */}
                               </td>
                               <td className="font-semibold p-2 border text-nowrap text-center">
-                              {(item?.markets?.[1]?.market ==  matchBetsData?.matchodds?.[1]?.runnerName )
+                              {(item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName ) || (item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[1]?.runnerName)
                                  || (matchBetsData?.bookmakersOdds?.[1]?.selectionName  == item?.markets?.[1]?.market )
                                   ? 
                                   item?.markets?.[1]?.totalStake ? item?.markets?.[1]?.totalStake.toFixed(2)  : '0.00'
@@ -152,6 +154,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                                     :'0.00'
                                      }
                                 </td>
+                              
                             </tr>
                           )
                         })

@@ -256,7 +256,7 @@ const EventProfitLoss = ({ Userid }) => {
                               : "text-green-500"
                           }`}
                         >
-                          {Math.abs(totalData.profitLoss)}
+                          {Math.abs(totalData.profitLoss?.toFixed(2))}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
@@ -267,11 +267,11 @@ const EventProfitLoss = ({ Userid }) => {
                               : "text-green-500"
                           }`}
                         >
-                          {Math.abs(totalData.downlineProfitLoss)}
+                          {Math.abs(totalData.downlineProfitLoss?.toFixed(2))}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm text-center font-medium">
-                        {totalData.commission}
+                        {totalData.commission?.toFixed(2)}
                       </td>
                     </tr>
                   </tfoot>

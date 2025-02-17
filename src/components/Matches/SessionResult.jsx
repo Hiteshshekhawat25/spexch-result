@@ -49,11 +49,7 @@ const SessionResult = () => {
   };
 
   const handleRevertCoins = async (marketId) => {
-    // console.log("selectedSession", selectedSession, tempResult);
-    // if (!selectedSession || !tempResult) {
-    //   toast.error("Please select a match & session and enter a result.");
-    //   return;
-    // }
+   
     console.log("selectedMatch, marketId",selectedMatch, marketId);
     try {
       await RevertSessionCoins(selectedMatch, marketId);
@@ -68,11 +64,7 @@ const SessionResult = () => {
 
 
   const handleTransferCoins = async (marketId) => {
-    // console.log("selectedSession", selectedSession, tempResult);
-    // if (!selectedSession || !tempResult) {
-    //   toast.error("Please select a match & session and enter a result.");
-    //   return;
-    // }
+   
     try {
       await transferSessionCoins(selectedMatch, marketId);
       toast.success("transfer successfully!");
@@ -81,6 +73,10 @@ const SessionResult = () => {
       toast.error("Failed to update the session result. Please try again.");
     }
   };
+
+
+console.log({sessions},'sessions')
+ 
 
   const handleMatchSelectFocus = async () => {
     if (matchList.length > 0) return;
@@ -300,15 +296,23 @@ const SessionResult = () => {
                       {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
                       <td className="px-4 py-2">{session.marketTime}</td>
                       <td className="px-4 py-2">
-                        <button
-                          className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                    {!session?.transferredCoin ?  
+                       <button
+                          className="px-4 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 "
                           onClick={() => handleTransferCoins(session.marketId)}
-                          disabled={
-                            !session?.result || session?.transferredCoin
-                          }
+                         
                         >
                           Transfer coins
                         </button>
+                        :
+                        <button
+                          className="px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-blue-600 "
+                          onClick={() => handleRevertCoins(session.marketId)}
+                         
+                        >
+                          Revert coins
+                        </button>
+                        }
                       </td>
                     </tr>
                   ))

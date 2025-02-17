@@ -306,7 +306,7 @@ const BetList = ({ Userid }) => {
                             {item.oddsRequested}
                           </td>
                           <td className="border border-gray-400 px-4 py-3 font-bold">
-                            {item.stake}
+                            {item.stake?.toFixed(2)}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
                             {new Date(item.placeTime).toLocaleDateString(

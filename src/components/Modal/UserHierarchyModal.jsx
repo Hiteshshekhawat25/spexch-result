@@ -10,6 +10,7 @@ const UserHierarchyModal = ({ userId, username, closeModal }) => {
   useEffect(() => {
     if (!userId) return;
     const fetchUserData = async () => {
+      console.log('userHeirarchyModal')
       try {
         setLoading(true);
         const response = await getUserData(`user/get-user/${userId}`);

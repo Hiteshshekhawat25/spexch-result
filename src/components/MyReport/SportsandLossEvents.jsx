@@ -171,7 +171,7 @@ const SportsandLossEvents = () => {
                   }}
                 >
                   {item.totalUplineProfitLoss < 0
-                    ? Math.abs(item.totalUplineProfitLoss.toFixed(2))
+                    ? item.totalUplineProfitLoss.toFixed(2)
                     : item.totalUplineProfitLoss.toFixed(2)}
                 </td>
                 <td
@@ -186,13 +186,9 @@ const SportsandLossEvents = () => {
                 </td>
                 <td
                   className="px-4 py-2 text-center"
-                  style={{
-                    color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
-                  }}
+                  
                 >
-                  {item.totalCommission < 0
-                    ? Math.abs(item.totalCommission.toFixed(2))
-                    : item.totalCommission.toFixed(2)}
+                  {item?.totalCommission}
                 </td>
               </tr>
             ))}

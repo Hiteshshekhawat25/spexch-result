@@ -10,8 +10,9 @@ const initialState = {
 
 export const fetchMarketBets = createAsyncThunk('marketBets', async (matchId)=> {
   try {
+
     const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${BASE_URL}/user/marketBetHistory?matchId=${matchId}`, {
+    const response = await axios.get(`${BASE_URL}/user/marketBetHistory?page=${matchId.page}&matchId=${matchId.gameId}${matchId.search ? `&search=${matchId.search}` : ''}`, {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json",
