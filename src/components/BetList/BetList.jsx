@@ -11,6 +11,7 @@ import UserHierarchyModal from "../Modal/UserHierarchyModal";
 
 import BetListFilter from "./BetListFilter";
 import { ClipLoader } from "react-spinners";
+import { searchbetList } from "../../Services/Downlinelistapi";
 
 const BetList = ({ Userid }) => {
   const dispatch = useDispatch();
@@ -28,8 +29,10 @@ const BetList = ({ Userid }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectedUsername, setSelectedUsername] = useState(null);
+  const [roleId, setRoleId] = useState("");
   const [hoverTimeout, setHoverTimeout] = useState(null);
-
+  const [searchData, setSearchData] = useState([]);
+  console.log("Userid", Userid);
 
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [sortConfig, setSortConfig] = useState({
@@ -51,10 +54,11 @@ const BetList = ({ Userid }) => {
     setCurrentPage(1);
   }, [data, filters]);
 
-  const handleSearchChange = (e) => {
-    setSearchTerm(e.target.value);
-    setCurrentPage(1);
-  };
+  // const handleSearchChange = (e) => {
+  //   setSearchTerm(e.target.value);
+  //   setCurrentPage(1);
+  // };
+  const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
   const handleEntriesChange = (e) => {
     setEntriesToShow(Number(e.target.value));
@@ -119,7 +123,26 @@ const BetList = ({ Userid }) => {
   });
 
   useEffect(() => {}, [currentPage]);
-  
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      handleSearch();
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const handleSearch = async () => {
+    if (searchTerm?.length) {
+      try {
+        const res = await searchbetList(
+          `user/get-bet-list?page=1&limit=10&search=${searchTerm}`
+        );
+        setSearchData(res?.data?.data);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   return (
     <div className="p-4">
@@ -266,9 +289,9 @@ const BetList = ({ Userid }) => {
                     </tr>
                   </thead>
 
-                  <tbody className="text-center">
-                    {sortedData.length > 0 ? (
-                      sortedData.map((item, index) => (
+                  {/* <tbody className="text-center">
+                  {(searchData.length > 0 ? searchData : sortedData).length > 0 ? (
+    (searchData.length > 0 ? searchData : sortedData).map((item, index) => (
                         <tr key={index}>
                           <td
                            onMouseEnter={() => handleMouseEnter(item)}
@@ -353,6 +376,176 @@ const BetList = ({ Userid }) => {
                           className="border border-gray-400 px-4 py-3"
                         >
                           No data !
+                        </td>
+                      </tr>
+                    )}
+                  </tbody> */}
+                  <tbody className="text-center">
+                    {searchData.length > 0 ? (
+                      // If search results exist, display searchData
+                      searchData.map((item, index) => (
+                        <tr key={index}>
+                          <td
+                            onMouseEnter={() => handleMouseEnter(item)}
+                            onMouseLeave={handleMouseLeave}
+                            onClick={() => {
+                              setSelectedUserId(item.createdBy);
+                              setSelectedUsername(item.username);
+                              setIsModalOpen(true);
+                            }}
+                            className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+                          >
+                            {item.username}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.sport}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.event}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.market}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.selection}
+                          </td>
+                          <td
+                            className={`border border-gray-400 px-4 py-3 font-bold ${
+                              item.type === "no" ? "text-red-600" : "text-blue"
+                            }`}
+                          >
+                            {item.type === "no" ? "Lay" : "Back"}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.oddsRequested}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3 font-bold">
+                            {item.stake?.toFixed(2)}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {new Date(item.placeTime).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )}{" "}
+                            {new Date(item.placeTime).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {new Date(item.settleTime).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )}{" "}
+                            {new Date(item.settleTime).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    ) : sortedData.length > 0 ? (
+                      // If no search results but sortedData exists, display sortedData
+                      sortedData.map((item, index) => (
+                        <tr key={index}>
+                          <td
+                            onMouseEnter={() => handleMouseEnter(item)}
+                            onMouseLeave={handleMouseLeave}
+                            onClick={() => {
+                              setSelectedUserId(item.createdBy);
+                              setSelectedUsername(item.username);
+                              setIsModalOpen(true);
+                            }}
+                            className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+                          >
+                            {item.username}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.sport}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.event}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.market}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.selection}
+                          </td>
+                          <td
+                            className={`border border-gray-400 px-4 py-3 font-bold ${
+                              item.type === "no" ? "text-red-600" : "text-blue"
+                            }`}
+                          >
+                            {item.type === "no" ? "Lay" : "Back"}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {item.oddsRequested}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3 font-bold">
+                            {item.stake?.toFixed(2)}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {new Date(item.placeTime).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )}{" "}
+                            {new Date(item.placeTime).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )}
+                          </td>
+                          <td className="border border-gray-400 px-4 py-3">
+                            {new Date(item.settleTime).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "2-digit",
+                                year: "numeric",
+                              }
+                            )}{" "}
+                            {new Date(item.settleTime).toLocaleTimeString(
+                              "en-US",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: true,
+                              }
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td
+                          colSpan="10"
+                          className="border border-gray-400 px-4 py-3"
+                        >
+                          No data found!
                         </td>
                       </tr>
                     )}
