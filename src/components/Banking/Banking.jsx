@@ -236,11 +236,11 @@ const Banking = () => {
             : item
         );
 
-        dispatch(setDownlineData(updatedDownlineData)); // Automatically update Redux store
+        dispatch(setDownlineData(updatedDownlineData));
       })
       .catch((error) => {
         toast.error(
-          error.message || `Error processing transaction for ${data.userId}.`, {
+          error || `Error processing transaction for ${data.userId}.`, {
             autoClose: 5000, 
           }
         );
