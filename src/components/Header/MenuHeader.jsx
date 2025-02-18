@@ -81,6 +81,10 @@ const MenuHeader = () => {
         link: "/GlobalSettings",
       },
       {
+        name: "Casino Settings",
+        link: "/CasinoSettings",
+      },
+      {
         name: "Logout",
         link: "#",
         onClick: handleLogout,

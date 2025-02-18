@@ -39,6 +39,8 @@ import SportsandLossEvents from "../components/MyReport/SportsandLossEvents";
 import MatchProfitandLoss from "../components/MyReport/MatchProfitandLoss";
 import ProfitLossUser from "../components/MyReport/ProfitLossUser";
 import BetHistory from "../components/MyReport/BetHistory";
+import Casino from "../components/casino/Casino";
+import GamesList from "../components/casino/GamesList";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -144,6 +146,26 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <SuperAdminForm />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+       <Route
+        path={ROUTES_CONST.CasinoSettings}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <Casino/>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+       <Route
+        path={`${ROUTES_CONST.CasinoGamesList}/:id`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <GamesList/>
             </LayoutHeader>
           </ProtectedRoutes>
         }

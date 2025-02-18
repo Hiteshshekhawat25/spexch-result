@@ -39,6 +39,8 @@ import { userBookReducer } from './Slice/UserBookSlice';
 import { liabilityReducer } from './Slice/liabilitySlice';
 import { matchListReducer } from './Slice/matchlistGameIdSlice';
 import {  masterBookReducer } from './Slice/masterListSlice';
+import { casinoProvidersReducer } from './Slice/casinoProvidersSlice';
+import { casinoListReducer } from './Slice/CasinoListSlice';
 
 
 export const store = configureStore({
@@ -80,7 +82,9 @@ export const store = configureStore({
     userBookList : userBookReducer,
     liability : liabilityReducer,
     matchlist : matchListReducer,
-    masterBook : masterBookReducer
+    masterBook : masterBookReducer,
+    casinoProviders : casinoProvidersReducer,
+    CasinoList : casinoListReducer
   },
 });
 
