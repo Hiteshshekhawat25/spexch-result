@@ -280,7 +280,6 @@ export const performTransaction = async (transactionType, data, token) => {
   if (!apiUrl) {
     throw new Error("Invalid transaction type.");
   }
-
   try {
     const response = await axios.post(apiUrl, data, {
       headers: {
@@ -288,9 +287,8 @@ export const performTransaction = async (transactionType, data, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    return response.data; // Return API response data
+    return response.data;
   } catch (error) {
-    // Return error message
     throw error.response?.data?.message || "An error occurred while processing the transaction.";
   }
 };
@@ -361,6 +359,30 @@ export const getGameActionStatus = async (token, userId) => {
 
 // GET with Authorization for Create New Match
 export const searchDownline = async (url) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const response = await axios.get(`${BASE_URL}/${url}`, {
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear(); // Clear localStorage if token is invalid
+      toast.error("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+  }
+};
+//get search for betlist
+export const searchbetList = async (url) => {
   const token = localStorage.getItem("authToken");
 
   try {
