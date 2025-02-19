@@ -17,6 +17,39 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
   }
 
 
+  const returnExposerAmount = (sid) => {
+    let total = 0;
+    let wintotal = 0;
+    let amounttotal = 0;
+    // if (openBets?.length > 0) {
+      const marketData = userBookList;
+      for (let i = 0; i < marketData?.length; i++) {
+        if (marketData?.[i]?.selectionId == sid) {
+          if (marketData?.[i]?.type === "back") {
+            console.log(marketData?.[i]?.type,'marketData?.[i]?.selectionId1')
+            wintotal += marketData?.[i]?.potentialWin
+          } else {
+            console.log(marketData?.[i]?.type,'marketData?.[i]?.selectionId2')
+            wintotal -= marketData?.[i]?.amount
+          }
+        } else {
+          if (marketData?.[i]?.type === "back") {
+            console.log(marketData?.[i]?.type,'marketData?.[i]?.selectionId3')
+            amounttotal -= marketData?.[i]?.amount
+          } else {
+            console.log(marketData?.[i]?.type,'marketData?.[i]?.selectionId4')
+            amounttotal += marketData?.[i]?.potentialWin
+          }
+        }
+
+        console.log(wintotal , amounttotal,'wintotal + amounttotal123444')
+      }
+      total = wintotal + amounttotal
+      return total
+    // }
+  }
+
+
   const getUserList=()=>{
     dispatch(fetchUserBook({page : 1,limit : 100,type : type,matchId : gameId}))
   }
@@ -26,7 +59,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
 
     console.log({data},'data')
     data.forEach(bet => {
-        const { username, market, stake, profitLoss,role_name ,_id} = bet;
+        const { username, market, stake, profitLoss,role_name ,_id, selectionId} = bet;
 
         // If the user doesn't exist in mergedData, create an entry
         if (!mergedData[username]) {
@@ -42,10 +75,11 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
         }
         
         // Sum the stake and profitLoss for the combined user and market
-        mergedData[username][market].role = role_name
-        mergedData[username][market]._id = _id
+        mergedData[username][market].role = role_name;
+        mergedData[username][market].selectionId = selectionId;
+        mergedData[username][market]._id = _id;
         mergedData[username][market].totalStake += stake;
-        mergedData[username][market].totalProfitLoss += profitLoss;
+        mergedData[username][market].totalProfitLoss = returnExposerAmount(selectionId);
       });
       
       // Convert the merged data into an array of objects
@@ -57,6 +91,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
             totalStake: markets[market].totalStake,
             role : markets[market].role,
             _id :  markets[market]._id,
+            selectionId :  markets[market].selectionId,
             totalProfitLoss: markets[market].totalProfitLoss
           }));
         
@@ -95,7 +130,6 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                       <th>Role</th>
                       <th>{matchBetsData?.matchodds?.[0]?.runnerName  ? matchBetsData?.matchodds?.[0]?.runnerName : matchBetsData?.bookmakersOdds?.[0]?.selectionName}</th>
                       <th>{matchBetsData?.matchodds?.[1]?.runnerName ? matchBetsData?.matchodds?.[1]?.runnerName : matchBetsData?.bookmakersOdds?.[1]?.selectionName}</th>
-                     
                     </tr>
                     {
                       userBookList?.length ?
@@ -106,51 +140,52 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                             <tr key={item?._id}>
                               <td className="font-semibold p-2 border text-nowrap text-center text-lightblue" 
                               onClick={()=>{
-                                if(book !== 'user'){
                                 if(item?.markets?.[0]?.role == 'master'){
                                   setUserId(item?.markets?.[0]?._id)
                                 }else {
                                   getUserList()
                                 }
-                                }}
+                                }
                                 }>
                                 {item?.username}
                               </td>
                               <td className="font-semibold p-2 border text-nowrap text-center">
                                 {item?.markets?.[0]?.role == 'master' ? 'MASTER' : item?.markets?.[0]?.role == 'agent' ? 'AGENT' : 'USER'}
                               </td>
-                              <td className="font-semibold p-2 border text-nowrap text-center">
+                              <td className={`font-semibold p-2 border text-nowrap text-center ${ returnExposerAmount(item?.markets?.[0]?.selectionId) < 0 ? 'text-red-600' : 'text-green-500'}`}>
                                 {(item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName ) ||(item?.markets?.[1]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName)
                                  || 
                                  (matchBetsData?.bookmakersOdds?.[0]?.selectionName  == item?.markets?.[0]?.market )
                                   ? 
-                                  item?.markets?.[0]?.totalStake ? item?.markets?.[0]?.totalStake.toFixed(2)  : '0.00'
+                                  returnExposerAmount(item?.markets?.[0]?.selectionId)
                                   :
                                   ( item?.markets?.[1]?.market ==  matchBetsData?.matchodds?.[1]?.runnerName) || (matchBetsData?.bookmakersOdds?.[1]?.selectionName  == item?.markets?.[1]?.market) 
                                   ? 
-                                  item?.markets?.[0]?.totalStake
+                                  returnExposerAmount(item?.markets?.[0]?.selectionId)
                                    ?
-                                    item?.markets?.[0]?.totalStake.toFixed(2)  : item?.markets?.[0]?.totalStake ?  item?.markets?.[0]?.totalStake : '0.00'
+                                    item?.markets?.[0]?.totalStake.toFixed(2)  : returnExposerAmount(item?.markets?.[0]?.selectionId) ?  returnExposerAmount(item?.markets?.[0]?.selectionId) : '0.00'
                                     :'0.00'
                                     
                                      }
+
+                                    
                                 {/* {type == 'odds' ? 
                                   item?.totalStakes
  
                                 }
                                  ? item?.markets?.[0]?.totalStakes : '-' : matchBetsData?.bookmakersOdds?.[0]?.selectionName == item?.markets?.[0]?.market ? item?.markets?.[0]?.totalStake : '-'} */}
                               </td>
-                              <td className="font-semibold p-2 border text-nowrap text-center">
+                              <td className={`font-semibold p-2 border text-nowrap text-center ${ returnExposerAmount(item?.markets?.[1]?.selectionId) < 0 ? 'text-red-600' : 'text-green-500'}`}>
                               {(item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[0]?.runnerName ) || (item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[1]?.runnerName)
                                  || (matchBetsData?.bookmakersOdds?.[1]?.selectionName  == item?.markets?.[1]?.market )
                                   ? 
-                                  item?.markets?.[1]?.totalStake ? item?.markets?.[1]?.totalStake.toFixed(2)  : '0.00'
+                                  returnExposerAmount(item?.markets?.[1]?.selectionId) ? returnExposerAmount(item?.markets?.[1]?.selectionId)  : '0.00'
                                   :
                                   ( item?.markets?.[0]?.market ==  matchBetsData?.matchodds?.[1]?.runnerName) || (matchBetsData?.bookmakersOdds?.[1]?.selectionName  == item?.markets?.[0]?.market) 
                                   ? 
-                                  item?.markets?.[0]?.totalStake
+                                  returnExposerAmount(item?.markets?.[1]?.selectionId)
                                    ?
-                                    item?.markets?.[0]?.totalStake.toFixed(2)  : '0.00'
+                                   returnExposerAmount(item?.markets?.[1]?.selectionId)  : '0.00'
                                     :'0.00'
                                      }
                                 </td>

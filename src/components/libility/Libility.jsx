@@ -3,15 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectBetListData, selectBetListError, selectBetListLoading } from '../../Store/Slice/betListSlice';
 import { selectBetListFilter } from '../../Store/Slice/betListFilterSlice';
 import { FaSortDown, FaSortUp } from 'react-icons/fa';
-import ManageBetFilter from './ManageBetFilter';
 import { liabilityBook } from '../../Store/Slice/liabilitySlice';
-import { getCreateNewMatchAPIAuth, getMatchList } from '../../Services/Newmatchapi';
 import RemarkModal from '../marketBetModal/RemarkModal';
 import { DeleteBet, RevertBet } from '../../Services/manageBetapi';
 import Pagination from '../pagination/Pagination';
 import moment from 'moment';
+import LibilityFilter from './LibilityFilter';
 
-function ManageBets({ Userid }) {
+function Libility({ Userid }) {
 
   const dispatch = useDispatch();
   const data = useSelector(selectBetListData);
@@ -182,7 +181,7 @@ function ManageBets({ Userid }) {
 
   return (
     <>
-      <ManageBetFilter
+      <LibilityFilter
         setTotalBets={(total) => setTotalBets(total)}
         setTotalPages={(total) => setTotalPages(total)}
         setBetlistData={handleBetlistUpdate}
@@ -220,16 +219,13 @@ function ManageBets({ Userid }) {
             <thead className="border border-gray-400 bg-gray-300 text-black text-center">
               <tr className="text-center">
                 {[
-                  "",
                   "sportName",
                   "event",
                   "market type",
                   "date",
                   "odds",
-                  // "status",
                   "amount",
                   "potential",
-                  "Actions"
                 ].map((key) => (
                   <th
                     key={key}
@@ -249,17 +245,11 @@ function ManageBets({ Userid }) {
                                   ? "Date"
                                   : key === "odds"
                                     ? "Odds"
-                                    // : key === "status"
-                                    // ? "Bet Status"
                                     : key === "amount"
                                       ? "Amount"
                                       : key === "potential"
                                         ? "Potentialwin"
-                                        : key === "" ?
-                                          <input type='checkbox'
-                                            value='all'
-                                            onChange={handleCheckbox}
-                                          /> : key
+                                        :  key
                           }
                         </span>
                         {key === "" ?
@@ -300,14 +290,7 @@ function ManageBets({ Userid }) {
               {dataLiability?.length > 0 ? (
                 dataLiability.map((item, index) => (
                   <tr key={index}>
-                    <td>
-                      <input
-                        type='checkbox'
-                        checked={checkbox?.includes(item?._id) ? true : false}
-                        value={item?._id}
-                        onChange={handleCheckbox}
-                      />
-                    </td>
+                  
 
                     <td
                       onClick={() => {
@@ -335,9 +318,7 @@ function ManageBets({ Userid }) {
                     <td className="border border-gray-400 px-4 py-3">
                       {item.odds}
                     </td>
-                    {/* <td className="border border-gray-400 px-4 py-3">
-                      {item?.betstatus?.toUpperCase()}
-                    </td> */}
+                   
                     <td
                       className="border border-gray-400 px-4 py-3"
                     >
@@ -346,28 +327,7 @@ function ManageBets({ Userid }) {
                     <td className="border border-gray-400 px-4 py-3">
                       {item.potentialWin.toFixed(2) || 0}
                     </td>
-                    <td className='border border-gray-400  py-3'>
-                      <div className='sm:flex gap-y-2 gap-x-3 justify-center'>
-                        {item?.isDeleted ?
-                          <button className='bg-lightblue text-white px-3 p-1 text-[12px] rounded'
-                            onClick={() => handleRevertBet(item)}
-                          >
-                            Revert
-                          </button>
-                          :
-                          <button className='bg-red-500 text-white px-3 p-1 text-[12px] rounded'
-                            onClick={() => {
-                              setRemarkModal(true)
-                              setSelectBet(item)
-                            }}
-
-                          >
-                            Delete
-                          </button>
-                        }
-                      </div>
-                    </td>
-
+                   
                   </tr>
                 ))
               ) : (
@@ -410,4 +370,4 @@ function ManageBets({ Userid }) {
   )
 }
 
-export default ManageBets
+export default Libility

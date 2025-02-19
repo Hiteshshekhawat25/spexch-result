@@ -151,8 +151,12 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
+              <div>
+         
+            </div>
             </div>
 
+           
             {/* Right Column */}
             <div className="space-y-4">
               <div>
@@ -194,6 +198,7 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
                   className="w-full p-2 border border-gray-300 rounded-md"
                 />
               </div>
+              
             </div>
           </div>
 

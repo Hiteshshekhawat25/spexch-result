@@ -7,6 +7,8 @@ import { LuRefreshCcw } from 'react-icons/lu';
 import { MdViewHeadline } from 'react-icons/md'
 import { updateCasinoStatus } from '../../Services/casinoServices';
 import { fetchCasinoList } from '../../Store/Slice/CasinoListSlice';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES_CONST } from '../../Constant/routesConstant';
 
 function Casino() {
 
@@ -14,6 +16,7 @@ function Casino() {
     const [i, setI] = useState('');
     const casinoProviders = useSelector((state) => state.casinoProviders)
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     useEffect(() => {
         dispatch(fetchCasinoProviders())
@@ -80,7 +83,8 @@ function Casino() {
                                     </button>
                                     <button className='p-2 shadow-md bg-slate-100 rounded'
                                         onClick={() => {
-                                            dispatch(fetchCasinoList({id:item?._id}))
+                                            dispatch(fetchCasinoList({id:item?._id,page : 1,perPage : 10}))
+                                            navigate(`${ROUTES_CONST.CasinoGamesList}/${item?._id}`)
                                         }}
                                     >
                                         <MdViewHeadline />

@@ -12,7 +12,7 @@ export const fetchCasinoList = createAsyncThunk('CasinoList', async (data)=> {
   
     try {
     const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${BASE_URL}/casino/importgames/${data.id}`, {
+    const response = await axios.get(`${BASE_URL}/casino/importgames/${data.id}?page=${data.page ? data.page : 1}&perPage=${data.perPage ? data.perPage : 10}`, {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json",

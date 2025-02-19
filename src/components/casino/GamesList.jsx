@@ -13,6 +13,8 @@ function GamesList() {
 
     const [active,setActive] = useState(false);
     const { id } = useParams();
+    const [page,setPage] = useState(1)
+    const [perPage,setPerPage] = useState(10)
     const [i,setI] = useState('');
     const casinoGamesList = useSelector((state)=>state.CasinoList)
     const dispatch = useDispatch();
@@ -31,6 +33,12 @@ function GamesList() {
             console.log(error,'error')
         }
     }
+
+    useEffect(()=>{
+        if(id){
+            dispatch(fetchCasinoList({id:id,page : page,perPage : perPage}))
+        }
+    },[id])
 
 
     
@@ -52,13 +60,13 @@ function GamesList() {
                 <th className='border border-slate-400 p-2 bg-slate-200 text-center'>
                     Status
                 </th>
-                <th className='border border-slate-400 p-2 bg-slate-200 text-center'>
+                {/* <th className='border border-slate-400 p-2 bg-slate-200 text-center'>
                     Actions
-                </th>
+                </th> */}
             </tr>
            {casinoGamesList?.data?.map((item,index)=>(
             <tr>
-                <td className='border p-2'>
+                <td className='border max-w-[32px] p-2'>
                     {index+1}
                 </td>
                 <td  className='border p-2 text-center'>
@@ -75,7 +83,7 @@ function GamesList() {
                    />
 
                 </td>
-                <td  className='border p-2'>
+                {/* <td  className='border p-2'>
                     <div className='flex justify-center'>
                     <button className='p-2 shadow-md bg-slate-100 rounded' >
                         <LuRefreshCcw/>
@@ -85,7 +93,7 @@ function GamesList() {
                         <MdViewHeadline/>
                     </button>
                     </div>
-                </td>
+                </td> */}
             </tr>
            ))}
         </table>

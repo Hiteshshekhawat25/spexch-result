@@ -41,6 +41,7 @@ import ProfitLossUser from "../components/MyReport/ProfitLossUser";
 import BetHistory from "../components/MyReport/BetHistory";
 import Casino from "../components/casino/Casino";
 import GamesList from "../components/casino/GamesList";
+import Libility from "../components/libility/Libility";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -156,6 +157,17 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <Casino/>
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+
+       <Route
+        path={ROUTES_CONST.liabilty}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <Libility/>
             </LayoutHeader>
           </ProtectedRoutes>
         }

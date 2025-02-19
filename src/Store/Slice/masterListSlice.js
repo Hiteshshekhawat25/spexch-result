@@ -11,7 +11,7 @@ const initialState = {
 export const fetchmasterBook = createAsyncThunk('masterBook', async (data)=> {
   try {
     const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${BASE_URL}/user/get-user-downline?page=${data.page}&limit=${data.limit}&masterId=${data.masterId}&type=${data.type}`, {
+    const response = await axios.get(`${BASE_URL}/user/get-user-downline?page=${data.page}&limit=${data.limit}&matchId=${data.matchId}&masterId=${data.masterId}&type=${data.type}`, {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json",

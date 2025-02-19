@@ -35,5 +35,6 @@ export const ROUTES_CONST = {
   BetHistory :"/bet-history"  ,
   Commission : "/commissions",
   CasinoSettings : "/casinoSettings",
-  CasinoGamesList : "/casino-games-list"
+  CasinoGamesList : "/casino-games-list",
+  liabilty : '/liability'
 };

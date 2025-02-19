@@ -5,6 +5,7 @@ import { IoLogOutOutline } from "react-icons/io5";
 import { TbTriangleInvertedFilled } from "react-icons/tb";
 import { useDispatch } from "react-redux";
 import { clearUserData } from "../../Store/Slice/userInfoSlice";
+import { ROUTES_CONST } from "../../Constant/routesConstant";
 
 const MenuHeader = () => {
   const [activeMenu, setActiveMenu] = useState(null);
@@ -75,6 +76,10 @@ const MenuHeader = () => {
           { name: "All Matches", link: "/AllMatches" },
           { name: "Session Result", link: "/SessionResult" },
         ],
+      },
+      {
+        name: "Liability",
+        link: ROUTES_CONST.liabilty,
       },
       {
         name: "Global Settings",
