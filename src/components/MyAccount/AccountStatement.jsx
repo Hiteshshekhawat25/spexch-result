@@ -12,7 +12,7 @@ const AccountStatement = ({ Userid }) => {
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [sortConfig, setSortConfig] = useState({
     key: "createdAt",
-    direction: "descending",
+    direction: "ascending",
   });
   const { userData } = useSelector((state) => state.user);
   const handlePageChange = (direction) => {
