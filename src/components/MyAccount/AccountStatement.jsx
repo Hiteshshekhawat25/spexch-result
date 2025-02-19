@@ -34,7 +34,7 @@ const AccountStatement = ({ Userid }) => {
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
-      direction = "descending";
+      direction = "ascending";
     }
     setSortConfig({ key, direction });
   };
