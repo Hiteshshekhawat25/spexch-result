@@ -3,67 +3,58 @@ import axios from "axios";
 import { BASE_URL } from "../../Constant/Api";
 
 const initialState = {
-  data : null,
-  loading : true,
-  error : null
+  data: null,
+  loading: true,
+  error: null
 }
 
-// export const fetchMarketBets = createAsyncThunk('marketBets', async (matchId)=> {
-//   try {
-//     const token = localStorage.getItem("authToken");
-//     const response = await axios.get(`${BASE_URL}/user/marketBetHistory?page=${}&perPage=${}&matchId=${matchId}`, {
-//       //  const response = await axios.get(`${BASE_URL}/user/marketBetHistory?matchId=${matchId}`, {
-//       headers: {
-//         "Content-Type": "application/json; charset=utf-8",
-//         Accept: "application/json",
-//         Authorization: `Bearer ${token}`,
-//       },
-//     });
-//     return response?.data;
-//   } catch (error) {
-//     console.log(error)
-//   }
-// })
 export const fetchMarketBets = createAsyncThunk(
-  'marketBets',
-  async (data) => { // Destructure the arguments
-
-    console.log(data,'matchId')
+  "marketBets",
+  async (data) => {
     try {
       const token = localStorage.getItem("authToken");
-      const response = await axios.get(
-        `${BASE_URL}/user/marketBetHistory?page=${data.page}&perPage=10&matchId=${data.gameId}${data.search ? `&search=${data.search}` : ''}`,
-        {
-          headers: {
-            "Content-Type": "application/json; charset=utf-8",
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+
+      // Construct base URL
+      let url = `${BASE_URL}/user/marketBetHistory?matchId=${data.matchId}&page=${data.page}&perPage=${data.perPage}`;
+
+      // Append search query if available
+      if (data.search) {
+        url += `&search=${encodeURIComponent(data.search)}`;
+      }
+
+      const response = await axios.get(url, {
+        headers: {
+          "Content-Type": "application/json; charset=utf-8",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("Response:", response?.data);
+
       return response?.data;
     } catch (error) {
-      console.log(error);
-      throw error; // Ensure the error is thrown so that the rejected action is dispatched
+      console.error("API Error:", error);
+      throw error;
     }
   }
 );
 export const marketBetSlice = createSlice({
-  name : 'marketBets',
+  name: 'marketBets',
   initialState,
-  extraReducers : (builder) => {
-    builder.addCase(fetchMarketBets.pending, (state)=> {
+  extraReducers: (builder) => {
+    builder.addCase(fetchMarketBets.pending, (state) => {
       state.loading = true
     })
-    builder.addCase(fetchMarketBets.fulfilled, (state, action)=> {
+    builder.addCase(fetchMarketBets.fulfilled, (state, action) => {
       state.loading = false,
-      state.error = null,
-      state.data = action.payload
+        state.error = null,
+        state.data = action.payload
     })
-    builder.addCase(fetchMarketBets.rejected, (state, action)=> {
+    builder.addCase(fetchMarketBets.rejected, (state, action) => {
       state.loading = false,
-      state.error = action.payload,
-      state.data = null
+        state.error = action.payload,
+        state.data = null
     })
   }
 })

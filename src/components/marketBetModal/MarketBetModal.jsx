@@ -1,8 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { fetchMarketBets } from "../../Store/Slice/marketBetsSlice";
 import moment from "moment/moment";
 import UserHistoryModal from "./UserHistoryModal";
+import { debounce } from "lodash";
 
 const MarketBetModal = ({
   matchId,
@@ -15,38 +16,71 @@ const MarketBetModal = ({
 }) => {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.marketBetList);
-  const [currentPage, setCurrentPage] = useState(1); // State for current page
-  const [entriesToShow, setEntriesToShow] = useState(10); // State for entries per page
+  const [currentPage, setCurrentPage] = useState(1);
+  const [entriesToShow, setEntriesToShow] = useState(10);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [prevSearchTerm, setPrevSearchTerm] = useState("");
 
   const handleClose = () => {
     setShow(false);
   };
 
-  console.log(matchId,'matchId')
-  // Fetch data when `show`, `currentPage`, or `entriesToShow` changes
-  useEffect(() => {
-    if (show) {
-      dispatch(fetchMarketBets({ matchId, page: currentPage, perPage: entriesToShow }));
-    }
-  }, [show, currentPage, entriesToShow]);
+  const debouncedSearch = useCallback(
+    debounce((term) => {
+      if (term !== prevSearchTerm) {
+        setCurrentPage(1);
+        setPrevSearchTerm(term);
+        dispatch(
+          fetchMarketBets({
+            matchId,
+            page: 1,
+            perPage: entriesToShow,
+            search: term,
+          })
+        );
+      }
+    }, 500),
+    [dispatch, entriesToShow, matchId, prevSearchTerm]
+  );
 
-  // Handle entries per page change
+  useEffect(() => {
+    let isMounted = true;
+    if (searchTerm === prevSearchTerm) {
+      dispatch(
+        fetchMarketBets({
+          matchId,
+          page: currentPage,
+          perPage: entriesToShow,
+          search: searchTerm,
+        })
+      );
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [matchId, currentPage, entriesToShow, prevSearchTerm]);
+
+  const handleSearch = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+    debouncedSearch(value);
+  };
   const handleEntriesChange = (e) => {
     setEntriesToShow(Number(e.target.value));
-    setCurrentPage(1); // Reset to the first page when entries per page changes
+    setCurrentPage(1);
   };
 
-  // Handle pagination button clicks
   const handlePageChange = (direction) => {
-    if (direction === "first") {
-      setCurrentPage(1);
-    } else if (direction === "last") {
+    if (direction === "first") setCurrentPage(1);
+    else if (direction === "last")
       setCurrentPage(data?.pagination?.totalPages || 1);
-    } else if (direction === "prev" && currentPage > 1) {
+    else if (direction === "prev" && currentPage > 1)
       setCurrentPage(currentPage - 1);
-    } else if (direction === "next" && currentPage < (data?.pagination?.totalPages || 1)) {
+    else if (
+      direction === "next" &&
+      currentPage < (data?.pagination?.totalPages || 1)
+    )
       setCurrentPage(currentPage + 1);
-    }
   };
 
   return (
@@ -103,6 +137,8 @@ const MarketBetModal = ({
                           id="search"
                           type="text"
                           className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
+                          value={searchTerm}
+                          onChange={handleSearch}
                         />
                       </div>
                     </div>
@@ -231,14 +267,18 @@ const MarketBetModal = ({
                   <button
                     onClick={() => handlePageChange("next")}
                     className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                    disabled={currentPage === (data?.pagination?.totalPages || 1)}
+                    disabled={
+                      currentPage === (data?.pagination?.totalPages || 1)
+                    }
                   >
                     Next
                   </button>
                   <button
                     onClick={() => handlePageChange("last")}
                     className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                    disabled={currentPage === (data?.pagination?.totalPages || 1)}
+                    disabled={
+                      currentPage === (data?.pagination?.totalPages || 1)
+                    }
                   >
                     Last
                   </button>

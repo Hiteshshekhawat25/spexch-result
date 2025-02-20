@@ -109,7 +109,7 @@ export const AddMasterForm = ({ closeModal }) => {
     }
   };
 
-  // Validatio
+  // Validation
   const validate = () => {
     const newErrors = {};
     if (!formData.username.trim()) {
@@ -227,9 +227,8 @@ export const AddMasterForm = ({ closeModal }) => {
         });
         toast.success(response?.data?.message || "Master created Successfully");
         handleCloseModal();
+        window.location.reload();
         dispatch(setStartFetchData());
-        // setTimeout(() => {
-        // }, 2000);
       } else {
         toast.error(
           response?.response?.data?.message || "Failed to save master."
@@ -324,12 +323,14 @@ export const AddMasterForm = ({ closeModal }) => {
                   Select Role
                 </option>
                 {role
-                  ?.filter(
-                    ({ role_name }) =>
-                      (userData?.data?.role_name !== "master" ||
-                        role_name !== "master") &&
-                      role_name !== "user"
-                  )
+                  ?.filter(({ role_name }) => {
+                    if (userData?.data?.role_name === "super") {
+                      return role_name === "master" || role_name === "agent"; // Super can assign Master & Agent
+                    } else if (userData?.data?.role_name === "master") {
+                      return role_name === "agent"; // Master can only assign Agent
+                    }
+                    return false; // Default case (if userData is not super/master)
+                  })
                   .map(({ _id, role_name }, index) => (
                     <option key={index} value={_id}>
                       {role_name}

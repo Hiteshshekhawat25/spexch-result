@@ -153,21 +153,21 @@ const Banking = () => {
   const handleSubmitPaymentFunction = (data) => {
     if (!password) {
       toast.error("Please enter the password.", {
-        autoClose: 5000, 
+        autoClose: 5000,
       });
       return;
     }
 
     if (!data.userId) {
       toast.error("Invalid data. Ensure all fields are filled correctly.", {
-        autoClose: 5000, 
+        autoClose: 5000,
       });
       return;
     }
 
     if (!data.depositwithdraw || !data.depositwithdrawStatus) {
       toast.error("Amount is Mandatory", {
-        autoClose: 5000, 
+        autoClose: 5000,
       });
       return;
     }
@@ -175,7 +175,7 @@ const Banking = () => {
     const token = localStorage.getItem("authToken");
     if (!token) {
       toast.error("Token not found. Please log in again.", {
-        autoClose: 5000, 
+        autoClose: 5000,
       });
       return;
     }
@@ -186,8 +186,9 @@ const Banking = () => {
       user.totalBalance < Number(data.depositwithdraw)
     ) {
       toast.error(
-        "Insufficient balance. Withdrawal amount exceeds total balance.", {
-          autoClose: 5000, 
+        "Insufficient balance. Withdrawal amount exceeds total balance.",
+        {
+          autoClose: 5000,
         }
       );
       return;
@@ -204,9 +205,9 @@ const Banking = () => {
       token
     )
       .then((res) => {
-        console.log(res.message,'ppp112221')
+        console.log(res.message, "ppp112221");
         toast.success(res?.message, {
-          autoClose: 5000, 
+          autoClose: 5000,
         });
         setPassword("");
 
@@ -240,8 +241,9 @@ const Banking = () => {
       })
       .catch((error) => {
         toast.error(
-          error || `Error processing transaction for ${data.userId}.`, {
-            autoClose: 5000, 
+          error || `Error processing transaction for ${data.userId}.`,
+          {
+            autoClose: 5000,
           }
         );
       });
@@ -341,7 +343,7 @@ const Banking = () => {
         const token = localStorage.getItem("authToken");
         if (!token) {
           console.error("Token not found. Please log in again.");
-          navigate("/login"); // Redirect to login if token is not found
+          navigate("/"); 
           return;
         }
 
@@ -367,7 +369,7 @@ const Banking = () => {
           );
           if (masterAgentRoles.length > 0) {
             const fetchPromises = masterAgentRoles.map(
-              (role) => fetchDownlineData(1, 10000, role.role_id) // High limit to get all data
+              (role) => fetchDownlineData(1, 10000, role.role_id)
             );
             const results = await Promise.all(fetchPromises);
 
@@ -543,14 +545,18 @@ const Banking = () => {
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
                     {new Intl.NumberFormat("en-IN").format(
-                      item.totalOpeningBalance 
+                      item.totalOpeningBalance
                     )}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(item.totalAvailableBalance)}
+                    {new Intl.NumberFormat("en-IN").format(
+                      item.totalAvailableBalance
+                    )}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
-                    {new Intl.NumberFormat("en-IN").format(item.totalExposureBalance)}
+                    {new Intl.NumberFormat("en-IN").format(
+                      item.totalExposureBalance
+                    )}
                   </td>
                   <td className=" px-4 py-2 text-md text-blue font-semibold flex items-center">
                     {new Intl.NumberFormat("en-IN").format(
@@ -563,10 +569,14 @@ const Banking = () => {
                   </td>
                   <td
                     className={`border border-gray-400 px-4 py-2 text-sm font-bold ${
-                      (item?.totalOpeningBalance - item?.creditReference ) <= 0 ? "text-red-500" : "text-green-500"
+                      item?.totalOpeningBalance - item?.creditReference <= 0
+                        ? "text-red-500"
+                        : "text-green-500"
                     }`}
                   >
-                    {new Intl.NumberFormat("en-IN").format(item?.totalOpeningBalance - item?.creditReference )}
+                    {new Intl.NumberFormat("en-IN").format(
+                      item?.totalOpeningBalance - item?.creditReference
+                    )}
                   </td>
                   <td className="border border-gray-400 px-4 py-2 text-md">
                     <div className="flex items-center space-x-2">

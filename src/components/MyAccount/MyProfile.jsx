@@ -19,12 +19,14 @@ import EditRollingCommissionModal from "../Modal/EditRollingCommisionModal";
 import EditCommissionModal from "../Modal/EditCommisionModal";
 import EditExposureLimitModal from "../Modal/EditExposureLimitModal";
 import { ClipLoader } from "react-spinners";
+import { useNavigate } from "react-router-dom";
 
 const MyProfile = ({ Userid, Role }) => {
   const dispatch = useDispatch();
   const profile = useSelector(selectProfileData);
   const profileStatus = useSelector(selectProfileStatus);
   const profileError = useSelector(selectProfileError);
+  const navigate = useNavigate();
 
   const [isRollingModalOpen, setIsRollingModalOpen] = useState(false);
   const [isAgentRollingModalOpen, setIsAgentRollingModalOpen] = useState(false);
@@ -51,10 +53,7 @@ const MyProfile = ({ Userid, Role }) => {
   
       const fetchProfileData = async () => {
         try {
-          console.log('userHeirarchyModal','=====>>>>>>')
           const response = await getUserData(`user/get-user/${ID}`);
-          console.log("API Response:", response.data);
-          console.log("response for commission", response);
           dispatch(updateProfile(response.data.data));
           dispatch(setRollingCommission(response.data.rollingCommission));
           dispatch(
@@ -85,9 +84,9 @@ const MyProfile = ({ Userid, Role }) => {
     );
   }
 
-  // if (profileStatus === "failed") {
-  //   return <div>Error: {profileError}</div>;
-  // }
+  if (profileStatus === "failed") {
+    navigate('/');
+  }
 
   // Open Rolling Commission modal
   const handleOpenRollingModal = () => {

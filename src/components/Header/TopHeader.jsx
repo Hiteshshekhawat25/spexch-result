@@ -6,7 +6,7 @@ import {
   fetchUserDataSuccess,
 } from "../../Store/Slice/userInfoSlice";
 import { getUserData } from "../../Services/UserInfoApi";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import spexec from "../../assets/spexchlogo.png";
 import { FaSyncAlt } from "react-icons/fa";
 import { MdRefresh } from "react-icons/md";
@@ -16,16 +16,16 @@ const TopHeader = () => {
   const { userData, loading, error } = useSelector((state) => state.user);
   const location = useLocation();
   const navigate = useNavigate();
-  console.log("userData",userData)
+  console.log("userData", userData);
 
   const refreshData = () => {
     dispatch(fetchUserDataStart());
     getUserData()
       .then((data) => {
-        console.error("Error fetching user data: Header", {data});
-        if(data?.status == 403 || data?.status == 401){
-          localStorage.clear()
-          navigate('/')
+        console.error("Error fetching user data: Header", { data });
+        if (data?.status == 403 || data?.status == 401) {
+          localStorage.clear();
+          navigate("/");
         }
         if (data && data.data) {
           dispatch(fetchUserDataSuccess(data));
@@ -34,13 +34,17 @@ const TopHeader = () => {
         }
       })
       .catch((err) => {
-        console.error("Error fetching user data: Header", {err});
+        console.error("Error fetching user data: Header", { err });
         dispatch(fetchUserDataFailure(err.message));
       });
   };
 
   useEffect(() => {
-    if (!userData || !userData.data || Object.keys(userData.data).length === 0) {
+    if (
+      !userData ||
+      !userData.data ||
+      Object.keys(userData.data).length === 0
+    ) {
       refreshData();
     }
   }, [dispatch, location.pathname]);
@@ -49,16 +53,22 @@ const TopHeader = () => {
     <div className="w-full bg-gradient-blue text-white md:py-6 py-4 md:px-4 px-3 lg:px-[35px] flex justify-between items-center">
       <div className="flex items-center justify-between w-full lg:w-auto">
         <div className="text-xl font-bold flex-shrink-0 md:h-[40px] h-[30px]">
-          <img src={spexec} alt="Logo" className="h-full" />
+          <Link to="/">
+            <img src={spexec} alt="Logo" className="h-full" />
+          </Link>
         </div>
         <div className="lg:hidden flex flex-col items-end space-y-1">
           {loading ? (
             <div className="flex items-center">
-              <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Loading...</span>
+              <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">
+                Loading...
+              </span>
               <FaSyncAlt className="text-white animate-spin ml-1" />
             </div>
           ) : error ? (
-            <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Error: {error}</span>
+            <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">
+              Error: {error}
+            </span>
           ) : userData ? (
             <div className="flex flex-col items-end gap-2">
               <div className="flex items-center space-x-1">
@@ -71,7 +81,10 @@ const TopHeader = () => {
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-white rounded-md font-custom font-bold md:text-[16px] text-[14px]">
-                  IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
+                  IRP{" "}
+                  {new Intl.NumberFormat("en-IN").format(
+                    userData?.data?.openingBalance
+                  )}
                 </span>
                 <button
                   onClick={refreshData}
@@ -88,11 +101,15 @@ const TopHeader = () => {
       <div className="hidden lg:flex flex-col lg:flex-row items-center gap-3">
         {loading ? (
           <div className="flex items-center">
-            <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Loading...</span>
+            <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">
+              Loading...
+            </span>
             <FaSyncAlt className="text-white animate-spin ml-1" />
           </div>
         ) : error ? (
-          <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">Error: {error}</span>
+          <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">
+            Error: {error}
+          </span>
         ) : userData ? (
           <>
             <div className="flex items-center gap-1 mb-1 lg:mb-0">
@@ -105,7 +122,10 @@ const TopHeader = () => {
             </div>
             <div className="flex items-center gap-2">
               <span className="text-white rounded-md font-custom font-bold">
-                IRP {new Intl.NumberFormat("en-IN").format(userData?.data?.openingBalance)}
+                IRP{" "}
+                {new Intl.NumberFormat("en-IN").format(
+                  userData?.data?.openingBalance
+                )}
               </span>
               <button
                 onClick={refreshData}
@@ -123,9 +143,3 @@ const TopHeader = () => {
 };
 
 export default TopHeader;
-
-
-
-
-
-

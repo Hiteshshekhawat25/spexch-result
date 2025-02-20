@@ -8,35 +8,29 @@ import axios from 'axios';
 // Function to perform the login API call
 export const loginUser = async (username, password) => {
   try {
-    // Ensure the URL is correctly interpolated
     const response = await fetch(`${BASE_URL}/user/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       
-      body: JSON.stringify({ username, password }), // Send the data as a JSON string
+      body: JSON.stringify({ username, password }),
       
     });
 
-    // Check if the response status is okay (status 200-299)
     if (!response.ok) {
-      // Optionally log the response for debugging
       const errorData = await response.json();
       console.error("Error Response:", errorData);
       throw new Error(errorData.message || 'Invalid username or password');
     }
 
-    // Parse the successful response
     const data = await response.json();
     console.log("login user new",data);
-    return data; // Returns user data if successful
+    return data; 
 
   } catch (error) {
-    // Log the error to the console for debugging
     console.error("Login error:", error);
 
-    // Rethrow the error to be handled by the caller
     throw error;
   }
 };
@@ -50,7 +44,6 @@ export const saveClientApi = async (endpoint, body, token, role) => {
         role: role,
       },
     });
-    // console.log("Res", res);
 
     if (res.data.success === false) {
       toast.error(res.data.message, {
