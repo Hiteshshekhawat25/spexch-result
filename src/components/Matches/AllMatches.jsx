@@ -18,6 +18,7 @@ import EditStakeModal from "../Modal/EditStakeModal";
 import EditMatchModal from "../Modal/EditMatchModal";
 import ScoreModal from "../Modal/ScoreModal";
 import { toast } from "react-toastify";
+import TossModal from "../Modal/TossModal";
 
 const AllMatches = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const AllMatches = () => {
   const [sportsOptions, setSportsOptions] = useState([]);
   const [isStakeModalOpen, setIsStakeModalOpen] = useState(false);
   const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
+  const [tossModal,setTossModal] = useState(false);
   const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -196,6 +198,7 @@ const AllMatches = () => {
 
   const closeModals = () => {
     setIsStakeModalOpen(false);
+    setTossModal(false)
     setIsMatchModalOpen(false);
     setIsScoreModalOpen(false); // Close the Score Modal
     setSelectedMatch(null);
@@ -230,6 +233,9 @@ const AllMatches = () => {
       {isScoreModalOpen && (
         <ScoreModal match={selectedMatch} onCancel={closeModals} />
       )}{" "}
+      {tossModal && (
+      <TossModal match={selectedMatch} onCancel={closeModals}/>
+      )}
       {/* Score Modal */}
       <div className="bg-gray-200 text-center py-2 mb-6">
         <h1 className="text-2xl font-custom">ALL Matches</h1>
@@ -337,6 +343,14 @@ const AllMatches = () => {
                             onClick={() => openMatchModal(match)}
                             className="text-white bg-lightblue p-1 rounded-full cursor-pointer size-7"
                           />
+                          <div className="p-[2px] h-7 text-center text-white font-bold w-7 rounded-full bg-gradient-green2" 
+                          onClick={()=>{
+                            setTossModal(true)
+                          setSelectedMatch(match)
+                          }}
+                          >
+                            T
+                          </div>
                         </div>
                       </div>
                     </td>

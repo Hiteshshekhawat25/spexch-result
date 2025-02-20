@@ -70,7 +70,8 @@ const MarketAnalysisInner = () => {
   const check = (enteries) => {
     const [entry] = enteries
     const data = structuredClone(backBets?.data);
-    if ((entry.isIntersecting == true) && (data?.length >= 10) && (currentPage < backBets?.pagination?.totalPages)) {
+    console.log(entry.isIntersecting == true , data?.length >= 10 ,'(entry.isIntersecting == true) && (data?.length >= 10)')
+    if ((entry.isIntersecting == true) && (data?.length >= 10) ) {
       setPages((pre) => ({ ...pre, viewBet: pages.viewBet + 1 }))
     }
   }
@@ -174,7 +175,7 @@ const MarketAnalysisInner = () => {
 
   useEffect(() => {
     if (showUserBook) {
-      dispatch(fetchmasterBook({ page: 1, limit: 100, type: type, masterId: userId ? userId : userDetails?._id }))
+      dispatch(fetchmasterBook({ page: 1, limit: 100, type: type, masterId: userId ? userId : userDetails?._id ,matchId : gameId}))
     }
   }, [showUserBook, userId])
 
@@ -196,7 +197,7 @@ const MarketAnalysisInner = () => {
     return () => {
       if (infiniteLoadRef.current) observer.unobserve(infiniteLoadRef.current)
     }
-  }, [backBets?.data?.length])
+  }, [backBets?.data?.length,infiniteLoadRef.current])
 
   console.log(backBets, 'ppppppppppppppppppppp')
 
@@ -342,7 +343,10 @@ const MarketAnalysisInner = () => {
             <div className="flex">
               <div className="flex  gap-1.5 items-center">
                 <label htmlFor="liveBets">Live Bets</label>
-                <input type="checkbox" className="hidden" id="liveBets" checked={liveBets} onChange={() => setLiveBets(!liveBets)} />
+                <input type="checkbox" className="hidden" id="liveBets" checked={liveBets} onChange={() => {
+                  setLiveBets(!liveBets)
+                  setCurrentPage(1)
+                  }} />
                 <label className={`bg-white cursor-pointer h-[18px] w-[36px] rounded-[3px] flex relative before:absolute before:top-[2px] before:left-[2px] before:w-[calc(18px_-_4px)] before:h-[calc(100%_-_4px)] before:ease-in-out before:transition-all before:duration-300 before:rounded-[3px] before:shadow before:border before:border-gray-400 ${liveBets ? 'before:!left-[20px] before:bg-green-600 before:border-green-600' : ''}`} htmlFor="liveBets"></label>
               </div>
               <div className="flex gap-1.5 items-center ml-4">

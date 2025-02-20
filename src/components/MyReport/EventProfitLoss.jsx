@@ -204,10 +204,10 @@ const EventProfitLoss = ({ Userid }) => {
                               }}
                             >
                               {item.totalUplineProfitLoss < 0
-                                ? Math.abs(
+                                ? `-${Math.abs(
                                     item.totalUplineProfitLoss.toFixed(2)
-                                  )
-                                : item.totalUplineProfitLoss.toFixed(2)}
+                                  ) + item.totalCommission}`
+                                : item.totalUplineProfitLoss.toFixed(2) + item?.totalCommission}
                             </td>
 
                             <td
@@ -256,7 +256,7 @@ const EventProfitLoss = ({ Userid }) => {
                               : "text-green-500"
                           }`}
                         >
-                          {Math.abs(totalData.profitLoss?.toFixed(2))}
+                          {totalData.profitLoss < 0 ? `-${(Math.abs(totalData.profitLoss?.toFixed(2))+ totalData.commission)}` : (Math.abs(totalData.profitLoss?.toFixed(2))+ totalData.commission) }
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">

@@ -84,9 +84,10 @@ const ProfitLossUser = () => {
           }
         );
         const data = await response.json();
+        console.log({data},'data')
         setProfitLossData(data.data);
-        setTotalEntries(data.total);
-        setTotalPages(data.totalPages);
+        setTotalEntries(data?.pagination?.totalRecords);
+        setTotalPages(data?.pagination?.totalPages);
         setIsDataFetched(true);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -218,7 +219,7 @@ const ProfitLossUser = () => {
                               item.selectionId
                             )
                           }
-                          className="px-4 py-3 text-sm text-center text-blue-400 border-r border-gray-400 cursor-pointer"
+                          className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
                         >
                           {item.username}
                         </td>

@@ -171,8 +171,8 @@ const SportsandLossEvents = () => {
                   }}
                 >
                   {item.totalUplineProfitLoss < 0
-                    ? item.totalUplineProfitLoss.toFixed(2)
-                    : item.totalUplineProfitLoss.toFixed(2)}
+                    ? `-${(Math.abs(item.totalUplineProfitLoss )+ item?.totalCommission)?.toFixed(2)}`
+                    : (Math.abs(item.totalUplineProfitLoss ) + item?.totalCommission)?.toFixed(2)}
                 </td>
                 <td
                   className="px-4 py-2 text-center"

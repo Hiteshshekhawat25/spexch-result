@@ -71,6 +71,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
           }
         }
       }
+      console.log(wintotal , amounttotal,'wintotal + amounttotal')
       total = wintotal + amounttotal
       return total
     // }

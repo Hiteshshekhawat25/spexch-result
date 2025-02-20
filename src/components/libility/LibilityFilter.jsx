@@ -13,7 +13,7 @@ import { liabilityBook } from '../../Store/Slice/liabilitySlice';
 import { matchListBook } from '../../Store/Slice/matchlistGameIdSlice';
 import { fetchSessions } from '../../Store/Slice/SessionSlice';
 
-function ManageBetFilter({
+function LibilityFilter({
   setBetlistData,
   setTotalBets,
   remarkModal,
@@ -244,7 +244,7 @@ function ManageBetFilter({
               {loading ? (
                 <option value="">Loading...</option>
               ) : (
-                [{name : 'Active Bets',_id : 'REVERT'},{name : 'Settled Bets',_id : 'settled'}, {name : 'Delete Bets',_id:'DELETED'}].map((sport) => (
+                [{name : 'Active Bets',_id : 'REVERT'}, {name : 'Delete Bets',_id:'DELETED'}].map((sport) => (
                   <option key={sport._id} value={sport._id} className='font-bold'>
                     {sport.name}
                   </option>
@@ -252,19 +252,7 @@ function ManageBetFilter({
               )}
             </select>
           </div>
-              <button disabled={checkbox?.length == 0 || selectFilterData.status == 'DELETED'? true : false}
-               className='bg-red-500  text-[12px] sm:text-sm text-white max-h-12 sm:py-3 disabled:bg-red-400 p-2 sm:px-5 text-center  rounded-md'
-               onClick={handleDeleteBet}
-               >
-                Delete Bets 
-              </button>
-              <button 
-              disabled={checkbox?.length == 0 || selectFilterData.status == 'REVERT' ? true : false} 
-              className='bg-lightblue text-[12px] sm:text-sm max-h-12 text-white p-2 sm:py-3 sm:px-5 disabled:bg-bluehover text-center  rounded-md'
-              onClick={handleRevertBet}
-              >
-                Revert Bets 
-              </button>
+            
             </div>
           </div>
         </div>
@@ -272,4 +260,4 @@ function ManageBetFilter({
   )
 }
 
-export default ManageBetFilter
+export default LibilityFilter

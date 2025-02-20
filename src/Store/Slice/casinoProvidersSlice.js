@@ -8,10 +8,11 @@ const initialState = {
   error : null
 }
 
-export const fetchmasterBook = createAsyncThunk('masterBook', async (data)=> {
+export const fetchCasinoProviders = createAsyncThunk('casinoProviders', async (data)=> {
+  
   try {
     const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${BASE_URL}/user/get-user-downline?page=${data.page}&limit=${data.limit}&matchId=${data.matchId}&masterId=${data.masterId}&type=${data.type}`, {
+    const response = await axios.get(`${BASE_URL}/casino/getproviders`, {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json",
@@ -20,23 +21,23 @@ export const fetchmasterBook = createAsyncThunk('masterBook', async (data)=> {
     });
     return response?.data?.data;
   } catch (error) {
-    console.log(error)
+    console.log(error,'error')
   }
 })
 
-export const masterBookSlice = createSlice({
-  name : 'userBook',
+export const casinoProvidersSlice = createSlice({
+  name : 'casinoProviders',
   initialState,
   extraReducers : (builder) => {
-    builder.addCase(fetchmasterBook.pending, (state)=> {
+    builder.addCase(fetchCasinoProviders.pending, (state)=> {
       state.loading = true
     })
-    builder.addCase(fetchmasterBook.fulfilled, (state, action)=> {
+    builder.addCase(fetchCasinoProviders.fulfilled, (state, action)=> {
       state.loading = false,
       state.error = null,
       state.data = action.payload
     })
-    builder.addCase(fetchmasterBook.rejected, (state, action)=> {
+    builder.addCase(fetchCasinoProviders.rejected, (state, action)=> {
       state.loading = false,
       state.error = action.payload,
       state.data = null
@@ -44,4 +45,4 @@ export const masterBookSlice = createSlice({
   }
 })
 
-export const masterBookReducer = masterBookSlice.reducer
+export const casinoProvidersReducer = casinoProvidersSlice.reducer

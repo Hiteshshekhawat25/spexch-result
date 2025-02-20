@@ -207,7 +207,7 @@ console.log(totalData,'paginatedData')
                               : "text-green-500"
                           }`}
                         >
-                          {Math.abs(row.totalUplineProfitLoss.toFixed(2))}
+                          {Math.abs(row.totalUplineProfitLoss.toFixed(2)) + row.commission}
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
