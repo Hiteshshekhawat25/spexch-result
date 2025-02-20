@@ -131,15 +131,15 @@ const DownlineList = () => {
   };
 
   useEffect(() => {
-      const timer = setTimeout(() => {
-        handleSearch();
-      }, 500);
-      return () => clearTimeout(timer);
+    const timer = setTimeout(() => {
+      handleSearch();
+    }, 500);
+    return () => clearTimeout(timer);
   }, [searchTerm]);
 
   const handleSearch = async () => {
     if (searchTerm?.length) {
-     try {
+      try {
         const res = await searchDownline(
           `user/get-user?page=1&limit=10&search=${searchTerm}&role=${roleId}`
         );
@@ -151,24 +151,24 @@ const DownlineList = () => {
   };
 
   useEffect(() => {
-    if(roleId){
+    if (roleId) {
       const fetchData = async () => {
-        console.log('rrrrrruuuuuunnnnnnnn3')
+        console.log("rrrrrruuuuuunnnnnnnn3");
         try {
           const token = localStorage.getItem("authToken");
           if (!token) {
             console.error("Token not found. Please log in again.");
             return;
           }
-  
+
           dispatch(setLoading(true));
-  
+
           const result = await fetchDownlineData(
             currentPage,
             entriesToShow,
             roleId
           );
-  
+
           if (result && result.data) {
             dispatch(setDownlineData(result.data));
             setTotalUsers(result.pagination?.totalUsers || 0);
@@ -180,8 +180,8 @@ const DownlineList = () => {
           dispatch(setLoading(false));
         }
       };
-  
-        fetchData();
+
+      fetchData();
     }
   }, [
     dispatch,
@@ -199,7 +199,7 @@ const DownlineList = () => {
   useEffect(() => {
     if (location.pathname === "/master-downline-list") {
       const fetchUserRoles = async () => {
-        console.log('rrrrrruuuuuunnnnnnnn2')
+        console.log("rrrrrruuuuuunnnnnnnn2");
         try {
           const token = localStorage.getItem("authToken");
           if (token) {
@@ -214,7 +214,10 @@ const DownlineList = () => {
               const masterAgentRoles = rolesData.filter(
                 (role) =>
                   role.role_name.toLowerCase() === "master" ||
-                  role.role_name.toLowerCase() === "agent"
+                  role.role_name.toLowerCase() === "agent" ||
+                  role.role_name.toLowerCase() === "sub-admin" ||
+                  role.role_name.toLowerCase() === "super"||
+                  role.role_name.toLowerCase() === "white-level"
               );
 
               if (masterAgentRoles.length > 0) {
@@ -256,7 +259,7 @@ const DownlineList = () => {
   useEffect(() => {
     if (location.pathname === "/user-downline-list") {
       const fetchUserRoles = async () => {
-        console.log('rrrrrruuuuuunnnnnnnn1')
+        console.log("rrrrrruuuuuunnnnnnnn1");
         try {
           const token = localStorage.getItem("authToken");
           if (token) {
@@ -429,7 +432,7 @@ const DownlineList = () => {
   const fetchUsers = async () => {
     if (!selectedFilter) return;
     try {
-      const fetchedUsers = await fetchUsersByStatus(selectedFilter,roleId);
+      const fetchedUsers = await fetchUsersByStatus(selectedFilter, roleId);
       setUserList(fetchedUsers);
     } catch (error) {
       console.error("Error fetching users:", error);
@@ -441,7 +444,7 @@ const DownlineList = () => {
   };
 
   useEffect(() => {
-      fetchUsers();
+    fetchUsers();
   }, [selectedFilter]);
 
   const handleDelete = async (item) => {
@@ -501,7 +504,7 @@ const DownlineList = () => {
     }
   };
 
-  console.log({roles,roleId,role},'downlineData')
+  console.log({ roles, roleId, role }, "downlineData");
   return (
     <>
       {loading ? (
@@ -583,17 +586,17 @@ const DownlineList = () => {
                 {/* Search Input */}
                 <div className="flex w-full sm:flex-row sm:items-center sm:space-x-2">
                   <label className="text-sm p-1">Search:</label>
-               {!accountStatus && 
-                  <div className="rounded-md w-full sm:w-28">
-                    <input
-                    id="search"
-                      type="text"
-                      value={searchTerm}
-                      onChange={handleSearchChange}
-                      className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
-                    />
-                  </div>
-                  }
+                  {!accountStatus && (
+                    <div className="rounded-md w-full sm:w-28">
+                      <input
+                        id="search"
+                        type="text"
+                        value={searchTerm}
+                        onChange={handleSearchChange}
+                        className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -825,7 +828,10 @@ const DownlineList = () => {
                         </td>
                         <td
                           className={`border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold ${
-                            (item?.totalOpeningBalance - item?.creditReference ) < 0 ? "text-red-500" : ""
+                            item?.totalOpeningBalance - item?.creditReference <
+                            0
+                              ? "text-red-500"
+                              : ""
                           }`}
                           style={{
                             fontFamily: "Tahoma, Helvetica, sans-serif",
@@ -839,7 +845,10 @@ const DownlineList = () => {
                             : new Intl.NumberFormat("en-IN", {
                                 minimumFractionDigits: 0,
                                 maximumFractionDigits: 2,
-                              }).format(item?.totalOpeningBalance - item?.creditReference )}
+                              }).format(
+                                item?.totalOpeningBalance -
+                                  item?.creditReference
+                              )}
                         </td>
                         {!isMasterDownlineList && (
                           <td
@@ -934,8 +943,8 @@ const DownlineList = () => {
                           </div>
                         </td>
                       </tr>
-                    )))
-                   : (
+                    ))
+                  ) : (
                     <tr>
                       <td colSpan={10} className="text-center p-6">
                         No Data Available
