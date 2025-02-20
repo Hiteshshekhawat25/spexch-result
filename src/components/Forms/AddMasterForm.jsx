@@ -227,9 +227,8 @@ export const AddMasterForm = ({ closeModal }) => {
         });
         toast.success(response?.data?.message || "Master created Successfully");
         handleCloseModal();
+        window.location.reload();
         dispatch(setStartFetchData());
-        // setTimeout(() => {
-        // }, 2000);
       } else {
         toast.error(
           response?.response?.data?.message || "Failed to save master."

@@ -233,9 +233,7 @@ export const AddClientForm = ({ closeModal }) => {
         token
       );
       console.log(response);
-
-      // toast.success(response.data.message || "Client created successfully!");
-      // window.location.reload();
+      window.location.reload();
 
       setTimeout(() => {
         handleCloseModal();
