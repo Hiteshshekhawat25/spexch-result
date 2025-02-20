@@ -163,8 +163,9 @@ const MarketAnalysisInner = () => {
   }, [isCached]);
 
   useEffect(() => {
-      dispatch(fetchMarketBets({ gameId, page: pages.viewBet ,search}))
-    
+    console.log("matchID",gameId)
+      dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+
   }, [liveBets, pages.viewBet,search])
 
   useEffect(() => {
@@ -418,7 +419,12 @@ const MarketAnalysisInner = () => {
         </div>
       </div>
       {/* <MatchRulesModal/> */}
-      <MarketBetModal matchId={gameId} show={showBetsModal} setShow={setShowBetsModal} setShowUser={setShowUser} setSelectedUser={setSelectedUser} />
+      <MarketBetModal matchId={gameId} show={showBetsModal}
+       setShow={setShowBetsModal}
+       setShowUser={setShowUser} 
+       setSelectedUser={setSelectedUser} 
+      //  matchId={gameId}
+       />
       <UserHistoryModal showUser={showUser} setShowUser={setShowUser} selectedUser={selectedUser} />
       <MarketListModal
         showUser={marketListModal}
