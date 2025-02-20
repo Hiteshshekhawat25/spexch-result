@@ -19,23 +19,58 @@ const ActivityLog = ({ Userid }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const totalPages = Math.ceil(totalRecords / entriesToShow);
+  
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userId = userData?.data?._id;
 
-  useEffect(() => {
-    if (Userid) {
-      dispatch(setActivityLogsLoading());
+  // useEffect(() => {
+  //   if (Userid) {
+  //     dispatch(setActivityLogsLoading());
+  //     const fetchActivityLogs = async () => {
+  //       try {
+  //         const response = await getUserData(
+  //           `user/login-activity/${Userid}?page=${currentPage}&limit=${entriesToShow}`
+  //         );
+  //         dispatch(
+  //           setActivityLogs({
+  //             logs: response.data.data,
+  //             totalRecords: response.data.pagination.totalRecords,
+  //             totalPages:
+  //               response.data.pagination.totalPages ||
+  //               Math.ceil(
+  //                 response.data.pagination.totalRecords / entriesToShow
+  //               ),
+  //           })
+  //         );
+  //       } catch (error) {
+  //         dispatch(
+  //           setActivityLogsError(
+  //             error.message || "Failed to fetch activity logs"
+  //           )
+  //         );
+  //       }
+  //     };
 
+  //     fetchActivityLogs();
+  //   }
+  // }, [Userid, currentPage, entriesToShow, dispatch]);
+  console.log("Userid",Userid);
+  console.log("userId",userId);
+  useEffect(() => {
+    const id = Userid || userId;
+  
+    if (id) {
+      dispatch(setActivityLogsLoading());
       const fetchActivityLogs = async () => {
         try {
           const response = await getUserData(
-            `user/login-activity/${Userid}?page=${currentPage}&limit=${entriesToShow}`
+            `user/login-activity/${id}?page=${currentPage}&limit=${entriesToShow}`
           );
           dispatch(
             setActivityLogs({
-              logs: response.data.data,
-              totalRecords: response.data.pagination.totalRecords,
+              logs: response.data.data || 0,
+              totalRecords: response.data.pagination.totalRecords || 0,
               totalPages:
                 response.data.pagination.totalPages ||
                 Math.ceil(
@@ -51,11 +86,10 @@ const ActivityLog = ({ Userid }) => {
           );
         }
       };
-
+  
       fetchActivityLogs();
     }
-  }, [Userid, currentPage, entriesToShow, dispatch]);
-
+  }, [Userid, userId, currentPage, entriesToShow, dispatch]);
   const handleEntriesChange = (event) => {
     setEntriesToShow(Number(event.target.value));
     setCurrentPage(1);
