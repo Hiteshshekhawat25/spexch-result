@@ -18,8 +18,6 @@ const MarketBetModal = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  console.log("matchId",matchId);
-  console.log("dataa in ",data);
 
   const handleClose = () => {
     setShow(false);

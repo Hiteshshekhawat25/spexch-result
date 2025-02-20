@@ -267,6 +267,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type="text"
                 name="username"
+                placeholder="Username.."
                 value={formData.username}
                 onChange={handleChange}
                 required
@@ -293,6 +294,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type="text"
                 name="name"
+                placeholder="Name.."
                 value={formData.name}
                 onChange={handleChange}
                 required
@@ -320,7 +322,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 className="w-full h-8 p-1 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               >
                 <option value="" disabled>
-                  Select Role
+                  Select your A/C. type
                 </option>
                 {role
                   ?.filter(({ role_name }) => {
@@ -400,6 +402,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type="text"
                 name="commission"
+                placeholder="Commission.."
                 value={formData.commission}
                 onChange={handleChange}
                 required
@@ -420,6 +423,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type="text"
                 name="openingBalance"
+                placeholder="Opening Balance.."
                 value={formData.openingBalance}
                 onChange={handleChange}
                 required
@@ -442,6 +446,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type="text"
                 name="creditReference"
+                placeholder="Credit Reference.."
                 value={formData.creditReference}
                 onChange={handleChange}
                 required
@@ -464,6 +469,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type="text"
                 name="mobileNumber"
+                placeholder="Mobile Number.."
                 value={formData.mobileNumber}
                 onChange={handleChange}
                 required
@@ -486,6 +492,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type="text"
                 name="partnership"
+                placeholder="Partnership.."
                 value={formData.partnership}
                 onChange={handleChange}
                 required
@@ -506,6 +513,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
+                placeholder="Password.."
                 value={formData.password}
                 onChange={handleChange}
                 required
@@ -532,6 +540,7 @@ export const AddMasterForm = ({ closeModal }) => {
             <div className="relative flex-1">
               <input
                 type={showConfirmPassword ? "text" : "password"}
+                placeholder="Confirm Password.."
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleChange}
@@ -761,6 +770,7 @@ export const AddMasterForm = ({ closeModal }) => {
             <div className="relative flex-1">
               <input
                 type={showMasterPassword ? "text" : "password"}
+                placeholder="Master Password.."
                 name="masterPassword"
                 value={formData.masterPassword}
                 onChange={handleChange}
