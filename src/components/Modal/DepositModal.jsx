@@ -193,9 +193,9 @@ const DepositModal = ({
           <div className="w-2/3 flex items-center space-x-2">
            <input
       type="text"
-      value={remark || userData?.data?.username || ''}
+      value={remark}
       onChange={(e) => setRemark(e.target.value)}
-      placeholder="Remark..."
+      placeholder="Remark.."
       className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
     />
           </div>

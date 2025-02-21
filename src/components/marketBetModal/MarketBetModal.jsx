@@ -1,9 +1,8 @@
 import { useDispatch, useSelector } from "react-redux";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { fetchMarketBets } from "../../Store/Slice/marketBetsSlice";
 import moment from "moment/moment";
 import UserHistoryModal from "./UserHistoryModal";
-import { debounce } from "lodash";
 
 const MarketBetModal = ({
   matchId,
@@ -19,55 +18,31 @@ const MarketBetModal = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [prevSearchTerm, setPrevSearchTerm] = useState("");
 
   const handleClose = () => {
     setShow(false);
   };
 
-  const debouncedSearch = useCallback(
-    debounce((term) => {
-      if (term !== prevSearchTerm) {
-        setCurrentPage(1);
-        setPrevSearchTerm(term);
-        dispatch(
-          fetchMarketBets({
-            matchId,
-            page: 1,
-            perPage: entriesToShow,
-            search: term,
-          })
-        );
-      }
-    }, 500),
-    [dispatch, entriesToShow, matchId, prevSearchTerm]
-  );
-
   useEffect(() => {
-    let isMounted = true;
-    if (searchTerm === prevSearchTerm) {
-      dispatch(
-        fetchMarketBets({
-          matchId,
-          page: currentPage,
-          perPage: entriesToShow,
-          search: searchTerm,
-        })
-      );
-    }
-    return () => {
-      isMounted = false;
-    };
-  }, [matchId, currentPage, entriesToShow, prevSearchTerm]);
+    dispatch(
+      fetchMarketBets({
+        matchId,
+        page: currentPage,
+        perPage: entriesToShow,
+        search: searchTerm,
+      })
+    );
+  }, [matchId, currentPage, entriesToShow, searchTerm, dispatch]);
 
   const handleSearch = (e) => {
     const value = e.target.value;
     setSearchTerm(value);
-    debouncedSearch(value);
+    setCurrentPage(1); 
   };
+
   const handleEntriesChange = (e) => {
     setEntriesToShow(Number(e.target.value));
-    setCurrentPage(1);
+    setCurrentPage(1); 
   };
 
   const handlePageChange = (direction) => {

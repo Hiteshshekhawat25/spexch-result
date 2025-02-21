@@ -49,6 +49,8 @@ const AddClientButton = () => {
     <div className="flex justify-end items-center gap-2 md:mb-6 mb-4">
       {(roleName === "white-level" ||
         roleName === "master" ||
+        roleName === "super-admin" ||
+        roleName === "sub-admin" ||
         roleName === "super") &&
         location.pathname === "/master-downline-list" && (
           <button

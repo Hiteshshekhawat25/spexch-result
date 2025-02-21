@@ -162,12 +162,13 @@ const CreditEditReferenceModal = ({
             New
           </label>
           <div className="w-full sm:w-2/3 flex items-center space-x-2">
-            <input
-              type="text"
-              value={newCreditRef}
-              onChange={(e) => setNewCreditRef(e.target.value)}
-              className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
-            />
+          <input
+  type="number"
+  value={newCreditRef}
+  onChange={(e) => setNewCreditRef(e.target.value)}
+  min="0"
+  className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
+/>
           </div>
         </div>
   

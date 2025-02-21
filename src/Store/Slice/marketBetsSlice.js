@@ -10,16 +10,16 @@ const initialState = {
 
 export const fetchMarketBets = createAsyncThunk(
   "marketBets",
-  async (data) => {
+  async ({ matchId, page, perPage, search }) => {
     try {
       const token = localStorage.getItem("authToken");
 
       // Construct base URL
-      let url = `${BASE_URL}/user/marketBetHistory?matchId=${data.matchId}&page=${data.page}&perPage=${data.perPage}`;
+      let url = `${BASE_URL}/user/marketBetHistory?matchId=${matchId}&page=${page}&perPage=${perPage}`;
 
       // Append search query if available
-      if (data.search) {
-        url += `&search=${encodeURIComponent(data.search)}`;
+      if (search) {
+        url += `&search=${encodeURIComponent(search)}`;
       }
 
       const response = await axios.get(url, {
@@ -30,7 +30,7 @@ export const fetchMarketBets = createAsyncThunk(
         },
       });
 
-      console.log("Response:", response?.data);
+      console.log("AAPI", response?.data);
 
       return response?.data;
     } catch (error) {
