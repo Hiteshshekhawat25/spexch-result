@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-const BookFancyModal = ({openBets, selectedFancy,matchBetsData,show,setShow}) => {
+const BookFancyModal = ({openBets, selectedFancy,matchBetsData,bookData,show,setShow}) => {
   const dispatch = useDispatch()
   const [bookDataArray, setBookDataArray] = useState([])
 
@@ -147,13 +147,12 @@ const BookFancyModal = ({openBets, selectedFancy,matchBetsData,show,setShow}) =>
   
     if (openBets?.length) {
       // Filter and sort the data
-      const bookData = openBets?.[0]?.betTypesGrouped?.filter((item) =>item?.marketName == selectedFancy)
-        const fancy = matchBetsData?.matchfancies?.filter((item)=>item?.marketName == selectedFancy)  
+      const bookData1 = bookData?.filter((item) =>item?.marketName == selectedFancy)
 
-        console.log({fancy},'yuioop')
-      if (bookData?.length) {
+      if (bookData1?.length) {
         // Calculate the global range
-        const allOdds = bookData.map((item) => Number(item?.potentialWin));
+        const allOdds = bookData.map((item) => Number(item?.fancyOdds));
+        console.log(allOdds,'yuioop')
         const globalLowerBound = Math.min(...allOdds) - 10;
         const globalUpperBound = Math.max(...allOdds) + 10;
         
@@ -212,7 +211,7 @@ const BookFancyModal = ({openBets, selectedFancy,matchBetsData,show,setShow}) =>
   
   
 
-  console.log({openBets,bookDataArray})
+  console.log({openBets,bookDataArray},'fancyprice111')
   
 
   return (
@@ -231,7 +230,7 @@ const BookFancyModal = ({openBets, selectedFancy,matchBetsData,show,setShow}) =>
                 <table className="w-full">
                   <tbody>
                     {
-                      returnRollingCommissionTable(bookDataArray)?.length ? 
+                      returnRollingCommissionTable(bookData)?.length ? 
                       returnRollingCommissionTable(bookDataArray)?.map(item => (
                         <>
                         {

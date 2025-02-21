@@ -100,7 +100,7 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
                 <div className="md:px-4 px-3">
                   <div className="text-xs font-semibold">{item?.selectionName}</div>
                   <div className={`text-[0.625rem] font-semibold ${price > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {price?.toFixed(2) || '0'}
+                    {returnExposerAmount(item?.selectionId)?.toFixed(2)}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

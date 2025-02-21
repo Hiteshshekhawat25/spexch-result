@@ -58,12 +58,14 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
       const marketData = betData?.filter((item) => item?.type === 'odds');
       for (let i = 0; i < marketData?.length; i++) {
         if (marketData?.[i]?.selectionId == sid) {
+          console.log(marketData?.[i]?.potentialWin,'marketData?.[i]?.potentialWin')
           if (marketData?.[i]?.betType === "back") {
             wintotal += marketData?.[i]?.potentialWin
           } else {
             wintotal -= marketData?.[i]?.amount
           }
         } else {
+          console.log(marketData?.[i]?.amount,'marketData?.[i]?.amount')
           if (marketData?.[i]?.betType === "back") {
             amounttotal -= marketData?.[i]?.amount
           } else {
@@ -71,7 +73,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
           }
         }
       }
-      console.log(wintotal , amounttotal,'wintotal + amounttotal')
+      console.log(wintotal , amounttotal,'wintotal + amounttotal55555555555555')
       total = wintotal + amounttotal
       return total
     // }
@@ -81,7 +83,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
 
 
 
-  console.log(returnExposerAmount(),openBets,'matchBetsData123')
+  console.log(betData,'matchBetsData123')
 
   return (
     <>

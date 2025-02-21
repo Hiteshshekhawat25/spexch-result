@@ -21,3 +21,21 @@ export const updateCasinoStatus = async (status, id) => {
         return error
     }
 }
+
+
+
+export const getService=async(resource)=>{
+    try{
+        const token = localStorage.getItem('authToken')
+        const res = await axios.get(`${BASE_URL}${resource}`,{
+            headers:{
+                "Authorization": `Bearer ${token}`,
+                "Content-Type" : "application/json"
+            }
+        })
+        return res
+        
+    }catch(error){
+        console.log({...error})
+    }
+}
