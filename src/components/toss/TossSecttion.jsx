@@ -15,15 +15,15 @@ function TossSection({matchBetsData,setBetData,betData,openBets}) {
         for (let i = 0; i < marketData?.length; i++) {
           if (marketData?.[i]?.selectionId == sid) {
             if (marketData?.[i]?.betType === "back") {
-              wintotal += marketData?.[i]?.potentialWin
+              wintotal -= marketData?.[i]?.potentialWin
             } else {
-              wintotal -= marketData?.[i]?.amount
+              wintotal += marketData?.[i]?.amount
             }
           } else {
             if (marketData?.[i]?.betType === "back") {
-              amounttotal -= marketData?.[i]?.amount
+              amounttotal += marketData?.[i]?.amount
             } else {
-              amounttotal += marketData?.[i]?.potentialWin
+              amounttotal -= marketData?.[i]?.potentialWin
             }
   
           }

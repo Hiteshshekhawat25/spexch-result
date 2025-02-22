@@ -164,14 +164,21 @@ const MarketAnalysisInner = () => {
   }, [isCached]);
 
   useEffect(() => {
-    console.log("matchID",gameId)
-    if(gameId){
-      intervalRef.current = setInterval(() => {
-        dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
-      }, 10000);
+    let timer ;
+    if(gameId && liveBets){
+         timer = setInterval(() => {
+          dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+        }, 5000);
+      
     }
+    return ()=>clearInterval(timer)
+  }, [liveBets,gameId,pages.viewBet,search,backBets?.data?.length])
 
-  }, [liveBets, pages.viewBet,search,gameId])
+  useEffect(()=>{
+    if(gameId){
+      dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+    }
+  },[gameId,liveBets])
 
   useEffect(() => {
     if (showUserBook) {
@@ -204,8 +211,6 @@ const MarketAnalysisInner = () => {
       if (infiniteLoadRef.current) observer.unobserve(infiniteLoadRef.current)
     }
   }, [backBets?.data?.length,infiniteLoadRef.current])
-
-  console.log(backBets, 'ppppppppppppppppppppp')
 
   return (
     <>
@@ -403,7 +408,7 @@ const MarketAnalysisInner = () => {
                   <tbody>
                     {
                       backBets?.data?.length > 0 ? 
-                  arrayFunction()?.map(item => (
+                      backBets?.data?.map(item => (
                           <tr key={item?._id}>
                             <td className={` p-2 border-b border-b-black ${(item?.betType === "back" || item?.betType === "yes") ? 'bg-[#d7e8f4]' : 'bg-[#f6e6ea]'}`}>
                               <div className="flex items-center gap-2">
