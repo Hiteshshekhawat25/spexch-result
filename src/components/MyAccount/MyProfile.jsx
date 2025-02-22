@@ -40,40 +40,39 @@ const MyProfile = ({ Userid, Role }) => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [modalData, setModalData] = useState(null);
 
-  console.log("Userid passed to MyProfile:",profile );
+  console.log("Userid passed to MyProfile:", profile);
   console.log("Role", Role);
 
   const ID = Userid || JSON.parse(localStorage.getItem("userData"))?.data?._id;
   console.log("Final ID being used:", ID);
 
   useEffect(() => {
-    console.log("Setting profile to loading...",Userid);
+    console.log("Setting profile to loading...", Userid);
     // if (Userid) {
-      dispatch(setProfileLoading());
-  
-      const fetchProfileData = async () => {
-        try {
-          const response = await getUserData(`user/get-user/${ID}`);
-          dispatch(updateProfile(response.data.data));
-          dispatch(setRollingCommission(response.data.rollingCommission));
-          dispatch(
-            setAgentRollingCommission({
-              username: response.data.data.username,
-              commissionRates: response.data.agentRollingCommission,
-            })
-          );
-  
-          setModalData(response.data.data);
-        } catch (error) {
-          console.error("Fetch Profile Error:", error);
-          dispatch(
-            setProfileError(error.message || "Failed to fetch profile data")
-          );
-        }
-      };
-  
-      fetchProfileData();
-    // }
+    dispatch(setProfileLoading());
+
+    const fetchProfileData = async () => {
+      try {
+        const response = await getUserData(`user/get-user/${ID}`);
+        dispatch(updateProfile(response.data.data));
+        dispatch(setRollingCommission(response.data.rollingCommission));
+        dispatch(
+          setAgentRollingCommission({
+            username: response.data.data.username,
+            commissionRates: response.data.agentRollingCommission,
+          })
+        );
+
+        setModalData(response.data.data);
+      } catch (error) {
+        console.error("Fetch Profile Error:", error);
+        dispatch(
+          setProfileError(error.message || "Failed to fetch profile data")
+        );
+      }
+    };
+
+    fetchProfileData();
   }, [Userid, dispatch]);
 
   if (profileStatus === "loading") {
@@ -85,7 +84,7 @@ const MyProfile = ({ Userid, Role }) => {
   }
 
   if (profileStatus === "failed") {
-    navigate('/');
+    navigate("/");
   }
 
   // Open Rolling Commission modal

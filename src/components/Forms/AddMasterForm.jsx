@@ -327,7 +327,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 {role
                   ?.filter(({ role_name }) => {
                     if (userData?.data?.role_name === "super-admin") {
-                      return role_name === "sub-admin" ; // Super can assign Master & Agent
+                      return role_name === "sub-admin"; // Super can assign Master & Agent
                     } else if (userData?.data?.role_name === "sub-admin") {
                       return role_name === "white-level"; // Master can only assign Agent
                     } else if (userData?.data?.role_name === "white-level") {

@@ -54,7 +54,7 @@ const MyAccount = () => {
       content = <BetList Userid={Userid} Role={role_name} />;
       break;
     case "profitLoss":
-      content = <EventProfitLoss Userid={Userid}/>;
+      content = <EventProfitLoss Userid={Userid} />;
       break;
     default:
       content = <MyProfile Userid={Userid} Role={role_name} />;

@@ -56,7 +56,7 @@ const MenuHeader = () => {
         { name: "Master Banking", link: "/master-banking" },
       ],
     },
-    { name: "Commission", link: "/commissions" },
+    { name: "Commission", link: "/commission" },
     { name: "Password History", link: "/password-history" },
     { name: "Restore User", link: "/restore-user" },
     // {
@@ -148,8 +148,8 @@ const MenuHeader = () => {
       <div
         className="xl:hidden overflow-x-auto whitespace-nowrap "
         style={{
-          scrollbarWidth: 'none', // For Firefox
-          msOverflowStyle: 'none', // For IE and Edge
+          scrollbarWidth: "none", // For Firefox
+          msOverflowStyle: "none", // For IE and Edge
         }}
         ref={menuWrapperRef}
       >

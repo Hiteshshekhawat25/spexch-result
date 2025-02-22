@@ -343,7 +343,7 @@ const Banking = () => {
         const token = localStorage.getItem("authToken");
         if (!token) {
           console.error("Token not found. Please log in again.");
-          navigate("/"); 
+          navigate("/");
           return;
         }
 
@@ -368,8 +368,8 @@ const Banking = () => {
               role.role_name.toLowerCase() === "agent"
           );
           if (masterAgentRoles.length > 0) {
-            const fetchPromises = masterAgentRoles.map(
-              (role) => fetchDownlineData(1, 10000, role.role_id)
+            const fetchPromises = masterAgentRoles.map((role) =>
+              fetchDownlineData(1, 10000, role.role_id)
             );
             const results = await Promise.all(fetchPromises);
 
@@ -643,43 +643,106 @@ const Banking = () => {
               ))}
             </tbody>
           </table>
-          <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
-            <div className="text-sm text-gray-600">
+          <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+            {/* Showing entries text */}
+            <div className="text-sm text-gray-600 mb-2 sm:mb-0">
               Showing{" "}
               {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
               {Math.min(currentPage * entriesToShow, totalUsers)} of{" "}
               {totalUsers} entries
             </div>
-            <div className="flex space-x-2 sm:ml-auto">
-              <button
-                onClick={() => handlePageChange("first")}
-                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                disabled={currentPage === 1}
-              >
-                First
-              </button>
-              <button
-                onClick={() => handlePageChange("prev")}
-                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                disabled={currentPage === 1}
-              >
-                Previous
-              </button>
-              <button
-                onClick={() => handlePageChange("next")}
-                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                disabled={currentPage === totalPages}
-              >
-                Next
-              </button>
-              <button
-                onClick={() => handlePageChange("last")}
-                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                disabled={currentPage === totalPages}
-              >
-                Last
-              </button>
-            </div>
+
+            {/* Pagination Buttons */}
+            {totalPages > 1 && (
+              <div className="flex space-x-2">
+                {/* First Button */}
+                <button
+                  onClick={() => handlePageChange("first")}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  First
+                </button>
+
+                {/* Previous Button */}
+                <button
+                  onClick={() => handlePageChange("prev")}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => {
+                    if (
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1)
+                    ) {
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                            currentPage === page
+                              ? "bg-gray-200"
+                              : "hover:bg-gray-100"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    } else if (
+                      page === currentPage - 2 ||
+                      page === currentPage + 2
+                    ) {
+                      return (
+                        <span key={page} className="px-3 py-1 text-sm">
+                          ...
+                        </span>
+                      );
+                    }
+                    return null;
+                  }
+                )}
+
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange("next")}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === totalPages
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  Next
+                </button>
+
+                {/* Last Button */}
+                <button
+                  onClick={() => handlePageChange("last")}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === totalPages
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  Last
+                </button>
+              </div>
+            )}
           </div>
 
           <div className="flex flex-col sm:flex-row items-center mt-4 space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 w-full">

@@ -34,34 +34,6 @@ const EventPLFilter = ({
   const { dataSource, fromDate, toDate, fromTime, toTime } =
     eventPLFilterState || {};
 
-  // Set default values when component mounts
-  useEffect(() => {
-    if (!dataSource) dispatch(setDataSource("live"));
-    if (!fromDate) dispatch(setFromDate(today));
-    if (!toDate) dispatch(setToDate(today));
-    if (!fromTime) dispatch(setFromTime("00:00"));
-    if (!toTime) dispatch(setToTime("23:59"));
-  }, [dataSource, fromDate, toDate, fromTime, toTime, dispatch, today]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [entriesToShow, setCurrentPage]);
-
-  useEffect(() => {
-    if (fromDate && toDate) {
-      handleGetPL();
-      setLocalLoadingState(false);
-    }
-  }, [
-    currentPage,
-    fromDate,
-    toDate,
-    fromTime,
-    toTime,
-    dataSource,
-    entriesToShow,
-  ]);
-
   // Function to dynamically calculate date range based on data source
   const getDateRange = (source) => {
     const today = new Date();
@@ -96,13 +68,50 @@ const EventPLFilter = ({
     return { fromDate, toDate };
   };
 
+  // Set default values when component mounts or dataSource changes
+  useEffect(() => {
+    const { fromDate: adjustedFromDate, toDate: adjustedToDate } =
+      getDateRange(dataSource);
+
+    dispatch(setFromDate(adjustedFromDate));
+    dispatch(setToDate(adjustedToDate));
+
+    // Set default times
+    dispatch(setFromTime("00:00"));
+    dispatch(setToTime("23:59"));
+  }, [dataSource, dispatch]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [entriesToShow, setCurrentPage]);
+
+  useEffect(() => {
+    if (fromDate && toDate) {
+      handleGetPL();
+      setLocalLoadingState(false);
+    }
+  }, [
+    currentPage,
+    fromDate,
+    toDate,
+    fromTime,
+    toTime,
+    dataSource,
+    entriesToShow,
+  ]);
+
+  useEffect(() => {
+    dispatch(setDataSource("live"));
+  }, [dispatch]);
+
   const handleGetPL = async () => {
     try {
-      // Get the dynamically calculated date range based on the selected data source
       const { fromDate: adjustedFromDate, toDate: adjustedToDate } =
         getDateRange(dataSource);
 
-      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}${Userid ? `&userId=${Userid}` : ''}`;
+      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}${
+        Userid ? `&userId=${Userid}` : ""
+      }`;
       const response = await getProfitLossData(url);
 
       if (response && response.data) {
@@ -138,42 +147,54 @@ const EventPLFilter = ({
       </div>
 
       <div className="flex flex-col  col-span-8 md:col-span-2  items-start">
-        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">From Date</label>
+        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
+          From Date
+        </label>
         <input
           type="date"
           value={fromDate || today}
           onChange={(e) => dispatch(setFromDate(e.target.value))}
           className="border rounded w-full px-1 py-1 text-sm"
+          disabled={dataSource !== "live"} // Disable if not live data
         />
       </div>
 
       <div className="flex flex-col col-span-4 md:col-span-2 items-start">
-        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">From Time</label>
+        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
+          From Time
+        </label>
         <input
           type="time"
           value={fromTime || "00:00"}
           onChange={(e) => dispatch(setFromTime(e.target.value))}
           className="border w-full rounded px-2 py-1 text-sm"
+          disabled={dataSource !== "live"}
         />
       </div>
 
       <div className="flex flex-col col-span-8 md:col-span-2 items-start">
-        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">To Date</label>
+        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
+          To Date
+        </label>
         <input
           type="date"
           value={toDate || today}
           onChange={(e) => dispatch(setToDate(e.target.value))}
           className="border w-full rounded px-2 py-1 text-sm"
+          disabled={dataSource !== "live"}
         />
       </div>
 
       <div className="flex flex-col  col-span-4 md:col-span-2 items-start">
-        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">To Time</label>
+        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
+          To Time
+        </label>
         <input
           type="time"
           value={toTime || "23:59"}
           onChange={(e) => dispatch(setToTime(e.target.value))}
           className="border w-full rounded px-2 py-1 text-sm"
+          disabled={dataSource !== "live"}
         />
       </div>
 

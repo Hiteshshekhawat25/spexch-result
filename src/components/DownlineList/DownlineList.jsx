@@ -450,7 +450,7 @@ const DownlineList = () => {
         "White-level",
         "sub-admin",
       ];
-  
+
       if (validRoles.includes(item.role_name)) {
         const data = await fetchallUsers(item._id);
         setUserFetchList(data);
@@ -459,7 +459,7 @@ const DownlineList = () => {
       console.error("Error fetching details:", error);
     }
   };
-  
+
   const fetchUsers = async () => {
     if (!selectedFilter) return;
     try {
