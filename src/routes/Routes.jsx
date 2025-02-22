@@ -42,6 +42,7 @@ import BetHistory from "../components/MyReport/BetHistory";
 import Casino from "../components/casino/Casino";
 import GamesList from "../components/casino/GamesList";
 import Libility from "../components/libility/Libility";
+import CommissionPage from "../components/Commission/CommissionPage";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -183,13 +184,11 @@ const RoutesComp = ({ socket }) => {
         }
       />
        <Route
-        path={ROUTES_CONST.Commission}
+        path={ROUTES_CONST.commission}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <div className="text-center font-bold">
-                Coming Soon...
-              </div>
+            <CommissionPage/>
             </LayoutHeader>
           </ProtectedRoutes>
         }

@@ -254,28 +254,31 @@ function ManageBets({ Userid }) {
                     <div className="flex flex-col border-b border-gray-300 pb-2">
                       <div className="flex justify-between items-center">
                         <span>
-                          {key === "sportName"
-                            ? "Sport Name"
-                            : key === "event"
-                              ? "Event"
-                              : key === "market type"
-                                ? "Market Type"
-                                : key === "date"
-                                  ? "Date"
-                                  : key === "odds"
-                                    ? "Odds"
-                                    // : key === "status"
-                                    // ? "Bet Status"
-                                    : key === "amount"
-                                      ? "Amount"
-                                      : key === "potential"
-                                        ? "Potentialwin"
-                                        : key === "" ?
-                                          <input type='checkbox'
-                                            value='all'
-                                            onChange={handleCheckbox}
-                                          /> : key
-                          }
+                          {key === "sportName" ? (
+                            "Sport Name"
+                          ) : key === "event" ? (
+                            "Event"
+                          ) : key === "market type" ? (
+                            "Market Type"
+                          ) : key === "date" ? (
+                            "Date"
+                          ) : key === "odds" ? (
+                            "Odds"
+                          ) : // : key === "status"
+                          // ? "Bet Status"
+                          key === "amount" ? (
+                            "Amount"
+                          ) : key === "potential" ? (
+                            "Potentialwin"
+                          ) : key === "" ? (
+                            <input
+                              type="checkbox"
+                              value="all"
+                              onChange={handleCheckbox}
+                            />
+                          ) : (
+                            key
+                          )}
                         </span>
                         {key === "" ? (
                           <></>
@@ -354,9 +357,7 @@ function ManageBets({ Userid }) {
                     {/* <td className="border border-gray-400 px-4 py-3">
                       {item?.betstatus?.toUpperCase()}
                     </td> */}
-                    <td
-                      className="border border-gray-400 px-4 py-3"
-                    >
+                    <td className="border border-gray-400 px-4 py-3">
                       {item.amount.toFixed(2) || 0}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
@@ -415,7 +416,7 @@ function ManageBets({ Userid }) {
             <button
               onClick={() => setCurrentPage(1)}
               disabled={currentPage === 1}
-              className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+              className={`px-3 py-1 text-sm rounded ${
                 currentPage === 1
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-gray-100"
@@ -428,7 +429,7 @@ function ManageBets({ Userid }) {
             <button
               onClick={() => setCurrentPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+              className={`px-3 py-1 text-sm rounded ${
                 currentPage === 1
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-gray-100"
@@ -437,19 +438,43 @@ function ManageBets({ Userid }) {
               Previous
             </button>
 
-            {/* Current Page Number */}
-            <button
-              className="px-3 py-1 text-sm border border-gray-300 rounded bg-gray-200"
-              disabled
-            >
-              {currentPage}
-            </button>
+            {/* Page Numbers */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+              if (
+                page === 1 ||
+                page === currentPage ||
+                page === totalPages ||
+                (page >= currentPage - 2 && page <= currentPage + 2)
+              ) {
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                      currentPage === page ? "bg-gray-200" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              } else if (
+                (page === currentPage - 3 && currentPage > 4) ||
+                (page === currentPage + 3 && currentPage < totalPages - 3)
+              ) {
+                return (
+                  <span key={page} className="px-3 py-1 text-sm">
+                    ...
+                  </span>
+                );
+              }
+              return null;
+            })}
 
             {/* Next Button */}
             <button
               onClick={() => setCurrentPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+              className={`px-3 py-1 text-sm rounded ${
                 currentPage === totalPages
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-gray-100"
@@ -462,7 +487,7 @@ function ManageBets({ Userid }) {
             <button
               onClick={() => setCurrentPage(totalPages)}
               disabled={currentPage === totalPages}
-              className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+              className={`px-3 py-1 text-sm rounded ${
                 currentPage === totalPages
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-gray-100"

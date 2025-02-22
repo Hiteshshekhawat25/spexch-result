@@ -138,7 +138,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
               </span>
             </div>
           </div>
-
+          {/* 
           <div>
             <label className="text-sm font-custom font-medium text-gray-700">
               New Password <span className="text-red-600">*</span>
@@ -157,6 +157,38 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
                 {showNewPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
               </span>
             </div>
+          </div> */}
+          <div>
+            <label className="text-sm font-custom font-medium text-gray-700">
+              New Password <span className="text-red-600">*</span>
+            </label>
+            <div className="relative">
+              <input
+                type={showNewPassword ? "text" : "password"}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                onBlur={(e) => {
+                  const password = e.target.value;
+                  if (password.length < 8) {
+                    setError("Password should be at least 8 characters long.");
+                  } else if (!/\d/.test(password)) {
+                    setError("Password must contain at least one number.");
+                  } else {
+                    setError(""); // Clear the error if conditions are met
+                  }
+                }}
+                className="w-full p-2 border border-gray-300 rounded mt-1"
+              />
+              <span
+                onClick={() => setShowNewPassword(!showNewPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
+              >
+                {showNewPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+              </span>
+            </div>
+
+            {/* Dynamic Validation Messages */}
+            {error && <div className="text-red-600 text-sm mt-1">{error}</div>}
           </div>
 
           <div>

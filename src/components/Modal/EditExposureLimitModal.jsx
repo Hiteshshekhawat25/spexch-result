@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5"; 
+import { IoClose } from "react-icons/io5";
 import { useDispatch } from "react-redux";
-import { updateExposure } from "../../Store/Slice/editExposureSlice"; 
+import { updateExposure } from "../../Store/Slice/editExposureSlice";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import {
@@ -10,8 +10,9 @@ import {
   setLoading,
 } from "../../Store/Slice/downlineSlice";
 import { toast } from "react-toastify";
-import { fetchRoles } from "../../Utils/LoginApi";
+import { fetchRoles, fetchUserDetails } from "../../Utils/LoginApi";
 import { useLocation } from "react-router-dom";
+import { updateProfile } from "../../Store/Slice/profileSlice";
 
 const EditExposureLimitModal = ({
   username,
@@ -31,17 +32,15 @@ const EditExposureLimitModal = ({
   const [password, setPassword] = useState("");
   const [roles, setRoles] = useState([]);
   const location = useLocation();
-    const [passwordVisible, setPasswordVisible] = useState(false);
+  const [passwordVisible, setPasswordVisible] = useState(false);
 
-    const handlePasswordVisibility = () => {
-      setPasswordVisible((prev) => !prev);
-    };
-
+  const handlePasswordVisibility = () => {
+    setPasswordVisible((prev) => !prev);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-   
     // Validation checks for empty fields
     if (!newExposureLimit) {
       toast.error("New Exposure Limit is required.");
@@ -83,10 +82,16 @@ const EditExposureLimitModal = ({
       setRoles(rolesData);
 
       let roleId = null;
-      if (location.pathname === "/user-downline-list") {
+      if (
+        location.pathname === "/user-downline-list" ||
+        location.pathname === "/MyAccount"
+      ) {
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
+      } else if (
+        location.pathname === "/master-downline-list" ||
+        location.pathname === "/MyAccount"
+      ) {
         const masterRole = rolesData.find(
           (role) => role.role_name === "master"
         );
@@ -111,6 +116,7 @@ const EditExposureLimitModal = ({
         if (result && result.data) {
           console.log("result", result.data);
           dispatch(setDownlineData(result.data));
+          window.location.reload();
 
           setNewExposureLimit(0);
           setPassword("");
@@ -167,31 +173,39 @@ const EditExposureLimitModal = ({
               <input
                 type="text"
                 value={newExposureLimit}
-                onChange={(e) => setNewExposureLimit(e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  const numericValue = value.replace(/[^0-9]/g, "");
+                  setNewExposureLimit(numericValue);
+                }}
                 className="w-full p-2 border border-black rounded-lg text-gray-700"
               />
             </div>
           </div>
 
           {/* Password Field */}
-      
 
-<div className="flex items-center relative">
-  <label className="block text-sm font-custom text-gray-700 w-1/3">
-    Password
-  </label>
-  <input
-    type={passwordVisible ? "text" : "password"}  
-    value={password}
-    onChange={(e) => setPassword(e.target.value)}
-    className="w-2/3 p-2 border border-black rounded-lg text-gray-700 pr-10"  />
-  <div
-    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 cursor-pointer"
-    onClick={handlePasswordVisibility}
-  >
-    {passwordVisible ? <FaEyeSlash color="black" /> : <FaEye color="black" />}
-  </div>
-</div>
+          <div className="flex items-center relative">
+            <label className="block text-sm font-custom text-gray-700 w-1/3">
+              Password
+            </label>
+            <input
+              type={passwordVisible ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-2/3 p-2 border border-black rounded-lg text-gray-700 pr-10"
+            />
+            <div
+              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 cursor-pointer"
+              onClick={handlePasswordVisibility}
+            >
+              {passwordVisible ? (
+                <FaEyeSlash color="black" />
+              ) : (
+                <FaEye color="black" />
+              )}
+            </div>
+          </div>
 
           {/* Buttons */}
           <div className="flex justify-end space-x-4 mt-4">
