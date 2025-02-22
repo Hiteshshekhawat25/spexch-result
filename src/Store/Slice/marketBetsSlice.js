@@ -15,7 +15,7 @@ export const fetchMarketBets = createAsyncThunk(
       const token = localStorage.getItem("authToken");
 
       // Construct base URL
-      let url = `${BASE_URL}/user/marketBetHistory?matchId=${matchId}&page=${page}&perPage=${perPage}`;
+      let url = `${BASE_URL}/user/marketBetHistory?matchId=${matchId}`;
 
       // Append search query if available
       if (search) {

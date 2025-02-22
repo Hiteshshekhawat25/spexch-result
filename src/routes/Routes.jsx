@@ -42,6 +42,7 @@ import BetHistory from "../components/MyReport/BetHistory";
 import Casino from "../components/casino/Casino";
 import GamesList from "../components/casino/GamesList";
 import Libility from "../components/libility/Libility";
+import TossResult from "../components/toss/TossResult";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -445,6 +446,17 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <MarketAnalysisInner />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+
+<Route
+        path={`${ROUTES_CONST.TossResult}/:matchId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <TossResult />
             </LayoutHeader>
           </ProtectedRoutes>
         }

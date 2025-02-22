@@ -16,6 +16,7 @@ import BookModal from "../marketBetModal/BookModal"
 import { fetchUserBook } from "../../Store/Slice/UserBookSlice"
 import MarketListModal from "../marketBetModal/MarketListModal"
 import { fetchmasterBook } from "../../Store/Slice/masterListSlice"
+import TossSection from "../toss/TossSecttion"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -48,6 +49,7 @@ const MarketAnalysisInner = () => {
   const betList = useSelector(state => state?.marketBetList)
   const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef()
+  const intervalRef = useRef();
   const { data: backBets } = useSelector(state => state?.marketBetList)
   const [listData, setListData] = useState([]);
   const { data: userBooks } = useSelector(state => state?.userBookList)
@@ -159,14 +161,17 @@ const MarketAnalysisInner = () => {
       }, 1000)
       return () => clearInterval(counterRef.current)
     }
-
   }, [isCached]);
 
   useEffect(() => {
     console.log("matchID",gameId)
-      dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+    if(gameId){
+      intervalRef.current = setInterval(() => {
+        dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+      }, 10000);
+    }
 
-  }, [liveBets, pages.viewBet,search])
+  }, [liveBets, pages.viewBet,search,gameId])
 
   useEffect(() => {
     if (showUserBook) {
@@ -249,6 +254,20 @@ const MarketAnalysisInner = () => {
                   : ''
               }
             </div>
+            <div>
+            {matchBetsData && (matchBetsData?.tossMarket?.length &&  matchBetsData?.tossStatus !== 'inactive') && matchBetsData?.gameId == '4' ? (
+            <div className="bg-green-200 my-4">
+              <TossSection
+                matchBetsData={matchBetsData}
+                setBetData={setBetData}
+                betData={backBets?.data?.filter((item) => item?.type == "toss")}
+                openBets={openBets?.data}
+              />
+            </div>
+          ) : (
+            ""
+          )}
+            </div>
             <div className={`${(activeOdds === 'all' || activeOdds === 'fancy') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && cached?.matchfancies?.length ?
@@ -261,6 +280,7 @@ const MarketAnalysisInner = () => {
                   : ''
               }
             </div>
+         
           </div>
         </div>
         <div className="lg:col-span-5 col-span-1">

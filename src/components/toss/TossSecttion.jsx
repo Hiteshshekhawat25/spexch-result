@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import SportsHeading from '../../../components/sportsHeading/SportsHeading'
-import PlaceBet from '../../../components/placeBet/PlaceBet'
+import SportsHeading from '../../components/sportsHeading/SportsHeading'
+// import PlaceBet from '../../../components/placeBet/PlaceBet'
 
 function TossSection({matchBetsData,setBetData,betData,openBets}) {
     const [selectionId,setSelectionId] = useState('')
@@ -10,8 +10,8 @@ function TossSection({matchBetsData,setBetData,betData,openBets}) {
       let total = 0;
       let wintotal = 0;
       let amounttotal = 0;
-      if (openBets?.length > 0) {
-        const marketData = openBets?.filter((item) => item?.type === 'toss');
+      if (betData?.length > 0) {
+        const marketData = betData?.filter((item) => item?.type === 'toss');
         for (let i = 0; i < marketData?.length; i++) {
           if (marketData?.[i]?.selectionId == sid) {
             if (marketData?.[i]?.betType === "back") {
@@ -80,19 +80,7 @@ function TossSection({matchBetsData,setBetData,betData,openBets}) {
             ))}
         
         </div>
-            {
-                    betData?.selectionId === selectionId && selectionId ? 
-            <div>
-                <PlaceBet
-                betData={betData}
-                setBetData={setBetData} 
-                matchBetsData={matchBetsData}
-
-                />
-            </div> 
-            : 
-            <></>
-            }
+          
     </div>
   )
 }

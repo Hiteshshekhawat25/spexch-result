@@ -147,7 +147,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
     let wintotal = 0;
     let amounttotal = 0;
     // if (openBets?.length > 0) {
-      const marketData = betData?.filter((item) => item?.type === 'odds');
+      const marketData = betData?.filter((item) => item?.type === 'fancy');
       for (let i = 0; i < marketData?.length; i++) {
         if (marketData?.[i]?.selectionId == sid) {
           if (marketData?.[i]?.betType === "back") {
