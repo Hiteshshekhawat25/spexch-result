@@ -41,6 +41,8 @@ import { matchListReducer } from './Slice/matchlistGameIdSlice';
 import {  masterBookReducer } from './Slice/masterListSlice';
 import { casinoProvidersReducer } from './Slice/casinoProvidersSlice';
 import { casinoListReducer } from './Slice/CasinoListSlice';
+import { pendingLiabilityReducer } from './Slice/pendingLiability';
+import { pendingMarketReducer } from './Slice/pendingMarket';
 
 
 export const store = configureStore({
@@ -84,7 +86,9 @@ export const store = configureStore({
     matchlist : matchListReducer,
     masterBook : masterBookReducer,
     casinoProviders : casinoProvidersReducer,
-    CasinoList : casinoListReducer
+    CasinoList : casinoListReducer,
+    pendingLiability : pendingLiabilityReducer,
+    pendingMarket : pendingMarketReducer
   },
 });
 

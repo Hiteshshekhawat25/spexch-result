@@ -37,5 +37,6 @@ export const ROUTES_CONST = {
   CasinoSettings : "/casinoSettings",
   CasinoGamesList : "/casino-games-list",
   liabilty : '/liability',
-  TossResult : '/toss-result'
+  TossResult : '/toss-result',
+  PendingMarket : '/pending-market'
 };

@@ -9,6 +9,9 @@ import { DeleteBet, RevertBet } from '../../Services/manageBetapi';
 import Pagination from '../pagination/Pagination';
 import moment from 'moment';
 import LibilityFilter from './LibilityFilter';
+import { pendingLiabilityBook } from '../../Store/Slice/pendingLiability';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES_CONST } from '../../Constant/routesConstant';
 
 function Libility({ Userid }) {
 
@@ -16,10 +19,11 @@ function Libility({ Userid }) {
   const data = useSelector(selectBetListData);
   const loading = useSelector(selectBetListLoading);
   const error = useSelector(selectBetListError);
+  const navigate = useNavigate();
   const filters = useSelector(selectBetListFilter);
-  const dataLiability = useSelector((state) => state.liability.data)
-  const total = useSelector((state) => state.liability)
-  const pages = useSelector((state) => state.liability?.pages)
+  const dataLiability = useSelector((state) => state.pendingLiability.data)
+  const total = useSelector((state) => state.pendingLiability)
+  const pages = useSelector((state) => state.pendingLiability?.pages)
   const [selectFilterData, setSelectFilterData] = useState({
     match: '',
     sport: '4',
@@ -89,10 +93,10 @@ function Libility({ Userid }) {
 
       if (res?.data?.success) {
         setSelectBet({})
-          dispatch(liabilityBook({
+          dispatch(pendingLiabilityBook({
                 page : currentPage,
                 limit : 10,
-                sport : selectFilterData?.sport == '4' ? 'Cricket' : selectFilterData?.sport == '2' ? 'Tennis' : 'Soccer' ,
+                sport : selectFilterData?.sport ,
                 type : selectFilterData?.odds,
                 matchId : selectFilterData?.match,
                 sessionId : selectFilterData?.session,
@@ -109,8 +113,6 @@ function Libility({ Userid }) {
     setBetlistData(data);
     setCurrentPage(1);
   }, [data, filters]);
-
-
 
 
   const handlePageChange = (direction) => {
@@ -223,17 +225,17 @@ function Libility({ Userid }) {
                   "event",
                   "market type",
                   "date",
-                  "odds",
-                  "amount",
-                  "potential",
+                  // "odds",
+                  // "amount",
+                  // "potential",
                 ].map((key) => (
                   <th
                     key={key}
                     className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer p-1"
                     onClick={() => handleSort(key)}
                   >
-                    <div className="flex flex-col border-b border-gray-300 pb-2">
-                      <div className="flex justify-between items-center">
+                    <div className="flex flex-col border-b  border-gray-300 pb-2">
+                      <div className="text-center items-center">
                         <span>
                           {key === "sportName"
                             ? "Sport Name"
@@ -243,16 +245,16 @@ function Libility({ Userid }) {
                                 ? "Market Type"
                                 : key === "date"
                                   ? "Date"
-                                  : key === "odds"
-                                    ? "Odds"
-                                    : key === "amount"
-                                      ? "Amount"
-                                      : key === "potential"
-                                        ? "Potentialwin"
+                                  // : key === "odds"
+                                  //   ? "Odds"
+                                    // : key === "amount"
+                                    //   ? "Amount"
+                                    //   : key === "potential"
+                                    //     ? "Potentialwin"
                                         :  key
                           }
                         </span>
-                        {key === "" ?
+                        {/* {key === "" ?
 
                           <></>
                           :
@@ -278,7 +280,7 @@ function Libility({ Userid }) {
                               }}
                             />
                           </div>
-                        }
+                        } */}
                       </div>
                     </div>
                   </th>
@@ -288,26 +290,24 @@ function Libility({ Userid }) {
 
             <tbody className="text-center">
               {dataLiability?.length > 0 ? (
-                dataLiability.map((item, index) => (
+                dataLiability.map((item, index) => {
+                  console.log(item,'item')
+                  return(
                   <tr key={index}>
                   
 
                     <td
-                      onClick={() => {
-                        console.log("Clicked Item:", item); // Log the entire item object
-                        console.log("Selected User ID:", item.createdBy);
-                        console.log("Selected User Name:", item.username);
-                        setSelectedUserId(item.createdBy);
-                        setSelectedUsername(item.username);
-                        setIsModalOpen(true);
-                      }}
                       className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
                     >
                       {item.sport}
                     </td>
 
-                    <td className="border border-gray-400 px-4 py-3">
-                      {item.event}
+                    <td className="border border-gray-400 text-lightblue font-bold px-4 py-3"
+                    onClick={()=>{
+                      navigate(`${ROUTES_CONST.PendingMarket}/${selectFilterData?.sport}/${item?._id}`)
+                    }}
+                    >
+                      {item.match}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
                       {item.marketType}
@@ -315,21 +315,21 @@ function Libility({ Userid }) {
                     <td className="border border-gray-400 px-4 py-3">
                       {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                     </td>
-                    <td className="border border-gray-400 px-4 py-3">
+                    {/* <td className="border border-gray-400 px-4 py-3">
                       {item.odds}
-                    </td>
+                    </td> */}
                    
-                    <td
+                    {/* <td
                       className="border border-gray-400 px-4 py-3"
                     >
-                      {item.amount.toFixed(2) || 0}
+                      {item?.amount?.toFixed(2) || 0}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
-                      {item.potentialWin.toFixed(2) || 0}
-                    </td>
+                      {item?.potentialWin?.toFixed(2) || 0}
+                    </td> */}
                    
                   </tr>
-                ))
+                )})
               ) : (
                 <tr>
                   <td

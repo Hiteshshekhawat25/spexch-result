@@ -43,6 +43,7 @@ import Casino from "../components/casino/Casino";
 import GamesList from "../components/casino/GamesList";
 import Libility from "../components/libility/Libility";
 import TossResult from "../components/toss/TossResult";
+import PendingMarket from "../components/libility/PendingMarket";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -457,6 +458,16 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <TossResult />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
+        path={`${ROUTES_CONST.PendingMarket}/:sportId/:id`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <PendingMarket />
             </LayoutHeader>
           </ProtectedRoutes>
         }
