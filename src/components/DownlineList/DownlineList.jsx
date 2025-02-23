@@ -447,7 +447,7 @@ const DownlineList = () => {
         "agent",
         "super-admin",
         "super",
-        "White-level",
+        "white-level",
         "sub-admin",
       ];
 
@@ -528,7 +528,6 @@ const DownlineList = () => {
         err.response?.data?.message ||
         err.message ||
         "An error occurred. Please try again.";
-      // setApiError(errorMessage);s
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -733,7 +732,7 @@ const DownlineList = () => {
                               {item.role_name?.toUpperCase()}
                             </span>
                             <span
-                              className="text-[#2789ce] font-custom font-semibold"
+                              className="text-[#2789ce] font-custom font-semibold cursor-pointer"
                               style={{
                                 fontFamily: "Tahoma, Helvetica, sans-serif",
                               }}
