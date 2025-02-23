@@ -155,7 +155,7 @@ const EventPLFilter = ({
           value={fromDate || today}
           onChange={(e) => dispatch(setFromDate(e.target.value))}
           className="border rounded w-full px-1 py-1 text-sm"
-          disabled={dataSource !== "live"} // Disable if not live data
+          disabled={dataSource !== "live"} 
         />
       </div>
 

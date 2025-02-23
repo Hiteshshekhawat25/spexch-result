@@ -633,8 +633,10 @@ const MatchProfitandLoss = () => {
               : bValue - aValue;
           }
 
-          if (aValue < bValue) return sortConfig.direction === "ascending" ? -1 : 1;
-          if (aValue > bValue) return sortConfig.direction === "ascending" ? 1 : -1;
+          if (aValue < bValue)
+            return sortConfig.direction === "ascending" ? -1 : 1;
+          if (aValue > bValue)
+            return sortConfig.direction === "ascending" ? 1 : -1;
           return 0;
         });
 
@@ -840,62 +842,98 @@ const MatchProfitandLoss = () => {
         </table>
       </div>
       <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+        {/* Showing entries text */}
         <div className="text-sm text-gray-600 mb-2 sm:mb-0">
           Showing{" "}
-          {data.length > 0
-            ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
-                currentPage * entriesToShow,
-                data.length
-              )}`
-            : "0 to 0"}{" "}
-          of {data.length} entries
+          {data.length === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+          {Math.min(currentPage * entriesToShow, data.length)} of {data.length}{" "}
+          entries
         </div>
-        <div className="flex space-x-2">
-          <button
-            onClick={() => handlePageChange("first")}
-            disabled={currentPage === 1}
-            className={`px-3 py-1 text-sm rounded ${
-              currentPage === 1
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            First
-          </button>
-          <button
-            onClick={() => handlePageChange("prev")}
-            disabled={currentPage === 1}
-            className={`px-3 py-1 text-sm rounded ${
-              currentPage === 1
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            Previous
-          </button>
-          <button
-            onClick={() => handlePageChange("next")}
-            disabled={currentPage === totalPages}
-            className={`px-3 py-1 text-sm rounded ${
-              currentPage === totalPages
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            Next
-          </button>
-          <button
-            onClick={() => handlePageChange("last")}
-            disabled={currentPage === totalPages}
-            className={`px-3 py-1 text-sm rounded ${
-              currentPage === totalPages
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-gray-100"
-            }`}
-          >
-            Last
-          </button>
-        </div>
+
+        {/* Pagination Buttons */}
+        {totalPages > 1 && (
+          <div className="flex space-x-2">
+            {/* First Button */}
+            <button
+              onClick={() => handlePageChange("first")}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 text-sm rounded ${
+                currentPage === 1
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              First
+            </button>
+
+            {/* Previous Button */}
+            <button
+              onClick={() => handlePageChange("prev")}
+              disabled={currentPage === 1}
+              className={`px-3 py-1 text-sm rounded ${
+                currentPage === 1
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              Previous
+            </button>
+
+            {/* Page Numbers */}
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+              if (
+                page === 1 ||
+                page === totalPages ||
+                (page >= currentPage - 1 && page <= currentPage + 1)
+              ) {
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                      currentPage === page ? "bg-gray-200" : "hover:bg-gray-100"
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              } else if (page === currentPage - 2 || page === currentPage + 2) {
+                return (
+                  <span key={page} className="px-3 py-1 text-sm">
+                    ...
+                  </span>
+                );
+              }
+              return null;
+            })}
+
+            {/* Next Button */}
+            <button
+              onClick={() => handlePageChange("next")}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 text-sm rounded ${
+                currentPage === totalPages
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              Next
+            </button>
+
+            {/* Last Button */}
+            <button
+              onClick={() => handlePageChange("last")}
+              disabled={currentPage === totalPages}
+              className={`px-3 py-1 text-sm rounded ${
+                currentPage === totalPages
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:bg-gray-100"
+              }`}
+            >
+              Last
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

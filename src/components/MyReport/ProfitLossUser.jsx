@@ -64,7 +64,7 @@ const ProfitLossUser = () => {
     commission: sortedData.reduce((sum, row) => sum + row.commission, 0),
   };
 
-  const handleRowClick = (matchId, id,selectionId) => {
+  const handleRowClick = (matchId, id, selectionId) => {
     navigate(`/bet-history/${matchId}/${selectionId}/${id}`);
   };
 
@@ -99,7 +99,6 @@ const ProfitLossUser = () => {
     fetchData();
   }, [id]);
 
-  
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
@@ -231,10 +230,12 @@ const ProfitLossUser = () => {
                               item.matchDetails._id,
                               item._id
                             );
-                            handleRowClick(item.matchDetails._id, item._id,item.selectionId);
+                            handleRowClick(
+                              item.matchDetails._id,
+                              item._id,
+                              item.selectionId
+                            );
                           }}
-
-
                           className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
                         >
                           {item.username}
@@ -273,14 +274,17 @@ const ProfitLossUser = () => {
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           <p>
-                            {new Date(item.settledTime).toLocaleString("en-US", {
-                              year: "numeric",
-                              month: "long",
-                              day: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              second: "2-digit",
-                            })}
+                            {new Date(item.settledTime).toLocaleString(
+                              "en-US",
+                              {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                second: "2-digit",
+                              }
+                            )}
                           </p>
                         </td>
                       </tr>

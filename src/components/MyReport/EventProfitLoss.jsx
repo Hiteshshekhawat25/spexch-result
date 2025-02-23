@@ -23,7 +23,7 @@ const EventProfitLoss = ({ Userid }) => {
   });
   const navigate = useNavigate();
 
-  console.log("userId",userId)
+  console.log("userId", userId);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -73,10 +73,10 @@ const EventProfitLoss = ({ Userid }) => {
 
   const handleRowClick = (gameId) => {
     navigate(`${ROUTES_CONST.SportsandLossEvents}/${gameId}`, {
-      state: { userId: userId }, 
+      state: { userId: userId },
     });
   };
-  
+
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
@@ -298,61 +298,15 @@ const EventProfitLoss = ({ Userid }) => {
                 )}
               </table>
             </div>
-            {/* <div className="flex justify-between mb-2 sm:mb-0 items-center m-4  flex-col sm:flex-row">
-              <div className="text-[12px] sm:text-sm w-full items-start mb-2 text-gray-600 sm:mb-0">
-                Showing{" "}
-                {totalEntries > 0
-                  ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
-                      currentPage * entriesToShow,
-                      totalEntries
-                    )}`
-                  : "0 to 0"}{" "}
-                of {totalEntries} entries
-              </div>
-              <div className="flex space-x-2 sm:ml-auto">
-                <button
-                  onClick={() => setCurrentPage(1)}
-                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm "
-                  disabled={currentPage === 1}
-                >
-                  First
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm "
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm "
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-                <button
-                  onClick={() => setCurrentPage(totalPages)}
-                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm"
-                  disabled={currentPage === totalPages}
-                >
-                  Last
-                </button>
-              </div>
-            </div> */}
             <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
               {/* Showing entries text */}
               <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}
-                {totalTransactions === 0
+                {totalEntries === 0
                   ? 0
                   : (currentPage - 1) * entriesToShow + 1}{" "}
-                to {Math.min(currentPage * entriesToShow, totalTransactions)} of{" "}
-                {totalTransactions} entries
+                to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
+                {totalEntries} entries
               </div>
 
               {/* Pagination Buttons */}

@@ -12,47 +12,47 @@ const RestoreUser = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
-//   useEffect(() => {
-//     const fetchRestoreUser = async () => {
-//       try {
-//         const token = localStorage.getItem("authToken");
-//         if (!token) {
-//           console.error("No token found for authorization.");
-//           return;
-//         }
+  //   useEffect(() => {
+  //     const fetchRestoreUser = async () => {
+  //       try {
+  //         const token = localStorage.getItem("authToken");
+  //         if (!token) {
+  //           console.error("No token found for authorization.");
+  //           return;
+  //         }
 
-//         const response = await axios.get(`${BASE_URL}/user/get-deleted-user`, {
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//           params: {
-//             page: currentPage,
-//             limit: entriesToShow,
-//           },
-//         });
+  //         const response = await axios.get(`${BASE_URL}/user/get-deleted-user`, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //           params: {
+  //             page: currentPage,
+  //             limit: entriesToShow,
+  //           },
+  //         });
 
-//         const data = response.data;
-//         console.log("data", data);
-//         if (data.success) {
-//           setRestoreUser(data?.data || []);
-//           setTotalCount(data?.pagination.totalRecords);
-//           setTotalRecords(data?.pagination.totalRecords);
-//           // Calculate totalPages after fetching the data
-//           setTotalPages(
-//             Math.ceil(data?.pagination.totalRecords / entriesToShow)
-//           );
-//         } else {
-//           console.error("Failed to fetch password history.");
-//         }
-//       } catch (error) {
-//         console.error("An error occurred while fetching deleted user:", error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
+  //         const data = response.data;
+  //         console.log("data", data);
+  //         if (data.success) {
+  //           setRestoreUser(data?.data || []);
+  //           setTotalCount(data?.pagination.totalRecords);
+  //           setTotalRecords(data?.pagination.totalRecords);
+  //           // Calculate totalPages after fetching the data
+  //           setTotalPages(
+  //             Math.ceil(data?.pagination.totalRecords / entriesToShow)
+  //           );
+  //         } else {
+  //           console.error("Failed to fetch password history.");
+  //         }
+  //       } catch (error) {
+  //         console.error("An error occurred while fetching deleted user:", error);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
 
-//     fetchRestoreUser();
-//   }, [currentPage, entriesToShow, totalRecords]);
+  //     fetchRestoreUser();
+  //   }, [currentPage, entriesToShow, totalRecords]);
 
   const filteredData = restoreUser.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
@@ -95,63 +95,63 @@ const RestoreUser = () => {
     setCurrentPage(1);
   };
 
-//   const handleRestoreUser =(userId)=> {
-//     const token = localStorage.getItem("authToken");
-//     console.log("token", token)
-  
-//     try {
-//       const response = axios.put(
-//         `${BASE_URL}/user/restore-user`,
-//         {
-//           userId,
-//         },
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
-//       fetchRestoreUser();
-//       return response?.data?.data;
-      
-//     } catch (error) {
-//       console.error("Error updating user status:", error);
-//       throw error;
-//     }
+  //   const handleRestoreUser =(userId)=> {
+  //     const token = localStorage.getItem("authToken");
+  //     console.log("token", token)
 
-//   }
-// const handleRestoreUser = async (userId) => {
-//     const token = localStorage.getItem("authToken");
-//     console.log("token", token);
-  
-//     try {
-//       const response = await axios.put(
-//         `${BASE_URL}/user/restore-user`,
-//         { userId },
-//         {
-//           headers: {
-//             "Content-Type": "application/json",
-//             Authorization: `Bearer ${token}`,
-//           },
-//         }
-//       );
-//       console.log("User restored successfully:", response?.data?.data);
-  
-//       // Call fetchRestoreUser if needed after the successful API call
-//       fetchRestoreUser();
-  
-//       return response?.data?.data;
-//     } catch (error) {
-//       console.error("Error updating user status:", error);
-//       throw error; // Re-throw the error for further handling if necessary
-//     }
-//   };
+  //     try {
+  //       const response = axios.put(
+  //         `${BASE_URL}/user/restore-user`,
+  //         {
+  //           userId,
+  //         },
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  //       fetchRestoreUser();
+  //       return response?.data?.data;
+
+  //     } catch (error) {
+  //       console.error("Error updating user status:", error);
+  //       throw error;
+  //     }
+
+  //   }
+  // const handleRestoreUser = async (userId) => {
+  //     const token = localStorage.getItem("authToken");
+  //     console.log("token", token);
+
+  //     try {
+  //       const response = await axios.put(
+  //         `${BASE_URL}/user/restore-user`,
+  //         { userId },
+  //         {
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //             Authorization: `Bearer ${token}`,
+  //           },
+  //         }
+  //       );
+  //       console.log("User restored successfully:", response?.data?.data);
+
+  //       // Call fetchRestoreUser if needed after the successful API call
+  //       fetchRestoreUser();
+
+  //       return response?.data?.data;
+  //     } catch (error) {
+  //       console.error("Error updating user status:", error);
+  //       throw error; // Re-throw the error for further handling if necessary
+  //     }
+  //   };
 
   const handleRestoreUser = async (userId) => {
     try {
       const token = localStorage.getItem("authToken");
-  
+
       const response = await axios.put(
         `${BASE_URL}/user/restore-user`,
         { userId },
@@ -162,12 +162,12 @@ const RestoreUser = () => {
           },
         }
       );
-  
+
       if (response?.data?.success) {
         setRestoreUser((prevUsers) =>
           prevUsers.filter((user) => user._id !== userId)
         );
-  
+
         fetchRestoreUser();
       } else {
         console.error("Failed to restore user");
@@ -176,7 +176,7 @@ const RestoreUser = () => {
       console.error("Error restoring user:", error);
     }
   };
-  
+
   // Make fetchRestoreUser a reusable function
   const fetchRestoreUser = async () => {
     setLoading(true);
@@ -186,7 +186,7 @@ const RestoreUser = () => {
         console.error("No token found for authorization.");
         return;
       }
-  
+
       const response = await axios.get(`${BASE_URL}/user/get-deleted-user`, {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -196,51 +196,47 @@ const RestoreUser = () => {
           limit: entriesToShow,
         },
       });
-  
-//       const data = response.data;
-//       if (data.success) {
-//         setRestoreUser(data?.data || []);
-//         setTotalCount(data?.pagination.totalRecords);
-//         setTotalRecords(data?.pagination.totalRecords);
-//         setTotalPages(
-//           Math.ceil(data?.pagination.totalRecords / entriesToShow)
-//         );
-//       } else {
-//         console.error("Failed to fetch deleted users.");
-//       }
-//     } catch (error) {
-//       console.error("Error fetching deleted users:", error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-const data = response.data;
-        console.log("data", data);
-        if (data.success) {
-          setRestoreUser(data?.data || []);
-          setTotalCount(data?.pagination.totalRecords);
-          setTotalRecords(data?.pagination.totalRecords);
-          // Calculate totalPages after fetching the data
-          setTotalPages(
-            Math.ceil(data?.pagination.totalRecords / entriesToShow)
-          );
-        } else {
-          console.error("Failed to fetch password history.");
-        }
-      } catch (error) {
-        console.error("An error occurred while fetching deleted user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
 
-  
+      //       const data = response.data;
+      //       if (data.success) {
+      //         setRestoreUser(data?.data || []);
+      //         setTotalCount(data?.pagination.totalRecords);
+      //         setTotalRecords(data?.pagination.totalRecords);
+      //         setTotalPages(
+      //           Math.ceil(data?.pagination.totalRecords / entriesToShow)
+      //         );
+      //       } else {
+      //         console.error("Failed to fetch deleted users.");
+      //       }
+      //     } catch (error) {
+      //       console.error("Error fetching deleted users:", error);
+      //     } finally {
+      //       setLoading(false);
+      //     }
+      //   };
+      const data = response.data;
+      console.log("data", data);
+      if (data.success) {
+        setRestoreUser(data?.data || []);
+        setTotalCount(data?.pagination.totalRecords);
+        setTotalRecords(data?.pagination.totalRecords);
+        // Calculate totalPages after fetching the data
+        setTotalPages(Math.ceil(data?.pagination.totalRecords / entriesToShow));
+      } else {
+        console.error("Failed to fetch password history.");
+      }
+    } catch (error) {
+      console.error("An error occurred while fetching deleted user:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Call fetchRestoreUser in useEffect
   useEffect(() => {
     fetchRestoreUser();
   }, [currentPage, entriesToShow]);
-  
-  
+
   return (
     <div className="bg-gray-100">
       <div className="border border-gray-300 rounded-md bg-white">
@@ -317,7 +313,12 @@ const data = response.data;
                             {formatDateTime(item.deletedAt)}
                           </td>
                           <td className="border border-gray-300 p-2 text-center">
-                            <button className="text-md bg-gradient-seablue text-white font-bold p-1 rounded" onClick={()=>handleRestoreUser(item._id)}>Restore</button>
+                            <button
+                              className="text-md bg-gradient-seablue text-white font-bold p-1 rounded"
+                              onClick={() => handleRestoreUser(item._id)}
+                            >
+                              Restore
+                            </button>
                           </td>
                         </tr>
                       )
@@ -333,43 +334,106 @@ const data = response.data;
               </tbody>
             </table>
           </div>
-          <div className="flex justify-between items-center mt-4">
-            <div className="text-sm text-gray-600">
+          <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+            {/* Showing entries text */}
+            <div className="text-sm text-gray-600 mb-2 sm:mb-0">
               Showing{" "}
               {totalRecords === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
               to {Math.min(currentPage * entriesToShow, totalRecords)} of{" "}
               {totalRecords} entries
             </div>
-            <div className="flex justify-end items-center py-2 space-x-2">
-              <button
-                onClick={() => handlePageChange("first")}
-                disabled={currentPage === 1}
-                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-              >
-                First
-              </button>
-              <button
-                onClick={() => handlePageChange("prev")}
-                disabled={currentPage === 1}
-                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-              >
-                Prev
-              </button>
-              <button
-                onClick={() => handlePageChange("next")}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-              >
-                Next
-              </button>
-              <button
-                onClick={() => handlePageChange("last")}
-                disabled={currentPage === totalPages}
-                className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-              >
-                Last
-              </button>
-            </div>
+
+            {/* Pagination Buttons */}
+            {totalPages > 1 && (
+              <div className="flex space-x-2">
+                {/* First Button */}
+                <button
+                  onClick={() => handlePageChange("first")}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  First
+                </button>
+
+                {/* Previous Button */}
+                <button
+                  onClick={() => handlePageChange("prev")}
+                  disabled={currentPage === 1}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => {
+                    if (
+                      page === 1 ||
+                      page === totalPages ||
+                      (page >= currentPage - 1 && page <= currentPage + 1)
+                    ) {
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                            currentPage === page
+                              ? "bg-gray-200"
+                              : "hover:bg-gray-100"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    } else if (
+                      page === currentPage - 2 ||
+                      page === currentPage + 2
+                    ) {
+                      return (
+                        <span key={page} className="px-3 py-1 text-sm">
+                          ...
+                        </span>
+                      );
+                    }
+                    return null;
+                  }
+                )}
+
+                {/* Next Button */}
+                <button
+                  onClick={() => handlePageChange("next")}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === totalPages
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  Next
+                </button>
+
+                {/* Last Button */}
+                <button
+                  onClick={() => handlePageChange("last")}
+                  disabled={currentPage === totalPages}
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === totalPages
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
+                >
+                  Last
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

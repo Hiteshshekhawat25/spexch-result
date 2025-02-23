@@ -14,7 +14,7 @@ const SportsandLossEvents = () => {
   const location = useLocation();
   const userId = location.state?.userId;
   const [sortConfig, setSortConfig] = useState({
-    key: "event", 
+    key: "event",
     direction: "ascending",
   });
   const navigate = useNavigate();
@@ -26,7 +26,7 @@ const SportsandLossEvents = () => {
     { display: "Commission", key: "commission" },
   ];
 
-  console.log("userId",userId);
+  console.log("userId", userId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -90,7 +90,11 @@ const SportsandLossEvents = () => {
   );
 
   if (loading) {
-    return <div><ClipLoader/></div>;
+    return (
+      <div>
+        <ClipLoader />
+      </div>
+    );
   }
 
   // const handleMatchClick = (matchId) => {
@@ -102,7 +106,7 @@ const SportsandLossEvents = () => {
       state: { userId: userId },
     });
   };
-  
+
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
@@ -140,7 +144,7 @@ const SportsandLossEvents = () => {
       <div className="overflow-x-auto">
         <table className="w-full table-auto border-collapse border border-gray-400">
           <thead className="bg-gray-300 text-black border border-gray-400">
-            <tr >
+            <tr>
               {headers.map((header) => (
                 <th
                   key={header.key}
@@ -149,7 +153,9 @@ const SportsandLossEvents = () => {
                   // className=" bg-red-500 border border-gray-400 text-center justify-between"
                 >
                   <div className="flex justify-between items-center">
-                    <div className="items-center text-center justify-between">{header.display}</div>
+                    <div className="items-center text-center justify-between">
+                      {header.display}
+                    </div>
                     <div className="flex flex-col items-center ml-2">
                       <FaSortUp
                         className={`${
@@ -178,14 +184,16 @@ const SportsandLossEvents = () => {
           <tbody>
             {paginatedData.map((item, index) => (
               <tr key={index} className="border-b border-gray-400">
-                <td className="px-4 py-2 text-center border border-gray-400">{item.sport}</td>
+                <td className="px-4 py-2 text-center border border-gray-400">
+                  {item.sport}
+                </td>
                 <td
                   className="px-4 py-2 text-center text-lightblue cursor-pointer border border-gray-400"
                   onClick={() => handleMatchClick(item._id)}
                 >
                   {item.match}
                 </td>
-                
+
                 <td
                   className="px-4 py-2 text-center border border-gray-400"
                   style={{
@@ -196,20 +204,23 @@ const SportsandLossEvents = () => {
                     ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
                     : item.totalDownlineProfitLoss.toFixed(2)}
                 </td>
-                 <td
+                <td
                   className="px-4 py-2 text-center border border-gray-400"
                   style={{
                     color: item.totalUplineProfitLoss < 0 ? "red" : "green",
                   }}
                 >
                   {item.totalUplineProfitLoss < 0
-                    ? `-${(Math.abs(item.totalUplineProfitLoss )+ item?.totalCommission)?.toFixed(2)}`
-                    : (Math.abs(item.totalUplineProfitLoss ) + item?.totalCommission)?.toFixed(2)}
+                    ? `-${(
+                        Math.abs(item.totalUplineProfitLoss) +
+                        item?.totalCommission
+                      )?.toFixed(2)}`
+                    : (
+                        Math.abs(item.totalUplineProfitLoss) +
+                        item?.totalCommission
+                      )?.toFixed(2)}
                 </td>
-                <td
-                  className="px-4 py-2 text-center"
-                  
-                >
+                <td className="px-4 py-2 text-center">
                   {item?.totalCommission}
                 </td>
               </tr>

@@ -249,32 +249,19 @@ const BetHistory = () => {
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.totalAmount?.toFixed(2)}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {/* <span
-                            style={{
-                              color: item.totalProfitLoss < 0 ? "red" : "green",
-                            }}
-                          >
-                            {item.totalProfitLoss}
-                          </span>
-                          &nbsp;
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400 whitespace-nowrap">
                           <span
-                            style={{
-                              color: item.totalProfitLoss < 0 ? "green" : "red",
-                            }}
+                            className={
+                              item?.totalAmount < 0
+                                ? "text-red-500"
+                                : "text-green-800"
+                            }
                           >
-                            (
-                            {item.totalProfitLoss > 0
-                              ? `-${item.totalProfitLoss}`
-                              : Math.abs(item.totalProfitLoss)}
-                            )
-                          </span> */}
-                          <span className={`${item?.totalAmount < 0 ? "text-red-500" : "text-green-800"}`}>
                             {item?.totalAmount}
                           </span>
-                          <span style={{ color: "red" }}>
+                          <span className="text-red-500">
                             {" "}
-                            ({item?.totalProfitLoss ? `${item.totalProfitLoss}` : "0"})
+                            ({item?.totalProfitLoss || 0})
                           </span>
                         </td>
 
