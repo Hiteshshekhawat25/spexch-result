@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { ClipLoader } from "react-spinners"; 
+import { ClipLoader } from "react-spinners";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -10,8 +10,8 @@ const Dashboard = () => {
 
   useEffect(() => {
     setTimeout(() => {
-      setLoading(false); 
-    }, 1000); 
+      setLoading(false);
+    }, 1000);
   }, []);
 
   const liveSportsData = {
@@ -47,7 +47,13 @@ const Dashboard = () => {
           <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
           <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
           <div className="absolute bottom-[-40px] w-full text-center text-xl font-custom font-semibold text-black">
-            <ClipLoader />
+            <ClipLoader
+              color="#3b82f6"
+              size={60}
+              loading={true}
+              speedMultiplier={1.5}
+              cssOverride={{ borderWidth: "4px" }}
+            />
           </div>
         </div>
       </div>
@@ -80,4 +86,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

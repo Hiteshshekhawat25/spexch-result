@@ -20,6 +20,7 @@ const ProfitLoss = () => {
     direction: "ascending",
   });
   const navigate = useNavigate();
+
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -29,21 +30,25 @@ const ProfitLoss = () => {
   };
 
   const fetchUserData = async (userId, role_name, item) => {
-    console.log(role_name,'role_name')
+    console.log(role_name, "role_name");
     const token = localStorage.getItem("authToken");
     setLocalLoading(true);
+
     if (role_name === "user") {
       navigate(ROUTES_CONST.MyAccount, {
         state: {
           selectedUser: item,
+          userId: item._id,
           selectedPage: "profitLoss",
         },
       });
+      setLocalLoading(false);
+      return;
     }
 
     try {
       const response = await axios.get(`${BASE_URL}/user/get-profit-loss`, {
-        params: { page: currentPage, limit: 10, userId },
+        params: { page: currentPage, limit: entriesToShow, userId },
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json",
@@ -51,18 +56,24 @@ const ProfitLoss = () => {
         },
       });
 
-      const data = response.data.data;
-      console.log("datadata", response?.data);
+      console.log("Request URL:", response.config.url);
+      console.log("Response Data:", response?.data);
+
+      const data = response?.data?.data || [];
       setExpandedRows(data);
-      setProfitLossData(data)
-      setTotalPages(response?.data?.pagination?.totalPages)
-      setTotalEntries(response?.data?.pagination?.totalRecords)
+      setProfitLossData(data);
+      setTotalPages(response?.data?.pagination?.totalPages || 0);
+      setTotalEntries(response?.data?.pagination?.totalRecords || 0);
     } catch (error) {
       console.error("Error fetching user data:", error);
     } finally {
       setLocalLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchUserData();
+  }, [currentPage, entriesToShow]);
 
   const sortedData = [...profitLossData].sort((a, b) => {
     if (a[sortConfig.key] < b[sortConfig.key])
@@ -90,8 +101,16 @@ const ProfitLoss = () => {
     ),
   };
 
-console.log(totalData,'paginatedData')
 
+  const handlePageChange = (direction) => {
+    let newPage = currentPage;
+    if (direction === "next" && currentPage < totalPages) newPage++;
+    else if (direction === "prev" && currentPage > 1) newPage--;
+    else if (direction === "first") newPage = 1;
+    else if (direction === "last") newPage = totalPages;
+
+    setCurrentPage(newPage);
+  };
 
   return (
     <div className="p-4">
@@ -207,21 +226,28 @@ console.log(totalData,'paginatedData')
                               : "text-green-500"
                           }`}
                         >
-                          {Math.abs(row.totalUplineProfitLoss.toFixed(2)) + row.commission}
+                          {/* {Math.abs(row.totalUplineProfitLoss.toFixed(2))} */}
+                          {row.totalUplineProfitLoss.toFixed(2)}
+                          {/* + {row.commission} */}
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                            row.totalDownlineProfitLoss < 0 ? "red" : "green"
+                            row.totalDownlineProfitLoss < 0
+                              ? "text-red-500"
+                              : "text-green-500"
                           }`}
                         >
                           {Math.abs(row.totalDownlineProfitLoss.toFixed(2))}
+                          {/* {row.totalDownlineProfitLoss > 0
+  ? (Math.abs(row.totalDownlineProfitLoss) - row.commission).toFixed(2)
+  : Math.abs(row.totalDownlineProfitLoss.toFixed(2))} */}
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
                             row.commission < 0 ? "red" : "green"
                           }`}
                         >
-                          {0}
+                          {Math.abs(row.totalCommission.toFixed(2))}
                         </td>
                       </tr>
                     )
@@ -232,7 +258,9 @@ console.log(totalData,'paginatedData')
                   <tr key={index} className="border-b border-gray-400">
                     <td
                       className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium text-lightblue cursor-pointer"
-                      onClick={() => fetchUserData(item._id, item.role_name, item)}
+                      onClick={() =>
+                        fetchUserData(item._id, item.role_name, item)
+                      }
                     >
                       {item.username ? item.username.toUpperCase() : ""}
                     </td>
@@ -282,7 +310,9 @@ console.log(totalData,'paginatedData')
                 </td>
                 <td
                   className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${
-                    totalData?.profitLoss < 0 ? "text-red-500" : "text-green-500"
+                    totalData?.profitLoss < 0
+                      ? "text-red-500"
+                      : "text-green-500"
                   }`}
                 >
                   {Math.abs(totalData?.profitLoss?.toFixed(2) || 0)}

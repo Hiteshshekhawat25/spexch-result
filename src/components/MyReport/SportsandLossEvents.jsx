@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useMemo } from "react";
 import { BASE_URL } from "../../Constant/Api";
 import axios from "axios";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 
 const SportsandLossEvents = () => {
   const { gameId } = useParams();
@@ -10,8 +11,10 @@ const SportsandLossEvents = () => {
   const [loading, setLoading] = useState(true);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const location = useLocation();
+  const userId = location.state?.userId;
   const [sortConfig, setSortConfig] = useState({
-    key: "event", // default sort key, adjust as needed
+    key: "event", 
     direction: "ascending",
   });
   const navigate = useNavigate();
@@ -22,6 +25,8 @@ const SportsandLossEvents = () => {
     { display: "DownLine Profit/Loss", key: "totalDownlineProfitLoss" },
     { display: "Commission", key: "commission" },
   ];
+
+  console.log("userId",userId);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,11 +90,26 @@ const SportsandLossEvents = () => {
   );
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div><ClipLoader/></div>;
   }
 
+  // const handleMatchClick = (matchId) => {
+  //   navigate(`/match-bet-profit-loss/${matchId}`);
+  // };
+
   const handleMatchClick = (matchId) => {
-    navigate(`/match-bet-profit-loss/${matchId}`);
+    navigate(`/match-bet-profit-loss/${matchId}`, {
+      state: { userId: userId },
+    });
+  };
+  
+  const handlePageChange = (direction) => {
+    let newPage = currentPage;
+    if (direction === "next" && currentPage < totalPages) newPage++;
+    else if (direction === "prev" && currentPage > 1) newPage--;
+    else if (direction === "first") newPage = 1;
+    else if (direction === "last") newPage = totalPages;
+    setCurrentPage(newPage);
   };
 
   return (
@@ -119,16 +139,17 @@ const SportsandLossEvents = () => {
       </div>
       <div className="overflow-x-auto">
         <table className="w-full table-auto border-collapse border border-gray-400">
-          <thead className="bg-gray-300 text-black">
-            <tr>
+          <thead className="bg-gray-300 text-black border border-gray-400">
+            <tr >
               {headers.map((header) => (
                 <th
                   key={header.key}
                   className="px-4 py-2 cursor-pointer"
                   onClick={() => handleSort(header.key)}
+                  // className=" bg-red-500 border border-gray-400 text-center justify-between"
                 >
                   <div className="flex justify-between items-center">
-                    <span>{header.display}</span>
+                    <div className="items-center text-center justify-between">{header.display}</div>
                     <div className="flex flex-col items-center ml-2">
                       <FaSortUp
                         className={`${
@@ -157,25 +178,16 @@ const SportsandLossEvents = () => {
           <tbody>
             {paginatedData.map((item, index) => (
               <tr key={index} className="border-b border-gray-400">
-                <td className="px-4 py-2 text-center">{item.sport}</td>
+                <td className="px-4 py-2 text-center border border-gray-400">{item.sport}</td>
                 <td
-                  className="px-4 py-2 text-center text-lightblue cursor-pointer"
+                  className="px-4 py-2 text-center text-lightblue cursor-pointer border border-gray-400"
                   onClick={() => handleMatchClick(item._id)}
                 >
                   {item.match}
                 </td>
+                
                 <td
-                  className="px-4 py-2 text-center"
-                  style={{
-                    color: item.totalUplineProfitLoss < 0 ? "red" : "green",
-                  }}
-                >
-                  {item.totalUplineProfitLoss < 0
-                    ? `-${(Math.abs(item.totalUplineProfitLoss )+ item?.totalCommission)?.toFixed(2)}`
-                    : (Math.abs(item.totalUplineProfitLoss ) + item?.totalCommission)?.toFixed(2)}
-                </td>
-                <td
-                  className="px-4 py-2 text-center"
+                  className="px-4 py-2 text-center border border-gray-400"
                   style={{
                     color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
                   }}
@@ -183,6 +195,16 @@ const SportsandLossEvents = () => {
                   {item.totalDownlineProfitLoss < 0
                     ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
                     : item.totalDownlineProfitLoss.toFixed(2)}
+                </td>
+                 <td
+                  className="px-4 py-2 text-center border border-gray-400"
+                  style={{
+                    color: item.totalUplineProfitLoss < 0 ? "red" : "green",
+                  }}
+                >
+                  {item.totalUplineProfitLoss < 0
+                    ? `-${(Math.abs(item.totalUplineProfitLoss )+ item?.totalCommission)?.toFixed(2)}`
+                    : (Math.abs(item.totalUplineProfitLoss ) + item?.totalCommission)?.toFixed(2)}
                 </td>
                 <td
                   className="px-4 py-2 text-center"

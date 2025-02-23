@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { BASE_URL } from "../../Constant/Api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 
@@ -12,14 +12,27 @@ const BetHistory = () => {
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
-  const { matchId, id ,selectionId} = useParams();
-  console.log("urlparams", matchId, id,selectionId);
+  const { matchId, selectionId, id } = useParams();
+  const [totalTransactions, setTotalTransactions] = useState(0);
+  const location = useLocation();
+  // const { userId, matchId, selectionId } = location.state || {};
+  console.log("bethistory url params", matchId, selectionId, id);
 
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
-    direction: "ascending",
+    direction: "descending",
   });
   const navigate = useNavigate();
+
+  const handlePageChange = (direction) => {
+    let newPage = currentPage;
+    if (direction === "next" && currentPage < totalPages) newPage++;
+    else if (direction === "prev" && currentPage > 1) newPage--;
+    else if (direction === "first") newPage = 1;
+    else if (direction === "last") newPage = totalPages;
+
+    setCurrentPage(newPage);
+  };
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -68,74 +81,13 @@ const BetHistory = () => {
   //   navigate(`/bet-history/${gameId}`);
   // };
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLocalLoading(true);
-  //     try {
-  //       const token = localStorage.getItem("authToken");
-  //       const response = await fetch(
-  //         `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}`,
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json; charset=utf-8",
-  //             Accept: "application/json",
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       const data = await response.json();
-  //       setProfitLossData(data.data);
-  //       setTotalEntries(data.total);
-  //       setTotalPages(data.totalPages);
-  //       setIsDataFetched(true);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLocalLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [matchId,id]);
-  // useEffect(() => {
-  //   console.log("inside", matchId, id);
-  //   const fetchData = async () => {
-  //     setLocalLoading(true);
-  //     try {
-  //       const token = localStorage.getItem("authToken");
-  //       const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}`;
-  //       console.log("Fetching", url);
-
-  //       const response = await fetch(url, {
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-
-  //       const data = await response.json();
-  //       setProfitLossData(data.data);
-  //       setTotalEntries(data.total);
-  //       setTotalPages(data.totalPages);
-  //       setIsDataFetched(true);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLocalLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, [matchId, id]);
-
   useEffect(() => {
-    console.log("inside", matchId, id);
+    console.log("inside", matchId, id, selectionId);
     const fetchData = async () => {
       setLocalLoading(true);
       try {
         const token = localStorage.getItem("authToken");
-        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}&selectionId=${selectionId}`;
+        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${selectionId}&selectionId=${id}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -157,7 +109,8 @@ const BetHistory = () => {
     };
 
     fetchData();
-  }, [matchId, id]); // Add dependencies
+  }, [matchId, id]);
+
   return (
     <div className="p-4">
       {localLoading ? (
@@ -316,10 +269,12 @@ const BetHistory = () => {
                               : Math.abs(item.totalProfitLoss)}
                             )
                           </span> */}
-                          <span style={{color:"green"}}>{item?.potentialWin}</span>
+                          <span className={`${item?.totalAmount < 0 ? "text-red-500" : "text-green-800"}`}>
+                            {item?.totalAmount}
+                          </span>
                           <span style={{ color: "red" }}>
                             {" "}
-                            ({item?.totalAmount ? `-${item.totalAmount}` : "0"})
+                            ({item?.totalProfitLoss ? `${item.totalProfitLoss}` : "0"})
                           </span>
                         </td>
 
@@ -368,9 +323,11 @@ const BetHistory = () => {
               {/* Showing entries text */}
               <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}
-                {totalEntries > 0 ? (currentPage - 1) * entriesToShow + 1 : 0}{" "}
-                to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
-                {totalEntries} entries
+                {totalTransactions === 0
+                  ? 0
+                  : (currentPage - 1) * entriesToShow + 1}{" "}
+                to {Math.min(currentPage * entriesToShow, totalTransactions)} of{" "}
+                {totalTransactions} entries
               </div>
 
               {/* Pagination Buttons */}
@@ -378,9 +335,9 @@ const BetHistory = () => {
                 <div className="flex space-x-2">
                   {/* First Button */}
                   <button
-                    onClick={() => setCurrentPage(1)}
+                    onClick={() => handlePageChange("first")}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                    className={`px-3 py-1 text-sm rounded ${
                       currentPage === 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
@@ -391,11 +348,9 @@ const BetHistory = () => {
 
                   {/* Previous Button */}
                   <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.max(prev - 1, 1))
-                    }
+                    onClick={() => handlePageChange("prev")}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                    className={`px-3 py-1 text-sm rounded ${
                       currentPage === 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
@@ -404,7 +359,7 @@ const BetHistory = () => {
                     Previous
                   </button>
 
-                  {/* Page Numbers with ... for large sets */}
+                  {/* Page Numbers */}
                   {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                     (page) => {
                       if (
@@ -441,11 +396,9 @@ const BetHistory = () => {
 
                   {/* Next Button */}
                   <button
-                    onClick={() =>
-                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                    }
+                    onClick={() => handlePageChange("next")}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                    className={`px-3 py-1 text-sm rounded ${
                       currentPage === totalPages
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
@@ -456,9 +409,9 @@ const BetHistory = () => {
 
                   {/* Last Button */}
                   <button
-                    onClick={() => setCurrentPage(totalPages)}
+                    onClick={() => handlePageChange("last")}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                    className={`px-3 py-1 text-sm rounded ${
                       currentPage === totalPages
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"

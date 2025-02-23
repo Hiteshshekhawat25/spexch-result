@@ -113,10 +113,9 @@ const PLFilter = ({
     toTime: "23:59",
   };
 
-  useEffect(()=>{
-    handleGetPL()
-  },[currentPage])
-
+  useEffect(() => {
+    handleGetPL();
+  }, [currentPage]);
 
   return (
     <div className="grid grid-cols-12  gap-2 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">

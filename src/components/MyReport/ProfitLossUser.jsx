@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { BASE_URL } from "../../Constant/Api";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 
 const ProfitLossUser = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -12,7 +13,7 @@ const ProfitLossUser = () => {
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const { selectionId, id } = useParams();
-  console.log(selectionId, id);
+  console.log("selection", selectionId, id);
 
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
@@ -63,9 +64,8 @@ const ProfitLossUser = () => {
     commission: sortedData.reduce((sum, row) => sum + row.commission, 0),
   };
 
-  const handleRowClick = (id, selectionId) => {
-    navigate(`/bet-history/${selectionId}/${id}`);
-    console.log(`/profit-loss-user/${selectionId}/${id}`);
+  const handleRowClick = (matchId, id,selectionId) => {
+    navigate(`/bet-history/${matchId}/${selectionId}/${id}`);
   };
 
   useEffect(() => {
@@ -74,7 +74,7 @@ const ProfitLossUser = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch(
-          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&matchId=${id}`,
+          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&selectionId=${id}&matchId=${selectionId}`,
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -84,7 +84,7 @@ const ProfitLossUser = () => {
           }
         );
         const data = await response.json();
-        console.log({data},'data')
+        console.log({ data }, "data");
         setProfitLossData(data.data);
         setTotalEntries(data?.pagination?.totalRecords);
         setTotalPages(data?.pagination?.totalPages);
@@ -97,7 +97,18 @@ const ProfitLossUser = () => {
     };
 
     fetchData();
-  }, []);
+  }, [id]);
+
+  
+  const handlePageChange = (direction) => {
+    let newPage = currentPage;
+    if (direction === "next" && currentPage < totalPages) newPage++;
+    else if (direction === "prev" && currentPage > 1) newPage--;
+    else if (direction === "first") newPage = 1;
+    else if (direction === "last") newPage = totalPages;
+
+    setCurrentPage(newPage);
+  };
 
   return (
     <div className="p-4">
@@ -107,7 +118,7 @@ const ProfitLossUser = () => {
             <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
             <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
             <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
-              Loading...
+              <ClipLoader />
             </div>
           </div>
         </div>
@@ -213,47 +224,64 @@ const ProfitLossUser = () => {
                     paginatedData.map((item, index) => (
                       <tr key={index} className="border-b border-gray-400">
                         <td
-                          onClick={() =>
-                            handleRowClick(
+                          onClick={() => {
+                            console.log(
+                              "Clicked",
+                              item.selectionId,
                               item.matchDetails._id,
-                              item.selectionId
-                            )
-                          }
+                              item._id
+                            );
+                            handleRowClick(item.matchDetails._id, item._id,item.selectionId);
+                          }}
+
+
                           className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
                         >
                           {item.username}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDetails.sport}
+                          {item.sport}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDetails.match}
+                          {item.match}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDetails.marketName}
+                          {item.type === "odds"
+                            ? "Match odds"
+                            : item.type === "bookmakers"
+                            ? "Bookmaker"
+                            : item.type === "toss"
+                            ? "Toss"
+                            : item.marketNameTwo}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDetails.status}
+                          {item?.marketName ?? "-"}
                         </td>
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400"
                           style={{
-                            color:
-                              item.totalDownlineProfitLoss < 0
-                                ? "red"
-                                : "green",
+                            color: item.totalProfitLoss < 0 ? "red" : "green",
                           }}
                         >
-                          {item.totalDownlineProfitLoss < 0
-                            ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
-                            : item.totalDownlineProfitLoss.toFixed(2)}
+                          {item.totalProfitLoss < 0
+                            ? Math.abs(item?.totalProfitLoss?.toFixed(2))
+                            : item?.totalProfitLoss?.toFixed(2)}
                         </td>
 
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.totalCommission.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.createdAt}
+                          <p>
+                            {new Date(item.settledTime).toLocaleString("en-US", {
+                              year: "numeric",
+                              month: "long",
+                              day: "numeric",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                            })}
+                          </p>
                         </td>
                       </tr>
                     ))
