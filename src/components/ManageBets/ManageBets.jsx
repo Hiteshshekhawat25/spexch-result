@@ -35,6 +35,8 @@ function ManageBets({ Userid }) {
     status: "REVERT",
     date1: "",
     date2: "",
+    fromTime: "",
+    toTime: "",
   });
   const {
     sessions,
