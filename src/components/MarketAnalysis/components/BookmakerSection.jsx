@@ -51,15 +51,15 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
         for (let i = 0; i < marketData?.length; i++) {
           if (marketData?.[i]?.selectionId == sid) {
             if (marketData?.[i]?.betType === "back") {
-              wintotal += marketData?.[i]?.potentialWin
+              wintotal -= marketData?.[i]?.potentialWin
             } else {
-              wintotal -= marketData?.[i]?.amount
+              wintotal += marketData?.[i]?.amount
             }
           } else {
             if (marketData?.[i]?.betType === "back") {
-              amounttotal -= marketData?.[i]?.amount
+              amounttotal += marketData?.[i]?.amount
             } else {
-              amounttotal += marketData?.[i]?.potentialWin
+              amounttotal -= marketData?.[i]?.potentialWin
             }
           }
         }
@@ -99,8 +99,8 @@ const BookmakerSection = ({matchBetsData, setBetData, betData, openBets}) => {
               <div className="flex items-center justify-between border-t border-[#7e97a7] bg-[#faf8d8]">
                 <div className="md:px-4 px-3">
                   <div className="text-xs font-semibold">{item?.selectionName}</div>
-                  <div className={`text-[0.625rem] font-semibold ${price > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                    {price?.toFixed(2) || '0'}
+                  <div className={`text-[0.625rem] font-semibold ${returnExposerAmount(item?.selectionId) > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                    {returnExposerAmount(item?.selectionId)?.toFixed(2)}
                   </div>
                 </div>
                 <div className="flex items-center gap-2">

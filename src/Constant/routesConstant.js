@@ -36,5 +36,6 @@ export const ROUTES_CONST = {
   commission : "/commission",
   CasinoSettings : "/casinoSettings",
   CasinoGamesList : "/casino-games-list",
-  liabilty : '/liability'
+  liabilty : '/liability',
+  TossResult : '/toss-result'
 };

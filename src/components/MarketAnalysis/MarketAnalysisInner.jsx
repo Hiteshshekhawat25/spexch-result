@@ -16,6 +16,7 @@ import BookModal from "../marketBetModal/BookModal"
 import { fetchUserBook } from "../../Store/Slice/UserBookSlice"
 import MarketListModal from "../marketBetModal/MarketListModal"
 import { fetchmasterBook } from "../../Store/Slice/masterListSlice"
+import TossSection from "../toss/TossSecttion"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -48,6 +49,7 @@ const MarketAnalysisInner = () => {
   const betList = useSelector(state => state?.marketBetList)
   const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef()
+  const intervalRef = useRef();
   const { data: backBets } = useSelector(state => state?.marketBetList)
   const [listData, setListData] = useState([]);
   const { data: userBooks } = useSelector(state => state?.userBookList)
@@ -159,14 +161,24 @@ const MarketAnalysisInner = () => {
       }, 1000)
       return () => clearInterval(counterRef.current)
     }
-
   }, [isCached]);
 
   useEffect(() => {
-    console.log("matchID",gameId)
-      dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+    let timer ;
+    if(gameId && liveBets){
+         timer = setInterval(() => {
+          dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+        }, 5000);
+      
+    }
+    return ()=>clearInterval(timer)
+  }, [liveBets,gameId,pages.viewBet,search,backBets?.data?.length])
 
-  }, [liveBets, pages.viewBet,search])
+  useEffect(()=>{
+    if(gameId){
+      dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+    }
+  },[gameId,liveBets])
 
   useEffect(() => {
     if (showUserBook) {
@@ -199,8 +211,6 @@ const MarketAnalysisInner = () => {
       if (infiniteLoadRef.current) observer.unobserve(infiniteLoadRef.current)
     }
   }, [backBets?.data?.length,infiniteLoadRef.current])
-
-  console.log(backBets, 'ppppppppppppppppppppp')
 
   return (
     <>
@@ -249,6 +259,20 @@ const MarketAnalysisInner = () => {
                   : ''
               }
             </div>
+            <div>
+            {matchBetsData && (matchBetsData?.tossMarket?.length &&  matchBetsData?.tossStatus !== 'inactive') && matchBetsData?.gameId == '4' ? (
+            <div className="bg-green-200 my-4">
+              <TossSection
+                matchBetsData={matchBetsData}
+                setBetData={setBetData}
+                betData={backBets?.data?.filter((item) => item?.type == "toss")}
+                openBets={openBets?.data}
+              />
+            </div>
+          ) : (
+            ""
+          )}
+            </div>
             <div className={`${(activeOdds === 'all' || activeOdds === 'fancy') ? '' : 'max-lg:hidden'}`}>
               {
                 matchBetsData && cached?.matchfancies?.length ?
@@ -261,6 +285,7 @@ const MarketAnalysisInner = () => {
                   : ''
               }
             </div>
+         
           </div>
         </div>
         <div className="lg:col-span-5 col-span-1">
@@ -383,7 +408,7 @@ const MarketAnalysisInner = () => {
                   <tbody>
                     {
                       backBets?.data?.length > 0 ? 
-                  arrayFunction()?.map(item => (
+                      backBets?.data?.map(item => (
                           <tr key={item?._id}>
                             <td className={` p-2 border-b border-b-black ${(item?.betType === "back" || item?.betType === "yes") ? 'bg-[#d7e8f4]' : 'bg-[#f6e6ea]'}`}>
                               <div className="flex items-center gap-2">

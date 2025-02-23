@@ -8,6 +8,8 @@ import { useDispatch } from "react-redux"
 // import { openBookModal } from "../../../store/slices/modalSlice/modalSlice"
 import { returnStatus } from "../../../Utils/returnStatus";
 import BookFancyModal from "../../FancyModal/BookModalFancy";
+import { getService } from '../../../Services/casinoServices';
+import { useParams } from "react-router-dom";
 
 
 
@@ -27,6 +29,8 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
   const [previous, setPrevious] = useState({});
   const [info , setInfo] = useState(false);
   const [i,setI] = useState();
+  const { gameId } = useParams();
+  const [bookData,setbookData] = useState([]);
   const [openBookModal,setOpenBookModal] = useState(false);
   const [blink, setBlink] = useState(false);
   const [fancyTabs, setFancyTabs] = useState([]);
@@ -143,7 +147,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
     let wintotal = 0;
     let amounttotal = 0;
     // if (openBets?.length > 0) {
-      const marketData = betData?.filter((item) => item?.type === 'odds');
+      const marketData = betData?.filter((item) => item?.type === 'fancy');
       for (let i = 0; i < marketData?.length; i++) {
         if (marketData?.[i]?.selectionId == sid) {
           if (marketData?.[i]?.betType === "back") {
@@ -165,12 +169,19 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
   }
 
 
-  const handleBookFancy = () => {
-    // dispatch(openBookModal())
-    setOpenBookModal(true)
+  const handleBookFancy = async(data) => {
+    console.log(data,gameId,'matchIdselectionId')
+    try{
+      const res = await getService(`/user/get-fancy-bets?matchId=${gameId}&selectionId=${data?.marketId}`)
+      setbookData(res?.data?.data)
+      setOpenBookModal(true)
+      console.log(res?.data?.data,'resresresresresresresres')
+    }catch(error){
+      console.log(error)
+    }
   }
 
-  console.log({ matchBetsData },'fancyprice')
+  console.log({ matchBetsData ,betData},'fancyprice')
 
   return (
     <>
@@ -241,7 +252,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
                     </div> */}
                     <div className="">
                       <button variant="secondary" size="sm" className="flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-blue shadow hover:bg-gradient-blue-hover text-white h-8 rounded-md px-3 text-xs w-auto mr-3" onClick={() => {
-                        handleBookFancy();
+                        handleBookFancy(item);
                         setSelectedFancy(item?.marketName)
                       }}>Book</button>
                     </div>
@@ -282,7 +293,13 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
           }) : ''
         }
       </div>
-      <BookFancyModal selectedFancy={selectedFancy} matchBetsData={matchBetsData} openBets={betData} show={openBookModal} setShow={setOpenBookModal}/>
+      <BookFancyModal 
+      selectedFancy={selectedFancy} 
+      matchBetsData={matchBetsData} 
+      bookData={bookData}
+      openBets={betData} 
+      show={openBookModal} 
+      setShow={setOpenBookModal}/>
     </>
   )
 }

@@ -10,12 +10,12 @@ const initialState = {
 
 export const fetchMarketBets = createAsyncThunk(
   "marketBets",
-  async ({ matchId, page, perPage, search }) => {
+  async (data) => {
     try {
       const token = localStorage.getItem("authToken");
-
+      console.log(data?.matchId,'==============================12')
       // Construct base URL
-      let url = `${BASE_URL}/user/marketBetHistory?matchId=${matchId}&page=${page}&perPage=${perPage}`;
+      let url = `${BASE_URL}/user/marketBetHistory?matchId=${data?.matchId}`;
 
       // Append search query if available
       if (search) {

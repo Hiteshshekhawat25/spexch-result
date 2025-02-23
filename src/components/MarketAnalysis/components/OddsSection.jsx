@@ -58,20 +58,22 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
       const marketData = betData?.filter((item) => item?.type === 'odds');
       for (let i = 0; i < marketData?.length; i++) {
         if (marketData?.[i]?.selectionId == sid) {
+          console.log(marketData?.[i]?.potentialWin,'marketData?.[i]?.potentialWin')
           if (marketData?.[i]?.betType === "back") {
-            wintotal += marketData?.[i]?.potentialWin
+            wintotal -= marketData?.[i]?.potentialWin
           } else {
-            wintotal -= marketData?.[i]?.amount
+            wintotal += marketData?.[i]?.amount
           }
         } else {
+          console.log(marketData?.[i]?.amount,'marketData?.[i]?.amount')
           if (marketData?.[i]?.betType === "back") {
-            amounttotal -= marketData?.[i]?.amount
+            amounttotal += marketData?.[i]?.amount
           } else {
-            amounttotal += marketData?.[i]?.potentialWin
+            amounttotal -= marketData?.[i]?.potentialWin
           }
         }
       }
-      console.log(wintotal , amounttotal,'wintotal + amounttotal')
+      console.log(wintotal , amounttotal,'wintotal + amounttotal55555555555555')
       total = wintotal + amounttotal
       return total
     // }
@@ -81,7 +83,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
 
 
 
-  console.log(returnExposerAmount(),openBets,'matchBetsData123')
+  console.log(betData,'matchBetsData123')
 
   return (
     <>
@@ -113,7 +115,6 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
               let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.runnerName )?.[0]
               let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.runnerName )?.[0]
               let price = (p2?.totalPotentialWin ?  p2?.totalPotentialWin : 0) -(p1?.totalAmount ? p1?.totalAmount : 0) 
-
 
               console.log(item?.selectionId,'priceOdds')
             if (item?.runnerName) return (

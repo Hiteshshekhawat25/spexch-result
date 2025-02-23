@@ -457,6 +457,12 @@ const AllMatches = () => {
                         >
                           Result Log
                         </Link>
+                        <Link
+                          to={`/toss-result/${match.eventId}`}
+                          className="py-1 px-3 rounded-full text-white bg-lightblue bg-blue-500 whitespace-nowrap inline-block"
+                        >
+                          Toss Result
+                        </Link>
                       </div>
                     </td>
                     <td className="px-4 py-2 border border-gray-300"></td>

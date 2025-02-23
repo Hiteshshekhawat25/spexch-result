@@ -23,16 +23,16 @@ const MarketBetModal = ({
     setShow(false);
   };
 
-  useEffect(() => {
-    dispatch(
-      fetchMarketBets({
-        matchId,
-        page: currentPage,
-        perPage: entriesToShow,
-        search: searchTerm,
-      })
-    );
-  }, [matchId, currentPage, entriesToShow, searchTerm, dispatch]);
+  // useEffect(() => {
+  //     dispatch(
+  //       fetchMarketBets({
+  //         matchId,
+  //         page: currentPage,
+  //         perPage: entriesToShow,
+  //         search: searchTerm,
+  //       })
+  //     );
+  // }, [matchId, currentPage, entriesToShow, searchTerm, dispatch]);
 
   const handleSearch = (e) => {
     const value = e.target.value;
