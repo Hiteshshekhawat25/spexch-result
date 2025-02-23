@@ -87,7 +87,7 @@ const BetHistory = () => {
       setLocalLoading(true);
       try {
         const token = localStorage.getItem("authToken");
-        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${selectionId}&selectionId=${id}`;
+        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}&selectionId=${selectionId}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",

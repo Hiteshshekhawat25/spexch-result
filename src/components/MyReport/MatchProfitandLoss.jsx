@@ -704,7 +704,6 @@ const MatchProfitandLoss = () => {
 
     console.log("Navigating to:", url);
   };
-
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
