@@ -3,6 +3,7 @@ import { BASE_URL } from "../../Constant/Api";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 const BetHistory = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -23,6 +24,7 @@ const BetHistory = () => {
     direction: "descending",
   });
   const navigate = useNavigate();
+  const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
 
   const handlePageChange = (direction) => {
     let newPage = currentPage;
@@ -77,17 +79,13 @@ const BetHistory = () => {
     commission: sortedData.reduce((sum, row) => sum + row.commission, 0),
   };
 
-  // const handleRowClick = (gameId) => {
-  //   navigate(`/bet-history/${gameId}`);
-  // };
-
   useEffect(() => {
     console.log("inside", matchId, id, selectionId);
     const fetchData = async () => {
       setLocalLoading(true);
       try {
         const token = localStorage.getItem("authToken");
-        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}&selectionId=${selectionId}`;
+        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}&selectionId=${selectionId}&fromDate=${fromDate}&toDate=${toDate}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -233,38 +231,43 @@ const BetHistory = () => {
                           {item.marketNameTwo}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {/* {item.betType === "no" ? "Lay" : "Back"} */}
                           <td className="px-4 py-3 text-sm text-center">
-                            {item.betType === "no"
+                            {item.betType == "no"
                               ? "Lay"
-                              : item.betType === "yes"
+                              : item.betType == "yes"
                               ? "Back"
                               : "Void"}
                           </td>
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {/* {(item.fancy/item.odds)} */}
                           {item.fancyOdds}/{item.odds}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.totalAmount?.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400 whitespace-nowrap">
-                          <span
-                            className={
-                              item?.totalAmount < 0
-                                ? "text-red-500"
-                                : "text-green-800"
-                            }
-                          >
-                            {item?.totalAmount}
-                          </span>
-                          <span className="text-red-500">
-                            {" "}
-                            ({item?.totalProfitLoss || 0})
-                          </span>
-                        </td>
-
+  {item?.betType === "lay" || item?.betType === "no" ? (
+    <>
+      <span className="text-green-800">
+        {item?.totalAmount}
+      </span>
+      <span className="text-red-500">
+        {" "}
+        ({item?.totalProfitLoss || 0})
+      </span>
+    </>
+  ) : (
+    <>
+      <span className="text-green-800">
+        ({item?.totalProfitLoss})
+      </span>
+      <span className="text-red-500">
+        {" "}
+        (-{item?.totalAmount || 0})
+      </span>
+    </>
+  )}
+</td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {new Date(item.placeTime).toLocaleString("en-US", {
                             year: "numeric",
@@ -287,7 +290,6 @@ const BetHistory = () => {
                             hour12: true,
                           })}
                         </td>
-
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           <button className="text-EgyptianBlue">Info</button>
                         </td>

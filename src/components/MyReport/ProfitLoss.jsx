@@ -101,7 +101,6 @@ const ProfitLoss = () => {
     ),
   };
 
-
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
@@ -388,10 +387,8 @@ const ProfitLoss = () => {
           {/* Showing entries text */}
           <div className="text-sm text-gray-600 mb-2 sm:mb-0">
             Showing{" "}
-            {totalEntries === 0
-              ? 0
-              : (currentPage - 1) * entriesToShow + 1}{" "}
-            to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
+            {totalEntries === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+            {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
             {totalEntries} entries
           </div>
 

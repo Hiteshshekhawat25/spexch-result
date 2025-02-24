@@ -3,6 +3,7 @@ import { BASE_URL } from "../../Constant/Api";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 const ProfitLossUser = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -64,6 +65,8 @@ const ProfitLossUser = () => {
     commission: sortedData.reduce((sum, row) => sum + row.commission, 0),
   };
 
+  const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
+
   const handleRowClick = (matchId, id, selectionId) => {
     navigate(`/bet-history/${matchId}/${selectionId}/${id}`);
   };
@@ -74,7 +77,7 @@ const ProfitLossUser = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch(
-          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&selectionId=${id}&matchId=${selectionId}`,
+          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&selectionId=${id}&matchId=${selectionId}&fromDate=${fromDate}&toDate=${toDate}`,
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -98,6 +101,7 @@ const ProfitLossUser = () => {
 
     fetchData();
   }, [id]);
+
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
@@ -255,7 +259,8 @@ const ProfitLossUser = () => {
                             : item.marketNameTwo}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item?.marketName ?? "-"}
+                          {/* {item?.marketName ? " " : "void"} */}
+                          {item?.isDeleted ? "Void" : item?.marketName}
                         </td>
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400"
@@ -263,7 +268,9 @@ const ProfitLossUser = () => {
                             color: item.totalProfitLoss < 0 ? "red" : "green",
                           }}
                         >
-                          {item.totalProfitLoss < 0
+                          {item?.isDeleted
+                            ? "0.00"
+                            : item.totalProfitLoss < 0
                             ? Math.abs(item?.totalProfitLoss?.toFixed(2))
                             : item?.totalProfitLoss?.toFixed(2)}
                         </td>

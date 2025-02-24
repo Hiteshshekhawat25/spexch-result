@@ -4,6 +4,7 @@ import axios from "axios";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 const SportsandLossEvents = () => {
   const { gameId } = useParams();
@@ -27,6 +28,8 @@ const SportsandLossEvents = () => {
   ];
 
   console.log("userId", userId);
+  const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
+  console.log("fromDate", fromDate);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -40,6 +43,9 @@ const SportsandLossEvents = () => {
               page: 1,
               limit: 10,
               gameId: gameId,
+              userId,
+              fromDate: fromDate,
+              toDate: toDate,
             },
             headers: {
               "Content-Type": "application/json; charset=utf-8",

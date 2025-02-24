@@ -47,7 +47,7 @@ import { createSlice } from "@reduxjs/toolkit";
 // export default eventPLFilterSlice.reducer;
 // eventPLFilterSlice.js
 const initialState = {
-  dataSource: "live", // Default to "live"
+  dataSource: "live", 
   fromDate: null,
   toDate: null,
   fromTime: null,

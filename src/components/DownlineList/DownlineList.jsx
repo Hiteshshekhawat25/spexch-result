@@ -106,6 +106,7 @@ const DownlineList = () => {
       state: {
         selectedUser: item,
         selectedPage: "profitLoss",
+        userId: item._id
       },
     });
   };
@@ -126,6 +127,7 @@ const DownlineList = () => {
       state: {
         selectedUser: item,
         selectedPage: "myProfile",
+        userId: item._id
       },
     });
   };
@@ -223,7 +225,7 @@ const DownlineList = () => {
               if (masterAgentRoles.length > 0) {
                 // Fetch all data for each role without pagination
                 const fetchPromises = masterAgentRoles.map(
-                  (role) => fetchDownlineData(1, 10000, role.role_id) // High limit to get all data
+                  (role) => fetchDownlineData(1, 10000, role.role_id) 
                 );
 
                 const results = await Promise.all(fetchPromises);
@@ -924,7 +926,7 @@ const DownlineList = () => {
                             </div>
                             {!isMasterDownlineList && (
                               <div
-                                onClick={() => handleArrowClick(item)}
+                                onClick={() => handleArrowClick(item,item._id)}
                                 className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                               >
                                 <RiArrowUpDownFill className="text-darkgray" />
@@ -947,9 +949,12 @@ const DownlineList = () => {
                             </div>
 
                             <div
-                              onClick={() => handleProfileClick(item)}
-                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
-                            >
+  onClick={() => {
+    handleProfileClick(item,item._id);
+    console.log("item",item._id);
+  }}
+  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+>
                               <FaUserAlt className="text-darkgray" />
                             </div>
 

@@ -572,6 +572,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { BASE_URL } from "../../Constant/Api";
 import { ClipLoader } from "react-spinners";
+import { useSelector } from "react-redux";
 
 const MatchProfitandLoss = () => {
   const { matchId } = useParams();
@@ -591,7 +592,7 @@ const MatchProfitandLoss = () => {
 
   console.log("userId", user_id);
 
-  // Define headers based on the fields returned by your API.
+  // Define headers based on the fields returned by your API
   const headers = [
     { display: "Sport Name", key: "sports" },
     { display: "Event Name", key: "event" },
@@ -602,6 +603,8 @@ const MatchProfitandLoss = () => {
     { display: "Settle Time", key: "settle" },
   ];
 
+  const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
+  console.log("fromDate in matchbet", fromDate);
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("authToken");
@@ -613,6 +616,9 @@ const MatchProfitandLoss = () => {
               page: 1,
               limit: 10,
               matchId: matchId,
+              userId:user_id,
+              fromDate: fromDate,
+              toDate: toDate,
             },
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -622,25 +628,7 @@ const MatchProfitandLoss = () => {
           }
         );
 
-        // Apply default sorting when data is fetched
-        const sortedData = response.data.data.sort((a, b) => {
-          const aValue = a[sortConfig.key];
-          const bValue = b[sortConfig.key];
-
-          if (typeof aValue === "number" && typeof bValue === "number") {
-            return sortConfig.direction === "ascending"
-              ? aValue - bValue
-              : bValue - aValue;
-          }
-
-          if (aValue < bValue)
-            return sortConfig.direction === "ascending" ? -1 : 1;
-          if (aValue > bValue)
-            return sortConfig.direction === "ascending" ? 1 : -1;
-          return 0;
-        });
-
-        setData(sortedData);
+        setData(response.data.data); // No sorting here
         setTotalEntries(response.data.total);
         setTotalPages(Math.ceil(response.data.total / entriesToShow));
       } catch (error) {
@@ -651,7 +639,7 @@ const MatchProfitandLoss = () => {
     };
 
     fetchData();
-  }, [matchId, entriesToShow]);
+  }, [matchId, entriesToShow, fromDate, toDate]);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -683,11 +671,6 @@ const MatchProfitandLoss = () => {
   );
 
   const handleMarketNameClick = (matchId, selectionId, userId) => {
-    console.log("matchId:", matchId);
-    console.log("selectionId:", selectionId);
-    console.log("userId:", userId);
-    console.log("first user user_id:", user_id);
-
     let url = "";
 
     if (user_id) {
@@ -701,9 +684,8 @@ const MatchProfitandLoss = () => {
         state: { userId },
       });
     }
-
-    console.log("Navigating to:", url);
   };
+
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;

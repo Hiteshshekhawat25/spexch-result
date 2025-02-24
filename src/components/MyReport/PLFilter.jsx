@@ -23,7 +23,7 @@ const PLFilter = ({
   const plFilterState = useSelector((state) => state.plFilter);
   const { dataSource, fromDate, toDate, fromTime, toTime } =
     plFilterState || {};
-
+  //  const { fromDate, toDate } = useSelector((state) => state.plFilter);
   // Get today's date
   const today = new Date().toISOString().split("T")[0];
 

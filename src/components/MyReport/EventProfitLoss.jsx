@@ -14,7 +14,8 @@ const EventProfitLoss = ({ Userid }) => {
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
-  const [totalTransactions, setTotalTransactions] = useState(0);
+  // const [totalTransactions, setTotalTransactions] = useState(0);
+
   const location = useLocation();
   const userId = location.state?.userId;
   const [sortConfig, setSortConfig] = useState({
@@ -22,6 +23,9 @@ const EventProfitLoss = ({ Userid }) => {
     direction: "ascending",
   });
   const navigate = useNavigate();
+
+  const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
+  console.log("fromDate", fromDate);
 
   console.log("userId", userId);
 
@@ -302,9 +306,7 @@ const EventProfitLoss = ({ Userid }) => {
               {/* Showing entries text */}
               <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}
-                {totalEntries === 0
-                  ? 0
-                  : (currentPage - 1) * entriesToShow + 1}{" "}
+                {totalEntries === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
                 to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
                 {totalEntries} entries
               </div>
