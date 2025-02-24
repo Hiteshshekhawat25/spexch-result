@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { BASE_URL } from "../../Constant/Api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
+import { ClipLoader } from "react-spinners";
 
 const BetHistory = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -11,14 +12,27 @@ const BetHistory = () => {
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
-  const { selectionId, id } = useParams();
-  console.log(selectionId, id);
+  const { matchId, selectionId, id } = useParams();
+  const [totalTransactions, setTotalTransactions] = useState(0);
+  const location = useLocation();
+  // const { userId, matchId, selectionId } = location.state || {};
+  console.log("bethistory url params", matchId, selectionId, id);
 
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
-    direction: "ascending",
+    direction: "descending",
   });
   const navigate = useNavigate();
+
+  const handlePageChange = (direction) => {
+    let newPage = currentPage;
+    if (direction === "next" && currentPage < totalPages) newPage++;
+    else if (direction === "prev" && currentPage > 1) newPage--;
+    else if (direction === "first") newPage = 1;
+    else if (direction === "last") newPage = totalPages;
+
+    setCurrentPage(newPage);
+  };
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -63,25 +77,25 @@ const BetHistory = () => {
     commission: sortedData.reduce((sum, row) => sum + row.commission, 0),
   };
 
-  const handleRowClick = (gameId) => {
-    navigate(`/bet-history/${gameId}`);
-  };
+  // const handleRowClick = (gameId) => {
+  //   navigate(`/bet-history/${gameId}`);
+  // };
 
   useEffect(() => {
+    console.log("inside", matchId, id, selectionId);
     const fetchData = async () => {
       setLocalLoading(true);
       try {
         const token = localStorage.getItem("authToken");
-        const response = await fetch(
-          `${BASE_URL}/user/get-selection-amount-profit-loss?page=1&limit=200&selectionId=${selectionId}&matchId=${id}`,
-          {
-            headers: {
-              "Content-Type": "application/json; charset=utf-8",
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}&selectionId=${selectionId}`;
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
         const data = await response.json();
         setProfitLossData(data.data);
         setTotalEntries(data.total);
@@ -95,7 +109,7 @@ const BetHistory = () => {
     };
 
     fetchData();
-  }, []);
+  }, [matchId, id]);
 
   return (
     <div className="p-4">
@@ -105,7 +119,7 @@ const BetHistory = () => {
             <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
             <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
             <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
-              Loading...
+              <ClipLoader />
             </div>
           </div>
         </div>
@@ -113,7 +127,7 @@ const BetHistory = () => {
         <>
           <div className="border border-gray-300 rounded-md bg-white">
             <h1 className="text-xl bg-gradient-blue text-white font-bold p-4">
-              Profit Loss User
+              Bet History
             </h1>
 
             <div className="flex justify-between items-center mb-4 p-4">
@@ -196,56 +210,86 @@ const BetHistory = () => {
                 <tbody>
                   {profitLossData.length > 0 ? (
                     paginatedData.map((item, index) => (
-                      <tr key={index} className="border-b border-gray-400">
+                      <tr
+                        key={index}
+                        className={`border-b border-gray-400 ${
+                          item.betType === "no" || item.betType === "lay"
+                            ? "bg-pink-300"
+                            : item.betType === "Back" || item.betType === "yes"
+                            ? "bg-lightblue"
+                            : ""
+                        }`}
+                      >
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDetails.sport}
+                          {item.sport}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDetails.match}
+                          {item.match}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDetails.marketName}
+                          {item.marketNameTwo}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.matchDetails.runnerName}
+                          {item.marketNameTwo}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.betType}
+                          {/* {item.betType === "no" ? "Lay" : "Back"} */}
+                          <td className="px-4 py-3 text-sm text-center">
+                            {item.betType === "no"
+                              ? "Lay"
+                              : item.betType === "yes"
+                              ? "Back"
+                              : "Void"}
+                          </td>
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.odds}
+                          {/* {(item.fancy/item.odds)} */}
+                          {item.fancyOdds}/{item.odds}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.amount?.toFixed(2)}
+                          {item.totalAmount?.toFixed(2)}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.totalDownlineProfitLoss}
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400 whitespace-nowrap">
+                          <span
+                            className={
+                              item?.totalAmount < 0
+                                ? "text-red-500"
+                                : "text-green-800"
+                            }
+                          >
+                            {item?.totalAmount}
+                          </span>
+                          <span className="text-red-500">
+                            {" "}
+                            ({item?.totalProfitLoss || 0})
+                          </span>
                         </td>
+
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {new Date(item.createdAt).toLocaleString("en-US", {
+                          {new Date(item.placeTime).toLocaleString("en-US", {
                             year: "numeric",
                             month: "short",
                             day: "2-digit",
                             hour: "2-digit",
                             minute: "2-digit",
+                            second: "2-digit",
                             hour12: true,
                           })}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {new Date(
-                            item.matchDetails.marketStartTime
-                          ).toLocaleString("en-US", {
+                          {new Date(item.matchTime).toLocaleString("en-US", {
                             year: "numeric",
                             month: "short",
                             day: "2-digit",
                             hour: "2-digit",
                             minute: "2-digit",
+                            second: "2-digit",
                             hour12: true,
                           })}
                         </td>
 
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.details}
+                          <button className="text-EgyptianBlue">Info</button>
                         </td>
                       </tr>
                     ))
@@ -262,52 +306,108 @@ const BetHistory = () => {
                 </tbody>
               </table>
             </div>
-
-            <div className="flex justify-between mb-2 sm:mb-0 items-center mt-4  flex-col sm:flex-row">
-              <div className="text-sm text-gray-600 sm:mb-0">
+            <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+              {/* Showing entries text */}
+              <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}
-                {totalEntries > 0
-                  ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
-                      currentPage * entriesToShow,
-                      totalEntries
-                    )}`
-                  : "0 to 0"}{" "}
-                of {totalEntries} entries
+                {totalTransactions === 0
+                  ? 0
+                  : (currentPage - 1) * entriesToShow + 1}{" "}
+                to {Math.min(currentPage * entriesToShow, totalTransactions)} of{" "}
+                {totalTransactions} entries
               </div>
-              <div className="flex space-x-2 sm:ml-auto">
-                <button
-                  onClick={() => setCurrentPage(1)}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                  disabled={currentPage === 1}
-                >
-                  First
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-                <button
-                  onClick={() => setCurrentPage(totalPages)}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                  disabled={currentPage === totalPages}
-                >
-                  Last
-                </button>
-              </div>
+
+              {/* Pagination Buttons */}
+              {totalPages > 1 && (
+                <div className="flex space-x-2">
+                  {/* First Button */}
+                  <button
+                    onClick={() => handlePageChange("first")}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === 1
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    First
+                  </button>
+
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange("prev")}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === 1
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Previous
+                  </button>
+
+                  {/* Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => {
+                      if (
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1)
+                      ) {
+                        return (
+                          <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                              currentPage === page
+                                ? "bg-gray-200"
+                                : "hover:bg-gray-100"
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        );
+                      } else if (
+                        page === currentPage - 2 ||
+                        page === currentPage + 2
+                      ) {
+                        return (
+                          <span key={page} className="px-3 py-1 text-sm">
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
+                    }
+                  )}
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange("next")}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Next
+                  </button>
+
+                  {/* Last Button */}
+                  <button
+                    onClick={() => handlePageChange("last")}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Last
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </>

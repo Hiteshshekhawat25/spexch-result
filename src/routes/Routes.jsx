@@ -44,6 +44,7 @@ import GamesList from "../components/casino/GamesList";
 import Libility from "../components/libility/Libility";
 import TossResult from "../components/toss/TossResult";
 import PendingMarket from "../components/libility/PendingMarket";
+import CommissionPage from "../components/Commission/CommissionPage";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -62,7 +63,7 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-      
+
       <Route
         path={ROUTES_CONST.masterdownlineList}
         element={
@@ -133,7 +134,7 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-       <Route
+      <Route
         path={ROUTES_CONST.ManageBets}
         element={
           <ProtectedRoutes>
@@ -153,45 +154,43 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
-       <Route
+      <Route
         path={ROUTES_CONST.CasinoSettings}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <Casino/>
+              <Casino />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
 
-       <Route
+      <Route
         path={ROUTES_CONST.liabilty}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <Libility/>
+              <Libility />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
-       <Route
+      <Route
         path={`${ROUTES_CONST.CasinoGamesList}/:id`}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <GamesList/>
+              <GamesList />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
-       <Route
-        path={ROUTES_CONST.Commission}
+      <Route
+        path={ROUTES_CONST.commission}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <div className="text-center font-bold">
-                Coming Soon...
-              </div>
+              <CommissionPage />
             </LayoutHeader>
           </ProtectedRoutes>
         }
@@ -351,15 +350,16 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-        path={`${ROUTES_CONST.BetHistory}/:selectionId/:id`}
+        path={`${ROUTES_CONST.BetHistory}/:matchId/:selectionId/:id?`}
         element={
           <ProtectedRoutes>
             <LayoutHeader>
-              <BetHistory/>
+              <BetHistory />
             </LayoutHeader>
           </ProtectedRoutes>
         }
       />
+
       <Route
         path={ROUTES_CONST.EventProfitLoss}
         element={
@@ -452,7 +452,7 @@ const RoutesComp = ({ socket }) => {
         }
       />
 
-<Route
+      <Route
         path={`${ROUTES_CONST.TossResult}/:matchId`}
         element={
           <ProtectedRoutes>

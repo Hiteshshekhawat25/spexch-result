@@ -11,13 +11,12 @@ import {
 import { clearUserData } from "../../Store/Slice/userInfoSlice";
 import { toast } from "react-toastify";
 import {
-  changeBetPassword,
   changeOwnPassword,
   changeUserPassword,
 } from "../../Services/UserInfoApi";
 import { useNavigate } from "react-router-dom";
 
-const ChangePasswordModal = ({ userId, onCancel }) => {
+const BetPasswordModal = ({ userId, onCancel }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -82,16 +81,21 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
     dispatch(setChangePasswordLoading());
 
     try {
-        await changeBetPassword(confirmPassword, newPassword,currentPassword);
-       
+      if (userId) {
+        await changeUserPassword(currentPassword, newPassword, userId);
+      } else {
+        await changeOwnPassword(currentPassword, newPassword);
+        dispatch(clearUserData());
+        localStorage.removeItem("token");
         toast.success("Your Password has been Changed Successfully !");
-      //   setTimeout(() => {
-      //     navigate("/");
-      //   }, 2000);
-      //   return;
-      // dispatch(setChangePasswordSuccess());
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
+        return;
+      }
+      dispatch(setChangePasswordSuccess());
       onCancel();
-      // toast.success("Password changed successfully!");
+      toast.success("Password changed successfully!");
     } catch (err) {
       dispatch(setChangePasswordError(err.message));
       setError(err.message);
@@ -103,7 +107,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
       <div className="bg-white rounded-lg w-[500px] mt-20">
         <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-2">
-          <span>Bet Password</span>
+          <span>Change Password</span>
           <IoClose
             onClick={onCancel}
             className="cursor-pointer text-white text-2xl"
@@ -257,4 +261,4 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
   );
 };
 
-export default ChangePasswordModal;
+export default BetPasswordModal;

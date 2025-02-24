@@ -3,7 +3,8 @@ import { useSelector } from "react-redux";
 import EventPLFilter from "./EventPLFilter";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 
 const EventProfitLoss = ({ Userid }) => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -13,12 +14,16 @@ const EventProfitLoss = ({ Userid }) => {
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
-
+  const [totalTransactions, setTotalTransactions] = useState(0);
+  const location = useLocation();
+  const userId = location.state?.userId;
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
     direction: "ascending",
   });
   const navigate = useNavigate();
+
+  console.log("userId", userId);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -67,7 +72,19 @@ const EventProfitLoss = ({ Userid }) => {
   };
 
   const handleRowClick = (gameId) => {
-    navigate(`${ROUTES_CONST.SportsandLossEvents}/${gameId}`);
+    navigate(`${ROUTES_CONST.SportsandLossEvents}/${gameId}`, {
+      state: { userId: userId },
+    });
+  };
+
+  const handlePageChange = (direction) => {
+    let newPage = currentPage;
+    if (direction === "next" && currentPage < totalPages) newPage++;
+    else if (direction === "prev" && currentPage > 1) newPage--;
+    else if (direction === "first") newPage = 1;
+    else if (direction === "last") newPage = totalPages;
+
+    setCurrentPage(newPage);
   };
   return (
     <div className="p-4">
@@ -77,7 +94,7 @@ const EventProfitLoss = ({ Userid }) => {
             <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
             <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
             <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
-              Loading...
+              <ClipLoader />
             </div>
           </div>
         </div>
@@ -180,63 +197,62 @@ const EventProfitLoss = ({ Userid }) => {
                 </thead>
                 <tbody>
                   {profitLossData.length > 0 ? (
-                    paginatedData.map(
-                      (item, index) => (
-                        console.log("item", item),
-                        (
-                          <tr
-                            key={index}
-                            className="border-b border-gray-400 font-medium"
-                          >
-                            <td
-                              onClick={() => handleRowClick(item.gameId)}
-                              className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer font-medium"
-                            >
-                              {item._id}
-                            </td>
-                            <td
-                              className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
-                              style={{
-                                color:
-                                  item.totalUplineProfitLoss < 0
-                                    ? "red"
-                                    : "green",
-                              }}
-                            >
-                              {item.totalUplineProfitLoss < 0
-                                ? `-${Math.abs(
-                                    item.totalUplineProfitLoss.toFixed(2)
-                                  ) + item.totalCommission}`
-                                : item.totalUplineProfitLoss.toFixed(2) + item?.totalCommission}
-                            </td>
+                    paginatedData.map((item, index) => (
+                      <tr
+                        key={index}
+                        className="border-b border-gray-400 font-medium"
+                      >
+                        <td
+                          onClick={() => handleRowClick(item.gameId)}
+                          className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer font-medium"
+                        >
+                          {item._id}
+                        </td>
+                        <td
+                          className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
+                          style={{
+                            color:
+                              item.totalUplineProfitLoss < 0 ? "red" : "green",
+                          }}
+                        >
+                          {item.totalUplineProfitLoss < 0
+                            ? `-${Math.abs(
+                                item.totalUplineProfitLoss.toFixed(2)
+                              )}`
+                            : item.totalUplineProfitLoss.toFixed(2)}
+                        </td>
 
-                            <td
-                              className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
-                              style={{
-                                color:
-                                  item.totalDownlineProfitLoss < 0
-                                    ? "red"
-                                    : "green",
-                              }}
-                            >
-                              {item.totalDownlineProfitLoss < 0
-                                ? Math.abs(
-                                    item.totalDownlineProfitLoss.toFixed(2)
-                                  )
-                                : item.totalDownlineProfitLoss.toFixed(2)}
-                            </td>
+                        <td
+                          className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
+                          style={{
+                            color:
+                              item.totalDownlineProfitLoss < 0
+                                ? "red"
+                                : "green",
+                          }}
+                        >
+                          {item.totalDownlineProfitLoss < 0
+                            ? Math.abs(
+                                (
+                                  item.totalDownlineProfitLoss +
+                                  item.totalCommission
+                                ).toFixed(2)
+                              )
+                            : (
+                                item.totalDownlineProfitLoss +
+                                item.totalCommission
+                              ).toFixed(2)}
+                        </td>
 
-                            <td className="px-4 py-3 text-sm text-center font-medium">
-                              {Math.abs(item.totalCommission.toFixed(2))}
-                            </td>
-                          </tr>
-                        )
-                      )
-                    )
+                        <td className="px-4 py-3 text-sm text-center font-medium">
+                          {Math.abs(item.totalCommission.toFixed(2))}
+                        </td>
+                      </tr>
+                    ))
                   ) : (
                     <tr>
                       <td colSpan="4" className="px-4 py-3 text-sm text-center">
-                        No data available
+                        No data !
                       </td>
                     </tr>
                   )}
@@ -256,7 +272,9 @@ const EventProfitLoss = ({ Userid }) => {
                               : "text-green-500"
                           }`}
                         >
-                          {totalData.profitLoss < 0 ? `-${(Math.abs(totalData.profitLoss?.toFixed(2))+ totalData.commission)}` : (Math.abs(totalData.profitLoss?.toFixed(2))+ totalData.commission) }
+                          {totalData.profitLoss < 0
+                            ? `-${Math.abs(totalData.profitLoss?.toFixed(2))}`
+                            : Math.abs(totalData.profitLoss?.toFixed(2))}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
@@ -267,7 +285,9 @@ const EventProfitLoss = ({ Userid }) => {
                               : "text-green-500"
                           }`}
                         >
-                          {Math.abs(totalData.downlineProfitLoss?.toFixed(2))}
+                          {Math.abs(
+                            totalData.downlineProfitLoss + totalData.commission
+                          )?.toFixed(2)}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm text-center font-medium">
@@ -278,52 +298,108 @@ const EventProfitLoss = ({ Userid }) => {
                 )}
               </table>
             </div>
-
-            <div className="flex justify-between mb-2 sm:mb-0 items-center m-4  flex-col sm:flex-row">
-              <div className="text-[12px] sm:text-sm w-full items-start mb-2 text-gray-600 sm:mb-0">
+            <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+              {/* Showing entries text */}
+              <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}
-                {totalEntries > 0
-                  ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
-                      currentPage * entriesToShow,
-                      totalEntries
-                    )}`
-                  : "0 to 0"}{" "}
-                of {totalEntries} entries
+                {totalEntries === 0
+                  ? 0
+                  : (currentPage - 1) * entriesToShow + 1}{" "}
+                to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
+                {totalEntries} entries
               </div>
-              <div className="flex space-x-2 sm:ml-auto">
-                <button
-                  onClick={() => setCurrentPage(1)}
-                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm border border-gray-300"
-                  disabled={currentPage === 1}
-                >
-                  First
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm border border-gray-300"
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm border border-gray-300"
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-                <button
-                  onClick={() => setCurrentPage(totalPages)}
-                  className="px-3 py-1 text-gray-600 rounded text-[12px] sm:text-sm border border-gray-300"
-                  disabled={currentPage === totalPages}
-                >
-                  Last
-                </button>
-              </div>
+
+              {/* Pagination Buttons */}
+              {totalPages > 1 && (
+                <div className="flex space-x-2">
+                  {/* First Button */}
+                  <button
+                    onClick={() => handlePageChange("first")}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === 1
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    First
+                  </button>
+
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange("prev")}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === 1
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Previous
+                  </button>
+
+                  {/* Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => {
+                      if (
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1)
+                      ) {
+                        return (
+                          <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                              currentPage === page
+                                ? "bg-gray-200"
+                                : "hover:bg-gray-100"
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        );
+                      } else if (
+                        page === currentPage - 2 ||
+                        page === currentPage + 2
+                      ) {
+                        return (
+                          <span key={page} className="px-3 py-1 text-sm">
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
+                    }
+                  )}
+
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange("next")}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Next
+                  </button>
+
+                  {/* Last Button */}
+                  <button
+                    onClick={() => handlePageChange("last")}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Last
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </>

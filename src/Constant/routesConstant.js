@@ -33,7 +33,7 @@ export const ROUTES_CONST = {
   SportsandLossEvents: "/sportsandlossevents",
   ProfitLossUser: '/profit-loss-user',
   BetHistory :"/bet-history"  ,
-  Commission : "/commissions",
+  commission : "/commission",
   CasinoSettings : "/casinoSettings",
   CasinoGamesList : "/casino-games-list",
   liabilty : '/liability',

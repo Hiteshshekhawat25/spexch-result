@@ -216,7 +216,7 @@ const DownlineList = () => {
                   role.role_name.toLowerCase() === "master" ||
                   role.role_name.toLowerCase() === "agent" ||
                   role.role_name.toLowerCase() === "sub-admin" ||
-                  role.role_name.toLowerCase() === "super"||
+                  role.role_name.toLowerCase() === "super" ||
                   role.role_name.toLowerCase() === "white-level"
               );
 
@@ -358,14 +358,14 @@ const DownlineList = () => {
     setIsDeleteModalOpen(true);
   };
 
-  if (error) {
-    console.error("Error fetching user:", error);
-    return (
-      <div className="text-red-500 font-custom font-bold">
-        An error occurred: {error}
-      </div>
-    );
-  }
+  // if (error) {
+  //   console.error("Error fetching user:", error);
+  //   return (
+  //     <div className="text-red-500 font-custom font-bold">
+  //       An error occurred: {error}
+  //     </div>
+  //   );
+  // }
   const handleDeleteModalClose = () => {
     setIsDeleteModalOpen(false);
     setUserToDelete(null);
@@ -414,13 +414,44 @@ const DownlineList = () => {
     setSelectedUser(user);
   };
 
+  // const handleUsernameList = async (item) => {
+  //   // alert(item.role_name);
+  //   try {
+  //     if (item.role_name === "master") {
+  //       const data = await fetchallUsers(item._id);
+  //       setUserFetchList(data);
+  //     } else if (item.role_name === "agent") {
+  //       const data = await fetchallUsers(item._id);
+  //       setUserFetchList(data);
+  //     } else if (item.role_name === "super-admin") {
+  //       const data = await fetchallUsers(item._id);
+  //       setUserFetchList(data);
+  //     } else if (item.role_name === "super") {
+  //       const data = await fetchallUsers(item._id);
+  //       setUserFetchList(data);
+  //     } else if (item.role_name === "White-level") {
+  //       const data = await fetchallUsers(item._id);
+  //       setUserFetchList(data);
+  //     } else if (item.role_name === "sub-admin") {
+  //       const data = await fetchallUsers(item._id);
+  //       setUserFetchList(data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching details:", error);
+  //   }
+  // };
   const handleUsernameList = async (item) => {
-    // console.log("Fetching nested users for:", item);
     try {
-      if (item.role_name === "master") {
-        const data = await fetchallUsers(item._id);
-        setUserFetchList(data);
-      } else if (item.role_name === "agent") {
+      const validRoles = [
+        "master",
+        "agent",
+        "super-admin",
+        "super",
+        "white-level",
+        "sub-admin",
+      ];
+
+      if (validRoles.includes(item.role_name)) {
         const data = await fetchallUsers(item._id);
         setUserFetchList(data);
       }
@@ -497,7 +528,6 @@ const DownlineList = () => {
         err.response?.data?.message ||
         err.message ||
         "An error occurred. Please try again.";
-      // setApiError(errorMessage);s
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -515,7 +545,7 @@ const DownlineList = () => {
             <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
 
             <div className="absolute bottom-[-40px] w-full text-center text-xl font-custom font-medium text-black">
-              <ClipLoader />
+              <ClipLoader size={40} color="#0000FF" />
             </div>
           </div>
         </div>
@@ -702,7 +732,7 @@ const DownlineList = () => {
                               {item.role_name?.toUpperCase()}
                             </span>
                             <span
-                              className="text-[#2789ce] font-custom font-semibold"
+                              className="text-[#2789ce] font-custom font-semibold cursor-pointer"
                               style={{
                                 fontFamily: "Tahoma, Helvetica, sans-serif",
                               }}
@@ -955,37 +985,99 @@ const DownlineList = () => {
               </table>
             </div>
             <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
+              {/* Showing entries text */}
               <div className="text-sm text-gray-600">
                 Showing{" "}
                 {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
                 to {Math.min(currentPage * entriesToShow, totalUsers)} of{" "}
                 {totalUsers} entries
               </div>
+
+              {/* Pagination Buttons */}
               <div className="flex space-x-2 sm:ml-auto">
+                {/* First Button */}
                 <button
                   onClick={() => handlePageChange("first")}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
                   disabled={currentPage === 1}
                 >
                   First
                 </button>
+
+                {/* Previous Button */}
                 <button
                   onClick={() => handlePageChange("prev")}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === 1
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
                   disabled={currentPage === 1}
                 >
                   Previous
                 </button>
+
+                {/* Page Numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                  (page) => {
+                    if (
+                      page === 1 ||
+                      page === currentPage ||
+                      page === totalPages ||
+                      (page >= currentPage - 2 && page <= currentPage + 2)
+                    ) {
+                      return (
+                        <button
+                          key={page}
+                          onClick={() => setCurrentPage(page)}
+                          className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                            currentPage === page
+                              ? "bg-gray-200"
+                              : "hover:bg-gray-100"
+                          }`}
+                        >
+                          {page}
+                        </button>
+                      );
+                    } else if (
+                      (page === currentPage - 3 && currentPage > 4) ||
+                      (page === currentPage + 3 && currentPage < totalPages - 3)
+                    ) {
+                      return (
+                        <span key={page} className="px-3 py-1 text-sm">
+                          ...
+                        </span>
+                      );
+                    }
+                    return null;
+                  }
+                )}
+
+                {/* Next Button */}
                 <button
                   onClick={() => handlePageChange("next")}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === totalPages
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
                   disabled={currentPage === totalPages}
                 >
                   Next
                 </button>
+
+                {/* Last Button */}
                 <button
                   onClick={() => handlePageChange("last")}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
+                  className={`px-3 py-1 text-sm rounded ${
+                    currentPage === totalPages
+                      ? "opacity-50 cursor-not-allowed"
+                      : "hover:bg-gray-100"
+                  }`}
                   disabled={currentPage === totalPages}
                 >
                   Last

@@ -19,7 +19,6 @@ const ActivityLog = ({ Userid }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const totalPages = Math.ceil(totalRecords / entriesToShow);
-  
 
   const userData = JSON.parse(localStorage.getItem("userData"));
   const userId = userData?.data?._id;
@@ -55,11 +54,11 @@ const ActivityLog = ({ Userid }) => {
   //     fetchActivityLogs();
   //   }
   // }, [Userid, currentPage, entriesToShow, dispatch]);
-  console.log("Userid",Userid);
-  console.log("userId",userId);
+  console.log("Userid", Userid);
+  console.log("userId", userId);
   useEffect(() => {
     const id = Userid || userId;
-  
+
     if (id) {
       dispatch(setActivityLogsLoading());
       const fetchActivityLogs = async () => {
@@ -86,7 +85,7 @@ const ActivityLog = ({ Userid }) => {
           );
         }
       };
-  
+
       fetchActivityLogs();
     }
   }, [Userid, userId, currentPage, entriesToShow, dispatch]);
@@ -217,42 +216,105 @@ const ActivityLog = ({ Userid }) => {
         </div>
 
         <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+          {/* Showing entries text */}
           <div className="text-sm text-gray-600 mb-2 sm:mb-0">
             Showing{" "}
             {totalRecords === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
             {Math.min(currentPage * entriesToShow, totalRecords)} of{" "}
             {totalRecords} entries
           </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => handlePageChange("first")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === 1}
-            >
-              First
-            </button>
-            <button
-              onClick={() => handlePageChange("prev")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => handlePageChange("next")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-            <button
-              onClick={() => handlePageChange("last")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === totalPages}
-            >
-              Last
-            </button>
-          </div>
+
+          {/* Pagination Buttons */}
+          {totalPages > 1 && (
+            <div className="flex space-x-2">
+              {/* First Button */}
+              <button
+                onClick={() => handlePageChange("first")}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                First
+              </button>
+
+              {/* Previous Button */}
+              <button
+                onClick={() => handlePageChange("prev")}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => {
+                  if (
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                          currentPage === page
+                            ? "bg-gray-200"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (
+                    page === currentPage - 2 ||
+                    page === currentPage + 2
+                  ) {
+                    return (
+                      <span key={page} className="px-3 py-1 text-sm">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                }
+              )}
+
+              {/* Next Button */}
+              <button
+                onClick={() => handlePageChange("next")}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === totalPages
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Next
+              </button>
+
+              {/* Last Button */}
+              <button
+                onClick={() => handlePageChange("last")}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === totalPages
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Last
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,7 +1,8 @@
 import React from 'react'
 
-function RemarkModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet}) {
+function RemarkModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet,password,setpassword}) {
  
+
 
   const handleClose = () => {
     setShowUser(false)
@@ -29,7 +30,13 @@ function RemarkModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet}) 
                placeholder='Enter a Remark'
                />
               </div>
-              <div className='w-full mt-2  flex justify-end'>
+              <div className=' mt-2 mx-2 flex justify-between'>
+                <input
+                value={password} 
+                className='shadow border-1 w-full  max-w-[200px]  border-gray-800 outline-gray-400 rounded-md p-2  '
+                placeholder='Password'
+                onChange={(e)=>setpassword(e.target.value)}
+                />
                 <button  className='bg-lightblue text-white px-5 py-2 rounded-md' onClick={handleDeleteBet}>
                     Submit
                 </button>

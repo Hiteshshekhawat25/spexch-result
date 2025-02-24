@@ -25,6 +25,7 @@ module.exports = {
         NavyBlue: '#1b186e',
         bluehover: '#d1ddef',
         lightblue: '#38bdf8',
+        EgyptianBlue:"#1434A4",
         cream: '#fffbeb',
         success: '#4CAF50', // Custom success color
         error: '#F44336', // Custom error color

@@ -179,7 +179,7 @@ function Libility({ Userid }) {
 
 
 
-  console.log({ pages }, 'dataLiability')
+  console.log({ totalBets ,currentPage,entriesToShow,totalBets}, 'dataLiability')
 
   return (
     <>

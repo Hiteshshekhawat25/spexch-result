@@ -15,6 +15,7 @@ const AccountStatement = ({ Userid }) => {
     direction: "ascending",
   });
   const { userData } = useSelector((state) => state.user);
+
   const handlePageChange = (direction) => {
     let newPage = currentPage;
     if (direction === "next" && currentPage < totalPages) newPage++;
@@ -25,11 +26,11 @@ const AccountStatement = ({ Userid }) => {
     setCurrentPage(newPage);
   };
 
-  const handleFilterChange = (data) => {
-    setTotalTransactions(data.pagination.totalTransactions || 0);
-    setTotalPages(data.pagination.totalPages || 1);
-    setStatementData(data.data || []);
-  };
+  // const handleFilterChange = (data) => {
+  //   setTotalTransactions(data.pagination.totalTransactions || 0);
+  //   setTotalPages(data.pagination.totalPages || 1);
+  //   setStatementData(data.data || []);
+  // };
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -164,22 +165,22 @@ const AccountStatement = ({ Userid }) => {
               {sortedData.length > 0 ? (
                 sortedData.map((item, index) => (
                   <tr key={index} className="border-b border-gray-400">
-                    <td className="px-4 py-3 text-sm text-center">
+                    <td className="px-4 py-3 text-sm text-center border border-gray-400">
                       {formatDateTime(item.createdAt)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center font-bold">
+                    <td className="px-4 py-3 text-sm text-center font-bold border border-gray-400">
                       {item.transactionType === "credit" ? item.amount : "-"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center font-bold text-red-600">
+                    <td className="px-4 py-3 text-sm text-center font-bold text-red-600 border border-gray-400">
                       {item.transactionType === "debit" ? item.amount : "-"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center font-bold">
+                    <td className="px-4 py-3 text-sm text-center font-bold border border-gray-400">
                       {item.currentMainWallet}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center">
+                    <td className="px-4 py-3 text-sm text-center border border-gray-400">
                       {item.description || userData?.data?.username}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center">
+                    <td className="px-4 py-3 text-sm text-center border border-gray-400">
                       {item.from_To}
                     </td>
                   </tr>
@@ -195,41 +196,107 @@ const AccountStatement = ({ Userid }) => {
           </table>
         </div>
         <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+          {/* Showing entries text */}
           <div className="text-sm text-gray-600 mb-2 sm:mb-0">
-            Showing {(currentPage - 1) * entriesToShow + 1} to{" "}
-            {Math.min(currentPage * entriesToShow, totalTransactions)} of{" "}
+            Showing{" "}
+            {totalTransactions === 0
+              ? 0
+              : (currentPage - 1) * entriesToShow + 1}{" "}
+            to {Math.min(currentPage * entriesToShow, totalTransactions)} of{" "}
             {totalTransactions} entries
           </div>
-          <div className="flex space-x-2">
-            <button
-              onClick={() => handlePageChange("first")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === 1}
-            >
-              First
-            </button>
-            <button
-              onClick={() => handlePageChange("prev")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-            <button
-              onClick={() => handlePageChange("next")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </button>
-            <button
-              onClick={() => handlePageChange("last")}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
-              disabled={currentPage === totalPages}
-            >
-              Last
-            </button>
-          </div>
+
+          {/* Pagination Buttons */}
+          {totalPages > 1 && (
+            <div className="flex space-x-2">
+              {/* First Button */}
+              <button
+                onClick={() => handlePageChange("first")}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                First
+              </button>
+
+              {/* Previous Button */}
+              <button
+                onClick={() => handlePageChange("prev")}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                (page) => {
+                  if (
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1)
+                  ) {
+                    return (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                          currentPage === page
+                            ? "bg-gray-200"
+                            : "hover:bg-gray-100"
+                        }`}
+                      >
+                        {page}
+                      </button>
+                    );
+                  } else if (
+                    page === currentPage - 2 ||
+                    page === currentPage + 2
+                  ) {
+                    return (
+                      <span key={page} className="px-3 py-1 text-sm">
+                        ...
+                      </span>
+                    );
+                  }
+                  return null;
+                }
+              )}
+
+              {/* Next Button */}
+              <button
+                onClick={() => handlePageChange("next")}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === totalPages
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Next
+              </button>
+
+              {/* Last Button */}
+              <button
+                onClick={() => handlePageChange("last")}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === totalPages
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Last
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
