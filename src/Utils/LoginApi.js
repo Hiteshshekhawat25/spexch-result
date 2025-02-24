@@ -105,7 +105,6 @@ headers: { Authorization: `Bearer ${token}` },
 });
 
 if(response?.data?.pagination?.totalUsers === 0) {
-  console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaa aaa', response)
   toast.error("No users availabe for this user");
   return response.data.data
 }

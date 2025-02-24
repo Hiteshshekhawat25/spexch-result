@@ -155,7 +155,6 @@ const DownlineList = () => {
   useEffect(() => {
     if (roleId) {
       const fetchData = async () => {
-        console.log("rrrrrruuuuuunnnnnnnn3");
         try {
           const token = localStorage.getItem("authToken");
           if (!token) {

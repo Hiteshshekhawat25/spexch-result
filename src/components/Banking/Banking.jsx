@@ -335,7 +335,14 @@ const Banking = () => {
     };
 
     fetchData();
-  }, [dispatch, currentPage, entriesToShow, roleId, startFetchData]);
+  }, [
+    dispatch,
+    currentPage,
+    entriesToShow,
+    roleId,
+    startFetchData,
+    location.pathname,
+  ]);
 
   useEffect(() => {
     const fetchUserRoles = async () => {
@@ -420,7 +427,7 @@ const Banking = () => {
 
       fetchDownlineDataByRole();
     }
-  }, [dispatch, roleId, currentPage, entriesToShow]);
+  }, [dispatch, roleId, currentPage, entriesToShow, location.pathname]);
 
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
