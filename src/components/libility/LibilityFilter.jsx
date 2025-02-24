@@ -12,6 +12,7 @@ import { getCreateNewMatchAPIAuth, getMatchList } from '../../Services/Newmatcha
 import { liabilityBook } from '../../Store/Slice/liabilitySlice';
 import { matchListBook } from '../../Store/Slice/matchlistGameIdSlice';
 import { fetchSessions } from '../../Store/Slice/SessionSlice';
+import { pendingLiabilityBook } from '../../Store/Slice/pendingLiability';
 
 function LibilityFilter({
   setBetlistData,
@@ -73,10 +74,10 @@ function LibilityFilter({
     
   useEffect(() => {
     if(remarkModal == false){
-      dispatch(liabilityBook({
+      dispatch(pendingLiabilityBook({
         page : currentPage,
         limit : 10,
-        sport : selectFilterData?.sport == '4' ? 'Cricket' : selectFilterData?.sport == '2' ? 'Tennis' : 'Soccer' ,
+        sport : selectFilterData?.sport  ,
         type : selectFilterData?.odds,
         matchId : selectFilterData?.match,
         sessionId : selectFilterData?.session,

@@ -151,15 +151,15 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
       for (let i = 0; i < marketData?.length; i++) {
         if (marketData?.[i]?.selectionId == sid) {
           if (marketData?.[i]?.betType === "back") {
-            wintotal += marketData?.[i]?.potentialWin
+            wintotal -= marketData?.[i]?.potentialWin
           } else {
-            wintotal -= marketData?.[i]?.amount
+            wintotal += marketData?.[i]?.amount
           }
         } else {
           if (marketData?.[i]?.betType === "back") {
-            amounttotal -= marketData?.[i]?.amount
+            amounttotal += marketData?.[i]?.amount
           } else {
-            amounttotal += marketData?.[i]?.potentialWin
+            amounttotal -= marketData?.[i]?.potentialWin
           }
         }
       }
@@ -212,7 +212,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
             const previousOdds = previous?.[pIndex];
             const isYesBlinking = previousOdds?.runsYes !== item?.runsYes;
             const isNoBlinking = previousOdds?.runsNo !== item?.runsNo;
-            console.log(betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.marketName )?.[0],betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.marketName )?.[0],'betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.marketName )?.[0]')
+            console.log( item?.marketId,item?.marketName ,'betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.marketName )?.[0]')
               let p1 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName !== item?.marketName )?.[0]
               let p2 = betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.marketName )?.[0]
               let price = (p2?.totalPotentialWin ?  p2?.totalPotentialWin : 0) -(p1?.totalAmount ? p1?.totalAmount : 0) 
@@ -225,7 +225,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
                 <div className={`flex items-center justify-between border-t border-[#7e97a7] ${((activeTab !== "ALL") && (item?.catagory !== activeTab)) ? 'hidden' : ''}`}>
                   <div className="md:px-4 px-1">
                     <div className="text-xs font-semibold">{item?.marketName}</div>
-                    <div className="text-[0.625rem] font-semibold text-red-600">{betData?.[0]?.betTypesGrouped?.filter((itm)=>itm?.marketName == item?.marketName )?.length ? returnExposerAmount(item?.marketId)?.toFixed(2) || 0 : 0}</div>
+                    <div className="text-[0.625rem] font-semibold text-red-600">{returnExposerAmount(item?.marketId) ? returnExposerAmount(item?.marketId)?.toFixed(2) : 0}</div>
                   </div>
                   <div className="flex items-center ">
                     {/* <div className="md:hidden relative">

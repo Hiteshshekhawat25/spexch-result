@@ -335,6 +335,8 @@ function ManageBetFilter({
   setTotalBets,
   remarkModal,
   setTotalPages,
+  reverModal,
+  setRevertModal,
   checkbox,
   handleDeleteBet,
   handleRevertBet,
@@ -353,9 +355,6 @@ function ManageBetFilter({
   const [filteredSessions, setFilteredSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState("");
   const [loading, setLoading] = useState(false);
-  const [fromTime, setFromTime] = useState("");
-  const [toTime, setToTime] = useState("");
-
   const sessions = useSelector((state) => state.sessions);
   const matchList = useSelector((state) => state.matchlist.data);
   const today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
@@ -377,7 +376,7 @@ function ManageBetFilter({
   };
 
   useEffect(() => {
-    dispatch(matchListBook({ gameId: selectFilterData?.sport }));
+    dispatch(matchListBook({ gameId: selectFilterData?.sport ,flag : true }));
   }, [selectFilterData?.sport]);
 
   useEffect(() => {
@@ -400,8 +399,8 @@ function ManageBetFilter({
           matchId: selectFilterData?.match,
           sessionId: selectFilterData?.session,
           status: selectFilterData?.status,
-          fromTime: fromTime, // Add fromTime
-          toTime: toTime, // Add toTime
+          fromTime: selectFilterData?.fromTime, // Add fromTime
+          toTime: selectFilterData?.toTime, // Add toTime
         })
       );
     }
@@ -415,8 +414,8 @@ function ManageBetFilter({
     selectFilterData?.session,
     currentPage,
     remarkModal,
-    fromTime,
-    toTime,
+    selectFilterData?.fromTime,
+    selectFilterData?.toTime,
   ]);
 
   useEffect(() => {
@@ -549,10 +548,10 @@ function ManageBetFilter({
                 From Time
               </label>
               <input
-                type="time"
+                type="datetime-local"
                 className="border text-[12px] sm:text-sm w-full p-2 rounded"
-                value={fromTime}
-                onChange={(e) => setFromTime(e.target.value)}
+                value={selectFilterData?.fromTime}
+                onChange={(e) => handleSportChange(e, "fromTime")}
               />
             </div>
             <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
@@ -560,10 +559,10 @@ function ManageBetFilter({
                 To Time
               </label>
               <input
-                type="time"
+                type="datetime-local"
                 className="border text-[12px] sm:text-sm w-full p-2 rounded"
-                value={toTime}
-                onChange={(e) => setToTime(e.target.value)}
+                value={selectFilterData?.toTime}
+                onChange={(e) => handleSportChange(e, "toTime")}
               />
             </div>
           </>
@@ -645,7 +644,7 @@ function ManageBetFilter({
                   : false
               }
               className="bg-lightblue text-[12px] sm:text-sm max-h-12 text-white p-2 sm:py-3 sm:px-5 disabled:bg-bluehover text-center  rounded-md"
-              onClick={handleRevertBet}
+              onClick={()=>setRevertModal(true)}
             >
               Revert Bets
             </button>

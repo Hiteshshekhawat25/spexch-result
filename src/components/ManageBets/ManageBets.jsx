@@ -17,12 +17,14 @@ import RemarkModal from "../marketBetModal/RemarkModal";
 import { DeleteBet, RevertBet } from "../../Services/manageBetapi";
 import Pagination from "../pagination/Pagination";
 import moment from "moment";
+import RevertModal from "../marketBetModal/RevertModal";
 
 function ManageBets({ Userid }) {
   const dispatch = useDispatch();
   const data = useSelector(selectBetListData);
   const loading = useSelector(selectBetListLoading);
   const error = useSelector(selectBetListError);
+  const [password,setPassword]=useState('');
   const filters = useSelector(selectBetListFilter);
   const dataLiability = useSelector((state) => state.liability.data);
   const total = useSelector((state) => state.liability);
@@ -48,6 +50,7 @@ function ManageBets({ Userid }) {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [betlistData, setBetlistData] = useState([]);
   const [remarkModal, setRemarkModal] = useState(false);
+  const [remarkModal2,setRemarkModal2] = useState(false);
   const [remark, setRemark] = useState("");
   const [totalBets, setTotalBets] = useState(0);
   const [checkbox, setCheckbox] = useState([]);
@@ -80,11 +83,13 @@ function ManageBets({ Userid }) {
             ? selectFilterData?.odds
             : selectBet?.matchType,
           remark: remark,
+          betDeletePassword : password
         });
         if (res?.data?.success) {
           setSelectBet({});
           setRemark("");
           setRemarkModal(false);
+          setPassword('')
         }
         console.log({ res });
       } catch (error) {
@@ -98,15 +103,21 @@ function ManageBets({ Userid }) {
   const handleRevertBet = async (item) => {
     try {
       const res = await RevertBet("user/revert-delete-bets", {
-        betIds: checkbox?.length == 0 ? item?._id : checkbox,
+        betIds: checkbox?.length == 0 ? selectBet?._id : checkbox,
         matchId: selectFilterData?.match
           ? selectFilterData?.match
-          : item?.matchId,
-        type: selectFilterData?.odds ? selectFilterData?.odds : item?.matchType,
+          : selectBet?.matchId,
+        type: selectFilterData?.odds
+          ? selectFilterData?.odds
+          : selectBet?.matchType,
+          betDeletePassword : password
       });
 
       if (res?.data?.success) {
         setSelectBet({});
+          setRemark("");
+          setRemarkModal2(false);
+          setPassword('')
         dispatch(
           liabilityBook({
             page: currentPage,
@@ -121,6 +132,9 @@ function ManageBets({ Userid }) {
             matchId: selectFilterData?.match,
             sessionId: selectFilterData?.session,
             status: selectFilterData?.status,
+            fromTime: selectFilterData?.fromTime,
+            toTime: selectFilterData?.toTime,
+            betDeletePassword : password
           })
         );
       }
@@ -206,6 +220,8 @@ function ManageBets({ Userid }) {
         handleRevertBet={handleRevertBet}
         checkbox={checkbox}
         remarkModal={remarkModal}
+        reverModal={remarkModal2}
+        setRevertModal={setRemarkModal2}
         currentPage={currentPage}
         selectFilterData={selectFilterData}
         setSelectFilterData={setSelectFilterData}
@@ -370,7 +386,10 @@ function ManageBets({ Userid }) {
                         {item?.isDeleted ? (
                           <button
                             className="bg-lightblue text-white px-3 p-1 text-[12px] rounded"
-                            onClick={() => handleRevertBet(item)}
+                            onClick={() =>{
+                               setRemarkModal2(true)
+                               setSelectBet(item);
+                              }}
                           >
                             Revert
                           </button>
@@ -506,6 +525,17 @@ function ManageBets({ Userid }) {
         handleDeleteBet={handleDeleteBet}
         setRemark={setRemark}
         setShowUser={setRemarkModal}
+        password={password}
+        setPassword={setPassword}
+      />
+
+      <RevertModal
+        showUser={remarkModal2}
+        setShowUser={setRemarkModal2}
+        remark={remark}
+        handleDeleteBet={handleRevertBet}
+        password={password}
+        setPassword={setPassword}
       />
     </>
   );

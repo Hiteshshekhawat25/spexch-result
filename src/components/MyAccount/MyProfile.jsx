@@ -20,6 +20,7 @@ import EditCommissionModal from "../Modal/EditCommisionModal";
 import EditExposureLimitModal from "../Modal/EditExposureLimitModal";
 import { ClipLoader } from "react-spinners";
 import { useNavigate } from "react-router-dom";
+import BetPasswordModal from "../Modal/BetPasswordModal";
 
 const MyProfile = ({ Userid, Role }) => {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ const MyProfile = ({ Userid, Role }) => {
   const [isAgentRollingModalOpen, setIsAgentRollingModalOpen] = useState(false);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState(false);
+    const [betpasswordModal,setBetpasswordModal] = useState(false)
   const [isEditRollingModalOpen, setIsEditRollingModalOpen] = useState(false);
   const [isEditExposureLimitModalOpen, setIsEditExposureLimitModalOpen] =
     useState(false);
@@ -126,6 +128,10 @@ const MyProfile = ({ Userid, Role }) => {
     setIsChangePasswordModalOpen(true);
   };
 
+  const handleOpenBetPasswordModal = () => {
+    setBetpasswordModal(true);
+  };
+
   return (
     <div className="border border-gray-400 rounded-lg bg-white shadow-sm">
       {/* Header */}
@@ -210,6 +216,16 @@ const MyProfile = ({ Userid, Role }) => {
             />
           </span>
         </div>
+        <div className="flex py-3 px-4">
+          <span className="font-custom w-48">Bet Password</span>
+          <span className="flex items-center ml-4">
+            <span className="mr-2">********</span>
+            <FaRegEdit
+              className="text-blue cursor-pointer"
+              onClick={handleOpenChangePasswordModal}
+            />
+          </span>
+        </div>
       </div>
 
       {/* Modals */}
@@ -258,6 +274,13 @@ const MyProfile = ({ Userid, Role }) => {
         <ChangePasswordModal
           userId={Userid}
           onCancel={() => setIsChangePasswordModalOpen(false)}
+        />
+      )}
+
+      {betpasswordModal && (
+        <BetPasswordModal
+          userId={Userid}
+          onCancel={() => setBetpasswordModal(false)}
         />
       )}
       {isEditExposureLimitModalOpen && modalData && (

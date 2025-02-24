@@ -172,18 +172,18 @@ const BookFancyModal = ({openBets, selectedFancy,matchBetsData,bookData,show,set
             if (j < currentOdds) {
               element[j] =
                 bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no'
-                  ? amount
-                  : -potentialWin;
+                  ? -amount
+                  : potentialWin;
             } else if (j === currentOdds) {
               element[j] =
                 bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no'
-                  ? -amount
-                  : potentialWin;
+                  ? amount
+                  : -potentialWin;
             } else {
               element[j] =
                 bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no'
-                  ? -amount
-                  : potentialWin;
+                  ? amount
+                  : -potentialWin;
             }
           }
   

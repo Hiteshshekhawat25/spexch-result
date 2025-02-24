@@ -135,6 +135,41 @@ export const changeOwnPassword = async (currentPassword, newPassword) => {
   }
 };
 
+
+
+
+export const changeBetPassword = async (currentPassword, newPassword,adminPassword) => {
+  const token = localStorage.getItem("authToken");
+
+  if (!token) {
+    throw new Error("Auth token is missing. Please log in again.");
+  }
+
+  try {
+    const response = await axios.put(
+      `${BASE_URL}/user/change-bet-delete-password`,
+      {
+        newbetdeletePassword : newPassword,
+        password : currentPassword
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "Failed to change password. Please try again.");
+  }
+};
+
 export const putEditRollingCommission = async (url, params) => {
   const token = localStorage.getItem("authToken");
 

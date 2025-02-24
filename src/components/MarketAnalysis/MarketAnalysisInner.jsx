@@ -188,7 +188,9 @@ const MarketAnalysisInner = () => {
 
   useEffect(() => {
     if (showUserBook) {
-      dispatch(fetchmasterBook({ page: 1, limit: 100, type: type, masterId: userId ? userId : userDetails?._id ,matchId : gameId}))
+      let uid = userDetails?.role_name == 'super-admin' ? '' : userDetails?._id
+      console.log(userId ,userDetails?.role_name ,'userIduserIduserIduserIduserIduserId')
+      dispatch(fetchmasterBook({ page: 1, limit: 100, type: type, masterId: userId ? userId : uid  ,matchId : gameId}))
     }
   }, [showUserBook, userId])
 
