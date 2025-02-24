@@ -92,7 +92,7 @@ useEffect(() => {
     }
   }, [userBookList])
 
-  console.log({ listData}, 'listDatalistData')
+  console.log({ userBookList}, 'listDatalistData')
   return (
     <>
       <div onClick={handleClose} className={`h-dvh w-full fixed z-[500] top-0 left-0 items-center justify-center bg-black/40 transition-all duration-500 ease-in-out ${showUser ? 'flex' : 'hidden'}`} style={{ backdropFilter: 'blur(4px)' }}>
@@ -116,7 +116,7 @@ useEffect(() => {
                     </tr>
                     {
                       userBookList?.length ?
-                        listData?.map(item => {
+                      userBookList?.map(item => {
                           console.log(item?.market ,'listlist')
 
                           return (
@@ -135,14 +135,35 @@ useEffect(() => {
                               <td className="font-semibold p-2 border text-nowrap text-center">
                                 {item?.markets?.[0]?.role == 'master' ? 'MASTER' : item?.markets?.[0]?.role == 'agent' ? 'AGENT' : 'USER'}
                               </td>
-                              <td className={`font-semibold p-2 border text-nowrap text-center ${ returnExposerAmount(item?.markets?.[0]?.selectionId) < 0 ? 'text-red-600' : 'text-green-500'}`}>
-                              {/* {matchBetsData?.matchodds?.[0]?.runnerName == item?.ma ? matchBetsData?.matchodds?.[0]?.runnerName : matchBetsData?.bookmakersOdds?.[0]?.selectionName} */}
-                              </td>
-                              <td className={`font-semibold p-2 border text-nowrap text-center ${ item?.totalPotentialWin < 0 ? 'text-red-600' : 'text-green-500'}`}>
-                             {item?.totalPotentialWin}
+                              <td className={`font-semibold p-2 border text-nowrap text-center ${
+                                 ((matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[0]?.selectionId) ? 
+                                  item?.selectionResults?.[0]?.result?.toFixed(2) : 
+                                    (matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2) : 0)
+                                  < 0 
+                                 ? 'text-red-600' : 
+                                 'text-green-500'
+                                 }`}>
+                               {(matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[0]?.selectionId) ? 
+                               item?.selectionResults?.[0]?.result?.toFixed(2) : 
+                                 (matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2) : 0}
+                               </td>
+                              <td className={`font-semibold p-2 border text-nowrap text-center ${
+                                ( (matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionResults?.[0]?.selectionId) ? 
+                                  item?.selectionResults?.[0]?.result?.toFixed(2) : 
+                                    (matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2)  : 0
+                                   ) < 0 
+                                 ? 
+                                 'text-red-600' 
+                                 : 
+                                 'text-green-500'
+                                 }`}>
+                              {(matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionResults?.[0]?.selectionId) ? 
+                               item?.selectionResults?.[0]?.result?.toFixed(2) : 
+                                 (matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2) : 0}
                                 </td>
                               
                             </tr>
+                          
                           )
                         })
                         : ''

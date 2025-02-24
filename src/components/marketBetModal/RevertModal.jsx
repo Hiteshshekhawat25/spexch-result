@@ -1,6 +1,6 @@
 import React from 'react'
 
-function RemarkModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet,password,setPassword}) {
+function RevertModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet,password,setPassword}) {
  
 
 
@@ -21,15 +21,6 @@ function RemarkModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet,pa
               </button>
             </div>
             <div className="modal-body flex-1 overflow-y-auto p-4 text-sm relative">
-              <div className="overflow-y-auto w-full">
-               <textarea
-               rows={3}
-               value={remark}
-               onChange={(e)=>setRemark(e.target.value)}
-               className='shadow border-1    border-gray-800 outline-gray-400 rounded-md p-2  w-full'
-               placeholder='Enter a Remark'
-               />
-              </div>
               <div className=' mt-2 mx-2 flex justify-between'>
                 <input
                 value={password} 
@@ -49,4 +40,4 @@ function RemarkModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet,pa
   )
 }
 
-export default RemarkModal
+export default RevertModal

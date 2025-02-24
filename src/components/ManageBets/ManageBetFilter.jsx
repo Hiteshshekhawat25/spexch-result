@@ -335,6 +335,8 @@ function ManageBetFilter({
   setTotalBets,
   remarkModal,
   setTotalPages,
+  reverModal,
+  setRevertModal,
   checkbox,
   handleDeleteBet,
   handleRevertBet,
@@ -642,7 +644,7 @@ function ManageBetFilter({
                   : false
               }
               className="bg-lightblue text-[12px] sm:text-sm max-h-12 text-white p-2 sm:py-3 sm:px-5 disabled:bg-bluehover text-center  rounded-md"
-              onClick={handleRevertBet}
+              onClick={()=>setRevertModal(true)}
             >
               Revert Bets
             </button>
