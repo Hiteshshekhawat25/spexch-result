@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
-    <BrowserRouter basename="/admin/">
+    <BrowserRouter >
       <RoutesComp />
       <ToastContainer
         position="top-right"

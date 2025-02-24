@@ -376,7 +376,7 @@ function ManageBetFilter({
   };
 
   useEffect(() => {
-    dispatch(matchListBook({ gameId: selectFilterData?.sport }));
+    dispatch(matchListBook({ gameId: selectFilterData?.sport ,flag : true }));
   }, [selectFilterData?.sport]);
 
   useEffect(() => {

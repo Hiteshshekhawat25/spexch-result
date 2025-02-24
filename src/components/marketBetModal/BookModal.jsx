@@ -123,8 +123,8 @@ useEffect(() => {
                             <tr key={item?._id}>
                               <td className="font-semibold p-2 border text-nowrap text-center text-lightblue" 
                               onClick={()=>{
-                                if(item?.markets?.[0]?.role == 'master'){
-                                  setUserId(item?.markets?.[0]?._id)
+                                if(item?.role_name !== 'user'){
+                                  setUserId(item?._id)
                                 }else {
                                   getUserList()
                                 }
@@ -133,9 +133,10 @@ useEffect(() => {
                                 {item?.username}
                               </td>
                               <td className="font-semibold p-2 border text-nowrap text-center">
-                                {item?.markets?.[0]?.role == 'master' ? 'MASTER' : item?.markets?.[0]?.role == 'agent' ? 'AGENT' : 'USER'}
+                                {item?.role_name ? item?.role_name?.toUpperCase() : 'USER'}
                               </td>
-                              <td className={`font-semibold p-2 border text-nowrap text-center ${
+                            {book == 'user' ?  
+                             <td className={`font-semibold p-2 border text-nowrap text-center ${
                                  ((matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[0]?.selectionId) ? 
                                   item?.selectionResults?.[0]?.result?.toFixed(2) : 
                                     (matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2) : 0)
@@ -146,7 +147,23 @@ useEffect(() => {
                                {(matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[0]?.selectionId) ? 
                                item?.selectionResults?.[0]?.result?.toFixed(2) : 
                                  (matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2) : 0}
-                               </td>
+                               </td> : 
+
+                                <td className={`font-semibold p-2 border text-nowrap text-center ${
+                                  ((matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionData?.[0]?.selectionId) ? 
+                                  item?.selectionData?.[0]?.result?.toFixed(2) : 
+                                    (matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionData?.[1]?.selectionId) ? item?.selectionData?.[1]?.result?.toFixed(2) : 0)
+                                  < 0 
+                                  ? 'text-red-600' : 
+                                  'text-green-500'
+                                  }`}>
+                                {(matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionData?.[0]?.selectionId) ? 
+                                item?.selectionData?.[0]?.result?.toFixed(2) : 
+                                  (matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionData?.[1]?.selectionId) ? item?.selectionData?.[1]?.result?.toFixed(2) : 0}
+                                </td>
+                               }
+
+{book == 'user' ? 
                               <td className={`font-semibold p-2 border text-nowrap text-center ${
                                 ( (matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionResults?.[0]?.selectionId) ? 
                                   item?.selectionResults?.[0]?.result?.toFixed(2) : 
@@ -161,6 +178,22 @@ useEffect(() => {
                                item?.selectionResults?.[0]?.result?.toFixed(2) : 
                                  (matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2) : 0}
                                 </td>
+                                : 
+                                <td className={`font-semibold p-2 border text-nowrap text-center ${
+                                  ( (matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionData?.[0]?.selectionId) ? 
+                                    item?.selectionData?.[0]?.result?.toFixed(2) : 
+                                      (matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionData?.[1]?.selectionId) ? item?.selectionData?.[1]?.result?.toFixed(2)  : 0
+                                     ) < 0 
+                                   ? 
+                                   'text-red-600' 
+                                   : 
+                                   'text-green-500'
+                                   }`}>
+                                {(matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionData?.[0]?.selectionId) ? 
+                                 item?.selectionData?.[0]?.result?.toFixed(2) : 
+                                   (matchBetsData?.matchodds?.[1]?.selectionId == item?.selectionData?.[1]?.selectionId) ? item?.selectionData?.[1]?.result?.toFixed(2) : 0}
+                                  </td>
+                                }
                               
                             </tr>
                           
