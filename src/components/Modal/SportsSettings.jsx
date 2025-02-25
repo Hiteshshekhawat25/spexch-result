@@ -71,13 +71,13 @@ const SportsSettingsModal = ({
     <>
       {isOpen && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg w-[500px] mt-12">
+          <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-12">
             {/* Header */}
-            <div className="flex justify-between items-center bg-gradient-blue text-white text-md font-custom font-semibold w-full p-2">
+            <div className="flex justify-between items-center bg-gradient-blue rounded-t-lg text-white text-[14px] font-custom font-semibold w-full p-2">
               <span>Sports Settings</span>
               <IoClose
                 onClick={onClose}
-                className="cursor-pointer text-white text-2xl"
+                className="cursor-pointer text-white text-xl"
               />
             </div>
 
@@ -92,13 +92,13 @@ const SportsSettingsModal = ({
                 <table className="min-w-full table-auto border border-gray-400">
                   <thead className="bg-gray-300 border border-gray-400">
                     <tr>
-                      <th className="px-4 py-2 text-left border-r border-gray-400">
+                      <th className="px-4 py-2 text-left border-r font-custom text-[13px] border-gray-400">
                         Sr.No.
                       </th>
-                      <th className="px-4 py-2 text-left border-r border-gray-400">
+                      <th className="px-4 py-2 text-left border-r font-custom text-[13px] border-gray-400">
                         Sport Name
                       </th>
-                      <th className="px-4 py-2 text-center">Action</th>
+                      <th className="px-4 py-2 text-center font-custom text-[13px]">Action</th>
                     </tr>
                   </thead>
 
@@ -110,55 +110,52 @@ const SportsSettingsModal = ({
                           index % 2 === 0 ? "bg-white" : "bg-gray-50"
                         }`}
                       >
-                        <td className="border border-gray-400 px-4 py-2 text-center">
+                        <td className="border border-gray-400 px-4 py-2 text-center font-custom text-[13px]">
                           {index + 1}
                         </td>
-                        <td className="border border-gray-400 px-4 py-2 text-left">
+                        <td className="border border-gray-400 px-4 py-2 text-left text-[13px]">
                           {sport.name}
                         </td>
                       
-                      <td className="border border-gray-400 px-4 py-2 text-center">
+                      <td className="border border-gray-400 px-4 py-2 text-center font-custom">
   
-  <div
-  className={`relative inline-flex items-center h-6 w-16 border border-whiteGray cursor-pointer transition-colors ${
-    sport?.isChecked
-      ? "bg-gradient-seablue"
-      : "bg-white"
-  }`}
-  onClick={() =>
-    handleToggleChange(
-      sport?.gameId,
-      sport?.isChecked
-    )
-  }
->
-  
-  <span
-    className={`absolute right-2 text-sm font-bold ${
-      sport?.isChecked ? "text-transparent" : "text-whiteGray"
-    }`}
-  >
-    ✗
-  </span>
+                        <div
+                        className={`relative inline-flex items-center rounded-[3px] h-[22px] w-[40px] border border-whiteGray cursor-pointer transition-colors ${
+                          sport?.isChecked
+                            ? "bg-gradient-seablue"
+                            : "bg-white"
+                        }`}
+                        onClick={() =>
+                          handleToggleChange(
+                            sport?.gameId,
+                            sport?.isChecked
+                          )
+                        }
+                        >
+                          
+                          <span
+                            className={`absolute right-[2px] text-[10px] font-bold ${
+                              sport?.isChecked ? "text-transparent" : "text-whiteGray"
+                            }`}
+                          >
+                            ✗
+                          </span>
+                          <span
+                            className={`absolute left-[5px] text-[10px] font-bold ${
+                              sport?.isChecked ? "text-white" : "text-transparent"
+                            }`}
+                          >
+                            ✓
+                          </span>
 
-  
-  <span
-    className={`absolute left-2 text-sm font-bold ${
-      sport?.isChecked ? "text-white" : "text-transparent"
-    }`}
-  >
-    ✓
-  </span>
+                          <span
+                            className={`inline-block size-[16px] rounded-[2px] border border-whiteGray bg-white transform transition-all duration-200 ease-in-out ${
+                              sport?.isChecked ? "translate-x-5" : "translate-x-0.5"
+                            }`}
+                          ></span>
+                        </div>
 
-  
-  <span
-    className={`inline-block h-5 w-5 border border-whiteGray bg-white transform transition-transform ${
-      sport?.isChecked ? "translate-x-9" : "translate-x-1"
-    }`}
-  ></span>
-</div>
-
-</td>
+                        </td>
 
                       </tr>
                     ))}

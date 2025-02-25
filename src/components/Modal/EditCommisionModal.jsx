@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import { updateCommission } from "../../Store/Slice/updateCommissionSlice";
-import { IoClose, IoEye, IoEyeOff } from "react-icons/io5";
+import { IoClose, IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5';
 import { updateProfile } from "../../Store/Slice/profileSlice";
 
 const EditCommisionModal = ({
@@ -48,9 +48,9 @@ const EditCommisionModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[500px] mt-20">
+      <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-20">
         {/* Header */}
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-2">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-[15px] rounded-t-md font-custom font-semibold w-full p-2">
           <span>Update Commission</span>
           <IoClose
             onClick={onCancel}
@@ -59,7 +59,7 @@ const EditCommisionModal = ({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 p-5">
+        <form onSubmit={handleSubmit} className="space-y-4 p-4">
           {/* New Commission */}
           <div className="flex flex-col">
             <label className="block text-sm font-custom font-medium text-gray-700 mb-1">
@@ -70,7 +70,7 @@ const EditCommisionModal = ({
               value={newCommission}
               placeholder="Commission.."
               onChange={(e) => setNewCommission(e.target.value)}
-              className="p-2 border border-whiteGray rounded-lg text-gray-700"
+              className="p-2 border border-whiteGray rounded-[5px] text-gray-700 h-[35px] outline-none text-[14px]"
               min="0"
               max="100"
             />
@@ -81,34 +81,35 @@ const EditCommisionModal = ({
             <label className="block text-sm font-custom font-medium text-gray-700 mb-1">
               Your Password <span className="text-red-500">*</span>
             </label>
-            <input
-              type={showConfirmPassword ? "text" : "password"}
-              value={password}
-              placeholder="Your Password.."
-              onChange={(e) => setPassword(e.target.value)}
-              className="p-2 border border-whiteGray rounded-lg text-gray-700"
-            />
-
-            <span
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
-            >
-              {showConfirmPassword ? (
-                <IoEyeOff size={20} />
-              ) : (
-                <IoEye size={20} />
-              )}
-            </span>
+            <div className="relative">
+              <input
+                type={showConfirmPassword ? "text" : "password"}
+                value={password}
+                placeholder="Your Password.."
+                onChange={(e) => setPassword(e.target.value)}
+                className="p-2 border w-full border-whiteGray rounded-[5px] text-gray-700 h-[35px] outline-none text-[14px]"
+              />
+              <span
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer text-blue"
+              >
+                {showConfirmPassword ? (
+                  <IoEyeOffOutline size={20} />
+                ) : (
+                  <IoEyeOutline size={20} />
+                )}
+              </span>
+            </div>
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end space-x-4 mt-4">
+          <div className="flex justify-end space-x-3 mt-8 pt-4">
             <button
               type="submit"
-              className={`px-4 py-2 rounded-lg ${
+              className={`px-3 py-1 rounded-md font-bold ${
                 newCommission && password
                   ? "bg-gradient-seablue text-white"
-                  : "bg-gray-400 text-gray-700 cursor-not-allowed"
+                  : "bg-gray-500 text-white cursor-not-allowed"
               }`}
               disabled={!newCommission || !password}
             >
@@ -117,7 +118,7 @@ const EditCommisionModal = ({
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 bg-gray-400 text-black rounded-lg"
+              className="px-3 py-1 bg-gray-400 text-black rounded-md font-bold"
             >
               No
             </button>

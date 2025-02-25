@@ -91,7 +91,7 @@ const EventProfitLoss = ({ Userid }) => {
     setCurrentPage(newPage);
   };
   return (
-    <div className="p-4">
+    <div className="">
       {localLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
@@ -117,13 +117,13 @@ const EventProfitLoss = ({ Userid }) => {
           />
           {/* Data Table */}
           <div className="border border-gray-300 rounded-md bg-white">
-            <h1 className="text-xl p-2 px-4 bg-gradient-blue text-white font-bold">
+            <h1 className="text-[15px] rounded-t-lg p-2 px-4 bg-gradient-seablue text-white font-bold">
               Event Profit Loss
             </h1>
 
             <div className="flex justify-between items-center mb-4 p-4">
               <div className="flex items-center">
-                <label className="mr-2 text-sm font-medium text-black">
+                <label className="mr-2 text-sm text-black">
                   Show
                 </label>
                 <select
@@ -140,7 +140,7 @@ const EventProfitLoss = ({ Userid }) => {
                     </option>
                   ))}
                 </select>
-                <label className="ml-2 text-sm font-medium text-black">
+                <label className="ml-2 text-sm text-black">
                   entries
                 </label>
               </div>
@@ -157,10 +157,10 @@ const EventProfitLoss = ({ Userid }) => {
                     ].map((key) => (
                       <th
                         key={key}
-                        className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                        className="border-r border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
-                        <div className="flex justify-between items-center text-center">
+                        <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
                           <span>
                             {key === "sportName"
                               ? "Sport Name"
@@ -302,7 +302,7 @@ const EventProfitLoss = ({ Userid }) => {
                 )}
               </table>
             </div>
-            <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+            <div className="flex justify-between items-center mt-4 flex-col sm:flex-row p-3">
               {/* Showing entries text */}
               <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}

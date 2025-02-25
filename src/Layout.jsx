@@ -25,7 +25,7 @@ const Layout = ({ children }) => {
         <MenuHeader />
       </Suspense>
 
-      <div className="p-6">
+      <div className="md:p-6 p-4">
         <Suspense
           fallback={
             <div>

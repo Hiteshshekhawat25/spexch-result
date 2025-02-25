@@ -638,7 +638,7 @@ const DownlineList = () => {
                   <tr className="bg-gray-200">
                     {[
                       { key: "username", label: "Username" },
-                      { key: "creditRef", label: "CreditRef" },
+                      { key: "credit Ref.", label: "Credit Ref." },
                       ...(isMasterDownlineList
                         ? [{ key: "partnership", label: "Partnership" }]
                         : []),
@@ -647,7 +647,7 @@ const DownlineList = () => {
                       ...(!isMasterDownlineList
                         ? [{ key: "exposure", label: "Exposure Limit" }]
                         : []),
-                      { key: "availableBalance", label: "Avail. Bal" },
+                      { key: "availableBalance", label: "Avail. Bal." },
                       { key: "refPL", label: "Ref. P/L" },
                       ...(!isMasterDownlineList
                         ? [{ key: "partnership", label: "Partnership" }]
@@ -724,7 +724,7 @@ const DownlineList = () => {
                             }`}
                           >
                             <span
-                              className={`bg-green-500 text-white px-2 py-1 text-[10.5px] mr-1 rounded font-custom font-semibold text-l ${
+                              className={`bg-green-500 text-white px-[6px] py-[2px] text-[10.5px] mr-1 rounded font-custom font-semibold text-l ${
                                 item.role_name === "master"
                                   ? "cursor-pointer"
                                   : ""
@@ -733,7 +733,7 @@ const DownlineList = () => {
                               {item.role_name?.toUpperCase()}
                             </span>
                             <span
-                              className="text-[#2789ce] font-custom font-semibold cursor-pointer"
+                              className="text-balck font-custom font-semibold cursor-pointer"
                               style={{
                                 fontFamily: "Tahoma, Helvetica, sans-serif",
                               }}
@@ -901,7 +901,7 @@ const DownlineList = () => {
                           }}
                         >
                           <span
-                            className={`px-2 py-[4px] rounded-[5px] border text-[11px] capitalize ${
+                            className={`px-2 py-[4px] rounded-[5px] border text-[11px] ${
                               item.status === "active"
                                 ? "text-green-600 border-green-600 bg-green-100"
                                 : item.status === "suspended"
@@ -948,12 +948,12 @@ const DownlineList = () => {
                             </div>
 
                             <div
-  onClick={() => {
-    handleProfileClick(item,item._id);
-    console.log("item",item._id);
-  }}
-  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
->
+                                onClick={() => {
+                                  handleProfileClick(item,item._id);
+                                  console.log("item",item._id);
+                                }}
+                                className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                              >
                               <FaUserAlt className="text-darkgray" />
                             </div>
 
@@ -998,11 +998,11 @@ const DownlineList = () => {
               </div>
 
               {/* Pagination Buttons */}
-              <div className="flex space-x-2 sm:ml-auto">
+              <div className="flex sm:ml-auto">
                 {/* First Button */}
                 <button
                   onClick={() => handlePageChange("first")}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
                     currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
@@ -1015,7 +1015,7 @@ const DownlineList = () => {
                 {/* Previous Button */}
                 <button
                   onClick={() => handlePageChange("prev")}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
                     currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
@@ -1038,9 +1038,9 @@ const DownlineList = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                          className={`sm:px-3 px-2 sm:py-1 py-0.5 text-sm border border-white rounded ${
                             currentPage === page
-                              ? "bg-gray-200"
+                              ? "bg-gray-200 border-gray-700"
                               : "hover:bg-gray-100"
                           }`}
                         >
@@ -1052,7 +1052,7 @@ const DownlineList = () => {
                       (page === currentPage + 3 && currentPage < totalPages - 3)
                     ) {
                       return (
-                        <span key={page} className="px-3 py-1 text-sm">
+                        <span key={page} className="sm:px-3 px-2 py-1 text-sm">
                           ...
                         </span>
                       );
@@ -1064,7 +1064,7 @@ const DownlineList = () => {
                 {/* Next Button */}
                 <button
                   onClick={() => handlePageChange("next")}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
                     currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
@@ -1077,7 +1077,7 @@ const DownlineList = () => {
                 {/* Last Button */}
                 <button
                   onClick={() => handlePageChange("last")}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
                     currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"

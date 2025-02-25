@@ -145,8 +145,7 @@ const MenuHeader = () => {
 
   return (
     <div className="bg-gradient-green text-black font-bold">
-      <div
-        className="xl:hidden overflow-x-auto whitespace-nowrap "
+      <div className="xl:hidden overflow-x-auto whitespace-nowrap "
         style={{
           scrollbarWidth: "none", // For Firefox
           msOverflowStyle: "none", // For IE and Edge
@@ -157,7 +156,7 @@ const MenuHeader = () => {
           {menuItems.map((item, index) => (
             <li
               key={index}
-              className="relative text-sm border-l border-r border-gray-400"
+              className="relative text-sm border-r border-gray-500"
               ref={(el) => (menuRefs.current[index] = el)}
             >
               {item.name === "Logout" ? (
@@ -225,61 +224,62 @@ const MenuHeader = () => {
           ) : null
         )}
       </div>
-
-      <ul className="hidden xl:flex justify-center lg:justify-start text-lg ps-2">
-        {menuItems.map((item, index) => (
-          <li
-            key={index}
-            className="relative group border-r border-gray-500 text-[12.5px] text-nowrap"
-          >
-            {item.name === "Logout" ? (
-              <button
-                onClick={item.onClick}
-                className="py-1 px-1.5 ml-5 block border-b-2 text-black border-transparent hover:border-gray-600"
-              >
-                {item.name}
-                <IoLogOutOutline className="inline ml-1 -mt-0.5" />
-              </button>
-            ) : (
-              <Link
-                to={item.link}
-                onClick={() => setActiveMenu(item.name)}
-                className={`py-1 px-2 block border-b-2 ${
-                  activeMenu === item.name
-                    ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
-                    : "border-transparent hover:border-gray-600"
-                }`}
-              >
-                {item.name}
-                {item.subMenu && (
-                  <TbTriangleInvertedFilled className="inline ml-2 size-2 -mt-0.5" />
-                )}
-              </Link>
-            )}
-            {item.subMenu && (
-              <ul className="absolute left-0 top-full hidden bg-gradient-blue-hover group-hover:block shadow-lg z-10 flex whitespace-nowrap">
-                {item.subMenu.map((subItem, subIndex) => (
-                  <li key={subIndex}>
-                    <Link
-                      onClick={() => setActiveSubMenu(null)}
-                      onMouseEnter={() => {
-                        item.subMenu && toggleSubMenu(item.name, index);
-                      }}
-                      onMouseLeave={() => {
-                        setActiveSubMenu(null);
-                      }}
-                      to={subItem.link}
-                      className="block px-4 py-[3px] hover:bg-gradient-green text-white"
-                    >
-                      {subItem.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
+      <div className="xl:block hidden overflow-x-scroll whitespace-nowrap">
+        <ul className="flex justify-center lg:justify-start text-lg ps-2 z-50">
+          {menuItems.map((item, index) => (
+            <li
+              key={index}
+              className="relative group border-r border-gray-500 text-[12.5px] text-nowrap leading-normal "
+            >
+              {item.name === "Logout" ? (
+                <button
+                  onClick={item.onClick}
+                  className="py-1 px-1.5 ml-5 flex items-center h-full text-black border-transparent hover:border-gray-600 font-custom"
+                >
+                  {item.name}
+                  <IoLogOutOutline className="inline ml-1 -mt-0.5" />
+                </button>
+              ) : (
+                <Link
+                  to={item.link}
+                  onClick={() => setActiveMenu(item.name)}
+                  className={`py-[6px] px-2 flex items-center leading-normal  font-custom h-full ${
+                    activeMenu === item.name
+                      ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
+                      : "border-transparent hover:border-gray-600"
+                  }`}
+                >
+                  {item.name}
+                  {item.subMenu && (
+                    <TbTriangleInvertedFilled className="inline ml-2 size-2 h-1.5" />
+                  )}
+                </Link>
+              )}
+              {item.subMenu && (
+                <ul className="absolute left-0 top-full hidden bg-gradient-blue-hover group-hover:block shadow-lg z-10 whitespace-nowrap">
+                  {item.subMenu.map((subItem, subIndex) => (
+                    <li key={subIndex}>
+                      <Link
+                        onClick={() => setActiveSubMenu(null)}
+                        onMouseEnter={() => {
+                          item.subMenu && toggleSubMenu(item.name, index);
+                        }}
+                        onMouseLeave={() => {
+                          setActiveSubMenu(null);
+                        }}
+                        to={subItem.link}
+                        className="block px-4 py-[6px] font-custom border-b border-gray-800 hover:bg-gradient-green text-white"
+                      >
+                        {subItem.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 };

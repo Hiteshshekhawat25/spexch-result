@@ -119,16 +119,16 @@ const CreditReferenceTransactionModel = ({
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
       <div
         ref={modalRef}
-        className="bg-white rounded-lg shadow-lg p-0 w-full max-w-4xl relative"
+        className="bg-white rounded-lg shadow-lg p-0 w-[95%] sm:w-[80%] relative"
       >
         {/* Modal Header */}
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg mt-0 p-2 font-custom font-semibold w-full">
-          <h3 className="text-l font-custom font-semibold">
+        <div className="flex justify-between items-center bg-gradient-blue rounded-t-lg text-white text-lg mt-0 px-2 py-2 font-custom font-semibold w-full">
+          <h3 className="text-[15px] font-custom font-semibold">
             Credit Reference Log
           </h3>
           <button
             onClick={handleClose}
-            className="cursor-pointer text-white text-2xl"
+            className="cursor-pointer text-white text-xl"
           >
             &times;
           </button>
@@ -138,16 +138,16 @@ const CreditReferenceTransactionModel = ({
         {loading && <p>Loading...</p>}
         {error && <p className="text-red-500">Error: {error}</p>}
         {!loading && !error && entries.length > 0 && (
-          <div className="mt-4 overflow-auto max-h-96 p-4">
-            <div className="flex flex-col md:flex-row justify-between items-center mb-4 p-4 space-y-4 md:space-y-0">
+          <div className="mt-2 max-h-96 p-4">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6 space-y-4 md:space-y-0">
               <div className="flex items-center">
-                <label className="mr-2 text-sm font-medium text-black">
+                <label className="mr-2 text-[13px] text-black">
                   Show
                 </label>
                 <select
                   value={entriesPerPage}
                   onChange={handleEntriesChange}
-                  className="border rounded px-2 py-1 text-sm"
+                  className="border border-gray-400 rounded px-1 py-0.5 text-[13px] h-[28px]"
                 >
                   {[10, 25, 50, 100].map((number) => (
                     <option key={number} value={number}>
@@ -155,191 +155,192 @@ const CreditReferenceTransactionModel = ({
                     </option>
                   ))}
                 </select>
-                <label className="ml-2 text-sm font-medium text-black">
+                <label className="ml-2 text-[13px] text-black">
                   entries
                 </label>
               </div>
-              <div className="flex items-center w-full md:w-auto">
-                <p className="mr-2 text-sm font-medium text-black">Search:</p>
+              <div className="flex items-center md:pt-0 pt-2 w-auto">
+                <p className="mr-2 text-[13px] text-black">Search:</p>
                 <input
                   type="text"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  className="border rounded px-2 py-1 text-sm w-full md:w-auto"
+                  className="border rounded px-2 py-2 text-sm w-full md:w-auto h-[32px]"
                 />
               </div>
             </div>
-
-            <table className="table-auto w-full border-collapse border border-gray-300">
-              <thead>
-                <tr className="bg-gray-100">
-                  {/* Table Header with Sorting Arrows */}
-                  <th
-                    className="border border-gray-300 px-2 py-1 text-left cursor-pointer"
-                    onClick={() => handleSort("from_name")} // Replace with your sort handler
-                  >
-                    <div className="flex items-center">
-                      From Name
-                      <div className="flex flex-col items-center ml-2">
-                        <FaSortUp
-                          className={`${
-                            sortConfig.key === "from_name" &&
-                            sortConfig.direction === "ascending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginBottom: "-6px" }}
-                        />
-                        <FaSortDown
-                          className={`${
-                            sortConfig.key === "from_name" &&
-                            sortConfig.direction === "descending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginTop: "-6px" }}
-                        />
+            <div className=" overflow-auto">
+              <table className="table-auto w-full border-collapse border border-gray-300">
+                <thead>
+                  <tr className="bg-gray-100">
+                    {/* Table Header with Sorting Arrows */}
+                    <th
+                      className="border border-gray-300 px-2 py-2 cursor-pointer font-custom text-[13px] text-center"
+                      onClick={() => handleSort("from_name")} // Replace with your sort handler
+                    >
+                      <div className="flex items-center justify-center">
+                        From Name
+                        <div className="flex flex-col items-center ml-2">
+                          <FaSortUp
+                            className={`${
+                              sortConfig.key === "from_name" &&
+                              sortConfig.direction === "ascending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginBottom: "-6px" }}
+                          />
+                          <FaSortDown
+                            className={`${
+                              sortConfig.key === "from_name" &&
+                              sortConfig.direction === "descending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginTop: "-6px" }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </th>
-                  <th
-                    className="border border-gray-300 px-2 py-1 text-left cursor-pointer"
-                    onClick={() => handleSort("username")} // Replace with your sort handler
-                  >
-                    <div className="flex items-center">
-                      User Name
-                      <div className="flex flex-col items-center ml-2">
-                        <FaSortUp
-                          className={`${
-                            sortConfig.key === "username" &&
-                            sortConfig.direction === "ascending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginBottom: "-6px" }}
-                        />
-                        <FaSortDown
-                          className={`${
-                            sortConfig.key === "username" &&
-                            sortConfig.direction === "descending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginTop: "-6px" }}
-                        />
+                    </th>
+                    <th
+                      className="border border-gray-300 px-2 py-2 cursor-pointer font-custom text-[13px] text-center"
+                      onClick={() => handleSort("username")} // Replace with your sort handler
+                    >
+                      <div className="flex items-center justify-center">
+                        User Name
+                        <div className="flex flex-col items-center ml-2">
+                          <FaSortUp
+                            className={`${
+                              sortConfig.key === "username" &&
+                              sortConfig.direction === "ascending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginBottom: "-6px" }}
+                          />
+                          <FaSortDown
+                            className={`${
+                              sortConfig.key === "username" &&
+                              sortConfig.direction === "descending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginTop: "-6px" }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </th>
-                  <th
-                    className="border border-gray-300 px-2 py-1 text-left cursor-pointer"
-                    onClick={() => handleSort("oldCreditReference")}
-                  >
-                    <div className="flex items-center">
-                      Old Credit Reference
-                      <div className="flex flex-col items-center ml-2">
-                        <FaSortUp
-                          className={`${
-                            sortConfig.key === "oldCreditReference" &&
-                            sortConfig.direction === "ascending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginBottom: "-6px" }}
-                        />
-                        <FaSortDown
-                          className={`${
-                            sortConfig.key === "oldCreditReference" &&
-                            sortConfig.direction === "descending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginTop: "-6px" }}
-                        />
+                    </th>
+                    <th
+                      className="border border-gray-300 px-2 py-2 cursor-pointer font-custom text-[13px] text-center"
+                      onClick={() => handleSort("oldCreditReference")}
+                    >
+                      <div className="flex items-center justify-center">
+                        Old Credit Reference
+                        <div className="flex flex-col items-center ml-2">
+                          <FaSortUp
+                            className={`${
+                              sortConfig.key === "oldCreditReference" &&
+                              sortConfig.direction === "ascending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginBottom: "-6px" }}
+                          />
+                          <FaSortDown
+                            className={`${
+                              sortConfig.key === "oldCreditReference" &&
+                              sortConfig.direction === "descending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginTop: "-6px" }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </th>
-                  <th
-                    className="border border-gray-300 px-2 py-1 text-left cursor-pointer"
-                    onClick={() => handleSort("newCreditReference")}
-                  >
-                    <div className="flex items-center">
-                      New Credit Reference
-                      <div className="flex flex-col items-center ml-2">
-                        <FaSortUp
-                          className={`${
-                            sortConfig.key === "newCreditReference" &&
-                            sortConfig.direction === "ascending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginBottom: "-6px" }}
-                        />
-                        <FaSortDown
-                          className={`${
-                            sortConfig.key === "newCreditReference" &&
-                            sortConfig.direction === "descending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginTop: "-6px" }}
-                        />
+                    </th>
+                    <th
+                      className="border border-gray-300 px-2 py-2 cursor-pointer font-custom text-[13px] text-center"
+                      onClick={() => handleSort("newCreditReference")}
+                    >
+                      <div className="flex items-center justify-center">
+                        New Credit Reference
+                        <div className="flex flex-col items-center ml-2">
+                          <FaSortUp
+                            className={`${
+                              sortConfig.key === "newCreditReference" &&
+                              sortConfig.direction === "ascending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginBottom: "-6px" }}
+                          />
+                          <FaSortDown
+                            className={`${
+                              sortConfig.key === "newCreditReference" &&
+                              sortConfig.direction === "descending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginTop: "-6px" }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </th>
-                  <th
-                    className="border border-gray-300 px-2 py-1 text-left cursor-pointer"
-                    onClick={() => handleSort("createdAt")}
-                  >
-                    <div className="flex items-center">
-                      Date & Time
-                      <div className="flex flex-col items-center ml-2">
-                        <FaSortUp
-                          className={`${
-                            sortConfig.key === "createdAt" &&
-                            sortConfig.direction === "ascending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginBottom: "-6px" }}
-                        />
-                        <FaSortDown
-                          className={`${
-                            sortConfig.key === "createdAt" &&
-                            sortConfig.direction === "descending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{ marginTop: "-6px" }}
-                        />
+                    </th>
+                    <th
+                      className="border border-gray-300 px-2 py-2 cursor-pointer font-custom text-[13px] text-center"
+                      onClick={() => handleSort("createdAt")}
+                    >
+                      <div className="flex items-center justify-center">
+                        Date & Time
+                        <div className="flex flex-col items-center ml-2">
+                          <FaSortUp
+                            className={`${
+                              sortConfig.key === "createdAt" &&
+                              sortConfig.direction === "ascending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginBottom: "-6px" }}
+                          />
+                          <FaSortDown
+                            className={`${
+                              sortConfig.key === "createdAt" &&
+                              sortConfig.direction === "descending"
+                                ? "text-black"
+                                : "text-gray-400"
+                            }`}
+                            style={{ marginTop: "-6px" }}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {entries.map((row, index) => (
-                  <tr key={index} className="even:bg-gray-50">
-                    <td className="border border-gray-300 px-2 py-1">
-                      {row.from_name || "N/A"}
-                    </td>
-                    <td className="border border-gray-300 px-2 py-1">
-                      {row.username || "N/A"}
-                    </td>
-                    <td className="border border-gray-300 px-2 py-1">
-                      {row.oldCreditReference ?? 0}
-                    </td>
-                    <td className="border border-gray-300 px-2 py-1">
-                      {row.newCreditReference ?? 0}
-                    </td>
-                    <td className="border border-gray-300 px-2 py-1">
-                      {row.createdAt
-                        ? new Date(row.createdAt).toLocaleString()
-                        : "N/A"}
-                    </td>
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {entries.map((row, index) => (
+                    <tr key={index} className="even:bg-gray-50">
+                      <td className="border border-gray-300 px-2 py-2 text-[14px] text-center">
+                        {row.from_name || "N/A"}
+                      </td>
+                      <td className="border border-gray-300 px-2 py-2 text-[14px] text-center">
+                        {row.username || "N/A"}
+                      </td>
+                      <td className="border border-gray-300 px-2 py-2 text-[14px] text-center">
+                        {row.oldCreditReference ?? 0}
+                      </td>
+                      <td className="border border-gray-300 px-2 py-2 text-[14px] text-center">
+                        {row.newCreditReference ?? 0}
+                      </td>
+                      <td className="border border-gray-300 px-2 py-2 text-[14px] text-center">
+                        {row.createdAt
+                          ? new Date(row.createdAt).toLocaleString()
+                          : "N/A"}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         )}
 
@@ -349,7 +350,7 @@ const CreditReferenceTransactionModel = ({
 
         {/* Pagination Controls */}
 
-        <div className="flex items-center justify-between mt-4 p-4">
+        <div className="flex items-center justify-between sm:mt-4 mt-3 sm:p-4 p-3">
           <p className="text-sm text-gray-600">
             Page {currentPage} of {pagination.totalPages}
           </p>

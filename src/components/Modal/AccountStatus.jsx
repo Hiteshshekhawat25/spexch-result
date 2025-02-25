@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IoClose, IoEye, IoEyeOff } from "react-icons/io5";
+import { IoClose, IoEyeOutline, IoEyeOffOutline} from "react-icons/io5";
 import { toast } from "react-toastify";
 import { FaLock, FaCheckCircle } from "react-icons/fa";
 import { AiOutlineStop } from "react-icons/ai";
@@ -154,23 +154,23 @@ const AccountStatus = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[500px] mt-12">
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-sm font-custom font-semibold w-full p-2">
+      <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-12">
+        <div className="flex justify-between items-center rounded-t-md bg-gradient-blue text-white text-sm font-custom font-semibold w-full p-2">
           <span>Change Status</span>
           <IoClose
             onClick={onClose}
-            className="cursor-pointer text-white text-2xl"
+            className="cursor-pointer text-white text-xl"
           />
         </div>
 
         {/* User Info */}
-        <div className="space-y-4 p-5">
+        <div className="flex flex-col gap-4 p-5">
           <div className="flex justify-between items-center mb-4">
             {/* Amount Field */}
             <div className="flex justify-between">
               <div className="text-xs">
                 <span
-                  className="bg-green-500 text-white px-1 py-1 mr-1 rounded  font-custom font-bold text-xs"
+                  className="bg-green-500 text-white px-1 py-1 mr-1 rounded font-custom font-bold text-[10px]"
                   // onClick={() => handleUsernameList(item)}
                 >
                   {user?.role_name.toUpperCase()}
@@ -179,89 +179,89 @@ const AccountStatus = ({
               </div>
             </div>
             <div
-  className={`px-1 border rounded-sm text-center text-bold text-${
-    user?.status === "active"
-      ? "green"
-      : status === "suspended"
-      ? "red"
-      : "gray"
-  }-500 bg-${
-    user?.status === "active"
-      ? "green"
-      : status === "suspended"
-      ? "red"
-      : "gray"
-  }-100 border-${
-    user?.status === "active"
-      ? "green"
-      : user?.status === "suspended"
-      ? "red"
-      : "gray"
-  }-500`}
->
-  {/* {status === "active"
-    ? "active"
-    : status === "suspended"
-    ? "suspended"
-    : "locked"} */}
-    {user?.status}
-</div>
+              className={`px-1 border rounded-[4px] text-center font-bold text-[12px] text-${
+                user?.status === "active"
+                  ? "green"
+                  : status === "suspended"
+                  ? "red"
+                  : "gray"
+              }-500 bg-${
+                user?.status === "active"
+                  ? "green"
+                  : status === "suspended"
+                  ? "red"
+                  : "gray"
+              }-100 border-${
+                user?.status === "active"
+                  ? "green"
+                  : user?.status === "suspended"
+                  ? "red"
+                  : "gray"
+              }-500`}
+            >
+            {/* {status === "active"
+              ? "active"
+              : status === "suspended"
+              ? "suspended"
+              : "locked"} */}
+              {user?.status}
+          </div>
 
           </div>
 
           {/* Status Buttons */}
-          <div className="flex justify-between mb-4 px-4 space-x-4">
+          <div className="grid sm:grid-cols-3 grid-cols-2 justify-between gap-3">
             <div
               onClick={() => handleStatusChange("active")}
-              className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
-    ${
-      status === "active"
-        ? "bg-white text-green-500 border-green-500"
-        : "bg-white text-green-300 border-green-300"
-    }`}
+              className={`flex flex-col items-center justify-center w-full p-1 rounded-lg cursor-pointer border 
+                ${
+                  status === "active"
+                    ? "bg-white text-green-500 border-green-500"
+                    : "bg-white text-green-300 border-green-300"
+                }`}
             >
               <FaCheckCircle
-                className={`w-8 h-8 mb-2 ${
+                className={`w-8 h-8 mb-1 ${
                   status === "active" ? "text-green-500" : "text-green-300"
                 }`}
               />
-              <span className="font-medium">Active</span>
+              <span className="font-bold font-custom text-[14px]">Active</span>
             </div>
             <div
               onClick={() => handleStatusChange("suspended")}
-              className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
-    ${
-      status === "suspended"
-        ? "bg-white text-red-500 border-red-500"
-        : "bg-white text-red-300 border-red-300"
-    }`}
+              className={`flex flex-col items-center justify-center w-full p-1 rounded-lg cursor-pointer border 
+                ${
+                  status === "suspended"
+                    ? "bg-white text-red-500 border-red-500"
+                    : "bg-white text-red-300 border-red-300"
+                }`}
             >
               <AiOutlineStop
-                className={`w-8 h-8 mb-2 ${
+                className={`w-8 h-8 mb-1 ${
                   status === "suspended" ? "text-red-500" : "text-red-300"
                 }`}
               />
-              <span className="font-custom font-medium">Suspend</span>
+              <span className="font-custom font-bold text-[14px]">Suspend</span>
             </div>
             <div
               onClick={() => handleStatusChange("locked")}
-              className={`flex flex-col items-center justify-center w-1/3 p-3 rounded-lg cursor-pointer border 
-    ${
-      status === "locked"
-        ? "bg-white text-gray-600 border-gray-600"
-        : "bg-white text-gray-300 border-gray-300"
-    }`}
+              className={`flex flex-col items-center justify-center w-full p-1 rounded-lg cursor-pointer border 
+                ${
+                  status === "locked"
+                    ? "bg-white text-gray-600 border-gray-600"
+                    : "bg-white text-gray-300 border-gray-300"
+                }`}
             >
               <FaLock
-                className={`w-8 h-8 mb-2 ${
+                className={`w-8 h-8 mb-1 ${
                   status === "locked" ? "text-gray-500" : "text-whiteGray"
                 }`}
               />
-              <span className="font-custom font-medium">Locked</span>
+              <span className="font-custom font-bold text-[14px]">Locked</span>
             </div>
           </div>
 
-          <div className="w-full md:w-auto flex flex-col md:flex-row items-center md:space-x-4">
+          <div className="w-full md:w-auto flex flex-col md:flex-row items-center md:gap-4 mt-3">
             {/* Password Field */}
             <div className="flex-1 relative w-full md:w-auto">
               <input
@@ -270,13 +270,13 @@ const AccountStatus = ({
                 placeholder="Password..."
                 value={password}
                 onChange={handlePasswordChange}
-                className="w-full md:w-64 p-2 border border-gray-300 rounded-lg"
+                className="w-full md:w-64 p-2 text-[14px] h-[35px] border border-gray-300 outline-none rounded-md"
               />
               <span
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-2 top-5 transform -translate-y-1/2 cursor-pointer text-blue"
+                className="absolute right-2 top-4 text-[13px] transform -translate-y-1/2 cursor-pointer text-blue"
               >
-                {showPassword ? <IoEyeOff size={20} /> : <IoEye size={20} />}
+                {showPassword ? <IoEyeOutline size={17} /> : <IoEyeOffOutline size={17} />}
               </span>
             </div>
 
@@ -284,8 +284,8 @@ const AccountStatus = ({
             <button
               onClick={handleSubmit}
               disabled={!password}
-              className={`w-full md:w-64 py-2 px-4 font-custom font-bold rounded-lg mt-4 md:mt-0
-      ${password ? "bg-gradient-seablue" : "bg-ashGray"} text-white`}
+              className={`w-full md:w-64 py-1.5 px-4 font-custom text-[14px] font-bold rounded-md mt-3 md:mt-0
+              ${password ? "bg-gradient-seablue" : "bg-ashGray"} text-white`}
             >
               Change
             </button>
