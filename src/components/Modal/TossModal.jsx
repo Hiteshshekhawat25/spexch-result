@@ -15,8 +15,12 @@ function TossModal({match,onCancel}) {
         }
     }
 
-    const handleSubmit =()=>{
-
+    const handleSubmit =async()=>{
+      try{
+        const res = await createInstance({matchId : match?._id,tossMarket : formData})
+      }catch(error){
+        console.log(error)
+      }
     }
 
     console.log(match,'matchmatch')
