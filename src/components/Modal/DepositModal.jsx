@@ -87,10 +87,10 @@ const DepositModal = ({
         setRoles(rolesData);
 
         let roleId = null;
-        if (location.pathname === "/admin/user-downline-list") {
+        if (location.pathname.includes("/user-downline-list")) {
           const userRole = rolesData.find((role) => role.role_name === "user");
           roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-        } else if (location.pathname === "/admin/master-downline-list") {
+        } else if (location.pathname.includes("/master-downline-list")) {
           const masterRole = rolesData.find(
             (role) => role.role_name === "master"
           );

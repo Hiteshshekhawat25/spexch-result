@@ -368,7 +368,7 @@ const Banking = () => {
 
         setRoles(rolesData);
 
-        if (location.pathname === "/master-banking") {
+        if (location.pathname.includes("/master-banking")) {
           const masterAgentRoles = rolesData.filter(
             (role) =>
               role.role_name.toLowerCase() === "master" ||
@@ -392,7 +392,7 @@ const Banking = () => {
           } else if (rolesData.length > 0) {
             setRoleId(rolesData[0].role_id);
           }
-        } else if (location.pathname === "/user-banking") {
+        } else if (location.pathname.includes("/user-banking")) {
           const userRole = rolesData.find((role) => role.role_name === "user");
           if (userRole) {
             setRoleId(userRole.role_id);

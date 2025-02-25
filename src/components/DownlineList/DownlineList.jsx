@@ -199,7 +199,7 @@ const DownlineList = () => {
   );
 
   useEffect(() => {
-    if (location.pathname === "/master-downline-list") {
+    if (location.pathname.includes("/master-downline-list")) {
       const fetchUserRoles = async () => {
         console.log("rrrrrruuuuuunnnnnnnn2");
         try {
@@ -259,7 +259,7 @@ const DownlineList = () => {
   }, [token, location.pathname, currentPage, entriesToShow, dispatch]);
 
   useEffect(() => {
-    if (location.pathname === "/user-downline-list") {
+    if (location.pathname.includes("/user-downline-list")) {
       const fetchUserRoles = async () => {
         console.log("rrrrrruuuuuunnnnnnnn1");
         try {
@@ -509,10 +509,10 @@ const DownlineList = () => {
 
       let roleId = null;
 
-      if (location.pathname === "/user-downline-list") {
+      if (location.pathname.includes("/user-downline-list")) {
         const userRole = rolesData.find((role) => role.role_name === "user");
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
-      } else if (location.pathname === "/master-downline-list") {
+      } else if (location.pathname.includes("/master-downline-list")) {
         const masterRole = rolesData.find(
           (role) => role.role_name === "master"
         );

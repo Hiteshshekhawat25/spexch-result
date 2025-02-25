@@ -233,3 +233,52 @@ export const RevertSessionCoins = async (matchId,selectionId) => {
     throw error;
   }
 };
+
+
+
+export const getInstance = async (url,id) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const response = await axios.get(`${BASE_URL}${url}`, {
+      headers: {
+        
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+  }
+};
+
+export const postInstance = async (url,data) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const response = await axios.post(`${BASE_URL}${url}`, data,{
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+  }
+};
