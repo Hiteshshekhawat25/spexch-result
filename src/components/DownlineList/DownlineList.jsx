@@ -431,7 +431,14 @@ const DownlineList = () => {
         const data = await fetchallUsers(item._id);
         setUserFetchList(data);
         setIsNested(true);
-        if (item.role_name == "agent" || item.role_name == "user" || item.role_name == "sub-admin" || item.role_name == "master" || item.role_name == "white-level" || item.role_name == "super") {
+        if (
+          item.role_name == "agent" ||
+          item.role_name == "user" ||
+          item.role_name == "sub-admin" ||
+          item.role_name == "master" ||
+          item.role_name == "white-level" ||
+          item.role_name == "super"
+        ) {
           setIsNested(true);
         }
       } else if (item.role_name == "user") {
@@ -980,7 +987,12 @@ const DownlineList = () => {
                         <td className="px-4 py-2 text-sm">
                           <div className="flex md:space-x-2.5 space-x-2">
                             {isNested &&
-                            (item.role_name == "agent" || item.role_name == "user" || item.role_name == "sub-admin" || item.role_name == "master" || item.role_name == "white-level" || item.role_name == "super") ? (
+                            (item.role_name == "agent" ||
+                              item.role_name == "user" ||
+                              item.role_name == "sub-admin" ||
+                              item.role_name == "master" ||
+                              item.role_name == "white-level" ||
+                              item.role_name == "super") ? (
                               // Show only three icons for agent and user in nested condition
                               <>
                                 <div
