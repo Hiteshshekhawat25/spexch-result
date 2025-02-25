@@ -145,7 +145,8 @@ const MenuHeader = () => {
 
   return (
     <div className="bg-gradient-green text-black font-bold">
-      <div className="xl:hidden overflow-x-auto whitespace-nowrap "
+      <div
+        className="xl:hidden overflow-x-auto whitespace-nowrap "
         style={{
           scrollbarWidth: "none", // For Firefox
           msOverflowStyle: "none", // For IE and Edge
@@ -224,7 +225,7 @@ const MenuHeader = () => {
           ) : null
         )}
       </div>
-      <div className="xl:block hidden overflow-x-scroll whitespace-nowrap">
+      <div className="xl:block hidden whitespace-nowrap">
         <ul className="flex justify-center lg:justify-start text-lg ps-2 z-50">
           {menuItems.map((item, index) => (
             <li
