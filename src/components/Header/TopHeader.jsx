@@ -50,7 +50,7 @@ const TopHeader = () => {
   }, [dispatch, location.pathname]);
 
   return (
-    <div className="w-full bg-gradient-blue text-white md:py-6 py-4 md:px-4 px-3 lg:px-[35px] flex justify-between items-center">
+    <div className="w-full bg-gradient-blue text-white md:py-[19px] py-4 md:px-4 px-3 lg:px-[35px] flex justify-between items-center">
       <div className="flex items-center justify-between w-full lg:w-auto">
         <div className="text-xl font-bold flex-shrink-0 md:h-[40px] h-[30px]">
           <Link to="/">
@@ -113,7 +113,7 @@ const TopHeader = () => {
         ) : userData ? (
           <>
             <div className="flex items-center gap-1 mb-1 lg:mb-0">
-              <span className="bg-gray-800 text-white text-[10px] font-custom py-1 px-2 rounded-md">
+              <span className="bg-gray-800 text-white text-[10px] font-custom py-0.5 px-1 rounded-md">
                 {userData?.data?.role_name?.toUpperCase()}
               </span>
               <span className="text-white md:text-sm text-[13px] font-custom font-bold px-1 rounded-md">
@@ -121,7 +121,7 @@ const TopHeader = () => {
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-white rounded-md font-custom font-bold">
+              <span className="text-white rounded-md font-custom font-bold text-[13px]">
                 IRP{" "}
                 {new Intl.NumberFormat("en-IN").format(
                   userData?.data?.openingBalance

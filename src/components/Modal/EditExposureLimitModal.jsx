@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { IoClose } from "react-icons/io5";
+import { IoClose, IoEyeOutline, IoEyeOffOutline} from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { updateExposure } from "../../Store/Slice/editExposureSlice";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import {
   setDownlineData,
@@ -142,34 +141,34 @@ const EditExposureLimitModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[90%] sm:w-[500px] mt-20 sm:mt-10">
+      <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-20 sm:mt-10">
         {/* Header */}
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-2">
+        <div className="flex justify-between items-center bg-gradient-blue rounded-t-lg text-white text-[15px] font-custom font-semibold w-full p-2">
           <span>Edit Exposure Limit - {username}</span>
           <IoClose
             onClick={onCancel}
-            className="cursor-pointer text-white text-2xl"
+            className="cursor-pointer text-white text-xl"
           />
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 p-5">
+        <form onSubmit={handleSubmit} className="gap-5 flex flex-col p-4">
           {/* Current Exposure Limit */}
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-custom text-gray-700 w-1/3">
+          <div className="flex flex-row justify-between md:gap-0 gap-3 items-center md:w-[80%]">
+            <label className="block text-[13px] font-custom text-gray-700 sm:w-1/3">
               Current
             </label>
-            <p className="w-2/3 text-black font-custom">
+            <p className="w-full sm:w-2/3 text-black font-custom font-bold text-[13px]">
               {currentExposureLimit}
             </p>
           </div>
 
           {/* New Exposure Limit */}
-          <div className="flex justify-between items-center">
-            <label className="block text-sm font-custom text-gray-700 w-1/3">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center md:w-[80%]">
+            <label className="block text-[13px] font-custom text-gray-700 w-1/3">
               New
             </label>
-            <div className="w-2/3 flex items-center space-x-2">
+            <div className="w-full sm:w-2/3 flex items-center space-x-2">
               <input
                 type="text"
                 value={newExposureLimit}
@@ -178,41 +177,43 @@ const EditExposureLimitModal = ({
                   const numericValue = value.replace(/[^0-9]/g, "");
                   setNewExposureLimit(numericValue);
                 }}
-                className="w-full p-2 border border-black rounded-lg text-gray-700"
+                className="w-full p-2 border border-gray-300 rounded-[5px] h-[35px] text-gray-700"
               />
             </div>
           </div>
 
           {/* Password Field */}
 
-          <div className="flex items-center relative">
-            <label className="block text-sm font-custom text-gray-700 w-1/3">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center md:w-[80%] relative">
+            <label className="block text-[13px] font-custom text-gray-700 w-1/3">
               Password
             </label>
+           <div className="relative w-full sm:w-2/3">
             <input
-              type={passwordVisible ? "text" : "password"}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-2/3 p-2 border border-black rounded-lg text-gray-700 pr-10"
-            />
-            <div
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 cursor-pointer"
-              onClick={handlePasswordVisibility}
-            >
-              {passwordVisible ? (
-                <FaEyeSlash color="black" />
-              ) : (
-                <FaEye color="black" />
-              )}
-            </div>
+                type={passwordVisible ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="w-full p-2 border border-gray-300 rounded-[5px] h-[35px] text-gray-700 pr-10"
+              />
+              <div
+                className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 cursor-pointer"
+                onClick={handlePasswordVisibility}
+              >
+                {passwordVisible ? (
+                  <IoEyeOffOutline className="text-blue" />
+                ) : (
+                  <IoEyeOutline className="text-blue" />
+                )}
+              </div>
+           </div>
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end space-x-4 mt-4">
+          <div className="flex justify-end gap-3 md:mt-7 mt-4">
             {/* Submit Button */}
             <button
               type="submit"
-              className="px-4 py-2 bg-gradient-seablue font-custom font-bold text-white rounded-lg"
+              className="px-3 py-[6px] text-[14px] bg-gradient-seablue font-custom font-bold text-white rounded-md"
             >
               Submit
             </button>
@@ -221,7 +222,7 @@ const EditExposureLimitModal = ({
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 bg-gray-300 font-custom font-bold text-gray-700 rounded-lg"
+              className="px-3 py-[6px] text-[14px] bg-gray-400 font-custom font-bold text-gray-700 rounded-md"
             >
               Cancel
             </button>

@@ -133,49 +133,53 @@ const MyProfile = ({ Userid, Role }) => {
   };
 
   return (
-    <div className="border border-gray-400 rounded-lg bg-white shadow-sm">
+    <div className="border border-gray-400 rounded-[4px] bg-white shadow-sm">
       {/* Header */}
-      <div className="bg-gradient-seablue text-white py-1.5 px-2 rounded-t-lg">
-        <h1 className="text-md font-custom font-semibold">Account Details</h1>
+      <div className="bg-gradient-seablue text-white py-1.5 px-2 rounded-t-[4px]">
+        <h1 className="text-[14px] font-custom font-semibold">Account Details</h1>
       </div>
 
       {/* Profile Details */}
-      <div className="mt-4 text-sm">
-        <div className="flex border-b py-3 px-4">
-          <span className="font-custom w-48">Name</span>
-          <span className="text-left ml-4">{profile.name}</span>
+      <div className="mt-4 text-sm p-3 pt-0">
+        <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
+          <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Name</span>
+          <span className="text-left sm:ml-4 sm:py-0 py-4">{profile.name}</span>
         </div>
-        <div className="flex border-b py-3 px-4">
-          <span className="font-custom w-48">Commission</span>
-          <span className="text-left ml-4">{profile.commission}%</span>
-          {Userid && (
-            <span className="text-left ml-4 flex items-center">
+        <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
+          <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Commission</span>
+          <div className=" sm:py-0 py-3 flex">
+            <span className="text-left sm:ml-4">{profile.commission}%</span>
+            {Userid && (
+              <span className="text-left sm:ml-4 flex items-center">
+                <FaEdit
+                  className="ml-2 text-blue cursor-pointer"
+                  onClick={() => handleOpenEditCommissionModal(Userid)}
+                />
+              </span>
+            )}
+          </div>
+        </div>
+        <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
+          <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Rolling Commission</span>
+          <div className="flex sm:py-0 py-4">
+            <span className="text-left sm:ml-4  flex items-center">
               <FaEdit
                 className="ml-2 text-blue cursor-pointer"
-                onClick={() => handleOpenEditCommissionModal(Userid)}
+                onClick={handleOpenEditRollingModal}
               />
             </span>
-          )}
-        </div>
-        <div className="flex border-b py-3 px-4">
-          <span className="font-custom w-48">Rolling Commission</span>
-          <span className="text-left ml-4 flex items-center">
-            <FaEdit
-              className="ml-2 text-blue cursor-pointer"
-              onClick={handleOpenEditRollingModal}
-            />
-          </span>
-          <span className="text-left ml-4 flex items-center">
-            <FaEye
-              className="ml-2 text-blue cursor-pointer"
-              onClick={handleOpenRollingModal}
-            />
-          </span>
+            <span className="text-left sm:ml-4 flex items-center">
+              <FaEye
+                className="ml-2 text-blue cursor-pointer"
+                onClick={handleOpenRollingModal}
+              />
+            </span>
+          </div>
         </div>
         {Role !== "user" && (
-          <div className="flex border-b py-3 px-4">
-            <span className="font-custom w-48">Agent Rolling Commission</span>
-            <span className="text-left ml-4 flex items-center">
+          <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
+            <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Agent Rolling Commission</span>
+            <span className="text-left sm:ml-4 flex items-center sm:py-0 py-3">
               <FaEye
                 className="ml-2 text-blue cursor-pointer"
                 onClick={handleOpenAgentRollingModal}
@@ -183,32 +187,34 @@ const MyProfile = ({ Userid, Role }) => {
             </span>
           </div>
         )}
-        <div className="flex border-b py-3 px-4">
-          <span className="font-custom w-48">Currency</span>
-          <span className="text-left ml-4">IRP{profile.currency}</span>
+        <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
+          <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Currency</span>
+          <span className="text-left sm:ml-4 sm:py-0 py-4">IRP{profile.currency}</span>
         </div>
 
         {Role === "user" && (
-          <div className="flex border-b py-3 px-4">
-            <span className="font-custom w-48">Exposure Limit</span>
-            <span className="text-left ml-4">{profile.exposureLimit}</span>
-            <FaRegEdit
-              className="text-blue cursor-pointer"
-              onClick={handleOpenEditExposureModal}
-            />
+          <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
+            <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Exposure Limit</span>
+            <div className="flex items-center gap-3 sm:py-0 py-3">
+              <span className="text-left sm:ml-4">{profile.exposureLimit}</span>
+              <FaRegEdit
+                className="text-blue cursor-pointer"
+                onClick={handleOpenEditExposureModal}
+              />
+            </div>
           </div>
         )}
-        <div className="flex border-b py-3 px-4">
-          <span className="font-custom w-48">Partnership</span>
-          <span className="text-left ml-4">{profile.partnership}</span>
+        <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
+          <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Partnership</span>
+          <span className="text-left sm:ml-4 sm:py-0 py-4">{profile.partnership}</span>
         </div>
-        <div className="flex border-b py-3 px-4">
-          <span className="font-custom w-48">Mobile Number</span>
-          <span className="text-left ml-4">{profile.mobileNumber}</span>
+        <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
+          <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Mobile Number</span>
+          <span className="text-left sm:ml-4 sm:py-0 py-4">{profile.mobileNumber}</span>
         </div>
-        <div className="flex py-3 px-4">
-          <span className="font-custom w-48">Password</span>
-          <span className="flex items-center ml-4">
+        <div className="flex sm:py-3 border-b sm:flex-row flex-col">
+          <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Password</span>
+          <span className="flex items-center sm:ml-4 sm:py-0 py-4">
             <span className="mr-2">********</span>
             <FaRegEdit
               className="text-blue cursor-pointer"
@@ -216,9 +222,9 @@ const MyProfile = ({ Userid, Role }) => {
             />
           </span>
         </div>
-        <div className="flex py-3 px-4">
-          <span className="font-custom w-48">Bet Password</span>
-          <span className="flex items-center ml-4">
+        <div className="flex sm:py-3 border-b sm:flex-row flex-col">
+          <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Bet Password</span>
+          <span className="flex items-center sm:ml-4 sm:py-0 py-4">
             <span className="mr-2">********</span>
             <FaRegEdit
               className="text-blue cursor-pointer"

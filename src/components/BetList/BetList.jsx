@@ -145,7 +145,7 @@ const BetList = ({ Userid }) => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
@@ -170,19 +170,19 @@ const BetList = ({ Userid }) => {
           />
 
           <div className="border border-gray-300 rounded-md bg-white">
-            <h1 className="text-sm bg-gradient-seablue text-white font-bold p-2">
+            <h1 className="text-sm bg-gradient-seablue text-white font-bold p-2 rounded-t-md text-[15px]">
               Bet History
             </h1>
 
-            <div className="flex flex-col md:flex-row justify-between items-center mb-4 p-4 space-y-4 md:space-y-0">
+            <div className="flex flex-col sm:flex-row justify-between items-center p-4 sm:pb-0 pb-2 gap-4">
               <div className="flex items-center">
-                <label className="mr-2 text-sm font-medium text-black">
+                <label className="mr-2 text-sm text-black">
                   Show
                 </label>
                 <select
                   value={entriesToShow}
                   onChange={handleEntriesChange}
-                  className="border rounded px-2 py-1 text-sm"
+                  className="border rounded px-2 py-1 border-gray-400 text-sm"
                 >
                   {[10, 25, 50, 100].map((number) => (
                     <option key={number} value={number}>
@@ -190,18 +190,18 @@ const BetList = ({ Userid }) => {
                     </option>
                   ))}
                 </select>
-                <label className="ml-2 text-sm font-medium text-black">
+                <label className="ml-2 text-sm text-black">
                   entries
                 </label>
               </div>
-              <div className="flex items-center w-full md:w-auto">
-                <p className="mr-2 text-sm font-medium text-black">Search:</p>
+              <div className="flex items-center w-auto">
+                <p className="mr-2 text-sm text-black">Search:</p>
                 <input
                   type="text"
                   // placeholder="Search by username"
                   value={searchTerm}
                   onChange={handleSearchChange}
-                  className="border rounded px-2 py-1 text-sm w-full md:w-auto"
+                  className="border rounded px-2 py-1 h-[32px] text-sm w-full md:w-auto"
                 />
               </div>
             </div>
@@ -248,9 +248,9 @@ const BetList = ({ Userid }) => {
                                   : key === "Type"
                                   ? "Type"
                                   : key === "oddsReq"
-                                  ? "Odds Req"
+                                  ? "Odds Req."
                                   : key === "stake"
-                                  ? "Stake"
+                                  ? "Stack"
                                   : key === "placeTime"
                                   ? "Place Time"
                                   : key === "settleTime"
@@ -553,7 +553,7 @@ const BetList = ({ Userid }) => {
                 </table>
               </div>
             )}
-            <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+            <div className="flex justify-between sm:items-center mt-1 flex-col sm:flex-row p-4">
               {/* Showing entries text */}
               <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IoClose, IoEye, IoEyeOff } from 'react-icons/io5';
+import { IoClose, IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5';
 import { useDispatch, useSelector } from "react-redux";
 import { updateCreditReference } from "../../Store/Slice/creditReferenceslice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
@@ -136,9 +136,9 @@ const CreditEditReferenceModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-    <div className="bg-white rounded-lg w-[90%] sm:w-[500px] mt-12 sm:mt-12">
+    <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-12 sm:mt-12">
       {/* Header */}
-      <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-3">
+      <div className="flex justify-between items-center rounded-t-lg bg-gradient-blue text-white text-[15px] font-custom font-semibold w-full px-3 py-2">
         <span>Edit Credit Reference - {username}</span>
         <IoClose
           onClick={onCancel} // Close the modal
@@ -147,58 +147,57 @@ const CreditEditReferenceModal = ({
       </div>
   
       {/* Form */}
-      <form onSubmit={handleSubmit} className="space-y-4 p-5">
+      <form onSubmit={handleSubmit} className="gap-5 flex flex-col p-5">
         {/* Current Credit Reference */}
-        <div className="flex flex-col sm:flex-row justify-between items-center">
-          <label className="block text-sm font-custom font-medium text-gray-700 sm:w-1/3">
+        <div className="flex flex-row justify-between md:gap-0 gap-3 items-center md:w-[80%]">
+          <label className="block text-[13px] font-custom font-medium text-gray-700 sm:w-1/3">
             Current
           </label>
-          <p className="w-full sm:w-2/3 text-black font-custom  font-medium">{currentCreditRef}</p>
+          <p className="w-full sm:w-2/3 text-black font-custom font-bold text-[14px]">{currentCreditRef}</p>
         </div>
   
         {/* New Credit Reference */}
-        <div className="flex flex-col sm:flex-row justify-between items-center">
-          <label className="block text-sm font-custom font-medium text-gray-700 sm:w-1/3">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center md:w-[80%]">
+          <label className="block text-[13px] font-custom sm:mb-0 mb-[4px] font-medium text-gray-700 sm:w-1/3">
             New
           </label>
           <div className="w-full sm:w-2/3 flex items-center space-x-2">
           <input
-  type="number"
-  value={newCreditRef}
-  onChange={(e) => setNewCreditRef(e.target.value)}
-  min="0"
-  className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
-/>
+              type="number"
+              value={newCreditRef}
+              onChange={(e) => setNewCreditRef(e.target.value)}
+              min="0"
+              className="w-full p-2 border border-whiteGray rounded-[4px] text-gray-700 h-[35px]"
+            />
           </div>
         </div>
-  
         
-        <div className="flex flex-col sm:flex-row justify-between items-center">
-  <label className="block text-sm font-custom font-medium text-gray-700 sm:w-1/3">
-    Password
-  </label>
-  <div className="w-full sm:w-2/3 relative">
-    <input
-      type={showPassword ? "text" : "password"}  
-      value={password}
-      onChange={(e) => setPassword(e.target.value)}
-      className="w-full p-2 border border-whiteGray rounded-md text-gray-700"
-    />
-    <div
-      className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
-      onClick={() => setShowPassword(!showPassword)}
-    >
-      {showPassword ? <IoEyeOff className="text-blue" /> : <IoEye className="text-blue" />}
-    </div>
-  </div>
-</div>
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center md:w-[80%]">
+          <label className="block text-[13px] sm:mb-0 mb-[4px] font-custom font-medium text-gray-700 sm:w-1/3">
+            Password
+          </label>
+          <div className="w-full sm:w-2/3 relative">
+            <input
+              type={showPassword ? "text" : "password"}  
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-2 border border-whiteGray rounded-[4px] text-gray-700 h-[35px]"
+            />
+            <div
+              className="absolute top-1/2 right-3 transform -translate-y-1/2 cursor-pointer"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <IoEyeOffOutline className="text-blue" /> : <IoEyeOutline className="text-blue" />}
+            </div>
+          </div>
+        </div>
 
       
-        <div className="flex flex-col sm:flex-row justify-end space-y-4 sm:space-y-0 sm:space-x-4 mt-4">
+        <div className="flex justify-end gap-3 md:mt-7 mt-4">
          
           <button
             type="submit"
-            className="px-6 py-2 bg-gradient-seablue text-white rounded-lg font-custom"
+            className="px-3 py-[6px] bg-gradient-seablue font-bold text-[14px] text-white rounded-md font-custom"
           >
             Submit
           </button>
@@ -207,7 +206,7 @@ const CreditEditReferenceModal = ({
           <button
             type="button"
             onClick={onCancel} // Call onCancel to close the modal
-            className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg"
+            className="px-3 py-[6px] bg-gray-400 font-bold text-[14px] text-gray-700 rounded-md font-custom"
           >
             Cancel
           </button>

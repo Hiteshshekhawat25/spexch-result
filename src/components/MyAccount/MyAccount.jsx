@@ -65,7 +65,7 @@ const MyAccount = () => {
     : "max-h-[calc(3.5*2.6rem)]";
 
   return (
-    <div className="md:flex sm:0 justify-center mt-6">
+    <div className="justify-center md:grid-cols-4 grid-cols-1 grid gap-5">
       {loading ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
@@ -78,10 +78,9 @@ const MyAccount = () => {
         </div>
       ) : (
         <>
-          <div
-            className={`sm:w-1/4 border border-gray-400 mx-4 sm:mx-8 bg-white ${containerHeight} overflow-hidden mb-3`}
+          <div className={`border border-gray-300 md:col-span-1 col-span-1 bg-white ${containerHeight} overflow-hidden`}
           >
-            <h2 className="text-sm text-white bg-gradient-seablue font-custom font-bold py-2 px-4">
+            <h2 className="text-sm text-white bg-gradient-seablue font-custom font-bold py-2 px-2">
               My Account
             </h2>
 
@@ -92,7 +91,7 @@ const MyAccount = () => {
                 }`}
                 onClick={() => handleSelection("myProfile")}
               >
-                <div className="flex justify-between py-2 px-4 text-sm font-custom">
+                <div className="flex sm:justify-between justify-center py-1.5 px-2 text-[13px] font-custom">
                   <span>My Profile</span>
                 </div>
               </div>
@@ -107,7 +106,7 @@ const MyAccount = () => {
                     }`}
                     onClick={() => handleSelection("bethistory")}
                   >
-                    <div className="flex justify-between py-2 px-4 text-sm">
+                    <div className="flex sm:justify-between justify-center py-1.5 px-2 text-[13px]">
                       <span>Bet History</span>
                     </div>
                   </div>
@@ -119,7 +118,7 @@ const MyAccount = () => {
                     }`}
                     onClick={() => handleSelection("profitLoss")}
                   >
-                    <div className="flex justify-between py-2 px-4 text-sm">
+                    <div className="flex sm:justify-between justify-center py-1.5 px-2 text-[13px]">
                       <span>Profit & Loss</span>
                     </div>
                   </div>
@@ -134,7 +133,7 @@ const MyAccount = () => {
                 }`}
                 onClick={() => handleSelection("accountStatement")}
               >
-                <div className="flex justify-between py-2 px-4 text-sm font-custom">
+                <div className="flex sm:justify-between justify-center py-1.5 px-2 text-[13px] font-custom">
                   <span>Account Statement</span>
                 </div>
               </div>
@@ -147,14 +146,14 @@ const MyAccount = () => {
                 }`}
                 onClick={() => handleSelection("activityLog")}
               >
-                <div className="flex justify-between py-2 px-4 text-sm font-custom">
+                <div className="flex sm:justify-between justify-center py-1.5 px-2 text-[13px] font-custom">
                   <span>Activity Log</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="sm:w-3/4 md:w-full p-2">{content}</div>
+          <div className="md:col-span-3 col-span-1">{content}</div>
         </>
       )}
     </div>

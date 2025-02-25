@@ -74,6 +74,7 @@ const DownlineList = () => {
   const [userFetchList, setUserFetchList] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const downlineData = useSelector(selectDownlineData);
+  const [isNested, setIsNested] = useState(false);
   const loading = useSelector(selectDownlineLoading);
   const error = useSelector(selectDownlineError);
   const { startFetchData } = useSelector((state) => state.downline);
@@ -106,7 +107,7 @@ const DownlineList = () => {
       state: {
         selectedUser: item,
         selectedPage: "profitLoss",
-        userId: item._id
+        userId: item._id,
       },
     });
   };
@@ -127,7 +128,7 @@ const DownlineList = () => {
       state: {
         selectedUser: item,
         selectedPage: "myProfile",
-        userId: item._id
+        userId: item._id,
       },
     });
   };
@@ -223,8 +224,8 @@ const DownlineList = () => {
 
               if (masterAgentRoles.length > 0) {
                 // Fetch all data for each role without pagination
-                const fetchPromises = masterAgentRoles.map(
-                  (role) => fetchDownlineData(1, 10000, role.role_id) 
+                const fetchPromises = masterAgentRoles.map((role) =>
+                  fetchDownlineData(1, 10000, role.role_id)
                 );
 
                 const results = await Promise.all(fetchPromises);
@@ -415,35 +416,9 @@ const DownlineList = () => {
     setSelectedUser(user);
   };
 
-  // const handleUsernameList = async (item) => {
-  //   // alert(item.role_name);
-  //   try {
-  //     if (item.role_name === "master") {
-  //       const data = await fetchallUsers(item._id);
-  //       setUserFetchList(data);
-  //     } else if (item.role_name === "agent") {
-  //       const data = await fetchallUsers(item._id);
-  //       setUserFetchList(data);
-  //     } else if (item.role_name === "super-admin") {
-  //       const data = await fetchallUsers(item._id);
-  //       setUserFetchList(data);
-  //     } else if (item.role_name === "super") {
-  //       const data = await fetchallUsers(item._id);
-  //       setUserFetchList(data);
-  //     } else if (item.role_name === "White-level") {
-  //       const data = await fetchallUsers(item._id);
-  //       setUserFetchList(data);
-  //     } else if (item.role_name === "sub-admin") {
-  //       const data = await fetchallUsers(item._id);
-  //       setUserFetchList(data);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error fetching details:", error);
-  //   }
-  // };
   const handleUsernameList = async (item) => {
     try {
-      const validRoles = [
+      const allowedRoles = [
         "master",
         "agent",
         "super-admin",
@@ -452,14 +427,40 @@ const DownlineList = () => {
         "sub-admin",
       ];
 
-      if (validRoles.includes(item.role_name)) {
+      if (allowedRoles.includes(item.role_name)) {
         const data = await fetchallUsers(item._id);
         setUserFetchList(data);
+        setIsNested(true);
+        if (item.role_name == "agent" || item.role_name == "user") {
+          setIsNested(true);
+        }
+      } else if (item.role_name == "user") {
+        return null;
       }
     } catch (error) {
       console.error("Error fetching details:", error);
     }
   };
+
+  // const handleUsernameList = async (item) => {
+  //   try {
+  //     const validRoles = [
+  //       "master",
+  //       "agent",
+  //       "super-admin",
+  //       "super",
+  //       "white-level",
+  //       "sub-admin",
+  //     ];
+
+  //     if (validRoles.includes(item.role_name)) {
+  //       const data = await fetchallUsers(item._id);
+  //       setUserFetchList(data);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching details:", error);
+  //   }
+  // };
 
   const fetchUsers = async () => {
     if (!selectedFilter) return;
@@ -638,7 +639,7 @@ const DownlineList = () => {
                   <tr className="bg-gray-200">
                     {[
                       { key: "username", label: "Username" },
-                      { key: "creditRef", label: "CreditRef" },
+                      { key: "credit Ref.", label: "Credit Ref." },
                       ...(isMasterDownlineList
                         ? [{ key: "partnership", label: "Partnership" }]
                         : []),
@@ -647,7 +648,7 @@ const DownlineList = () => {
                       ...(!isMasterDownlineList
                         ? [{ key: "exposure", label: "Exposure Limit" }]
                         : []),
-                      { key: "availableBalance", label: "Avail. Bal" },
+                      { key: "availableBalance", label: "Avail. Bal." },
                       { key: "refPL", label: "Ref. P/L" },
                       ...(!isMasterDownlineList
                         ? [{ key: "partnership", label: "Partnership" }]
@@ -724,7 +725,7 @@ const DownlineList = () => {
                             }`}
                           >
                             <span
-                              className={`bg-green-500 text-white px-2 py-1 text-[10.5px] mr-1 rounded font-custom font-semibold text-l ${
+                              className={`bg-green-500 text-white px-[6px] py-[2px] text-[10.5px] mr-1 rounded font-custom font-semibold text-l ${
                                 item.role_name === "master"
                                   ? "cursor-pointer"
                                   : ""
@@ -733,7 +734,7 @@ const DownlineList = () => {
                               {item.role_name?.toUpperCase()}
                             </span>
                             <span
-                              className="text-[#2789ce] font-custom font-semibold cursor-pointer"
+                              className="text-balck font-custom font-semibold cursor-pointer"
                               style={{
                                 fontFamily: "Tahoma, Helvetica, sans-serif",
                               }}
@@ -901,7 +902,7 @@ const DownlineList = () => {
                           }}
                         >
                           <span
-                            className={`px-2 py-[4px] rounded-[5px] border text-[11px] capitalize ${
+                            className={`px-2 py-[4px] rounded-[5px] border text-[11px] ${
                               item.status === "active"
                                 ? "text-green-600 border-green-600 bg-green-100"
                                 : item.status === "suspended"
@@ -914,7 +915,7 @@ const DownlineList = () => {
                             {item.status}
                           </span>
                         </td>
-                        <td className="px-4 py-2 text-sm">
+                        {/* <td className="px-4 py-2 text-sm">
                           <div className="flex md:space-x-2.5 space-x-2">
                             <div
                               onClick={() => handleIconClick(item)}
@@ -925,7 +926,7 @@ const DownlineList = () => {
                             </div>
                             {!isMasterDownlineList && (
                               <div
-                                onClick={() => handleArrowClick(item,item._id)}
+                                onClick={() => handleArrowClick(item, item._id)}
                                 className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                               >
                                 <RiArrowUpDownFill className="text-darkgray" />
@@ -948,12 +949,12 @@ const DownlineList = () => {
                             </div>
 
                             <div
-  onClick={() => {
-    handleProfileClick(item,item._id);
-    console.log("item",item._id);
-  }}
-  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
->
+                              onClick={() => {
+                                handleProfileClick(item, item._id);
+                                console.log("item", item._id);
+                              }}
+                              className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                            >
                               <FaUserAlt className="text-darkgray" />
                             </div>
 
@@ -974,6 +975,106 @@ const DownlineList = () => {
                                 onClick={() => handleDelete(item)}
                               />
                             </div>
+                          </div>
+                        </td> */}
+                        <td className="px-4 py-2 text-sm">
+                          <div className="flex md:space-x-2.5 space-x-2">
+                            {isNested &&
+                            (item.role_name === "agent" ||
+                              item.role_name === "user") ? (
+                              // Show only three icons for agent and user in nested condition
+                              <>
+                                <div
+                                  onClick={() =>
+                                    handleArrowClick(item, item._id)
+                                  }
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                >
+                                  <RiArrowUpDownFill className="text-darkgray" />
+                                </div>
+
+                                <div
+                                  onClick={() => handleHistoryClick(item)}
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                >
+                                  <MdManageHistory className="text-darkgray" />
+                                </div>
+
+                                <div
+                                  onClick={() => {
+                                    handleProfileClick(item, item._id);
+                                    console.log("item", item._id);
+                                  }}
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                                >
+                                  <FaUserAlt className="text-darkgray" />
+                                </div>
+                              </>
+                            ) : (
+                              <>
+                                <div
+                                  onClick={() => handleIconClick(item)}
+                                  title="Banking"
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                                >
+                                  <AiFillDollarCircle className="text-darkgray" />
+                                </div>
+
+                                {!isMasterDownlineList && (
+                                  <div
+                                    onClick={() =>
+                                      handleArrowClick(item, item._id)
+                                    }
+                                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                  >
+                                    <RiArrowUpDownFill className="text-darkgray" />
+                                  </div>
+                                )}
+
+                                {!isMasterDownlineList && (
+                                  <div
+                                    onClick={() => handleHistoryClick(item)}
+                                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                  >
+                                    <MdManageHistory className="text-darkgray" />
+                                  </div>
+                                )}
+
+                                <div
+                                  onClick={() => statushandlechange(item)}
+                                  title="Change status"
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                >
+                                  <MdSettings className="text-darkgray" />
+                                </div>
+
+                                <div
+                                  onClick={() => {
+                                    handleProfileClick(item, item._id);
+                                    console.log("item", item._id);
+                                  }}
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                                >
+                                  <FaUserAlt className="text-darkgray" />
+                                </div>
+
+                                <div
+                                  onClick={() => handleOpenSettings(item)}
+                                  title="Sports Settings"
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                                >
+                                  <BsBuildingFillLock className="text-darkgray" />
+                                </div>
+
+                                <div
+                                  onClick={() => handleDeleteClick(item)}
+                                  title="Delete"
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                                >
+                                  <MdDelete className="text-darkgray" />
+                                </div>
+                              </>
+                            )}
                           </div>
                         </td>
                       </tr>
@@ -998,11 +1099,11 @@ const DownlineList = () => {
               </div>
 
               {/* Pagination Buttons */}
-              <div className="flex space-x-2 sm:ml-auto">
+              <div className="flex sm:ml-auto">
                 {/* First Button */}
                 <button
                   onClick={() => handlePageChange("first")}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
                     currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
@@ -1015,7 +1116,7 @@ const DownlineList = () => {
                 {/* Previous Button */}
                 <button
                   onClick={() => handlePageChange("prev")}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
                     currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
@@ -1038,9 +1139,9 @@ const DownlineList = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                          className={`sm:px-3 px-2 sm:py-1 py-0.5 text-sm border border-white rounded ${
                             currentPage === page
-                              ? "bg-gray-200"
+                              ? "bg-gray-200 border-gray-700"
                               : "hover:bg-gray-100"
                           }`}
                         >
@@ -1052,7 +1153,7 @@ const DownlineList = () => {
                       (page === currentPage + 3 && currentPage < totalPages - 3)
                     ) {
                       return (
-                        <span key={page} className="px-3 py-1 text-sm">
+                        <span key={page} className="sm:px-3 px-2 py-1 text-sm">
                           ...
                         </span>
                       );
@@ -1064,7 +1165,7 @@ const DownlineList = () => {
                 {/* Next Button */}
                 <button
                   onClick={() => handlePageChange("next")}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
                     currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
@@ -1077,7 +1178,7 @@ const DownlineList = () => {
                 {/* Last Button */}
                 <button
                   onClick={() => handlePageChange("last")}
-                  className={`px-3 py-1 text-sm rounded ${
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
                     currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"

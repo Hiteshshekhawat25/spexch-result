@@ -101,8 +101,8 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[500px] mt-20">
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-2">
+      <div className="bg-white rounded-lg  w-[95%] sm:w-[500px] mt-20">
+        <div className="flex justify-between rounded-t-lg items-center bg-gradient-blue text-white text-[15px] font-custom font-semibold w-full p-2">
           <span>Bet Password</span>
           <IoClose
             onClick={onCancel}
@@ -110,7 +110,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
           />
         </div>
 
-        <div className="p-5 space-y-4">
+        <div className="p-4 space-y-4">
           <div>
             <label className="text-sm font-custom font-medium text-gray-700">
               Your Password <span className="text-red-600">*</span>
@@ -120,7 +120,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
                 type={showCurrentPassword ? "text" : "password"}
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded mt-1"
+                className="w-full p-2 border border-gray-300 rounded mt-1 h-[36px]"
               />
               <span
                 onClick={() => setShowCurrentPassword(!showCurrentPassword)}
@@ -173,7 +173,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
                     setError(""); // Clear the error if conditions are met
                   }
                 }}
-                className="w-full p-2 border border-gray-300 rounded mt-1"
+                className="w-full p-2 border border-gray-300 rounded mt-1 h-[36px]"
               />
               <span
                 onClick={() => setShowNewPassword(!showNewPassword)}
@@ -199,7 +199,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
                 type={showConfirmPassword ? "text" : "password"}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="w-full p-2 border border-gray-300 rounded mt-1"
+                className="w-full p-2 border border-gray-300 rounded mt-1 h-[36px]"
               />
               <span
                 onClick={() => setShowConfirmPassword(!showConfirmPassword)}
@@ -223,7 +223,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
           <div className="flex justify-end mt-4 space-x-2">
             <button
               onClick={handleSubmit}
-              className={`bg-gradient-seablue text-white font-bold font-custom px-2 py-2 rounded ${
+              className={`bg-gradient-seablue text-white font-semibold text-[13px] font-custom px-2 py-1.5 rounded ${
                 !currentPassword ||
                 !newPassword ||
                 !confirmPassword ||
@@ -245,7 +245,7 @@ const ChangePasswordModal = ({ userId, onCancel }) => {
 
             <button
               onClick={onCancel}
-              className="bg-gradient-seablue text-white px-2 py-2 rounded font-bold font-custom"
+              className="bg-gradient-seablue text-white px-2 py-1.5 rounded font-semibold text-[13px] font-custom"
               disabled={changePasswordStatus === "loading"}
             >
               No

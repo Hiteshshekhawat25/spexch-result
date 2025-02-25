@@ -69,7 +69,7 @@ const AccountStatement = ({ Userid }) => {
   };
 
   return (
-    <div className="p-4">
+    <div className="">
       <AccountStatementFilter
         setTotalTransactions={setTotalTransactions}
         setTotalPages={setTotalPages}
@@ -82,7 +82,7 @@ const AccountStatement = ({ Userid }) => {
       />
 
       <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="text-xl bg-gradient-seablue text-white font-custom font-bold">
+        <h1 className="bg-gradient-seablue text-white font-custom font-semibold rounded-t-md text-[14px] p-2">
           Account Statement
         </h1>
 
@@ -195,7 +195,7 @@ const AccountStatement = ({ Userid }) => {
             </tbody>
           </table>
         </div>
-        <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+        <div className="flex justify-between items-center mt-4 flex-col sm:flex-row p-4 pt-0">
           {/* Showing entries text */}
           <div className="text-sm text-gray-600 mb-2 sm:mb-0">
             Showing{" "}

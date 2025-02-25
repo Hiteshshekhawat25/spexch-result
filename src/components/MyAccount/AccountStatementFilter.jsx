@@ -110,7 +110,7 @@ const AccountStatementFilter = ({
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
+    <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2 grid-cols-1 flex-wrap items-end md:gap-4 gap-3.5 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
       <div className="flex flex-col items-start">
         <label className="text-sm font-custom text-black mb-2">
           Data Source
@@ -118,7 +118,7 @@ const AccountStatementFilter = ({
         <select
           value={dataSource || "live"} // Default to "live" if dataSource is empty
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-10 py-1 "
+          className="border rounded px-3 py-1 h-[38px] text-[14px] outline-none w-full"
         >
           <option value="">Data Source</option>
           <option value="live">LIVE DATA</option>
@@ -126,31 +126,28 @@ const AccountStatementFilter = ({
           <option value="old">OLD DATA</option>
         </select>
       </div>
-
       <div className="flex flex-col items-start">
         <label className="text-sm font-custom text-black mb-1">From</label>
         <input
           type="date"
           value={fromDate || today}
           onChange={(e) => dispatch(setFromDate(e.target.value))}
-          className="border rounded px-8 py-2"
+          className="border rounded px-2 py-2 h-[38px] text-[14px] w-full"
         />
       </div>
-
-      <div className="flex flex-col items-start !mt-5">
+      <div className="flex flex-col items-start">
         <label className="text-sm font-custom text-black mb-1">To</label>
         <input
           type="date"
           value={toDate || today}
           onChange={(e) => dispatch(setToDate(e.target.value))}
-          className="border rounded px-8 py-2"
+          className="border rounded px-2 py-2 h-[38px] text-[14px] w-full"
         />
       </div>
-
       <div className="flex space-x-1 items-center mt-4">
         <button
           onClick={handleGetStatement}
-          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
+          className="px-4 py-[9px] bg-gradient-seablue text-white rounded-md text-sm"
         >
           Get Statement
         </button>

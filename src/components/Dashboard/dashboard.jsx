@@ -61,23 +61,23 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="flex flex-col lg:flex-row gap-2 w-full">
+    <div className="flex flex-col md:flex-row md:gap-6 gap-5 w-full">
       {/* Live Sports Profit */}
-      <div className="flex-1 mt-4 mx-4 bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px]">
-        <h2 className="text-md bg-gradient-seablue text-white  font-custom font-bold mb-4 p-1 rounded">
+      <div className="flex-1 bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px]">
+        <h2 className="text-[15px] bg-gradient-seablue text-white  font-custom font-bold py-[6px] px-2 rounded-t">
           Live Sports Profit
         </h2>
-        <div className="w-64 h-64 mx-auto">
+        <div className="w-64 h-64 mx-auto p-4">
           <Pie data={liveSportsData} />
         </div>
       </div>
 
       {/* Backup Sports Profit */}
-      <div className="flex-1 mt-4 mx-4 bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px]">
-        <h2 className="text-md bg-gradient-seablue text-white font-custom font-bold mb-4 p-1 rounded">
+      <div className="flex-1 bg-white rounded-lg text-gray-800 shadow-lg border border-gray-300 h-[400px]">
+        <h2 className="text-[15px] bg-gradient-seablue text-white font-custom font-bold py-[6px] px-2 rounded-t">
           Backup Sports Profit
         </h2>
-        <div className="w-64 h-64 mx-auto">
+        <div className="w-64 h-64 mx-auto p-4">
           <Pie data={backupSportsData} />
         </div>
       </div>
