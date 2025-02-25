@@ -260,7 +260,9 @@ const ProfitLossUser = () => {
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {/* {item?.marketName ? " " : "void"} */}
-                          {item?.isDeleted ? "Void" : item?.marketName}
+                          {item?.isDeleted
+                            ? "Void"
+                            : item?.marketName ?? item?.marketNameTwo}
                         </td>
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400"

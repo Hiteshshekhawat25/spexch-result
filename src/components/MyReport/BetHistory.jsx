@@ -213,7 +213,7 @@ const BetHistory = () => {
                         className={`border-b border-gray-400 ${
                           item.betType === "no" || item.betType === "lay"
                             ? "bg-pink-300"
-                            : item.betType === "Back" || item.betType === "yes"
+                            : item.betType === "back" || item.betType === "yes"
                             ? "bg-lightblue"
                             : ""
                         }`}
@@ -231,13 +231,11 @@ const BetHistory = () => {
                           {item.marketNameTwo}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          <td className="px-4 py-3 text-sm text-center">
-                            {item.betType == "no"
-                              ? "Lay"
-                              : item.betType == "yes"
-                              ? "Back"
-                              : "Void"}
-                          </td>
+                          {item.betType === "no" || item.betType === "lay"
+                            ? "Lay"
+                            : item.betType === "yes" || item.betType === "back"
+                            ? "Back"
+                            : "Void"}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.fancyOdds}/{item.odds}
@@ -246,28 +244,28 @@ const BetHistory = () => {
                           {item.totalAmount?.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400 whitespace-nowrap">
-  {item?.betType === "lay" || item?.betType === "no" ? (
-    <>
-      <span className="text-green-800">
-        {item?.totalAmount}
-      </span>
-      <span className="text-red-500">
-        {" "}
-        ({item?.totalProfitLoss || 0})
-      </span>
-    </>
-  ) : (
-    <>
-      <span className="text-green-800">
-        ({item?.totalProfitLoss})
-      </span>
-      <span className="text-red-500">
-        {" "}
-        (-{item?.totalAmount || 0})
-      </span>
-    </>
-  )}
-</td>
+                          {item?.betType === "lay" || item?.betType === "no" ? (
+                            <>
+                              <span className="text-green-800">
+                                {item?.totalAmount}
+                              </span>
+                              <span className="text-red-500">
+                                {" "}
+                                ({item?.totalProfitLoss || 0})
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-green-800">
+                                ({item?.totalProfitLoss})
+                              </span>
+                              <span className="text-red-500">
+                                {" "}
+                                (-{item?.totalAmount || 0})
+                              </span>
+                            </>
+                          )}
+                        </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {new Date(item.placeTime).toLocaleString("en-US", {
                             year: "numeric",
