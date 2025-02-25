@@ -236,26 +236,49 @@ export const RevertSessionCoins = async (matchId,selectionId) => {
 
 
 
-export const createInstance = async (matchId,tossMarket) => {
-  try {
-    const token = localStorage.getItem("authToken");
+export const getInstance = async (url,id) => {
+  const token = localStorage.getItem("authToken");
 
-    const response = await axios.post(
-      `${BASE_URL}/user/update-toss-market`,
-      {
-        matchId,
-        tossMarket,
+  try {
+    const response = await axios.get(`${BASE_URL}${url}`, {
+      headers: {
+        
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
       },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    return response.data;
+    });
+    return response;
   } catch (error) {
-    console.error("Error updating session result:", error);
-    throw error;
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+  }
+};
+
+export const postInstance = async (url,data) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const response = await axios.post(`${BASE_URL}${url}`, data,{
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }
 };
