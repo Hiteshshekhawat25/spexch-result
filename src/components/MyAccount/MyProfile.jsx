@@ -125,12 +125,13 @@ const MyProfile = ({ Userid, Role }) => {
   };
 
   const handleOpenChangePasswordModal = () => {
-    setIsChangePasswordModalOpen(true);
+    setBetpasswordModal(true);
   };
 
   const handleOpenBetPasswordModal = () => {
-    setBetpasswordModal(true);
+    setIsChangePasswordModalOpen(true);
   };
+
 
   return (
     <div className="border border-gray-400 rounded-[4px] bg-white shadow-sm">
@@ -228,7 +229,7 @@ const MyProfile = ({ Userid, Role }) => {
             <span className="mr-2">********</span>
             <FaRegEdit
               className="text-blue cursor-pointer"
-              onClick={handleOpenChangePasswordModal}
+              onClick={handleOpenBetPasswordModal}
             />
           </span>
         </div>
