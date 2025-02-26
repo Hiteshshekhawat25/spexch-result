@@ -616,7 +616,7 @@ const MatchProfitandLoss = () => {
               page: 1,
               limit: 10,
               matchId: matchId,
-              userId:user_id,
+              userId: user_id,
               fromDate: fromDate,
               toDate: toDate,
             },
@@ -786,10 +786,12 @@ const MatchProfitandLoss = () => {
                       ? "Match Odds"
                       : item?.type === "fancy"
                       ? item?.marketNameTwo
+                      : item?.type === "toss"
+                      ? "Toss"
                       : ""}
                   </p>
                 </td>
-                <td className="px-4 py-2 text-center">{item?.marketName}</td>
+                <td className="px-4 py-2 text-center">{item?.marketName ?? item?.marketNameTwo }</td>
                 <td
                   className="px-4 py-2 text-center"
                   style={{

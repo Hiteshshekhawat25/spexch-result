@@ -5,6 +5,7 @@ import { BASE_URL } from "../../Constant/Api";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
+import { useSelector } from "react-redux";
 
 const ProfitLoss = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -15,11 +16,17 @@ const ProfitLoss = () => {
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const [expandedRows, setExpandedRows] = useState([]);
+  const plFilterState = useSelector((state) => state.plFilter);
+  const { dataSource, fromDate, toDate, fromTime, toTime } =
+    plFilterState || {};
   const [sortConfig, setSortConfig] = useState({
     key: "username",
     direction: "ascending",
   });
   const navigate = useNavigate();
+
+  console.log("fromDate",fromDate);
+  console.log("todate",toDate)
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -30,7 +37,6 @@ const ProfitLoss = () => {
   };
 
   const fetchUserData = async (userId, role_name, item) => {
-    console.log(role_name, "role_name");
     const token = localStorage.getItem("authToken");
     setLocalLoading(true);
 
@@ -48,7 +54,13 @@ const ProfitLoss = () => {
 
     try {
       const response = await axios.get(`${BASE_URL}/user/get-profit-loss`, {
-        params: { page: currentPage, limit: entriesToShow, userId },
+        params: {
+          page: currentPage,
+          limit: entriesToShow,
+          userId,
+          fromDate,
+          toDate,
+        },
         headers: {
           "Content-Type": "application/json; charset=utf-8",
           Accept: "application/json",
@@ -56,8 +68,8 @@ const ProfitLoss = () => {
         },
       });
 
-      console.log("Request URL:", response.config.url);
-      console.log("Response Data:", response?.data);
+      // console.log("Request URL:", response.config.url);
+      // console.log("Response Data:", response?.data);
 
       const data = response?.data?.data || [];
       setExpandedRows(data);
@@ -204,7 +216,7 @@ const ProfitLoss = () => {
               {expandedRows.length > 0 ? (
                 expandedRows.map(
                   (row, index) => (
-                    console.log("row", row),
+                    // console.log("row", row),
                     (
                       <tr
                         key={index}
@@ -237,9 +249,6 @@ const ProfitLoss = () => {
                           }`}
                         >
                           {Math.abs(row.totalDownlineProfitLoss.toFixed(2))}
-                          {/* {row.totalDownlineProfitLoss > 0
-  ? (Math.abs(row.totalDownlineProfitLoss) - row.commission).toFixed(2)
-  : Math.abs(row.totalDownlineProfitLoss.toFixed(2))} */}
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${

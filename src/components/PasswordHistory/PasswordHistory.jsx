@@ -12,6 +12,11 @@ const PasswordHistory = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
+  const userData = JSON.parse(localStorage.getItem("userData"));
+
+  console.log("userDatauserData");
+  const userID = userData?.data._id;
+
   useEffect(() => {
     const fetchPasswordHistory = async () => {
       try {
@@ -30,6 +35,7 @@ const PasswordHistory = () => {
             params: {
               page: currentPage,
               limit: entriesToShow,
+              userId: userID,
             },
           }
         );
