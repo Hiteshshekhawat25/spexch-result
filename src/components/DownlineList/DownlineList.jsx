@@ -554,7 +554,7 @@ const DownlineList = () => {
             <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
 
             <div className="absolute bottom-[-40px] w-full text-center text-xl font-custom font-medium text-black">
-              <ClipLoader size={40} color="#0000FF" />
+              <ClipLoader color="#0000FF" />
             </div>
           </div>
         </div>
