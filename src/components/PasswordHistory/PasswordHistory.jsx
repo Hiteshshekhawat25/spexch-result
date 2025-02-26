@@ -73,7 +73,6 @@ const PasswordHistory = () => {
     (currentPage - 1) * entriesToShow,
     currentPage * entriesToShow
   );
-
   const handlePageChange = (direction) => {
     if (direction === "next" && currentPage < totalPages) {
       setCurrentPage((prevPage) => prevPage + 1);
@@ -173,7 +172,7 @@ const PasswordHistory = () => {
                         {item.remarks}
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
-                        {formatDateTime(item.date)}
+                        {formatDateTime(item.deletedAt)}
                       </td>
                     </tr>
                   ))

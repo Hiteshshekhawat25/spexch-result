@@ -12,56 +12,21 @@ const RestoreUser = () => {
   const [totalRecords, setTotalRecords] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
 
-  //   useEffect(() => {
-  //     const fetchRestoreUser = async () => {
-  //       try {
-  //         const token = localStorage.getItem("authToken");
-  //         if (!token) {
-  //           console.error("No token found for authorization.");
-  //           return;
-  //         }
+  // const userData = JSON.parse(localStorage.getItem("userData"));
 
-  //         const response = await axios.get(`${BASE_URL}/user/get-deleted-user`, {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //           params: {
-  //             page: currentPage,
-  //             limit: entriesToShow,
-  //           },
-  //         });
+  // console.log("userDatauserData");
+  // const userID = userData?.data._id;
 
-  //         const data = response.data;
-  //         console.log("data", data);
-  //         if (data.success) {
-  //           setRestoreUser(data?.data || []);
-  //           setTotalCount(data?.pagination.totalRecords);
-  //           setTotalRecords(data?.pagination.totalRecords);
-  //           // Calculate totalPages after fetching the data
-  //           setTotalPages(
-  //             Math.ceil(data?.pagination.totalRecords / entriesToShow)
-  //           );
-  //         } else {
-  //           console.error("Failed to fetch password history.");
-  //         }
-  //       } catch (error) {
-  //         console.error("An error occurred while fetching deleted user:", error);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-
-  //     fetchRestoreUser();
-  //   }, [currentPage, entriesToShow, totalRecords]);
+  // console.log("userID", userID);
 
   const filteredData = restoreUser.filter((item) =>
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const paginatedData = filteredData.slice(
-    (currentPage - 1) * entriesToShow,
-    currentPage * entriesToShow
-  );
+  // const paginatedData = filteredData.slice(
+  //   (currentPage - 1) * entriesToShow,
+  //   currentPage * entriesToShow
+  // );
 
   const handlePageChange = (direction) => {
     if (direction === "next" && currentPage < totalPages) {
@@ -95,66 +60,15 @@ const RestoreUser = () => {
     setCurrentPage(1);
   };
 
-  //   const handleRestoreUser =(userId)=> {
-  //     const token = localStorage.getItem("authToken");
-  //     console.log("token", token)
-
-  //     try {
-  //       const response = axios.put(
-  //         `${BASE_URL}/user/restore-user`,
-  //         {
-  //           userId,
-  //         },
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       fetchRestoreUser();
-  //       return response?.data?.data;
-
-  //     } catch (error) {
-  //       console.error("Error updating user status:", error);
-  //       throw error;
-  //     }
-
-  //   }
-  // const handleRestoreUser = async (userId) => {
-  //     const token = localStorage.getItem("authToken");
-  //     console.log("token", token);
-
-  //     try {
-  //       const response = await axios.put(
-  //         `${BASE_URL}/user/restore-user`,
-  //         { userId },
-  //         {
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
-  //       console.log("User restored successfully:", response?.data?.data);
-
-  //       // Call fetchRestoreUser if needed after the successful API call
-  //       fetchRestoreUser();
-
-  //       return response?.data?.data;
-  //     } catch (error) {
-  //       console.error("Error updating user status:", error);
-  //       throw error; // Re-throw the error for further handling if necessary
-  //     }
-  //   };
-
   const handleRestoreUser = async (userId) => {
     try {
       const token = localStorage.getItem("authToken");
 
       const response = await axios.put(
         `${BASE_URL}/user/restore-user`,
-        { userId },
+        {  page: currentPage,
+          limit: entriesToShow,
+          userId },
         {
           headers: {
             "Content-Type": "application/json",
@@ -196,31 +110,12 @@ const RestoreUser = () => {
           limit: entriesToShow,
         },
       });
-
-      //       const data = response.data;
-      //       if (data.success) {
-      //         setRestoreUser(data?.data || []);
-      //         setTotalCount(data?.pagination.totalRecords);
-      //         setTotalRecords(data?.pagination.totalRecords);
-      //         setTotalPages(
-      //           Math.ceil(data?.pagination.totalRecords / entriesToShow)
-      //         );
-      //       } else {
-      //         console.error("Failed to fetch deleted users.");
-      //       }
-      //     } catch (error) {
-      //       console.error("Error fetching deleted users:", error);
-      //     } finally {
-      //       setLoading(false);
-      //     }
-      //   };
       const data = response.data;
       console.log("data", data);
       if (data.success) {
         setRestoreUser(data?.data || []);
         setTotalCount(data?.pagination.totalRecords);
         setTotalRecords(data?.pagination.totalRecords);
-        // Calculate totalPages after fetching the data
         setTotalPages(Math.ceil(data?.pagination.totalRecords / entriesToShow));
       } else {
         console.error("Failed to fetch password history.");
