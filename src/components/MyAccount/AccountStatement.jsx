@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import AccountStatementFilter from "./AccountStatementFilter";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { FaRegArrowAltCircleRight } from 'react-icons/fa';
 
 const AccountStatement = ({ Userid }) => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -180,8 +181,8 @@ const AccountStatement = ({ Userid }) => {
                     <td className="px-4 py-3 text-sm text-center border border-gray-400">
                       {item.description || userData?.data?.username}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center border border-gray-400">
-                      {item.from_To}
+                    <td className="px-4 py-3 flex  items-center gap-2 text-sm text-center border border-gray-400">
+                      {item?.from} <FaRegArrowAltCircleRight/> {item?.to}
                     </td>
                   </tr>
                 ))
