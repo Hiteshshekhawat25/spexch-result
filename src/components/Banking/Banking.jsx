@@ -20,6 +20,9 @@ import {
 import { fetchRoles } from "../../Utils/LoginApi";
 import { FaSortUp, FaSortDown, FaEdit } from "react-icons/fa";
 import CreditEditReferenceModal from "../Modal/CreditEditReferanceModal";
+import AnimatedLoader from "../MarketAnalysis/components/Animated";
+import { fetchUserDataFailure, fetchUserDataStart, fetchUserDataSuccess } from "../../Store/Slice/userInfoSlice";
+import { getUserData } from "../../Services/UserInfoApi";
 
 const Banking = () => {
   const dispatch = useDispatch();
@@ -78,6 +81,51 @@ const Banking = () => {
   const handleEditClick = (user) => {
     setSelectedUser(user);
     setIsModalOpen(true);
+  };
+
+
+  const refreshData = () => {
+      dispatch(fetchUserDataStart());
+      getUserData()
+        .then((data) => {
+          console.error("Error fetching user data: Header", { data });
+          if (data?.status == 403 || data?.status == 401) {
+            localStorage.clear();
+            navigate("/");
+          }
+          if (data && data.data) {
+            dispatch(fetchUserDataSuccess(data));
+          } else {
+            dispatch(fetchUserDataFailure("Invalid data format"));
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching user data: Header", { err });
+          dispatch(fetchUserDataFailure(err.message));
+        });
+    };
+
+  const fetchData = async () => {
+    try {
+      dispatch(setLoading(true));
+
+      const result = await fetchDownlineData(
+        currentPage,
+        entriesToShow,
+        roleId
+      );
+
+      if (result && result.data) {
+        dispatch(setDownlineData(result.data));
+        console.log("Fetched downline data:", result.data);
+        setTotalUsers(result.pagination?.totalUsers || 0);
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err.message);
+      dispatch(setError(err.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   const handleInputChange = (e, key, index) => {
@@ -210,7 +258,8 @@ const Banking = () => {
           autoClose: 5000,
         });
         setPassword("");
-
+        refreshData()
+         fetchData()
         setEditedData((prevState) => {
           const updatedData = [...prevState];
           updatedData[selectedRowIndex] = {
@@ -304,36 +353,9 @@ const Banking = () => {
 
   const handleSearchChange = (e) => setSearchTerm(e.target.value);
 
+  
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // const token = localStorage.getItem("authToken");
-        // if (!token) {
-        //   console.error("Token not found. Please log in again.");
-        //   return;
-        // }
-
-        dispatch(setLoading(true));
-
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow,
-          roleId
-        );
-
-        if (result && result.data) {
-          dispatch(setDownlineData(result.data));
-          console.log("Fetched downline data:", result.data);
-          setTotalUsers(result.pagination?.totalUsers || 0);
-        }
-      } catch (err) {
-        console.error("Error fetching data:", err.message);
-        dispatch(setError(err.message));
-      } finally {
-        dispatch(setLoading(false));
-      }
-    };
-
     fetchData();
   }, [
     dispatch,
@@ -457,15 +479,7 @@ const Banking = () => {
     <div className="p-4 border border-gray-200 rounded-md bg-white overflow-x-auto">
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="relative w-48 h-48">
-            <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
-
-            <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
-
-            <div className="absolute bottom-[-40px] w-full text-center text-xl font-semibold text-black">
-              <ClipLoader />
-            </div>
-          </div>
+        <AnimatedLoader/>
         </div>
       ) : (
         <>

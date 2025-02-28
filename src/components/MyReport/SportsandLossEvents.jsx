@@ -23,8 +23,8 @@ const SportsandLossEvents = () => {
     { display: "Sport Name", key: "sport" },
     { display: "Event Name", key: "event" },
     { display: "Profit & Loss", key: "totalUplineProfitLoss" },
-    { display: "DownLine Profit/Loss", key: "totalDownlineProfitLoss" },
     { display: "Commission", key: "commission" },
+    { display: "Total P & L", key: "totalDownlineProfitLoss" },
   ];
 
   console.log("userId", userId);
@@ -159,7 +159,7 @@ const SportsandLossEvents = () => {
                   // className=" bg-red-500 border border-gray-400 text-center justify-between"
                 >
                   <div className="flex justify-between items-center">
-                    <div className="items-center text-center justify-between">
+                    <div className="items-center text-center w-full justify-between">
                       {header.display}
                     </div>
                     <div className="flex flex-col items-center ml-2">
@@ -207,27 +207,29 @@ const SportsandLossEvents = () => {
                   }}
                 >
                   {item.totalDownlineProfitLoss < 0
-                    ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
-                    : item.totalDownlineProfitLoss.toFixed(2)}
+                    ? `-${(
+                        Math.abs(item.totalDownlineProfitLoss) +
+                        item?.totalCommission
+                      )?.toFixed(2)}`
+                    : (
+                        Math.abs(item.totalDownlineProfitLoss) +
+                        item?.totalCommission
+                      )?.toFixed(2)}
+                </td>
+               
+               
+                <td className="px-4 py-2 text-center">
+                  {item?.totalCommission}
                 </td>
                 <td
                   className="px-4 py-2 text-center border border-gray-400"
                   style={{
-                    color: item.totalUplineProfitLoss < 0 ? "red" : "green",
+                    color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
                   }}
                 >
-                  {item.totalUplineProfitLoss < 0
-                    ? `-${(
-                        Math.abs(item.totalUplineProfitLoss) +
-                        item?.totalCommission
-                      )?.toFixed(2)}`
-                    : (
-                        Math.abs(item.totalUplineProfitLoss) +
-                        item?.totalCommission
-                      )?.toFixed(2)}
-                </td>
-                <td className="px-4 py-2 text-center">
-                  {item?.totalCommission}
+                  {item.totalDownlineProfitLoss < 0
+                    ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
+                    : item.totalDownlineProfitLoss.toFixed(2)}
                 </td>
               </tr>
             ))}

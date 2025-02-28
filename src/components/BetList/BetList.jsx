@@ -12,6 +12,7 @@ import UserHierarchyModal from "../Modal/UserHierarchyModal";
 import BetListFilter from "./BetListFilter";
 import { ClipLoader } from "react-spinners";
 import { searchbetList } from "../../Services/Downlinelistapi";
+import moment from "moment";
 
 const BetList = ({ Userid }) => {
   const dispatch = useDispatch();
@@ -404,7 +405,7 @@ const BetList = ({ Userid }) => {
                             {item.event}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
-                            {item.market}
+                            {/* {item.market} */}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
                             {item.selection}
@@ -483,7 +484,7 @@ const BetList = ({ Userid }) => {
                             {item.event}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
-                            {item.market}
+                            {item.type == 'odds' ? 'MATCH ODDS' : item?.type == 'bookmakers' ? 'BOOKMAKERS' : item?.type == 'toss' ? 'TOSS' : item?.type == 'fancy' ? 'FANCY' : ''}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
                             {item.selection}
@@ -502,40 +503,18 @@ const BetList = ({ Userid }) => {
                             {item.stake?.toFixed(2)}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
-                            {new Date(item.placeTime).toLocaleDateString(
-                              "en-GB",
-                              {
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric",
-                              }
-                            )}{" "}
-                            {new Date(item.placeTime).toLocaleTimeString(
+                            {moment(item.placeTime).format("MMMM Do YYYY, h:mm:ss")}{" "}
+                            {/* {new Date(item.placeTime).toLocaleTimeString(
                               "en-US",
                               {
                                 hour: "2-digit",
                                 minute: "2-digit",
                                 hour12: true,
                               }
-                            )}
+                            )} */}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
-                            {new Date(item.settleTime).toLocaleDateString(
-                              "en-GB",
-                              {
-                                day: "2-digit",
-                                month: "2-digit",
-                                year: "numeric",
-                              }
-                            )}{" "}
-                            {new Date(item.settleTime).toLocaleTimeString(
-                              "en-US",
-                              {
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                hour12: true,
-                              }
-                            )}
+                          {moment(item.settleTime).format("MMMM Do YYYY, h:mm:ss")}{" "}
                           </td>
                         </tr>
                       ))

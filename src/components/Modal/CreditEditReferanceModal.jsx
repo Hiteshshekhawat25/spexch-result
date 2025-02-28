@@ -11,10 +11,12 @@ import { useLocation } from "react-router-dom";
 const CreditEditReferenceModal = ({
   username,
   currentCreditRef,
+  setRoleId,
   onSubmit = () => {},
   onCancel,
   user,
   userId,
+  fetchData,
   fetchDownline,
   currentPage,
   entriesToShow,
@@ -23,6 +25,7 @@ const CreditEditReferenceModal = ({
   const [password, setPassword] = useState("");
   const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
+  const { userData } = useSelector((state) => state.user);
   const { creditReference } = useSelector((state) => state);
   const [showPassword, setShowPassword] = useState(false);
   
@@ -86,9 +89,20 @@ const CreditEditReferenceModal = ({
         roleId = userRole ? userRole.role_id : rolesData[0].role_id;
       } else if (location.pathname.includes("/master-downline-list") || location.pathname.includes("/user-banking")) {
         const masterRole = rolesData.find(
-          (role) => role.role_name === "master"
+          (role) => {
+            if(userData?.data?.role_name == 'super-admin'){
+              return role.role_name === "sub-admin"
+             }else if(userData?.data?.role_name == 'sub-admin'){
+               return role.role_name === "white-level"
+             }else if(userData?.data?.role_name == 'white-level'){
+               return role.role_name === "super"
+             }else if(userData?.data?.role_name == 'white-level'){
+               return role.role_name === "master"
+             }
+          }
         );
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+        setRoleId(roleId)
       } else {
         toast.warning("Invalid location path. Unable to determine action.");
         dispatch(setLoading(false));
@@ -102,16 +116,7 @@ const CreditEditReferenceModal = ({
       if (fetchResult.error) {
         toast.error(fetchResult.error);
       } else {
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow,
-          roleId
-        );
-        console.log({result},'allOdds')
-        if (result && result.data) {
-          console.log("result", result.data);
-          dispatch(setDownlineData(result.data));
-
+        fetchData(roleId)
           setNewCreditRef(0);
           setPassword("");
           toast.success(
@@ -120,9 +125,7 @@ const CreditEditReferenceModal = ({
 
           // Close the modal only after successful submission
           onCancel();
-        } else {
-          toast.warning("Unable to fetch updated downline data.");
-        }
+        
       }
     } catch (error) {
       console.error("Error:", error);

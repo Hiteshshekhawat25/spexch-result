@@ -364,7 +364,7 @@ function ManageBets({ Userid }) {
                       {item.event}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
-                      {item.marketType}
+                      {item.type == 'toss' ? 'TOSS' : item?.type == 'odds' ? 'MATCH ODDS' : item?.type == 'bookmakers' ? 'BOOKMAKERS' : item?.type == 'fancy' ? 'FANCY' : ''}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
                       {moment(item.createdAt).format("MMMM Do YYYY, h:mm:ss a")}

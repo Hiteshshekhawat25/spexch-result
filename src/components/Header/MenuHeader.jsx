@@ -75,20 +75,21 @@ const MenuHeader = () => {
           { name: "Create Manual Match", link: "/CreateManualMatch" },
           { name: "All Matches", link: "/AllMatches" },
           { name: "Session Result", link: "/SessionResult" },
+          {
+            name: "Global Settings",
+            link: "/GlobalSettings",
+          },
+          {
+            name: "Casino Settings",
+            link: "/CasinoSettings",
+          },
         ],
       },
       {
         name: "Liability",
         link: ROUTES_CONST.liabilty,
       },
-      {
-        name: "Global Settings",
-        link: "/GlobalSettings",
-      },
-      {
-        name: "Casino Settings",
-        link: "/CasinoSettings",
-      },
+     
       {
         name: "Logout",
         link: "#",
@@ -163,7 +164,7 @@ const MenuHeader = () => {
               {item.name === "Logout" ? (
                 <button
                   onClick={item.onClick}
-                  className="py-1 px-2 block border-b-2 bg-gradient-green text-black border-transparent hover:underline hover:decoration-black"
+                  className="py-1 px-2 block border-b-0 bg-gradient-green text-black border-transparent hover:underline hover:decoration-black"
                 >
                   {item.name}
                   <IoLogOutOutline className="inline ml-2" />

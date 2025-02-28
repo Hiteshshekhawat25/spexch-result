@@ -14,6 +14,8 @@ import { updatePartnership } from "../../Store/Slice/updatePartnershipSlice";
 
 const UpdatePartnershipModal = ({
   username,
+  setRoleId,
+  fetchData,
   onCancel,
   currentPartnership,
   onSubmit = () => {},
@@ -26,6 +28,10 @@ const UpdatePartnershipModal = ({
   const [newPartnership, setNewPartnership] = useState("");
   const [password, setPassword] = useState("");
   const [roles, setRoles] = useState([]);
+  const { userData, error } = useSelector((state) => state.user);
+
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -83,9 +89,20 @@ const UpdatePartnershipModal = ({
       } else if (location.pathname.includes("/master-downline-list")) {
         console.log("Inside master-downline-list");
         const masterRole = rolesData.find(
-          (role) => role.role_name === "master"
+          (role) =>{
+            if(userData?.data?.role_name == 'super-admin'){
+              return role.role_name === "sub-admin"
+             }else if(userData?.data?.role_name == 'sub-admin'){
+               return role.role_name === "white-level"
+             }else if(userData?.data?.role_name == 'white-level'){
+               return role.role_name === "super"
+             }else if(userData?.data?.role_name == 'white-level'){
+               return role.role_name === "master"
+             }
+          }
         );
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+        setRoleId(roleId)
       } else {
         toast.warning("Invalid location path. Unable to determine action.");
         setLoading(false);
@@ -99,26 +116,8 @@ const UpdatePartnershipModal = ({
       if (fetchResult.error) {
         toast.error(fetchResult.error);
       } else {
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow,
-          roleId
-        );
-        if (result && result.data) {
-          console.log("result", result.data);
-          dispatch(setDownlineData(result.data));
-
-          setNewPartnership(0);
-          setPassword("");
-          toast.success(
-            fetchResult.payload?.message || "Data updated successfully."
-          );
-
-          // Close the modal only after successful submission
-          onCancel();
-        } else {
-          toast.warning("Unable to fetch updated downline data.");
-        }
+        fetchData(roleId)
+        onCancel()
       }
     } catch (error) {
       console.error("Error:", error);

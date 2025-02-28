@@ -67,14 +67,14 @@ module.exports = {
       },
       keyframes: {
         crossing1: {
-          '0%': { left: '0', top: '0' },
-          '50%': { left: '50%', top: '50%' },
-          '100%': { left: '0', top: '0' },
+          '0%': { right: '100%', top: '30%' ,left : '0%'},
+          '50%': { right: '0%', top: '30%' ,left : '100%'},
+          '100%': { right: '100%', top: '30%' ,left : '0%'},
         },
         crossing2: {
-          '0%': { left: '50%', top: '50%' },
-          '50%': { left: '0', top: '0' },
-          '100%': { left: '50%', top: '50%' },
+          '0%': { left: '100%', top: '30%' ,right : '0%'},
+          '50%': { left: '0%', top: '30%', right : '100%'},
+          '100%': { left: '100%', top: '30%', right : '100%' },
         },
       },
       animation: {

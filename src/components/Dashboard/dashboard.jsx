@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { ClipLoader } from "react-spinners";
+import AnimatedLoader from "../MarketAnalysis/components/Animated";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -43,19 +44,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <div className="relative w-48 h-48">
-          <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
-          <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
-          <div className="absolute bottom-[-40px] w-full text-center text-xl font-custom font-semibold text-black">
-            <ClipLoader
-              color="#3b82f6"
-              size={60}
-              loading={true}
-              speedMultiplier={1.5}
-              cssOverride={{ borderWidth: "4px" }}
-            />
-          </div>
-        </div>
+       <AnimatedLoader/>
       </div>
     );
   }

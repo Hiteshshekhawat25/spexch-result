@@ -223,7 +223,7 @@ const MyProfile = ({ Userid, Role }) => {
             />
           </span>
         </div>
-        <div className="flex sm:py-3 border-b sm:flex-row flex-col">
+        {/* <div className="flex sm:py-3 border-b sm:flex-row flex-col">
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Bet Password</span>
           <span className="flex items-center sm:ml-4 sm:py-0 py-4">
             <span className="mr-2">********</span>
@@ -232,7 +232,7 @@ const MyProfile = ({ Userid, Role }) => {
               onClick={handleOpenBetPasswordModal}
             />
           </span>
-        </div>
+        </div> */}
       </div>
 
       {/* Modals */}
@@ -284,12 +284,12 @@ const MyProfile = ({ Userid, Role }) => {
         />
       )}
 
-      {betpasswordModal && (
+      {/* {betpasswordModal && (
         <BetPasswordModal
           userId={Userid}
           onCancel={() => setBetpasswordModal(false)}
         />
-      )}
+      )} */}
       {isEditExposureLimitModalOpen && modalData && (
         <EditExposureLimitModal
           username={modalData.username}

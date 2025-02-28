@@ -12,7 +12,10 @@ import { fetchRoles } from "../../Utils/LoginApi";
 const DepositModal = ({
   isOpen,
   onClose,
+  roleId,
+  fetchData,
   userId,
+  setRoleId,
   currentPage,
   entriesToShow,
   user,
@@ -88,28 +91,39 @@ const DepositModal = ({
           roleId = userRole ? userRole.role_id : rolesData[0].role_id;
         } else if (location.pathname.includes("/master-downline-list")) {
           const masterRole = rolesData.find(
-            (role) => role.role_name === "master"
+            (role) =>{
+
+              const obj ={
+                "super-admin":"sub-admin",
+                "sub-admin":"white-level",
+                "white-level":"super",
+                "super":"master"
+              }
+
+              return obj[userData?.data?.role_name];
+
+            // if(userData?.data?.role_name == 'super-admin'){
+            //   return role.role_name === "sub-admin"
+            //  }else if(userData?.data?.role_name == 'sub-admin'){
+            //    return role.role_name === "white-level"
+            //  }else if(userData?.data?.role_name == 'white-level'){
+            //    return role.role_name === "super"
+            //  }else if(userData?.data?.role_name == 'white-level'){
+            //    return role.role_name === "master"
+            //  }
+            }
           );
           roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+          setRoleId(roleId)
         } else {
           toast.warning("Invalid location path. Unable to determine action.");
           setLoading(false);
           return;
         }
-
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow,
-          roleId
-        );
-
-        if (result && result.data) {
-          dispatch(setDownlineData(result.data));
-          resetState();
+        fetchData(roleId); 
+        resetState();
           onClose();
-        } else {
-          toast.warning("Unable to fetch updated downline data.");
-        }
+        
       } else {
         toast.error(response.message || "Transaction Failed");
       }

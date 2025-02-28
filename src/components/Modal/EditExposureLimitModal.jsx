@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { IoClose, IoEyeOutline, IoEyeOffOutline} from "react-icons/io5";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { updateExposure } from "../../Store/Slice/editExposureSlice";
 import { fetchDownlineData } from "../../Services/Downlinelistapi";
 import {
@@ -17,6 +17,8 @@ const EditExposureLimitModal = ({
   username,
   currentExposureLimit,
   onCancel,
+  setRoleId,
+  fetchData,
   onSubmit = () => {},
   user,
   userId,
@@ -31,6 +33,7 @@ const EditExposureLimitModal = ({
   const [password, setPassword] = useState("");
   const [roles, setRoles] = useState([]);
   const location = useLocation();
+  const { userData, error } = useSelector((state) => state.user);
   const [passwordVisible, setPasswordVisible] = useState(false);
 
   const handlePasswordVisibility = () => {
@@ -92,9 +95,20 @@ const EditExposureLimitModal = ({
         location.pathname === "/MyAccount"
       ) {
         const masterRole = rolesData.find(
-          (role) => role.role_name === "master"
+          (role) => {
+            if(userData?.data?.role_name == 'super-admin'){
+              return role.role_name === "sub-admin"
+             }else if(userData?.data?.role_name == 'sub-admin'){
+               return role.role_name === "white-level"
+             }else if(userData?.data?.role_name == 'white-level'){
+               return role.role_name === "super"
+             }else if(userData?.data?.role_name == 'white-level'){
+               return role.role_name === "master"
+             }
+          }
         );
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+        setRoleId(roleId)
       } else {
         toast.warning("Invalid location path. Unable to determine action.");
         setLoading(false);
@@ -107,27 +121,7 @@ const EditExposureLimitModal = ({
       if (fetchResult.error) {
         // toast.error(fetchResult.error);
       } else {
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow,
-          roleId
-        );
-        if (result && result.data) {
-          console.log("result", result.data);
-          dispatch(setDownlineData(result.data));
-          window.location.reload();
-
-          setNewExposureLimit(0);
-          setPassword("");
-          onCancel();
-          toast.success(
-            fetchResult.payload?.message || "Data updated successfully."
-          );
-
-          onCancel();
-        } else {
-          toast.warning("Unable to fetch updated downline data.");
-        }
+        fetchData(roleId)
       }
     } catch (error) {
       console.error("Error:", error);

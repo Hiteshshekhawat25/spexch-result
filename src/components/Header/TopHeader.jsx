@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchUserDataFailure,
@@ -15,6 +15,7 @@ const TopHeader = () => {
   const dispatch = useDispatch();
   const { userData, loading, error } = useSelector((state) => state.user);
   const location = useLocation();
+  const userLogRef = useRef();
   const navigate = useNavigate();
   console.log("userData", userData);
 
@@ -45,8 +46,16 @@ const TopHeader = () => {
       !userData.data ||
       Object.keys(userData.data).length === 0
     ) {
-      refreshData();
+      if(userData){
+        userLogRef.current = setInterval(()=>{
+          refreshData()
+        },10000);
+      }else{
+        refreshData()
+      }
     }
+
+    return ()=>clearInterval(userLogRef.current)
   }, [dispatch, location.pathname]);
 
   return (
@@ -58,14 +67,7 @@ const TopHeader = () => {
           </Link>
         </div>
         <div className="lg:hidden flex flex-col items-end space-y-1">
-          {loading ? (
-            <div className="flex items-center">
-              <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">
-                Loading...
-              </span>
-              <FaSyncAlt className="text-white animate-spin ml-1" />
-            </div>
-          ) : error ? (
+          { error ? (
             <span className="bg-gray-800 text-white px-1 py-0.5 rounded-md">
               Error: {error}
             </span>

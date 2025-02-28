@@ -6,11 +6,14 @@ const CreditReferenceTransactionModel = ({
   userId,
   username,
   currentPage,
+  roleId,
+  fetchData,
   entriesToShow,
   onClose,
 }) => {
   const [isOpen, setIsOpen] = useState(true);
   const modalRef = useRef(null);
+  const { userData  } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const [entriesPerPage, setEntriesPerPage] = useState(entriesToShow || 10);

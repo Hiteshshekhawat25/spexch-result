@@ -16,8 +16,9 @@ const BetHistory = () => {
   const { matchId, selectionId, id } = useParams();
   const [totalTransactions, setTotalTransactions] = useState(0);
   const location = useLocation();
+  const color = location?.state?.color;
   // const { userId, matchId, selectionId } = location.state || {};
-  console.log("bethistory url params", matchId, selectionId, id);
+  console.log("location", location);
 
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
@@ -85,7 +86,7 @@ const BetHistory = () => {
       setLocalLoading(true);
       try {
         const token = localStorage.getItem("authToken");
-        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}&selectionId=${selectionId}&fromDate=${fromDate}&toDate=${toDate}`;
+        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}&fromDate=${fromDate}&toDate=${toDate}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -95,9 +96,10 @@ const BetHistory = () => {
         });
 
         const data = await response.json();
+        console.log(data, 'paginatedDatapaginatedDatapaginatedData')
         setProfitLossData(data.data);
-        setTotalEntries(data.total);
-        setTotalPages(data.totalPages);
+        setTotalEntries(data?.pagination?.totalRecords);
+        setTotalPages(data?.pagination?.totalPages);
         setIsDataFetched(true);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -108,6 +110,8 @@ const BetHistory = () => {
 
     fetchData();
   }, [matchId, id]);
+
+
 
   return (
     <div className="p-4">
@@ -123,12 +127,13 @@ const BetHistory = () => {
         </div>
       ) : (
         <>
-          <div className="border border-gray-300 rounded-md bg-white">
+          <div className="border border-gray-300 p-3 rounded-md bg-white">
             <h1 className="text-xl bg-gradient-blue text-white font-bold p-4">
               Bet History
             </h1>
 
             <div className="flex justify-between items-center mb-4 p-4">
+              <div className="flex w-full justify-between">
               <div className="flex items-center">
                 <label className="mr-2 text-sm font-medium text-black">
                   Show
@@ -150,6 +155,19 @@ const BetHistory = () => {
                 <label className="ml-2 text-sm font-medium text-black">
                   entries
                 </label>
+              </div>
+              {color ?
+                <div className="flex gap-2">
+                  <div className="border-2 border-gray-600 px-2 h-8 items-center text-center bg-[#faa9ba] ">
+                    Lay
+                  </div>
+                  <div className="border-2 border-gray-600 px-2 h-8  items-center text-center bg-[#72bbef] ">
+                    Back
+                  </div>
+                  <div className="border-2 border-gray-600 px-2 h-8 items-center text-center">
+                    Void
+                  </div>
+                </div> : ''}
               </div>
             </div>
             <div className="overflow-x-auto my-4 mx-4">
@@ -178,23 +196,21 @@ const BetHistory = () => {
                           <span>{key}</span>
                           <div className="flex flex-col items-center ml-2">
                             <FaSortUp
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "ascending"
+                              className={`${sortConfig.key === key &&
+                                  sortConfig.direction === "ascending"
                                   ? "text-black"
                                   : "text-gray-400"
-                              }`}
+                                }`}
                               style={{
                                 marginBottom: "-6px",
                               }}
                             />
                             <FaSortDown
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "descending"
+                              className={`${sortConfig.key === key &&
+                                  sortConfig.direction === "descending"
                                   ? "text-black"
                                   : "text-gray-400"
-                              }`}
+                                }`}
                               style={{
                                 marginTop: "-6px",
                               }}
@@ -210,13 +226,12 @@ const BetHistory = () => {
                     paginatedData.map((item, index) => (
                       <tr
                         key={index}
-                        className={`border-b border-gray-400 ${
-                          item.betType === "no" || item.betType === "lay"
-                            ? "bg-pink-300"
+                        className={`border-b border-gray-400 ${item.betType === "no" || item.betType === "lay"
+                            ? "bg-[#faa9ba]"
                             : item.betType === "back" || item.betType === "yes"
-                            ? "bg-lightblue"
-                            : ""
-                        }`}
+                              ? "bg-[#72bbef]"
+                              : ""
+                          }`}
                       >
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.sport}
@@ -225,7 +240,14 @@ const BetHistory = () => {
                           {item.match}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.marketNameTwo}
+                          {item.type == 'odds'
+                            ? 'Match odds'
+                            : item?.type == 'bookmakers' ?
+                              'Bookmakers' : item?.type == 'fancy'
+                                ? item.marketNameTwo :
+                                item?.type == 'toss' ?
+                                  'TOSS' : item?.type
+                          }
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.marketNameTwo}
@@ -234,11 +256,11 @@ const BetHistory = () => {
                           {item.betType === "no" || item.betType === "lay"
                             ? "Lay"
                             : item.betType === "yes" || item.betType === "back"
-                            ? "Back"
-                            : "Void"}
+                              ? "Back"
+                              : "Void"}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.fancyOdds}/{item.odds}
+                          {item.odds}/{item.fancyOdds}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.totalAmount?.toFixed(2)}
@@ -251,7 +273,7 @@ const BetHistory = () => {
                               </span>
                               <span className="text-red-500">
                                 {" "}
-                                ({item?.totalProfitLoss || 0})
+                                ({item?.totalProfitLoss > 0 ? (-item?.totalProfitLoss) : item?.totalProfitLoss || 0})
                               </span>
                             </>
                           ) : (
@@ -310,11 +332,11 @@ const BetHistory = () => {
               {/* Showing entries text */}
               <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}
-                {totalTransactions === 0
+                {totalEntries === 0
                   ? 0
                   : (currentPage - 1) * entriesToShow + 1}{" "}
-                to {Math.min(currentPage * entriesToShow, totalTransactions)} of{" "}
-                {totalTransactions} entries
+                to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
+                {totalEntries} entries
               </div>
 
               {/* Pagination Buttons */}
@@ -324,11 +346,10 @@ const BetHistory = () => {
                   <button
                     onClick={() => handlePageChange("first")}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded ${
-                      currentPage === 1
+                    className={`px-3 py-1 text-sm rounded ${currentPage === 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     First
                   </button>
@@ -337,11 +358,10 @@ const BetHistory = () => {
                   <button
                     onClick={() => handlePageChange("prev")}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded ${
-                      currentPage === 1
+                    className={`px-3 py-1 text-sm rounded ${currentPage === 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     Previous
                   </button>
@@ -358,11 +378,10 @@ const BetHistory = () => {
                           <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${
-                              currentPage === page
+                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${currentPage === page
                                 ? "bg-gray-200"
                                 : "hover:bg-gray-100"
-                            }`}
+                              }`}
                           >
                             {page}
                           </button>
@@ -385,11 +404,10 @@ const BetHistory = () => {
                   <button
                     onClick={() => handlePageChange("next")}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm rounded ${
-                      currentPage === totalPages
+                    className={`px-3 py-1 text-sm rounded ${currentPage === totalPages
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     Next
                   </button>
@@ -398,11 +416,10 @@ const BetHistory = () => {
                   <button
                     onClick={() => handlePageChange("last")}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm rounded ${
-                      currentPage === totalPages
+                    className={`px-3 py-1 text-sm rounded ${currentPage === totalPages
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     Last
                   </button>

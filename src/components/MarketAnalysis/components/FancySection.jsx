@@ -259,7 +259,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
                     </div> */}
                     <div className="">
                       <button variant="secondary" size="sm" className="flex items-center justify-center gap-2 whitespace-nowrap font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-gradient-blue shadow hover:bg-gradient-blue-hover text-white h-8 rounded-md px-3 text-xs w-auto mr-3" onClick={() => {
-                        handleBookFancy(item);
+                        handleBookFancy(item)
                         setSelectedFancy(item?.marketName)
                       }}>Book</button>
                     </div>

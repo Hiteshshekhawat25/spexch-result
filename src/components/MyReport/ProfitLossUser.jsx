@@ -68,7 +68,7 @@ const ProfitLossUser = () => {
   const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
 
   const handleRowClick = (matchId, id, selectionId) => {
-    navigate(`/bet-history/${matchId}/${selectionId}/${id}`);
+    navigate(`/bet-history/${matchId}/${selectionId}/${id}`,{state : {color  : true}});
   };
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const ProfitLossUser = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch(
-          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&selectionId=${id}&matchId=${selectionId}&fromDate=${fromDate}&toDate=${toDate}`,
+          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&matchId=${selectionId}&fromDate=${fromDate}&toDate=${toDate}`,
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -262,7 +262,7 @@ const ProfitLossUser = () => {
                           {/* {item?.marketName ? " " : "void"} */}
                           {item?.isDeleted
                             ? "Void"
-                            : item?.marketName ?? item?.marketNameTwo}
+                            : item?.marketName ? item?.marketName : item?.marketNameTwo}
                         </td>
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400"

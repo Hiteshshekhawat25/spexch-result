@@ -151,9 +151,9 @@ const EventProfitLoss = ({ Userid }) => {
                   <tr>
                     {[
                       "sportName",
-                      "uplineProfitLoss",
-                      "downlineProfitLoss",
+                      "Profit & Loss",
                       "commission",
+                      "Total P & L",
                     ].map((key) => (
                       <th
                         key={key}
@@ -161,14 +161,14 @@ const EventProfitLoss = ({ Userid }) => {
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
-                          <span>
+                          <span className="text-center w-full">
                             {key === "sportName"
                               ? "Sport Name"
-                              : key === "uplineProfitLoss"
-                              ? "Upline Profit/Loss"
-                              : key === "downlineProfitLoss"
-                              ? "Downline Profit/Loss"
-                              : "Commission"}
+                              : key === "Profit & Loss"
+                              ? "Profit & Loss"
+                              : key === "commission"
+                              ? "Commission"
+                              : "Total P & L"}
                           </span>
                           <div className="flex flex-col items-center ml-2">
                             <FaSortUp
@@ -216,14 +216,18 @@ const EventProfitLoss = ({ Userid }) => {
                           className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
                           style={{
                             color:
-                              item.totalUplineProfitLoss < 0 ? "red" : "green",
+                              item.totalDownlineProfitLoss < 0 ? "red" : "green",
                           }}
                         >
-                          {item.totalUplineProfitLoss < 0
+                          {item.totalDownlineProfitLoss < 0
                             ? `-${Math.abs(
-                                item.totalUplineProfitLoss.toFixed(2)
+                                item.totalDownlineProfitLoss.toFixed(2)
                               )}`
-                            : item.totalUplineProfitLoss.toFixed(2)}
+                            : item.totalDownlineProfitLoss.toFixed(2)}
+                        </td>
+
+                        <td className="px-4 py-3 text-sm text-center font-medium">
+                          {Math.abs(item.totalCommission.toFixed(2))}
                         </td>
 
                         <td
@@ -248,9 +252,7 @@ const EventProfitLoss = ({ Userid }) => {
                               ).toFixed(2)}
                         </td>
 
-                        <td className="px-4 py-3 text-sm text-center font-medium">
-                          {Math.abs(item.totalCommission.toFixed(2))}
-                        </td>
+                     
                       </tr>
                     ))
                   ) : (
@@ -271,15 +273,18 @@ const EventProfitLoss = ({ Userid }) => {
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
                         <span
                           className={`${
-                            totalData.profitLoss < 0
+                            totalData.downlineProfitLoss < 0
                               ? "text-red-500"
                               : "text-green-500"
                           }`}
                         >
-                          {totalData.profitLoss < 0
-                            ? `-${Math.abs(totalData.profitLoss?.toFixed(2))}`
-                            : Math.abs(totalData.profitLoss?.toFixed(2))}
+                          {totalData.downlineProfitLoss < 0
+                            ? `-${Math.abs(totalData.downlineProfitLoss?.toFixed(2))}`
+                            : Math.abs(totalData.downlineProfitLoss?.toFixed(2))}
                         </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-center font-medium">
+                        {totalData.commission?.toFixed(2)}
                       </td>
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
                         <span
@@ -294,9 +299,7 @@ const EventProfitLoss = ({ Userid }) => {
                           )?.toFixed(2)}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-sm text-center font-medium">
-                        {totalData.commission?.toFixed(2)}
-                      </td>
+                    
                     </tr>
                   </tfoot>
                 )}

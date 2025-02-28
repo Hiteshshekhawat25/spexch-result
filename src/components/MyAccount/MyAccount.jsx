@@ -6,6 +6,7 @@ import AccountStatement from "./AccountStatement";
 import ActivityLog from "./ActivityLog";
 import EventProfitLoss from "../MyReport/EventProfitLoss";
 import BetList from "../BetList/BetList";
+import AnimatedLoader from "../MarketAnalysis/components/Animated";
 
 const MyAccount = () => {
   const location = useLocation();
@@ -65,16 +66,10 @@ const MyAccount = () => {
     : "max-h-[calc(3.5*2.6rem)]";
 
   return (
-    <div className="justify-center md:grid-cols-4 grid-cols-1 grid gap-5">
+    <div className={`justify-center ${loading ?  `grid-cols-12` :`md:grid-cols-4 grid-cols-1 grid gap-5`}`}>
       {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="relative w-48 h-48">
-            <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
-            <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
-            <div className="absolute bottom-[-40px] w-full text-center text-xl font-custom font-semibold text-black">
-              <ClipLoader />
-            </div>
-          </div>
+        <div className="flex justify-center mx-auto items-center h-64">
+        <AnimatedLoader/>
         </div>
       ) : (
         <>

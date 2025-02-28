@@ -23,6 +23,8 @@ import { fetchRoles } from "../../Utils/LoginApi";
 const AccountStatus = ({
   userId,
   isOpen,
+  fetchData,
+  setRoleId,
   onClose,
   currentPage,
   entriesToShow,
@@ -30,6 +32,7 @@ const AccountStatus = ({
 }) => {
   const [status, setStatus] = useState("active");
   const [password, setPassword] = useState("");
+  const { userData } = useSelector((state) => state.user);
   const [userName, setUserName] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [roles, setRoles] = useState([]);
@@ -104,9 +107,19 @@ const AccountStatus = ({
       } else if (location.pathname.includes("/master-downline-list")) {
         console.log("Inside master-downline-list");
         const masterRole = rolesData.find(
-          (role) => role.role_name === "master"
-        );
+          (role) => {  
+            if(userData?.data?.role_name == 'super-admin'){
+            return role.role_name === "sub-admin"
+           }else if(userData?.data?.role_name == 'sub-admin'){
+             return role.role_name === "white-level"
+           }else if(userData?.data?.role_name == 'white-level'){
+             return role.role_name === "super"
+           }else if(userData?.data?.role_name == 'super'){
+             return role.role_name === "master"
+           }
+        });
         roleId = masterRole ? masterRole.role_id : rolesData[0].role_id;
+        setRoleId(roleId)
       } else {
         toast.warning("Invalid location path. Unable to determine action.");
         return;
@@ -124,19 +137,12 @@ const AccountStatus = ({
             "An error occurred while updating the credit reference."
         );
       } else {
-        const result = await fetchDownlineData(
-          currentPage,
-          entriesToShow,
-          roleId
-        );
-        if (result && result.data) {
+        fetchData(roleId)
           dispatch(setLoading(false));
           dispatch(setDownlineData(result.data));
           setPassword("");
           toast.success("Status updated successfully.");
-        } else {
-          toast.warning("Unable to fetch updated downline data.");
-        }
+        
       }
     } catch (error) {
       console.error("Error fetching downline data:", error);

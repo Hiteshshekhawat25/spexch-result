@@ -128,7 +128,7 @@ const BetListFilter = ({
           <select
             value={dataSource || "live"}
             onChange={(e) => dispatch(setDataSource(e.target.value))}
-            className="border rounded px-10 py-2"
+            className="border rounded px-7 py-2"
           >
             <option value="">Data Source</option>
             <option value="live">LIVE DATA</option>

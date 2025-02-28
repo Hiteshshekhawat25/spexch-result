@@ -41,6 +41,7 @@ import { ROUTES_CONST } from "../../Constant/routesConstant";
 import UpdatePartnershipModal from "../Modal/UpdatePartnershipModal";
 import { ClipLoader } from "react-spinners";
 import { resetDeleteState } from "../../Store/Slice/deleteSlice";
+import AnimatedLoader from "../MarketAnalysis/components/Animated";
 
 const DownlineList = () => {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ const DownlineList = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [sortConfig, setSortConfig] = useState({ key: null, direction: null });
+  const [sortConfig, setSortConfig] = useState({ key: '', direction: '' });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -65,8 +66,9 @@ const DownlineList = () => {
   const [settingsModal, setSettingsModal] = useState(false);
   const [accountStatus, setAccountStatus] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("");
+  const [dataList, setDataList] = useState([]);
   const [users, setUsers] = useState([]);
-
+  const [list,setList] = useState(false);
   const [roles, setRoles] = useState([]);
   const [userList, setUserList] = useState([]);
   const location = useLocation();
@@ -133,12 +135,26 @@ const DownlineList = () => {
     });
   };
 
+
+  useEffect(() => {
+    let arr = searchTerm?.length
+      ? searchData
+      : userFetchList.length > 0
+        ? userFetchList
+        : userList.length > 0
+          ? userList
+          : downlineData
+          console.log(arr,'098765432098765432876543')
+    setDataList(arr)
+  }, [searchData?.length, userFetchList.length, userList.length, downlineData?.length,isDeleteModalOpen])
+
   useEffect(() => {
     const timer = setTimeout(() => {
       handleSearch();
     }, 500);
     return () => clearTimeout(timer);
   }, [searchTerm]);
+
 
   const handleSearch = async () => {
     if (searchTerm?.length) {
@@ -153,25 +169,60 @@ const DownlineList = () => {
     }
   };
 
+
+  const fetchData = async (roleId) => {
+    try {
+      if(roleId){
+        const token = localStorage.getItem("authToken");
+        if (!token) {
+          console.error("Token not found. Please log in again.");
+          return;
+        }
+  
+        dispatch(setLoading(true));
+  
+        const result = await fetchDownlineData(
+          currentPage,
+          entriesToShow,
+          roleId
+        );
+  
+        if (result && result.data) {
+          setDataList(result.data)
+          dispatch(setDownlineData(result.data));
+          setTotalUsers(result.pagination?.totalUsers || 0);
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching data:", err.message);
+      dispatch(setError(err.message));
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+
+
   useEffect(() => {
     if (roleId) {
+      console.log("098765432098765432876543");
       const fetchData = async () => {
         try {
           const token = localStorage.getItem("authToken");
           if (!token) {
-            console.error("Token not found. Please log in again.");
             return;
           }
-
+    
           dispatch(setLoading(true));
-
+    
           const result = await fetchDownlineData(
             currentPage,
             entriesToShow,
             roleId
           );
-
+    
           if (result && result.data) {
+            setDataList(result.data)
             dispatch(setDownlineData(result.data));
             setTotalUsers(result.pagination?.totalUsers || 0);
           }
@@ -182,14 +233,14 @@ const DownlineList = () => {
           dispatch(setLoading(false));
         }
       };
-
+    
       fetchData();
     }
   }, [
-    dispatch,
     currentPage,
     entriesToShow,
     roleId,
+    isDeleteModalOpen,
     startFetchData,
     location.pathname,
   ]);
@@ -253,7 +304,6 @@ const DownlineList = () => {
           setError(error.message || "Failed to fetch roles.");
         }
       };
-
       fetchUserRoles();
     }
   }, [token, location.pathname, currentPage, entriesToShow, dispatch]);
@@ -289,39 +339,38 @@ const DownlineList = () => {
           setError(error.message || "Failed to fetch roles.");
         }
       };
-
       fetchUserRoles();
     }
   }, [token, location.pathname]);
-  const sortedData = useMemo(() => {
-    // console.log("filteredData", filteredData);
-    if (!sortConfig.key) return filteredData;
+  // const sortedData = useMemo(() => {
+  //   // console.log("filteredData", filteredData);
+  //   if (!sortConfig.key) return filteredData;
 
-    return [...filteredData].sort((a, b) => {
-      const aValue = a[sortConfig.key] || "";
-      const bValue = b[sortConfig.key] || "";
+  //   return [...filteredData].sort((a, b) => {
+  //     const aValue = a[sortConfig.key] || "";
+  //     const bValue = b[sortConfig.key] || "";
 
-      if (
-        ["partnership", "balance", "exposureLimit"].includes(sortConfig.key)
-      ) {
-        const numA = parseFloat(aValue) || 0;
-        const numB = parseFloat(bValue) || 0;
-        return sortConfig.direction === "ascending" ? numA - numB : numB - numA;
-      }
+  //     if (
+  //       ["partnership", "balance", "exposureLimit"].includes(sortConfig.key)
+  //     ) {
+  //       const numA = parseFloat(aValue) || 0;
+  //       const numB = parseFloat(bValue) || 0;
+  //       return sortConfig.direction === "ascending" ? numA - numB : numB - numA;
+  //     }
 
-      if (sortConfig.key === "status") {
-        return sortConfig.direction === "ascending"
-          ? aValue.localeCompare(bValue)
-          : bValue.localeCompare(aValue);
-      }
+  //     if (sortConfig.key === "status") {
+  //       return sortConfig.direction === "ascending"
+  //         ? aValue.localeCompare(bValue)
+  //         : bValue.localeCompare(aValue);
+  //     }
 
-      return sortConfig.direction === "ascending"
-        ? aValue.localeCompare(bValue)
-        : bValue.localeCompare(aValue);
-    });
-  }, [filteredData, sortConfig]);
+  //     return sortConfig.direction === "ascending"
+  //       ? aValue?.localeCompare(bValue)
+  //       : bValue?.localeCompare(aValue);
+  //   });
+  // }, [filteredData, sortConfig]);
 
-  const paginatedData = sortedData;
+  const paginatedData = filteredData;
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
   const handleEntriesChange = (e) => {
@@ -369,6 +418,7 @@ const DownlineList = () => {
   //   );
   // }
   const handleDeleteModalClose = () => {
+    setUpdatePartnership(false);
     setIsDeleteModalOpen(false);
     setUserToDelete(null);
     setDepositModal(false);
@@ -376,7 +426,6 @@ const DownlineList = () => {
     setAccountStatus(false);
     setCreditReferenceTransactionList(false);
     setIsModalOpen(false);
-    setUpdatePartnership(false);
   };
 
   const handleDeleteConfirm = () => {
@@ -430,7 +479,6 @@ const DownlineList = () => {
       if (allowedRoles.includes(item.role_name)) {
         const data = await fetchallUsers(item._id);
         setUserFetchList(data);
-        setIsNested(true);
         if (
           item.role_name == "agent" ||
           item.role_name == "user" ||
@@ -439,7 +487,10 @@ const DownlineList = () => {
           item.role_name == "white-level" ||
           item.role_name == "super"
         ) {
-          setIsNested(true);
+          console.log(data,'donenondoenodnods')
+          if(data?.length > 0){
+            setIsNested(true);
+          }
         }
       } else if (item.role_name == "user") {
         return null;
@@ -543,20 +594,14 @@ const DownlineList = () => {
     }
   };
 
-  console.log({ roles, roleId, role }, "downlineData");
+
+  console.log(dataList)
+
   return (
     <>
       {loading ? (
         <div className="flex justify-center items-center h-64">
-          <div className="relative w-48 h-48">
-            <div className="absolute w-8 h-8 bg-gradient-green rounded-full animate-crossing1"></div>
-
-            <div className="absolute w-8 h-8 bg-gradient-blue rounded-full animate-crossing2"></div>
-
-            <div className="absolute bottom-[-40px] w-full text-center text-xl font-custom font-medium text-black">
-              <ClipLoader color="#0000FF" />
-            </div>
-          </div>
+          <div><AnimatedLoader/></div>
         </div>
       ) : (
         <>
@@ -646,16 +691,16 @@ const DownlineList = () => {
                   <tr className="bg-gray-200">
                     {[
                       { key: "username", label: "Username" },
-                      { key: "credit Ref.", label: "Credit Ref." },
+                      { key: "creditReference", label: "Credit Ref." },
                       ...(isMasterDownlineList
                         ? [{ key: "partnership", label: "Partnership" }]
                         : []),
-                      { key: "balance", label: "Balance" },
-                      { key: "exposure", label: "Exposure" },
+                      { key: "totalOpeningBalance", label: "Balance" },
+                      { key: "totalExposureBalance", label: "Exposure" },
                       ...(!isMasterDownlineList
-                        ? [{ key: "exposure", label: "Exposure Limit" }]
+                        ? [{ key: "exposureLimit", label: "Exposure Limit" }]
                         : []),
-                      { key: "availableBalance", label: "Avail. Bal." },
+                      { key: "totalAvailableBalance", label: "Avail. Bal." },
                       { key: "refPL", label: "Ref. P/L" },
                       ...(!isMasterDownlineList
                         ? [{ key: "partnership", label: "Partnership" }]
@@ -671,23 +716,21 @@ const DownlineList = () => {
                           <div className="flex items-center ">{label}</div>
                           <div className="flex flex-col items-center ml-2">
                             <FaSortUp
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "ascending"
+                              className={`${sortConfig.key === key &&
+                                  sortConfig.direction === "ascending"
                                   ? "text-black"
                                   : "text-gray-400"
-                              }`}
+                                }`}
                               style={{
                                 marginBottom: "-6px",
                               }}
                             />
                             <FaSortDown
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "descending"
+                              className={`${sortConfig.key === key &&
+                                  sortConfig.direction === "descending"
                                   ? "text-black"
                                   : "text-gray-400"
-                              }`}
+                                }`}
                               style={{
                                 marginTop: "-6px",
                               }}
@@ -702,22 +745,30 @@ const DownlineList = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {(searchTerm?.length
-                    ? searchData
-                    : userFetchList.length > 0
-                    ? userFetchList
-                    : userList.length > 0
-                    ? userList
-                    : downlineData
-                  )?.length ? (
-                    (searchTerm?.length
-                      ? searchData
-                      : userFetchList.length > 0
-                      ? userFetchList
-                      : userList.length > 0
-                      ? userList
-                      : downlineData
-                    ).map((item) => (
+                  {dataList?.length ? (
+                    [...dataList]?.sort((a, b) => {
+                      if (sortConfig?.key !== '') {
+                        console.log('runnnnn1',sortConfig?.key)
+                        if(sortConfig?.direction == 'ascending'){
+                          console.log('runnnnn2',a[sortConfig.key] - b[sortConfig.key])
+                          if(sortConfig?.key == 'refPL'){
+                            return (a?.totalOpeningBalance - a?.creditReference) - (b?.totalOpeningBalance - b?.creditReference)
+                          }else if(sortConfig?.key == 'username'){
+                            return a.name?.localeCompare(a.name)
+                          }else{
+                            return a[sortConfig.key] - b[sortConfig.key]
+                          }
+                        }else if(sortConfig?.direction == 'descending'){
+                          console.log('runnnnn3', b[sortConfig.key] - a[sortConfig.key])
+                          if(sortConfig?.key == 'refPL'){
+                            return (b?.totalOpeningBalance - b?.creditReference) - (a?.totalOpeningBalance - a?.creditReference)
+                          }else if(sortConfig?.key == 'username'){
+                            return b?.name?.localeCompare(a?.name)
+                          }else{
+                        return  b[sortConfig.key] - a[sortConfig.key]
+                          }
+                        }}
+                    })?.map((item) => (
                       <tr
                         key={item?._id}
                         className="border border-gray-400 bg-white"
@@ -725,18 +776,16 @@ const DownlineList = () => {
                         <td className="px-3 py-2 text-[13px] text-nowrap">
                           <div
                             onClick={() => handleUsernameList(item)}
-                            className={`${
-                              item.role_name === "master"
+                            className={`${item.role_name === "master"
                                 ? "cursor-pointer"
                                 : ""
-                            }`}
+                              }`}
                           >
                             <span
-                              className={`bg-green-500 text-white px-[6px] py-[2px] text-[10.5px] mr-1 rounded font-custom font-semibold text-l ${
-                                item.role_name === "master"
+                              className={`bg-green-500 text-white px-[6px] py-[2px] text-[10.5px] mr-1 rounded font-custom font-semibold text-l ${item.role_name === "master"
                                   ? "cursor-pointer"
                                   : ""
-                              }`}
+                                }`}
                             >
                               {item.role_name?.toUpperCase()}
                             </span>
@@ -830,7 +879,7 @@ const DownlineList = () => {
                           {new Intl.NumberFormat("en-IN", {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 2,
-                          }).format(item.totalExposureBalance)}
+                          }).format(Math?.abs(item.totalExposureBalance))}
                           )
                         </td>
                         {!isMasterDownlineList && (
@@ -866,28 +915,27 @@ const DownlineList = () => {
                           }).format(item.totalAvailableBalance || 0)}
                         </td>
                         <td
-                          className={`border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold ${
-                            item?.totalOpeningBalance - item?.creditReference <
-                            0
+                          className={`border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold ${item?.totalOpeningBalance - item?.creditReference <
+                              0
                               ? "text-red-500"
                               : ""
-                          }`}
+                            }`}
                           style={{
                             fontFamily: "Tahoma, Helvetica, sans-serif",
                           }}
                         >
-                          {item.profit_loss < 0
+                          ({item.profit_loss < 0
                             ? `(-${new Intl.NumberFormat("en-IN", {
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 2,
-                              }).format(Math.abs(item.profit_loss))})`
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }).format(Math.abs(item.profit_loss))})`
                             : new Intl.NumberFormat("en-IN", {
-                                minimumFractionDigits: 0,
-                                maximumFractionDigits: 2,
-                              }).format(
-                                item?.totalOpeningBalance -
-                                  item?.creditReference
-                              )}
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }).format(
+                              item?.totalOpeningBalance -
+                              item?.creditReference
+                            )})
                         </td>
                         {!isMasterDownlineList && (
                           <td
@@ -896,10 +944,7 @@ const DownlineList = () => {
                               fontFamily: "Tahoma, Helvetica, sans-serif",
                             }}
                           >
-                            {new Intl.NumberFormat("en-IN", {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }).format(100)}
+                            {item?.partnership}
                           </td>
                         )}
                         <td
@@ -909,15 +954,14 @@ const DownlineList = () => {
                           }}
                         >
                           <span
-                            className={`px-2 py-[4px] rounded-[5px] border text-[11px] ${
-                              item.status === "active"
+                            className={`px-2 py-[4px] rounded-[5px] border text-[11px] ${item.status === "active"
                                 ? "text-green-600 border-green-600 bg-green-100"
                                 : item.status === "suspended"
-                                ? "text-red-600 border-red-600 bg-red-100"
-                                : item.status === "locked"
-                                ? "text-red-600 border-red-600 bg-red-100"
-                                : "text-gray-600 border-gray-600 bg-gray-100"
-                            }`}
+                                  ? "text-red-600 border-red-600 bg-red-100"
+                                  : item.status === "locked"
+                                    ? "text-red-600 border-red-600 bg-red-100"
+                                    : "text-gray-600 border-gray-600 bg-gray-100"
+                              }`}
                           >
                             {item.status}
                           </span>
@@ -987,12 +1031,12 @@ const DownlineList = () => {
                         <td className="px-4 py-2 text-sm">
                           <div className="flex md:space-x-2.5 space-x-2">
                             {isNested &&
-                            (item.role_name == "agent" ||
-                              item.role_name == "user" ||
-                              item.role_name == "sub-admin" ||
-                              item.role_name == "master" ||
-                              item.role_name == "white-level" ||
-                              item.role_name == "super") ? (
+                              (item.role_name == "agent" ||
+                                item.role_name == "user" ||
+                                item.role_name == "sub-admin" ||
+                                item.role_name == "master" ||
+                                item.role_name == "white-level" ||
+                                item.role_name == "super") ? (
                               // Show only three icons for agent and user in nested condition
                               <>
                                 <div
@@ -1114,11 +1158,10 @@ const DownlineList = () => {
                 {/* First Button */}
                 <button
                   onClick={() => handlePageChange("first")}
-                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
-                    currentPage === 1
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
-                  }`}
+                    }`}
                   disabled={currentPage === 1}
                 >
                   First
@@ -1127,11 +1170,10 @@ const DownlineList = () => {
                 {/* Previous Button */}
                 <button
                   onClick={() => handlePageChange("prev")}
-                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
-                    currentPage === 1
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
-                  }`}
+                    }`}
                   disabled={currentPage === 1}
                 >
                   Previous
@@ -1150,11 +1192,10 @@ const DownlineList = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`sm:px-3 px-2 sm:py-1 py-0.5 text-sm border border-white rounded ${
-                            currentPage === page
+                          className={`sm:px-3 px-2 sm:py-1 py-0.5 text-sm border border-white rounded ${currentPage === page
                               ? "bg-gray-200 border-gray-700"
                               : "hover:bg-gray-100"
-                          }`}
+                            }`}
                         >
                           {page}
                         </button>
@@ -1176,11 +1217,10 @@ const DownlineList = () => {
                 {/* Next Button */}
                 <button
                   onClick={() => handlePageChange("next")}
-                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
-                    currentPage === totalPages
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
-                  }`}
+                    }`}
                   disabled={currentPage === totalPages}
                 >
                   Next
@@ -1189,11 +1229,10 @@ const DownlineList = () => {
                 {/* Last Button */}
                 <button
                   onClick={() => handlePageChange("last")}
-                  className={`sm:px-3 px-2 py-1 text-sm rounded ${
-                    currentPage === totalPages
+                  className={`sm:px-3 px-2 py-1 text-sm rounded ${currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
-                  }`}
+                    }`}
                   disabled={currentPage === totalPages}
                 >
                   Last
@@ -1210,6 +1249,8 @@ const DownlineList = () => {
                   currentCreditRef={selectedUser.creditReference}
                   onSubmit={handleSubmitFunction}
                   user={selectedUser}
+                  setRoleId={setRoleId}
+                  fetchData={fetchData}
                   userId={selectedUser?._id}
                   currentPage={currentPage}
                   entriesToShow={entriesToShow}
@@ -1225,6 +1266,8 @@ const DownlineList = () => {
                   currentPartnership={selectedUser.partnership}
                   onSubmit={handleSubmitFunction}
                   user={selectedUser}
+                  setRoleId={setRoleId}
+                  fetchData={fetchData}
                   userId={selectedUser?._id}
                   currentPage={currentPage}
                   entriesToShow={entriesToShow}
@@ -1238,9 +1281,11 @@ const DownlineList = () => {
                   username={creditReferenceTransactionList.username}
                   isOpen={creditReferenceTransactionList}
                   onClose={handleDeleteModalClose}
+                  fetchData={fetchData}
                   // onConfirm={handleDeleteConfirm}
                   userId={creditReferenceTransactionList?._id}
                   currentPage={currentPage}
+                  setRoleId={setRoleId}
                   entriesToShow={entriesToShow}
                 />
               </>
@@ -1252,6 +1297,11 @@ const DownlineList = () => {
                 userId={selectedUser?._id}
                 currentPage={currentPage}
                 entriesToShow={entriesToShow}
+                roleId={roleId}
+                setList={setList}
+                list={list}
+                fetchData={fetchData}
+                setRoleId={setRoleId}
                 user={selectedUser}
               />
             )}
@@ -1262,7 +1312,9 @@ const DownlineList = () => {
                   onClose={handleDeleteModalClose}
                   // onConfirm={handleDeleteConfirm}
                   userId={selectedUser?._id}
+                  fetchData={fetchData}
                   currentPage={currentPage}
+                  setRoleId={setRoleId}
                   entriesToShow={entriesToShow}
                 />
               </>
@@ -1274,8 +1326,10 @@ const DownlineList = () => {
                   onClose={handleDeleteModalClose}
                   // onConfirm={handleDeleteConfirm}
                   userId={selectedUser?._id}
+                  fetchData={fetchData}
                   currentPage={currentPage}
                   entriesToShow={entriesToShow}
+                  setRoleId={setRoleId}
                   user={selectedUser}
                 />
               </>
@@ -1295,7 +1349,9 @@ const DownlineList = () => {
                   // onSubmit={handleSubmitFunction}
                   user={selectedExposureUser}
                   userId={selectedExposureUser?._id}
+                  fetchData={fetchData}
                   currentPage={currentPage}
+                  setRoleId={setRoleId}
                   entriesToShow={entriesToShow}
                 />
               </>

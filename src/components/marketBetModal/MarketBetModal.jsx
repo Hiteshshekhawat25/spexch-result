@@ -147,13 +147,7 @@ const MarketBetModal = ({
                     </tr>
                   </thead>
                   <tbody>
-                    {loading ? (
-                      <tr>
-                        <td colSpan={7} className="text-center py-7">
-                          Loading...
-                        </td>
-                      </tr>
-                    ) : error ? (
+                    {error ? (
                       <tr>
                         <td colSpan={7} className="text-center py-7">
                           Error: {error.message}

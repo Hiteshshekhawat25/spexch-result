@@ -172,7 +172,7 @@ const PasswordHistory = () => {
                         {item.remarks}
                       </td>
                       <td className="border border-gray-300 p-2 text-center">
-                        {formatDateTime(item.deletedAt)}
+                        {formatDateTime(item.date)}
                       </td>
                     </tr>
                   ))

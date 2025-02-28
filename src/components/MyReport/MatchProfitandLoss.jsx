@@ -740,7 +740,7 @@ const MatchProfitandLoss = () => {
                   onClick={() => handleSort(header.key)}
                 >
                   <div className="flex justify-between items-center">
-                    <span>{header.display}</span>
+                    <span className="w-full text-center">{header.display}</span>
                     <div className="flex flex-col items-center ml-2">
                       <FaSortUp
                         className={`${
@@ -787,11 +787,13 @@ const MatchProfitandLoss = () => {
                       : item?.type === "fancy"
                       ? item?.marketNameTwo
                       : item?.type === "toss"
-                      ? "Toss"
+                      ? "Toss" 
+                      : item?.type === "bookmakers"
+                      ? "Bookmaker"
                       : ""}
                   </p>
                 </td>
-                <td className="px-4 py-2 text-center">{item?.marketName ?? item?.marketNameTwo }</td>
+                <td className="px-4 py-2 text-center">{item?.marketName ? item?.marketName :  item?.marketNameTwo }</td>
                 <td
                   className="px-4 py-2 text-center"
                   style={{
