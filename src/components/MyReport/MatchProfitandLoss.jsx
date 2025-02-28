@@ -573,6 +573,7 @@ import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { BASE_URL } from "../../Constant/Api";
 import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 const MatchProfitandLoss = () => {
   const { matchId } = useParams();
@@ -670,18 +671,27 @@ const MatchProfitandLoss = () => {
     currentPage * entriesToShow
   );
 
-  const handleMarketNameClick = (matchId, selectionId, userId) => {
+  const handleMarketNameClick = (matchId, selectionId, userId,type) => {
     let url = "";
 
     if (user_id) {
       url = `/bet-history/${matchId}/${selectionId}/${userId}`;
       navigate(url, {
-        state: { userId, matchId, selectionId },
+        state: { userId,
+           matchId,
+            selectionId,
+            type : type == 'odds' ? type : type == 'bookmakers' ? type : '',
+            selectionId : selectionId
+          },
       });
     } else {
       url = `/profit-loss-user/${matchId}/${selectionId}`;
       navigate(url, {
-        state: { userId },
+        state: { 
+          userId ,
+          type : type == 'odds' ? type : type == 'bookmakers' ? type : '',
+          selectionId : selectionId
+        },
       });
     }
   };
@@ -736,7 +746,7 @@ const MatchProfitandLoss = () => {
               {headers.map((header) => (
                 <th
                   key={header.key}
-                  className="px-4 py-2 cursor-pointer"
+                  className="px-4 py-2 cursor-pointer border border-gray-400"
                   onClick={() => handleSort(header.key)}
                 >
                   <div className="flex justify-between items-center">
@@ -769,15 +779,16 @@ const MatchProfitandLoss = () => {
           <tbody>
             {paginatedData.map((item, index) => (
               <tr key={index} className="border-b border-gray-400">
-                <td className="px-4 py-2 text-center">{item.sport}</td>
-                <td className="px-4 py-2 text-center">{item.match}</td>
+                <td className="px-4 py-2 border border-gray-400 text-center">{item.sport}</td>
+                <td className="px-4 border border-gray-400 py-2 text-center">{item.match}</td>
                 <td
-                  className="px-4 py-2 text-center text-lightblue cursor-pointer"
+                  className="px-4 py-2 border border-gray-400 text-center text-lightblue cursor-pointer"
                   onClick={() => {
                     handleMarketNameClick(
                       item.matchId,
                       item.selectionId,
-                      item.userId
+                      item?.userId,
+                      item?.type
                     );
                   }}
                 >
@@ -793,9 +804,9 @@ const MatchProfitandLoss = () => {
                       : ""}
                   </p>
                 </td>
-                <td className="px-4 py-2 text-center">{item?.marketName ? item?.marketName :  item?.marketNameTwo }</td>
+                <td className="px-4 py-2 border border-gray-400 text-center">{item?.marketName ? item?.marketName :  item?.marketNameTwo }</td>
                 <td
-                  className="px-4 py-2 text-center"
+                  className="px-4 py-2 border border-gray-400 text-center"
                   style={{
                     color: item.totalProfitLoss < 0 ? "red" : "green",
                   }}
@@ -808,18 +819,11 @@ const MatchProfitandLoss = () => {
                         Math.abs(item.totalProfitLoss) + item?.totalCommission
                       ).toFixed(2)}
                 </td>
-                <td className="px-4 py-2 text-center">
+                <td className="px-4 py-2 border border-gray-400 text-center">
                   {item?.totalCommission.toFixed(2)}
                 </td>
-                <td className="px-4 py-2 text-center">
-                  {new Date(item.settledTime).toLocaleString("en-GB", {
-                    day: "2-digit",
-                    month: "2-digit",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                    second: "2-digit",
-                  })}
+                <td className="px-4 py-2 border border-gray-400 text-center">
+                {moment(item.settledTime).format("MMMM Do YYYY, h:mm:ss a")}
                 </td>
               </tr>
             ))}

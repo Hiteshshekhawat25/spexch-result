@@ -58,6 +58,8 @@ const MarketBetModal = ({
       setCurrentPage(currentPage + 1);
   };
 
+
+  console.log(data,'datadatadatadatadatadatadata')
   return (
     <>
       <div

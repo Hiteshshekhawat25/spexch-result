@@ -145,6 +145,11 @@ const BetList = ({ Userid }) => {
     }
   };
 
+  useEffect(()=>{
+    localStorage.removeItem('fromDate')
+    localStorage.removeItem('toDate')
+  },[])
+
   return (
     <div className="">
       {loading ? (
@@ -226,7 +231,7 @@ const BetList = ({ Userid }) => {
                         "oddsReq",
                         "stake",
                         "placeTime",
-                        "settleTime",
+                        "matchedTime",
                       ].map((key) => (
                         <th
                           key={key}
@@ -254,8 +259,8 @@ const BetList = ({ Userid }) => {
                                   ? "Stack"
                                   : key === "placeTime"
                                   ? "Place Time"
-                                  : key === "settleTime"
-                                  ? "Settle Time"
+                                  : key === "matchedTime"
+                                  ? "Matched Time"
                                   : key}
                               </span>
 
@@ -442,7 +447,7 @@ const BetList = ({ Userid }) => {
                             )}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
-                            {new Date(item.settleTime).toLocaleDateString(
+                            {new Date(item.matchTime).toLocaleDateString(
                               "en-GB",
                               {
                                 day: "2-digit",
@@ -450,7 +455,7 @@ const BetList = ({ Userid }) => {
                                 year: "numeric",
                               }
                             )}{" "}
-                            {new Date(item.settleTime).toLocaleTimeString(
+                            {new Date(item.matchTime).toLocaleTimeString(
                               "en-US",
                               {
                                 hour: "2-digit",
@@ -514,7 +519,7 @@ const BetList = ({ Userid }) => {
                             )} */}
                           </td>
                           <td className="border border-gray-400 px-4 py-3">
-                          {moment(item.settleTime).format("MMMM Do YYYY, h:mm:ss")}{" "}
+                          {moment(item.matchTime).format("MMMM Do YYYY, h:mm:ss")}{" "}
                           </td>
                         </tr>
                       ))

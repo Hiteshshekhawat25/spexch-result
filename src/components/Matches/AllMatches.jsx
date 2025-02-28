@@ -35,6 +35,7 @@ const AllMatches = () => {
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [loading, setLoading] = useState(true);
   const [entriesToShow, setEntriesToShow] = useState(10);
+  const [sortMatches,setSortMatches] = useState('new')
   const [currentPage, setCurrentPage] = useState(1);
 
   // Fetch sports from API
@@ -88,7 +89,7 @@ const AllMatches = () => {
 
     try {
       const response = await getCreateNewMatchAPIAuth(
-        `match/getmatchesviagameid/${sport}?page=${currentPage}&limit=${entriesToShow}&search=${searchTerm}`
+        `match/getmatchesviagameid/${sport}?page=${currentPage}&limit=${entriesToShow}&search=${searchTerm}&matchStatus=${sortMatches}`
       );
 
       if (response.data?.data) {
@@ -118,7 +119,7 @@ const AllMatches = () => {
 
   useEffect(() => {
     fetchMatches();
-  }, [dispatch, sport, currentPage, entriesToShow]);
+  }, [dispatch, sport, currentPage, entriesToShow,sortMatches]);
 
   console.log("Matches", matches);
 
@@ -142,6 +143,11 @@ const AllMatches = () => {
     setEntriesToShow(Number(e.target.value));
     setCurrentPage(1);
   };
+
+
+  const handleSortMatches=(e)=>{
+    setSortMatches(e.target.value)
+  }
 
   const handleStatusToggle = async (matchId, field, currentStatus) => {
     try {
@@ -241,6 +247,7 @@ const AllMatches = () => {
         <h1 className="text-2xl font-custom">ALL Matches</h1>
       </div>
       <div className="flex space-x-4 mb-6">
+        <div className="w-full">
         <select
           className="border p-2 rounded"
           value={sport}
@@ -262,7 +269,7 @@ const AllMatches = () => {
 
         <input
           type="text"
-          className="border p-2 rounded w-1/3"
+          className="border p-2 rounded w-1/3 max-w-[300px]"
           // placeholder="Search by EventID, MatchID..."
           value={searchTerm}
           onChange={(e) => dispatch(setSearchTerm(e.target.value))}
@@ -274,6 +281,20 @@ const AllMatches = () => {
         >
           Search
         </button>
+        </div>
+        <select
+          className="border p-2 rounded"
+          value={sortMatches}
+          onChange={handleSortMatches}
+        >
+         {
+            [{label:'Old Matches',value : 'old'},{label : 'New Matches', value : 'new'}].map((sportOption) => (
+              <option key={sportOption.label} value={sportOption.value}>
+                {sportOption.label}
+              </option>
+            ))
+          }
+        </select>
       </div>
       <div className="p-4 border border-gray-300 rounded-md bg-white">
         <div className="border border-gray-300 p-2 rounded-md mb-4">

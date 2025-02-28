@@ -86,7 +86,7 @@ const BetHistory = () => {
       setLocalLoading(true);
       try {
         const token = localStorage.getItem("authToken");
-        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&userId=${id}&fromDate=${fromDate}&toDate=${toDate}`;
+        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&type=${location?.state?.type}&userId=${location?.state?.userId}&fromDate=${fromDate ? fromDate : ''}&toDate=${toDate ? toDate : ''}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -189,7 +189,7 @@ const BetHistory = () => {
                     ].map((key) => (
                       <th
                         key={key}
-                        className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                        className="border border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between items-center text-center">
@@ -273,17 +273,17 @@ const BetHistory = () => {
                               </span>
                               <span className="text-red-500">
                                 {" "}
-                                ({item?.totalProfitLoss > 0 ? (-item?.totalProfitLoss) : item?.totalProfitLoss || 0})
+                                ({item?.totalProfitLoss > 0 ? (-Math.abs(item?.totalProfitLoss + item?.totalCommission)?.toFixed(2)) : (item?.totalProfitLoss + item?.totalCommission)?.toFixed(2) || 0})
                               </span>
                             </>
                           ) : (
                             <>
                               <span className="text-green-800">
-                                ({item?.totalProfitLoss})
+                                ({(item?.totalProfitLoss  + item?.totalCommission)?.toFixed(2)})
                               </span>
                               <span className="text-red-500">
                                 {" "}
-                                (-{item?.totalAmount || 0})
+                                (-{item?.totalAmount?.toFixed(2) || 0})
                               </span>
                             </>
                           )}

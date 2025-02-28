@@ -76,6 +76,7 @@ const DownlineList = () => {
   const [userFetchList, setUserFetchList] = useState([]);
   const [searchData, setSearchData] = useState([]);
   const downlineData = useSelector(selectDownlineData);
+  const { userData } = useSelector((state) => state.user);
   const [isNested, setIsNested] = useState(false);
   const loading = useSelector(selectDownlineLoading);
   const error = useSelector(selectDownlineError);
@@ -810,7 +811,8 @@ const DownlineList = () => {
                               minimumFractionDigits: 0,
                               maximumFractionDigits: 2,
                             }).format(item.creditReference)}
-                            <span className="ml-2 inline-flex space-x-2">
+                     {item?.createdBy == userData?.data?._id  ?        
+                                <span className="ml-2 inline-flex space-x-2">
                               <FaEdit
                                 className="text-[#315195] cursor-pointer"
                                 onClick={() => handleEditClick(item)}
@@ -819,7 +821,7 @@ const DownlineList = () => {
                                 className="text-[#315195] cursor-pointer"
                                 onClick={() => handleListView(item)}
                               />
-                            </span>
+                            </span> : <></>}
                           </span>
                         </td>
                         {!isMasterDownlineList && (
@@ -847,12 +849,13 @@ const DownlineList = () => {
                                 minimumFractionDigits: 0,
                                 maximumFractionDigits: 2,
                               }).format(item.partnership)}
-                              <span className="ml-2 inline-flex space-x-2">
+                            {item?.createdBy == userData?.data?._id ?  
+                             <span className="ml-2 inline-flex space-x-2">
                                 <FaEdit
                                   className="text-[#315195] cursor-pointer"
                                   onClick={() => handleUpdatePartnership(item)}
                                 />
-                              </span>
+                              </span> : <></>}
                             </span>
                           </td>
                         )}
@@ -912,7 +915,7 @@ const DownlineList = () => {
                           {new Intl.NumberFormat("en-IN", {
                             minimumFractionDigits: 0,
                             maximumFractionDigits: 2,
-                          }).format(item.totalAvailableBalance || 0)}
+                          }).format(item.availableBalanceMainUsers || 0)}
                         </td>
                         <td
                           className={`border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold ${item?.totalOpeningBalance - item?.creditReference <

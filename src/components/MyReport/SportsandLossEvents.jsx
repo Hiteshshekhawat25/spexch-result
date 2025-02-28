@@ -23,8 +23,8 @@ const SportsandLossEvents = () => {
     { display: "Sport Name", key: "sport" },
     { display: "Event Name", key: "event" },
     { display: "Profit & Loss", key: "totalUplineProfitLoss" },
+    { display: "Downline Profit/Loss", key: "totalDownlineProfitLoss" },
     { display: "Commission", key: "commission" },
-    { display: "Total P & L", key: "totalDownlineProfitLoss" },
   ];
 
   console.log("userId", userId);
@@ -154,7 +154,7 @@ const SportsandLossEvents = () => {
               {headers.map((header) => (
                 <th
                   key={header.key}
-                  className="px-4 py-2 cursor-pointer"
+                  className="px-4 py-2 text-sm border border-gray-400 cursor-pointer"
                   onClick={() => handleSort(header.key)}
                   // className=" bg-red-500 border border-gray-400 text-center justify-between"
                 >
@@ -194,7 +194,7 @@ const SportsandLossEvents = () => {
                   {item.sport}
                 </td>
                 <td
-                  className="px-4 py-2 text-center text-lightblue cursor-pointer border border-gray-400"
+                  className="px-4 py-2 text-sm text-center text-lightblue cursor-pointer border border-gray-400"
                   onClick={() => handleMatchClick(item._id)}
                 >
                   {item.match}
@@ -203,23 +203,17 @@ const SportsandLossEvents = () => {
                 <td
                   className="px-4 py-2 text-center border border-gray-400"
                   style={{
-                    color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
+                    color: item.totalUplineProfitLoss < 0 ? "red" : "green",
                   }}
                 >
-                  {item.totalDownlineProfitLoss < 0
+                  {item.totalUplineProfitLoss < 0
                     ? `-${(
-                        Math.abs(item.totalDownlineProfitLoss) +
-                        item?.totalCommission
+                        Math.abs(item.totalUplineProfitLoss) 
                       )?.toFixed(2)}`
                     : (
-                        Math.abs(item.totalDownlineProfitLoss) +
+                        Math.abs(item.totalUplineProfitLoss) +
                         item?.totalCommission
                       )?.toFixed(2)}
-                </td>
-               
-               
-                <td className="px-4 py-2 text-center">
-                  {item?.totalCommission}
                 </td>
                 <td
                   className="px-4 py-2 text-center border border-gray-400"
@@ -228,9 +222,16 @@ const SportsandLossEvents = () => {
                   }}
                 >
                   {item.totalDownlineProfitLoss < 0
-                    ? Math.abs(item.totalDownlineProfitLoss.toFixed(2))
-                    : item.totalDownlineProfitLoss.toFixed(2)}
+                    ? `-${Math.abs(item.totalDownlineProfitLoss +
+                      item?.totalCommission)?.toFixed(2)}`
+                    : (item.totalDownlineProfitLoss + 
+                    item?.totalCommission).toFixed(2)}
                 </td>
+               
+                <td className="px-4 py-2 text-center">
+                  {item?.totalCommission?.toFixed(2)}
+                </td>
+               
               </tr>
             ))}
           </tbody>

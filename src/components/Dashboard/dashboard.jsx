@@ -43,7 +43,7 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
+      <div className="flex justify-center mt-32 h-screen">
        <AnimatedLoader/>
       </div>
     );

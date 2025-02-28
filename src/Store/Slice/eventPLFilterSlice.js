@@ -48,8 +48,8 @@ import { createSlice } from "@reduxjs/toolkit";
 // eventPLFilterSlice.js
 const initialState = {
   dataSource: "live", 
-  fromDate: null,
-  toDate: null,
+  fromDate: localStorage?.getItem('fromDate'),
+  toDate: localStorage?.getItem('toDate'),
   fromTime: null,
   toTime: null,
 };
@@ -62,9 +62,11 @@ const eventPLFilterSlice = createSlice({
       state.dataSource = action.payload;
     },
     setFromDate: (state, action) => {
+      localStorage.setItem('fromDate',action.payload)
       state.fromDate = action.payload;
     },
     setToDate: (state, action) => {
+      localStorage.setItem('toDate',action.payload)
       state.toDate = action.payload;
     },
     setFromTime: (state, action) => {

@@ -17,7 +17,7 @@ const MenuHeader = () => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
-  console.log("userDatauserData", userData);
+  console.log("userDatauserData", location);
 
   const handleLogout = () => {
     console.log("logout Clicked");
@@ -173,11 +173,11 @@ const MenuHeader = () => {
                 <Link
                   to={item.link}
                   onClick={() => {
-                    setActiveMenu(item.name);
+                    setActiveMenu(item.link);
                     item.subMenu && toggleSubMenu(item.name, index);
                   }}
                   className={` border-b-2 h-full flex items-center px-2 py-1.5 text-[13px] ${
-                    activeMenu === item.name
+                    activeMenu === item.link
                       ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
                       : "border-transparent hover:underline hover:decoration-black"
                   }`}

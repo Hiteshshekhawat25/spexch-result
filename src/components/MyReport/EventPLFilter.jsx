@@ -44,6 +44,8 @@ const EventPLFilter = ({
         // For live data, use today's date
         fromDate = today.toISOString().split("T")[0];
         toDate = today.toISOString().split("T")[0];
+        dispatch(setFromDate(today.toISOString().split("T")[0]))
+        dispatch(setToDate(today.toISOString().split("T")[0]))
         break;
       case "backup":
         // For backup data, use the last 3 months
@@ -51,6 +53,8 @@ const EventPLFilter = ({
         const threeMonthsAgo = new Date(today);
         threeMonthsAgo.setMonth(today.getMonth() - 3);
         fromDate = threeMonthsAgo.toISOString().split("T")[0];
+        dispatch(setFromDate(fromDate))
+        dispatch(setToDate(toDate))
         break;
       case "old":
         // For old data, use the last 1 year
@@ -58,6 +62,8 @@ const EventPLFilter = ({
         const oneYearAgo = new Date(today);
         oneYearAgo.setFullYear(today.getFullYear() - 1);
         fromDate = oneYearAgo.toISOString().split("T")[0];
+        dispatch(setFromDate(fromDate))
+        dispatch(setToDate(toDate))
         break;
       default:
         // Default to today's date

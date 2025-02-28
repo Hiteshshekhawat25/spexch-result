@@ -17,11 +17,13 @@ const SessionResult = () => {
   const [matchLoading, setMatchLoading] = useState(false);
   const [matchError, setMatchError] = useState("");
   const [selectedMatch, setSelectedMatch] = useState("");
+  const [sortMatch,setSortMatch] = useState('new')
   const [filteredSessions, setFilteredSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState("");
 
   useEffect(() => {
     if (selectedMatch) {
+      console.log('sortMatchsortMatchsortMatchsortMatchsortMatchsortMatchsortMatch')
       dispatch(fetchSessions(selectedMatch));
     }
   }, [dispatch, selectedMatch]);
@@ -38,6 +40,11 @@ const SessionResult = () => {
 
   const handleMatchChange = (e) => {
     setSelectedMatch(e.target.value);
+  };
+
+
+  const handleSortChange = (e) => {
+    setSortMatch(e.target.value);
   };
 
   const handleResultChange = (e) => {
@@ -79,11 +86,10 @@ console.log({sessions},'sessions')
  
 
   const handleMatchSelectFocus = async () => {
-    if (matchList.length > 0) return;
-    setMatchLoading(true);
+     setMatchLoading(true);
     setMatchError("");
     try {
-      const response = await getMatchList();
+      const response = await getMatchList(sortMatch);
       setMatchList(response || []);
     } catch (error) {
       console.error("Error fetching match list:", error);
@@ -95,7 +101,7 @@ console.log({sessions},'sessions')
 
   useEffect(() => {
     handleMatchSelectFocus();
-  }, []);
+  }, [sortMatch]);
 
   const handleEditClick = (index, result) => {
     setEditingRow(index);
@@ -133,6 +139,33 @@ console.log({sessions},'sessions')
       {/* Row Section with Select Match, Select Session, and Result */}
       <div className="flex gap-6 mb-4">
         {/* Select Match Dropdown */}
+
+
+        <div className="w-1/4">
+          <label
+            htmlFor="match"
+            className="block text-md font-bold text-gray-700 mb-1 text-left"
+          >
+            Sort
+          </label>
+          <select
+            id="match"
+            className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
+            onChange={handleSortChange}
+            value={sortMatch}
+          >
+            {  [{label : 'Old Matches', value : 'old'},{label : 'New Matches',value : 'new'}].map((match) => (
+                <option key={match?.label} value={match.value}>
+                  {match.label} 
+                </option>
+            ))
+            }
+          </select>
+        </div>
+
+
+
+
         <div className="w-1/4">
           <label
             htmlFor="match"
@@ -162,6 +195,9 @@ console.log({sessions},'sessions')
             )}
           </select>
         </div>
+
+
+
 
         {/* Select Session Dropdown */}
         <div className="w-1/4">

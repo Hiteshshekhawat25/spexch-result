@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { BASE_URL } from "../../Constant/Api";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
@@ -13,8 +13,9 @@ const ProfitLossUser = () => {
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
+  const location = useLocation();
   const { selectionId, id } = useParams();
-  console.log("selection", selectionId, id);
+  console.log("selection", location);
 
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
@@ -67,8 +68,8 @@ const ProfitLossUser = () => {
 
   const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
 
-  const handleRowClick = (matchId, id, selectionId) => {
-    navigate(`/bet-history/${matchId}/${selectionId}/${id}`,{state : {color  : true}});
+  const handleRowClick = (matchId, id, selectionId,type,userId) => {
+    navigate(`/bet-history/${matchId}/${selectionId}/${id}`,{state : {color  : true,fromDate,toDate,type,userId}});
   };
 
   useEffect(() => {
@@ -77,7 +78,7 @@ const ProfitLossUser = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch(
-          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&matchId=${selectionId}&fromDate=${fromDate}&toDate=${toDate}`,
+          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&${location?.state?.type == 'odds' ||  location?.state?.type == 'bookmakers'? `type=${location?.state?.type}` : `&selectionId=${location?.state?.selectionId}` }&matchId=${selectionId}&fromDate=${fromDate ? fromDate : ''}&toDate=${toDate ? toDate :  ''}`,
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -171,7 +172,7 @@ const ProfitLossUser = () => {
                     ].map((key) => (
                       <th
                         key={key}
-                        className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                        className="border border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between items-center text-center">
@@ -236,7 +237,9 @@ const ProfitLossUser = () => {
                             handleRowClick(
                               item.matchDetails._id,
                               item._id,
-                              item.selectionId
+                              item.selectionId,
+                              item?.type,
+                              item?.userId
                             );
                           }}
                           className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
@@ -273,12 +276,12 @@ const ProfitLossUser = () => {
                           {item?.isDeleted
                             ? "0.00"
                             : item.totalProfitLoss < 0
-                            ? Math.abs(item?.totalProfitLoss?.toFixed(2))
-                            : item?.totalProfitLoss?.toFixed(2)}
+                            ? `-${(Math.abs(item?.totalProfitLoss + item?.totalCommission ))?.toFixed(2)}`
+                            : (Math.abs(item?.totalProfitLoss) + item?.totalCommission)?.toFixed(2)}
                         </td>
 
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.totalCommission.toFixed(2)}
+                          {item.totalCommission?.toFixed(2)}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           <p>

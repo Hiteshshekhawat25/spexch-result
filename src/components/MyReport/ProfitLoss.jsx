@@ -3,7 +3,7 @@ import PLFilter from "./PLFilter";
 import { FaSortUp, FaSortDown } from "react-icons/fa";
 import { BASE_URL } from "../../Constant/Api";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
 import { useSelector } from "react-redux";
 
@@ -16,6 +16,7 @@ const ProfitLoss = () => {
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [localLoading, setLocalLoading] = useState(false);
   const [expandedRows, setExpandedRows] = useState([]);
+  const location = useLocation()
   const plFilterState = useSelector((state) => state.plFilter);
   const { dataSource, fromDate, toDate, fromTime, toTime } =
     plFilterState || {};
@@ -170,7 +171,8 @@ const ProfitLoss = () => {
           <table className="w-full table-auto border-collapse border border-gray-400">
             <thead className="border border-gray-400 bg-gray-200 text-black text-center">
               <tr className="relative ml-50%">
-                {[
+                { 
+                [
                   "User Name",
                   "Profit/Loss",
                   "Downline Profit/Loss",
@@ -178,11 +180,11 @@ const ProfitLoss = () => {
                 ].map((key) => (
                   <th
                     key={key}
-                    className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer border-r border-gray-400"
+                    className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer border-r "
                     onClick={() => handleSort(key)}
                   >
-                    <div className="flex justify-between items-center text-center">
-                      <span>{key === "username" ? "Username" : key}</span>
+                    <div className="flex justify-between  items-center text-center">
+                      <span className="w-full">{key === "username" ? "Username" : key}</span>
                       <div className="flex flex-col items-center ml-2">
                         <FaSortUp
                           className={`${
@@ -248,7 +250,7 @@ const ProfitLoss = () => {
                               : "text-green-500"
                           }`}
                         >
-                          {Math.abs(row.totalDownlineProfitLoss.toFixed(2))}
+                          {Math.abs((row.totalDownlineProfitLoss + row.totalCommission)).toFixed(2)}
                         </td>
                         <td
                           className={`px-4 py-3 text-sm text-center border-r border-gray-400 font-bold ${

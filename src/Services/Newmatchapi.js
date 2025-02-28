@@ -107,13 +107,12 @@ export const deleteData = async (url) => {
 };
 
 // GET All Match List Api
-export const getMatchList = async ( ) => {
+export const getMatchList = async ( sortMatch) => {
   const token = localStorage.getItem("authToken");
 
   try {
-    const response = await axios.get(`${BASE_URL}/match/getAllMatchesSession?page=1&limit=2`, {
+    const response = await axios.get(`${BASE_URL}/match/getAllMatchesSession?page=1&limit=2&matchStatus=${sortMatch}`, {
       headers: {
-        
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
       },

@@ -31,6 +31,7 @@ const MyProfile = ({ Userid, Role }) => {
 
   const [isRollingModalOpen, setIsRollingModalOpen] = useState(false);
   const [isAgentRollingModalOpen, setIsAgentRollingModalOpen] = useState(false);
+  const { userData } = useSelector((state) => state.user);
   const [isChangePasswordModalOpen, setIsChangePasswordModalOpen] =
     useState(false);
     const [betpasswordModal,setBetpasswordModal] = useState(false)
@@ -150,7 +151,7 @@ const MyProfile = ({ Userid, Role }) => {
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Commission</span>
           <div className=" sm:py-0 py-3 flex">
             <span className="text-left sm:ml-4">{profile.commission}%</span>
-            {Userid && (
+            {((userData?.data?._id == profile?.createdBy) || !profile?.createdBy ) && (
               <span className="text-left sm:ml-4 flex items-center">
                 <FaEdit
                   className="ml-2 text-blue cursor-pointer"
@@ -162,7 +163,8 @@ const MyProfile = ({ Userid, Role }) => {
         </div>
         <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Rolling Commission</span>
-          <div className="flex sm:py-0 py-4">
+        {((userData?.data?._id == profile?.createdBy) || !profile?.createdBy )  && 
+         <div className="flex sm:py-0 py-4">
             <span className="text-left sm:ml-4  flex items-center">
               <FaEdit
                 className="ml-2 text-blue cursor-pointer"
@@ -175,7 +177,7 @@ const MyProfile = ({ Userid, Role }) => {
                 onClick={handleOpenRollingModal}
               />
             </span>
-          </div>
+          </div>}
         </div>
         {Role !== "user" && (
           <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
@@ -198,10 +200,11 @@ const MyProfile = ({ Userid, Role }) => {
             <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Exposure Limit</span>
             <div className="flex items-center gap-3 sm:py-0 py-3">
               <span className="text-left sm:ml-4">{profile.exposureLimit}</span>
+              {userData?.data?._id == profile?.createdBy  && 
               <FaRegEdit
                 className="text-blue cursor-pointer"
                 onClick={handleOpenEditExposureModal}
-              />
+              />}
             </div>
           </div>
         )}
@@ -217,10 +220,10 @@ const MyProfile = ({ Userid, Role }) => {
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Password</span>
           <span className="flex items-center sm:ml-4 sm:py-0 py-4">
             <span className="mr-2">********</span>
-            <FaRegEdit
+          {userData?.data?._id == profile?.createdBy &&  <FaRegEdit
               className="text-blue cursor-pointer"
               onClick={handleOpenChangePasswordModal}
-            />
+            />}
           </span>
         </div>
         {/* <div className="flex sm:py-3 border-b sm:flex-row flex-col">

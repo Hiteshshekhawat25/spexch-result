@@ -148,12 +148,13 @@ const EventProfitLoss = ({ Userid }) => {
             <div className="overflow-x-auto my-4 mx-4">
               <table className="w-full table-auto border-collapse border border-gray-400">
                 <thead className="border border-gray-400 bg-gray-300 text-black text-center">
+               {!location?.pathname?.includes('MyAccount') ? 
                   <tr>
-                    {[
+                    {[ 
                       "sportName",
-                      "Profit & Loss",
+                      "Upline Profit/Loss",
+                      "Downline Profit/Loss",
                       "commission",
-                      "Total P & L",
                     ].map((key) => (
                       <th
                         key={key}
@@ -164,8 +165,10 @@ const EventProfitLoss = ({ Userid }) => {
                           <span className="text-center w-full">
                             {key === "sportName"
                               ? "Sport Name"
-                              : key === "Profit & Loss"
-                              ? "Profit & Loss"
+                              : key === "Uplineline Profit/Loss"
+                              ? "Uplineline Profit/Loss"
+                              : key === "Downline Profit/Loss"
+                              ? "Downline Profit/Loss"
                               : key === "commission"
                               ? "Commission"
                               : "Total P & L"}
@@ -198,6 +201,59 @@ const EventProfitLoss = ({ Userid }) => {
                       </th>
                     ))}
                   </tr>
+                  :
+                  <tr>
+                    {[ 
+                      "sportName",
+                      "Upline Profit/Loss",
+                      "Downline Profit/Loss",
+                      "commission",
+                    ].map((key) => (
+                      <th
+                        key={key}
+                        className="border-r border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                        onClick={() => handleSort(key)}
+                      >
+                        <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
+                          <span className="text-center w-full">
+                            {key === "sportName"
+                              ? "Sport Name"
+                              : key === "Upline Profit/Loss"
+                              ? "Upline Profit/Loss"
+                              : key === "Downline Profit/Loss"
+                              ? "Downline Profit/Loss"
+                              : key === "commission"
+                              ? "Commission"
+                              : "Total P & L"}
+                          </span>
+                          <div className="flex flex-col items-center ml-2">
+                            <FaSortUp
+                              className={`${
+                                sortConfig.key === key &&
+                                sortConfig.direction === "ascending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                              }`}
+                              style={{
+                                marginBottom: "-6px",
+                              }}
+                            />
+                            <FaSortDown
+                              className={`${
+                                sortConfig.key === key &&
+                                sortConfig.direction === "descending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                              }`}
+                              style={{
+                                marginTop: "-6px",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>}
                 </thead>
                 <tbody>
                   {profitLossData.length > 0 ? (
@@ -216,20 +272,15 @@ const EventProfitLoss = ({ Userid }) => {
                           className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
                           style={{
                             color:
-                              item.totalDownlineProfitLoss < 0 ? "red" : "green",
+                              item.totalUplineProfitLoss < 0 ? "red" : "green",
                           }}
                         >
-                          {item.totalDownlineProfitLoss < 0
+                          {item.totalUplineProfitLoss < 0
                             ? `-${Math.abs(
-                                item.totalDownlineProfitLoss.toFixed(2)
+                                item.totalUplineProfitLoss.toFixed(2)
                               )}`
-                            : item.totalDownlineProfitLoss.toFixed(2)}
+                            : item.totalUplineProfitLoss.toFixed(2)}
                         </td>
-
-                        <td className="px-4 py-3 text-sm text-center font-medium">
-                          {Math.abs(item.totalCommission.toFixed(2))}
-                        </td>
-
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
                           style={{
@@ -251,7 +302,9 @@ const EventProfitLoss = ({ Userid }) => {
                                 item.totalCommission
                               ).toFixed(2)}
                         </td>
-
+                        <td className="px-4 py-3 text-sm text-center font-medium">
+                          {Math.abs(item.totalCommission.toFixed(2))}
+                        </td>
                      
                       </tr>
                     ))
@@ -273,19 +326,17 @@ const EventProfitLoss = ({ Userid }) => {
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
                         <span
                           className={`${
-                            totalData.downlineProfitLoss < 0
+                            totalData.profitLoss < 0
                               ? "text-red-500"
                               : "text-green-500"
                           }`}
                         >
-                          {totalData.downlineProfitLoss < 0
-                            ? `-${Math.abs(totalData.downlineProfitLoss?.toFixed(2))}`
-                            : Math.abs(totalData.downlineProfitLoss?.toFixed(2))}
+                          {totalData.profitLoss < 0
+                            ? `-${Math.abs(totalData.profitLoss?.toFixed(2))}`
+                            : Math.abs(totalData.profitLoss?.toFixed(2))}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-sm text-center font-medium">
-                        {totalData.commission?.toFixed(2)}
-                      </td>
+                      
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
                         <span
                           className={`${
@@ -299,7 +350,9 @@ const EventProfitLoss = ({ Userid }) => {
                           )?.toFixed(2)}
                         </span>
                       </td>
-                    
+                      <td className="px-4 py-3 text-sm text-center font-medium">
+                        {totalData.commission?.toFixed(2)}
+                      </td>
                     </tr>
                   </tfoot>
                 )}
