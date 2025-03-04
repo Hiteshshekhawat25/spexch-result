@@ -10,6 +10,7 @@ function TossResult() {
 
 
     const { matchId } = useParams();
+    const [loading,setLoading] = useState(false)
     const [marketData, setMarketData] = useState([])
     const [formValue, setFormValue] = useState({
       selectionId: '',
@@ -93,30 +94,35 @@ function TossResult() {
         // selectionId : formValue?.selectionId === 'ABANDONED' ? '' : formValue?.selectionId === 'TIE' ? '' :  Number(formValue?.selectionId),
         // status : formValue?.selectionId === 'ABANDONED' ? 'ABANDONED' : formValue?.selectionId === 'TIE' ? 'TIE' : 'WINNER'
       }
-      try {
-        const response = await axios.post(`${BASE_URL}/user/transfer-toss-coin/`, body, {
-          headers: {
-  
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        console.log("response", response);
-        if (response?.data?.success) {
-          toast.success(response?.data?.message);
-          getMatchDetails()
+      setLoading(true)
+      setTimeout(async()=>{
+        try {
+          const response = await axios.post(`${BASE_URL}/user/transfer-toss-coin/`, body, {
+            headers: {
+    
+              Accept: "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          console.log("response", response);
+          if (response?.data?.success) {
+            setLoading(false)
+            toast.success(response?.data?.message);
+            getMatchDetails()
+          }
+        } catch (error) {
+          setLoading(false)
+          // Handle specific token expiry case
+          if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+            localStorage.clear();
+            alert("Session expired. Please log in again.");
+          }
+          // Handle other API errors
+          toast.error(error?.response?.data?.message)
+          console.error("API error:", error);
+          // throw new Error(error.response?.data?.message || "An error occurred, please try again.");
         }
-      } catch (error) {
-        // Handle specific token expiry case
-        if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
-          localStorage.clear();
-          alert("Session expired. Please log in again.");
-        }
-        // Handle other API errors
-        toast.error(error?.response?.data?.message)
-        console.error("API error:", error);
-        // throw new Error(error.response?.data?.message || "An error occurred, please try again.");
-      }
+      },3000)
     };
 
 
@@ -133,37 +139,36 @@ function TossResult() {
           // selectionId : formValue?.selectionId === 'ABANDONED' ? '' : formValue?.selectionId === 'TIE' ? '' :  Number(formValue?.selectionId),
           // status : formValue?.selectionId === 'ABANDONED' ? 'ABANDONED' : formValue?.selectionId === 'TIE' ? 'TIE' : 'WINNER'
         }
-        try {
-          const response = await axios.post(`${BASE_URL}/user/rollback-toss-coin/`, body, {
-            headers: {
-    
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          console.log("response", response);
-          if (response?.data?.success) {
-            toast.success(response?.data?.message);
-            getMatchDetails()
+        setLoading(true)
+        setTimeout(async()=>{
+          try {
+            const response = await axios.post(`${BASE_URL}/user/rollback-toss-coin/`, body, {
+              headers: {
+      
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            });
+            console.log("response", response);
+            if (response?.data?.success) {
+              setLoading(false)
+              toast.success(response?.data?.message);
+              getMatchDetails()
+            }
+          } catch (error) {
+            setLoading(false)
+            // Handle specific token expiry case
+            if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+              localStorage.clear();
+              alert("Session expired. Please log in again.");
+            }
+            // Handle other API errors
+            toast.error(error?.response?.data?.message)
+            console.error("API error:", error);
+            // throw new Error(error.response?.data?.message || "An error occurred, please try again.");
           }
-        } catch (error) {
-          // Handle specific token expiry case
-          if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
-            localStorage.clear();
-            alert("Session expired. Please log in again.");
-          }
-          // Handle other API errors
-          toast.error(error?.response?.data?.message)
-          console.error("API error:", error);
-          // throw new Error(error.response?.data?.message || "An error occurred, please try again.");
-        }
+        },3000)
       };
-  
- 
-  
-  
-  
-   console.log(marketData,'marketDatamarketData')
   
   
 
@@ -212,10 +217,24 @@ function TossResult() {
            {/* Transfer Coins */}
            <div className="flex-1 text-right">
              {marketData?.[0]?.transferredTossCoin == 1 && marketData?.[0]?.tossResult == 1 ?
-               <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleTossRevertCoin}>
-                 Revert Coins
-               </button>
+             loading ?   
+              <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                // onClick={handleTossRevertCoin}
+                >
+                 Loading...
+               </button>:
+               <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+               onClick={handleTossRevertCoin}
+               >
+                Revert Coins
+              </button>
                :
+               loading ?   
+               <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                 // onClick={handleTossRevertCoin}
+                 >
+                  Loading...
+                </button>:
                <button disabled={marketData?.[0]?.tossResult === 0 || marketData?.[0]?.transferredTossCoin === 1} onClick={handleTossTransferCoin} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
    
                  {marketData?.[0]?.transferredTossCoin === 1 ? "Coins Transferred Successfully" : 'Transfer Coins'}

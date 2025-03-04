@@ -122,7 +122,7 @@ const SportsSettingsModal = ({
                         <div
                         className={`relative inline-flex items-center rounded-[3px] h-[22px] w-[40px] border border-whiteGray cursor-pointer transition-colors ${
                           sport?.isChecked
-                            ? "bg-gradient-seablue"
+                            ? "bg-green-400"
                             : "bg-white"
                         }`}
                         onClick={() =>

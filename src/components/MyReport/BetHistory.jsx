@@ -18,7 +18,7 @@ const BetHistory = () => {
   const location = useLocation();
   const color = location?.state?.color;
   // const { userId, matchId, selectionId } = location.state || {};
-  console.log("location", location);
+  console.log("location1234", location?.state?.type);
 
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
@@ -86,7 +86,7 @@ const BetHistory = () => {
       setLocalLoading(true);
       try {
         const token = localStorage.getItem("authToken");
-        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}&type=${location?.state?.type}&userId=${location?.state?.userId}&fromDate=${fromDate ? fromDate : ''}&toDate=${toDate ? toDate : ''}`;
+        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}${location?.state?.type !== 'fancy' ? `&type=${location?.state?.type}` : ''}${location?.state?.type == 'fancy' ? `&selectionId=${location?.state?.selectionId}` : ''}&userId=${location?.state?.userId}&fromDate=${fromDate ? fromDate : ''}&toDate=${toDate ? toDate : ''}`;
         const response = await fetch(url, {
           headers: {
             "Content-Type": "application/json",
@@ -189,11 +189,11 @@ const BetHistory = () => {
                     ].map((key) => (
                       <th
                         key={key}
-                        className="border border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                        className="border border-gray-400 px-1 min-w-32 w-auto py-2 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
-                        <div className="flex justify-between items-center text-center">
-                          <span>{key}</span>
+                        <div className="flex justify-between w-full items-center text-center">
+                          <span className="w-full">{key}</span>
                           <div className="flex flex-col items-center ml-2">
                             <FaSortUp
                               className={`${sortConfig.key === key &&
@@ -226,20 +226,20 @@ const BetHistory = () => {
                     paginatedData.map((item, index) => (
                       <tr
                         key={index}
-                        className={`border-b border-gray-400 ${item.betType === "no" || item.betType === "lay"
+                        className={`border-b  border-gray-400 ${item.betType === "no" || item.betType === "lay"
                             ? "bg-[#faa9ba]"
                             : item.betType === "back" || item.betType === "yes"
                               ? "bg-[#72bbef]"
                               : ""
                           }`}
                       >
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.sport}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.match}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.type == 'odds'
                             ? 'Match odds'
                             : item?.type == 'bookmakers' ?
@@ -249,23 +249,23 @@ const BetHistory = () => {
                                   'TOSS' : item?.type
                           }
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.marketNameTwo}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.betType === "no" || item.betType === "lay"
                             ? "Lay"
                             : item.betType === "yes" || item.betType === "back"
                               ? "Back"
                               : "Void"}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.odds}/{item.fancyOdds}
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        {item.fancyOdds ? `${item?.fancyOdds}/${item.odds}` : item?.odds + '/' + item.fancyOdds}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.totalAmount?.toFixed(2)}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400 whitespace-nowrap">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400 whitespace-nowrap">
                           {item?.betType === "lay" || item?.betType === "no" ? (
                             <>
                               <span className="text-green-800">
@@ -288,7 +288,7 @@ const BetHistory = () => {
                             </>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {new Date(item.placeTime).toLocaleString("en-US", {
                             year: "numeric",
                             month: "short",
@@ -299,7 +299,7 @@ const BetHistory = () => {
                             hour12: true,
                           })}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {new Date(item.matchTime).toLocaleString("en-US", {
                             year: "numeric",
                             month: "short",
@@ -310,7 +310,7 @@ const BetHistory = () => {
                             hour12: true,
                           })}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           <button className="text-EgyptianBlue">Info</button>
                         </td>
                       </tr>
@@ -319,7 +319,7 @@ const BetHistory = () => {
                     <tr>
                       <td
                         colSpan="11"
-                        className="px-4 py-3 text-sm text-center"
+                        className="px-1 min-w-32 w-auto py-2 text-sm text-center"
                       >
                         No data available
                       </td>

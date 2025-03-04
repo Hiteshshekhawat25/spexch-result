@@ -33,6 +33,7 @@ function RemarkModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet,pa
               <div className=' mt-2 mx-2 flex justify-between'>
                 <input
                 value={password} 
+                type='password'
                 className='shadow border-1 w-full  max-w-[200px]  border-gray-800 outline-gray-400 rounded-md p-2  '
                 placeholder='Password'
                 onChange={(e)=>setPassword(e.target.value)}

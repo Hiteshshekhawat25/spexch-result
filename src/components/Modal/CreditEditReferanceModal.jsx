@@ -114,6 +114,7 @@ const CreditEditReferenceModal = ({
       );
 
       if (fetchResult.error) {
+        console.log(fetchResult,'fetchResultfetchResultfetchResult')
         toast.error(fetchResult.error);
       } else {
         fetchData(roleId)
@@ -156,7 +157,10 @@ const CreditEditReferenceModal = ({
           <label className="block text-[13px] font-custom font-medium text-gray-700 sm:w-1/3">
             Current
           </label>
-          <p className="w-full sm:w-2/3 text-black font-custom font-bold text-[14px]">{currentCreditRef}</p>
+          <p className="w-full sm:w-2/3 text-black font-custom font-bold text-[14px]">{new Intl.NumberFormat("en-IN", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }).format(currentCreditRef)}</p>
         </div>
   
         {/* New Credit Reference */}

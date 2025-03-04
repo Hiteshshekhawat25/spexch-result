@@ -680,7 +680,7 @@ const MatchProfitandLoss = () => {
         state: { userId,
            matchId,
             selectionId,
-            type : type == 'odds' ? type : type == 'bookmakers' ? type : '',
+            type : type == 'odds' ? type : type == 'bookmakers' ? type : 'fancy',
             selectionId : selectionId
           },
       });

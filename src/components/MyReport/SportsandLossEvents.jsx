@@ -27,6 +27,14 @@ const SportsandLossEvents = () => {
     { display: "Commission", key: "commission" },
   ];
 
+  const header2 = [
+    { display: "Sport Name", key: "sport" },
+    { display: "Event Name", key: "event" },
+    { display: "Profit & Loss", key: "totalUplineProfitLoss" },
+    { display: "Commission", key: "commission" },
+    { display: "Total P&l", key: "total P&L" },
+  ];
+
   console.log("userId", userId);
   const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
   console.log("fromDate", fromDate);
@@ -151,7 +159,9 @@ const SportsandLossEvents = () => {
         <table className="w-full table-auto border-collapse border border-gray-400">
           <thead className="bg-gray-300 text-black border border-gray-400">
             <tr>
-              {headers.map((header) => (
+              {(location?.state?.downline
+               ? header2
+                : headers).map((header) => (
                 <th
                   key={header.key}
                   className="px-4 py-2 text-sm border border-gray-400 cursor-pointer"
@@ -215,7 +225,11 @@ const SportsandLossEvents = () => {
                         item?.totalCommission
                       )?.toFixed(2)}
                 </td>
-                <td
+             { location?.state?.downline ? 
+             <td className="px-4 py-2 text-center">
+             {item?.totalCommission?.toFixed(2)}
+           </td>
+             :  <td
                   className="px-4 py-2 text-center border border-gray-400"
                   style={{
                     color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
@@ -226,11 +240,21 @@ const SportsandLossEvents = () => {
                       item?.totalCommission)?.toFixed(2)}`
                     : (item.totalDownlineProfitLoss + 
                     item?.totalCommission).toFixed(2)}
-                </td>
+                </td>}
                
+             {location?.state?.downline ?
+              <td className="px-4 py-2 text-center">
+               {item.totalDownlineProfitLoss < 0
+                    ? `-${Math.abs(item.totalDownlineProfitLoss +
+                      item?.totalCommission)?.toFixed(2)}`
+                    : (item.totalDownlineProfitLoss + 
+                    item?.totalCommission).toFixed(2)}
+            </td>
+             : 
                 <td className="px-4 py-2 text-center">
                   {item?.totalCommission?.toFixed(2)}
                 </td>
+                }
                
               </tr>
             ))}

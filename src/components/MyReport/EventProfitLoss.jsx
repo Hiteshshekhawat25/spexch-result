@@ -77,7 +77,7 @@ const EventProfitLoss = ({ Userid }) => {
 
   const handleRowClick = (gameId) => {
     navigate(`${ROUTES_CONST.SportsandLossEvents}/${gameId}`, {
-      state: { userId: userId },
+      state: { userId: userId ,downline : location?.pathname?.includes('/EventProfitLoss') ? false :true},
     });
   };
 
@@ -148,60 +148,7 @@ const EventProfitLoss = ({ Userid }) => {
             <div className="overflow-x-auto my-4 mx-4">
               <table className="w-full table-auto border-collapse border border-gray-400">
                 <thead className="border border-gray-400 bg-gray-300 text-black text-center">
-               {!location?.pathname?.includes('MyAccount') ? 
-                  <tr>
-                    {[ 
-                      "sportName",
-                      "Upline Profit/Loss",
-                      "Downline Profit/Loss",
-                      "commission",
-                    ].map((key) => (
-                      <th
-                        key={key}
-                        className="border-r border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
-                        onClick={() => handleSort(key)}
-                      >
-                        <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
-                          <span className="text-center w-full">
-                            {key === "sportName"
-                              ? "Sport Name"
-                              : key === "Uplineline Profit/Loss"
-                              ? "Uplineline Profit/Loss"
-                              : key === "Downline Profit/Loss"
-                              ? "Downline Profit/Loss"
-                              : key === "commission"
-                              ? "Commission"
-                              : "Total P & L"}
-                          </span>
-                          <div className="flex flex-col items-center ml-2">
-                            <FaSortUp
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "ascending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                              }`}
-                              style={{
-                                marginBottom: "-6px",
-                              }}
-                            />
-                            <FaSortDown
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "descending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                              }`}
-                              style={{
-                                marginTop: "-6px",
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                  :
+               {!location?.pathname?.includes('/MyAccount') ? 
                   <tr>
                     {[ 
                       "sportName",
@@ -253,11 +200,85 @@ const EventProfitLoss = ({ Userid }) => {
                         </div>
                       </th>
                     ))}
+                  </tr>
+                  :
+                  <tr>
+                    {[ 
+                      "sportName",
+                      "Profit & Loss",
+                      "commission",
+                      "Total Profit&Loss",
+                    ].map((key) => (
+                      <th
+                        key={key}
+                        className="border-r border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                        onClick={() => handleSort(key)}
+                      >
+                        <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
+                          <span className="text-center w-full">
+                            {key === "sportName"
+                              ? "Sport Name"
+                              : key === "Profit & Loss"
+                              ? "Profit & Loss"
+                              : key === "Downline Profit/Loss"
+                              ? "Downline Profit/Loss"
+                              : key === "commission"
+                              ? "Commission"
+                              : "Total P & L"}
+                          </span>
+                          <div className="flex flex-col items-center ml-2">
+                            <FaSortUp
+                              className={`${
+                                sortConfig.key === key &&
+                                sortConfig.direction === "ascending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                              }`}
+                              style={{
+                                marginBottom: "-6px",
+                              }}
+                            />
+                            <FaSortDown
+                              className={`${
+                                sortConfig.key === key &&
+                                sortConfig.direction === "descending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                              }`}
+                              style={{
+                                marginTop: "-6px",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </th>
+                    ))}
                   </tr>}
                 </thead>
                 <tbody>
                   {profitLossData.length > 0 ? (
-                    paginatedData.map((item, index) => (
+                    [...paginatedData]?.sort((a, b) => {
+                      if (sortConfig?.key !== '') {
+                        if(sortConfig?.direction == 'ascending'){
+                          console.log('runnnnn2',a[sortConfig.key] - b[sortConfig.key])
+                          if(sortConfig?.key == 'refPL'){
+                            return (a?.totalOpeningBalance - a?.creditReference) - (b?.totalOpeningBalance - b?.creditReference)
+                          }else if(sortConfig?.key == 'username'){
+                            return a.name?.localeCompare(a.name)
+                          }else{
+                            return a[sortConfig.key] - b[sortConfig.key]
+                          }
+                        }else if(sortConfig?.direction == 'descending'){
+                          console.log('runnnnn3', b[sortConfig.key] - a[sortConfig.key])
+                          if(sortConfig?.key == 'refPL'){
+                            return (b?.totalOpeningBalance - b?.creditReference) - (a?.totalOpeningBalance - a?.creditReference)
+                          }else if(sortConfig?.key == 'username'){
+                            return b?.name?.localeCompare(a?.name)
+                          }else{
+                        return  b[sortConfig.key] - a[sortConfig.key]
+                          }
+                        }}
+                    }).map((item, index) => (
                       <tr
                         key={index}
                         className="border-b border-gray-400 font-medium"
@@ -281,7 +302,11 @@ const EventProfitLoss = ({ Userid }) => {
                               )}`
                             : item.totalUplineProfitLoss.toFixed(2)}
                         </td>
-                        <td
+                      {location?.pathname?.includes('/MyAccount') ? 
+                      <td className="px-4 py-3 text-sm text-center font-medium">
+                      {Math.abs(item.totalCommission.toFixed(2))}
+                    </td>
+                      :  <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
                           style={{
                             color:
@@ -301,10 +326,36 @@ const EventProfitLoss = ({ Userid }) => {
                                 item.totalDownlineProfitLoss +
                                 item.totalCommission
                               ).toFixed(2)}
-                        </td>
+                        </td>}
+
+                        {location?.pathname?.includes('/MyAccount') ? 
+                        <td
+                        className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
+                        style={{
+                          color:
+                            item.totalDownlineProfitLoss < 0
+                              ? "red"
+                              : "green",
+                        }}
+                      >
+                        {item.totalDownlineProfitLoss < 0
+                          ? Math.abs(
+                              (
+                                item.totalDownlineProfitLoss +
+                                item.totalCommission
+                              ).toFixed(2)
+                            )
+                          : (
+                              item.totalDownlineProfitLoss +
+                              item.totalCommission
+                            ).toFixed(2)}
+                      </td>
+                        :
                         <td className="px-4 py-3 text-sm text-center font-medium">
                           {Math.abs(item.totalCommission.toFixed(2))}
                         </td>
+                        
+                        }
                      
                       </tr>
                     ))
@@ -337,22 +388,46 @@ const EventProfitLoss = ({ Userid }) => {
                         </span>
                       </td>
                       
+                     {location?.pathname?.includes('/MyAccount') ?
+                       <td className="px-4 py-3 text-sm text-center font-medium">
+                       {totalData.commission?.toFixed(2)}
+                     </td>
+                     :
+                     <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                     <span
+                       className={`${
+                         totalData.downlineProfitLoss < 0
+                           ? "text-red-500"
+                           : "text-green-500"
+                       }`}
+                     >
+                       {Math.abs(
+                         totalData.downlineProfitLoss + totalData.commission
+                       )?.toFixed(2)}
+                     </span>
+                   </td> 
+                      }
+
+                      {location?.pathname?.includes('/MyAccount') ? 
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
-                        <span
-                          className={`${
-                            totalData.downlineProfitLoss < 0
-                              ? "text-red-500"
-                              : "text-green-500"
-                          }`}
-                        >
-                          {Math.abs(
-                            totalData.downlineProfitLoss + totalData.commission
-                          )?.toFixed(2)}
-                        </span>
-                      </td>
+                      <span
+                        className={`${
+                          totalData.downlineProfitLoss < 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {Math.abs(
+                          totalData.downlineProfitLoss + totalData.commission
+                        )?.toFixed(2)}
+                      </span>
+                    </td> 
+                      : 
                       <td className="px-4 py-3 text-sm text-center font-medium">
                         {totalData.commission?.toFixed(2)}
-                      </td>
+                      </td> 
+                      
+                      }
                     </tr>
                   </tfoot>
                 )}

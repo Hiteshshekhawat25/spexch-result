@@ -226,6 +226,7 @@ const AllMatches = () => {
       {isStakeModalOpen && (
         <EditStakeModal
           onCancel={closeModals}
+          fetchMatches={fetchMatches}
           match={selectedMatch}
           onSubmit={(data) => {
             console.log(data);
@@ -246,10 +247,10 @@ const AllMatches = () => {
       <div className="bg-gray-200 text-center py-2 mb-6">
         <h1 className="text-2xl font-custom">ALL Matches</h1>
       </div>
-      <div className="flex space-x-4 mb-6">
-        <div className="w-full">
+      <div className="sm:flex sm:space-x-4  items-center justify-between mb-6">
+        <div className="w-full sm:w-[50%] sm:my-0 my-3 sm:flex justify-between gap-3">
         <select
-          className="border p-2 rounded"
+          className="border px-2 py-2 w-full my-1 sm:my-0 rounded"
           value={sport}
           onChange={handleSportChange}
         >
@@ -269,7 +270,7 @@ const AllMatches = () => {
 
         <input
           type="text"
-          className="border p-2 rounded w-1/3 max-w-[300px]"
+          className="border p-2 h-10 rounded my-1 sm:my-0 w-full max-w-[300px]"
           // placeholder="Search by EventID, MatchID..."
           value={searchTerm}
           onChange={(e) => dispatch(setSearchTerm(e.target.value))}
@@ -277,13 +278,13 @@ const AllMatches = () => {
 
         <button
           onClick={handleSearch}
-          className="bg-gray-200 text-black p-2 rounded"
+          className="bg-gray-200 w-full my-1 sm:my-0 text-black p-2 rounded"
         >
           Search
         </button>
         </div>
         <select
-          className="border p-2 rounded"
+          className="border p-2 w-full  sm:w-auto h-12 my-1 rounded"
           value={sortMatches}
           onChange={handleSortMatches}
         >
@@ -529,13 +530,13 @@ const AllMatches = () => {
           </table>
         </div>
 
-        <div className="flex justify-between py-4">
+        <div className="md:flex justify-between py-4">
           <div>
             Showing {entriesToShow * (currentPage - 1) + 1} to{" "}
             {Math.min(entriesToShow * currentPage, totalMatches)} of{" "}
             {totalMatches} matches
           </div>
-          <div className="flex space-x-2">
+          <div className="flex sm:space-x-2">
             <button
               onClick={() => handlePageChange("first")}
               className={`px-4 py-2 text-black ${

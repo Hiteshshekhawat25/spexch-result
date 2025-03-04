@@ -6,7 +6,7 @@ import { putUpdateMatchAPIAuth } from "../../Services/Newmatchapi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const EditStakeModal = ({ onCancel, onSubmit, match }) => {
+const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
   console.log(match);
   const dispatch = useDispatch();
 
@@ -82,6 +82,7 @@ const EditStakeModal = ({ onCancel, onSubmit, match }) => {
         toast.success("Stake updated successfully!", {
           position: "top-center",
         });
+        fetchMatches()
         onSubmit(); // Trigger parent update callback
         onCancel(); // Close modal
       } else {
@@ -134,6 +135,7 @@ const EditStakeModal = ({ onCancel, onSubmit, match }) => {
     }
   };
 
+  console.log('matchmatchmatchmatch',match)
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50 overflow-y-auto">
       <div className="bg-white rounded-lg w-[700px] mt-0 p-4 shadow-lg">

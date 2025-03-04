@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 
 const TransferMatchCoins = () => {
   const { matchId } = useParams();
+  const [loading,setLoading] = useState(false);
   const [marketData, setMarketData] = useState([])
   const [formValue, setFormValue] = useState({
     selectionId: '',
@@ -128,19 +129,24 @@ const TransferMatchCoins = () => {
       // status : formValue?.selectionId === 'ABANDONED' ? 'ABANDONED' : formValue?.selectionId === 'TIE' ? 'TIE' : 'WINNER'
     }
     try {
-      const response = await axios.post(`${BASE_URL}/user/transfer-odds-coin/`, body, {
-        headers: {
-
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("response", response);
-      if (response?.data?.success) {
-        toast.success(response?.data?.message);
-        getMatchDetails()
-      }
+      setLoading(true)
+      setTimeout(async()=>{
+        const response = await axios.post(`${BASE_URL}/user/transfer-odds-coin/`, body, {
+          headers: {
+  
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("response", response);
+        setLoading(false)
+        if (response?.data?.success) {
+          toast.success(response?.data?.message);
+          getMatchDetails()
+        }
+      },3000)
     } catch (error) {
+      setLoading(false)
       // Handle specific token expiry case
       if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
         localStorage.clear();
@@ -165,18 +171,23 @@ const TransferMatchCoins = () => {
       // status : formValue?.selectionId === 'ABANDONED' ? 'ABANDONED' : formValue?.selectionId === 'TIE' ? 'TIE' : 'WINNER'
     }
     try {
-      const response = await axios.post(`${BASE_URL}/user/transfer-bookmakers-coin/`, body, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("response", response);
-      if (response?.data?.success) {
-        toast.success(response?.data?.message);
-        getMatchDetails()
-      }
+      setLoading(true)
+      setTimeout(async()=>{
+        const response = await axios.post(`${BASE_URL}/user/transfer-bookmakers-coin/`, body, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("response", response);
+        setLoading(false)
+        if (response?.data?.success) {
+          toast.success(response?.data?.message);
+          getMatchDetails()
+        }
+      },3000)
     } catch (error) {
+      setLoading(false)
       // Handle specific token expiry case
       if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
         localStorage.clear();
@@ -193,23 +204,28 @@ const TransferMatchCoins = () => {
 
   const handleRevertOddsCoins = async () => {
     try {
-      const body = {
-        matchId: marketData?.[0]?._id,
-      }
-      const token = localStorage.getItem("authToken");
-      const response = await axios.post(`${BASE_URL}/user/rollback-odds-coin`, body, {
-        headers: {
-
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("response", response);
-      if (response?.data?.success) {
-        toast.success(response?.data?.message);
-        getMatchDetails()
-      }
+      setLoading(true)
+      setTimeout(async()=>{
+        const body = {
+          matchId: marketData?.[0]?._id,
+        }
+        const token = localStorage.getItem("authToken");
+        const response = await axios.post(`${BASE_URL}/user/rollback-odds-coin`, body, {
+          headers: {
+  
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("response", response);
+        setLoading(false)
+        if (response?.data?.success) {
+          toast.success(response?.data?.message);
+          getMatchDetails()
+        }
+      },3000)
     } catch (error) {
+      setLoading(false)
       console.log(error, 'Error Fetching')
     }
   }
@@ -217,27 +233,32 @@ const TransferMatchCoins = () => {
 
   const handleRevertBookmakersCoins = async () => {
     try {
-      const body = {
-        matchId: marketData?.[0]?._id,
-      }
-      const token = localStorage.getItem("authToken");
-      const response = await axios.post(`${BASE_URL}/user/rollback-bookmakers-coin`, body, {
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log("response", response);
-      if (response?.data?.success) {
-        toast.success(response?.data?.message);
-        getMatchDetails()
-      }
+      setLoading(true)
+      setTimeout(async()=>{
+        const body = {
+          matchId: marketData?.[0]?._id,
+        }
+        const token = localStorage.getItem("authToken");
+        const response = await axios.post(`${BASE_URL}/user/rollback-bookmakers-coin`, body, {
+          headers: {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log("response", response);
+        setLoading(false)
+        if (response?.data?.success) {
+          toast.success(response?.data?.message);
+          getMatchDetails()
+        }
+      },3000)
     } catch (error) {
+      setLoading(false)
       console.log(error, 'Error Fetching')
     }
   }
 
-  console.log({ marketData })
+  console.log({ loading })
   return (
     <div className="w-full p-4">
       {/* Title Section */}
@@ -283,11 +304,23 @@ const TransferMatchCoins = () => {
         {/* Transfer Coins */}
         <div className="flex-1 text-right">
           {marketData?.[0]?.transferredOddsCoin == 1 && marketData?.[0]?.oddsResult == 1 ?
-            <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertOddsCoins}>
+          loading ?   
+          <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+            // onClick={handleTossRevertCoin}
+            >
+             Loading...
+           </button>
+           :
+           <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertOddsCoins}>
               Revert Coins
             </button>
             :
-            <button disabled={marketData?.[0]?.oddsResult === 0 || marketData?.[0]?.transferredOddsCoin === 1} onClick={handleOddsTransferCoin} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
+            loading ?   
+            <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+              // onClick={handleTossRevertCoin}
+              >
+               Loading...
+             </button>: <button disabled={marketData?.[0]?.oddsResult === 0 || marketData?.[0]?.transferredOddsCoin === 1} onClick={handleOddsTransferCoin} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
 
               {marketData?.[0]?.transferredOddsCoin === 1 ? "Coins Transferred Successfully" : 'Transfer Coins'}
             </button>

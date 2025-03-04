@@ -121,14 +121,14 @@ const BetListFilter = ({
       
       {/* Show Data Source select box only for "settled" or "void" bet type */}
       {type !== "unsettled" && (
-        <div className="flex flex-col items-start">
+        <div className="flex flex-col  items-start">
           <label className="text-sm font-custom text-black mb-2">
             Data Source
           </label>
           <select
             value={dataSource || "live"}
             onChange={(e) => dispatch(setDataSource(e.target.value))}
-            className="border rounded px-7 py-2"
+            className="border rounded px-5 py-2"
           >
             <option value="">Data Source</option>
             <option value="live">LIVE DATA</option>

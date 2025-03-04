@@ -16,33 +16,33 @@ const Layout = ({ children }) => {
     <div>
       <TopHeader />
       <Suspense
-        fallback={
-          <div>
-            <ClipLoader />
-          </div>
-        }
+        // fallback={
+        //   <div>
+        //     <ClipLoader />
+        //   </div>
+        // }
       >
         <MenuHeader />
       </Suspense>
 
       <div className="md:p-6 p-4">
         <Suspense
-          fallback={
-            <div>
-              <ClipLoader />
-            </div>
-          }
+          // fallback={
+          //   <div>
+          //     <ClipLoader />
+          //   </div>
+          // }
         >
           <AddClientButton />
         </Suspense>
 
         <div className="mb-6">
           <Suspense
-            fallback={
-              <div>
-                <ClipLoader />
-              </div>
-            }
+            // fallback={
+            //   <div>
+            //     <ClipLoader />
+            //   </div>
+            // }
           >
             <BalanceHeader />
           </Suspense>

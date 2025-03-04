@@ -8,7 +8,7 @@ const LayoutHeader = ({ children }) => {
     <div>
       <TopHeader />
       <MenuHeader />
-      <div className="md:px-8 px-4 md:py-4 py-4">
+      <div className="md:px-8 px-1 md:py-4 py-4">
         <div>{children}</div>
       </div>
     </div>

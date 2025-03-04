@@ -38,7 +38,10 @@ const AccountStatement = ({ Userid }) => {
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "ascending";
     }
-    setSortConfig({ key, direction });
+    setSortConfig((prev) =>
+      prev.key === key && prev.direction === "ascending"
+        ? { key, direction: "descending" }
+        : { key, direction: "ascending" });
   };
 
   const sortedData = [...statementData].sort((a, b) => {
@@ -164,7 +167,28 @@ const AccountStatement = ({ Userid }) => {
 
             <tbody>
               {sortedData.length > 0 ? (
-                sortedData.map((item, index) => (
+                [...sortedData]?.sort((a, b) => {
+                  if (sortConfig?.key !== '') {
+                    if(sortConfig?.direction == 'ascending'){
+                      console.log('runnnnn2',a[sortConfig.key] - b[sortConfig.key])
+                      if(sortConfig?.key == 'refPL'){
+                        return (a?.totalOpeningBalance - a?.creditReference) - (b?.totalOpeningBalance - b?.creditReference)
+                      }else if(sortConfig?.key == 'username'){
+                        return a.name?.localeCompare(a.name)
+                      }else{
+                        return a[sortConfig.key] - b[sortConfig.key]
+                      }
+                    }else if(sortConfig?.direction == 'descending'){
+                      console.log('runnnnn3', b[sortConfig.key] - a[sortConfig.key])
+                      if(sortConfig?.key == 'refPL'){
+                        return (b?.totalOpeningBalance - b?.creditReference) - (a?.totalOpeningBalance - a?.creditReference)
+                      }else if(sortConfig?.key == 'username'){
+                        return b?.name?.localeCompare(a?.name)
+                      }else{
+                    return  b[sortConfig.key] - a[sortConfig.key]
+                      }
+                    }}
+                }).map((item, index) => (
                   <tr key={index} className="border-b border-gray-400">
                     <td className="px-4 py-3 text-sm text-center border border-gray-400">
                       {formatDateTime(item.createdAt)}
@@ -178,10 +202,10 @@ const AccountStatement = ({ Userid }) => {
                     <td className="px-4 py-3 text-sm text-center font-bold border border-gray-400">
                       {item.currentMainWallet}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center border border-gray-400">
+                    <td className="px-4 py-3 text-sm text-center border text-nowrap border-gray-400">
                       {item.description || userData?.data?.username}
                     </td>
-                    <td className="px-4 py-3 flex  items-center gap-2 text-sm text-center border border-gray-400">
+                    <td className="px-4 py-3 flex  items-center gap-2 text-sm text-center items-center">
                       {item?.from} <FaRegArrowAltCircleRight/> {item?.to}
                     </td>
                   </tr>

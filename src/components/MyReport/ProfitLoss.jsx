@@ -26,7 +26,7 @@ const ProfitLoss = () => {
   });
   const navigate = useNavigate();
 
-  console.log("fromDate",fromDate);
+  console.log("fromDate1234",plFilterState,fromDate,{toDate});
   console.log("todate",toDate)
 
   const handleSort = (key) => {
@@ -59,8 +59,8 @@ const ProfitLoss = () => {
           page: currentPage,
           limit: entriesToShow,
           userId,
-          fromDate,
-          toDate,
+          fromDate : fromDate,
+          toDate : toDate,
         },
         headers: {
           "Content-Type": "application/json; charset=utf-8",
@@ -85,8 +85,10 @@ const ProfitLoss = () => {
   };
 
   useEffect(() => {
-    fetchUserData();
-  }, [currentPage, entriesToShow]);
+    if(fromDate && toDate){
+      fetchUserData();
+    }
+  }, [currentPage, entriesToShow,fromDate,toDate]);
 
   const sortedData = [...profitLossData].sort((a, b) => {
     if (a[sortConfig.key] < b[sortConfig.key])

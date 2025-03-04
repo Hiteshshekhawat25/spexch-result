@@ -217,10 +217,10 @@ const BetList = ({ Userid }) => {
             ) : error ? (
               <div className="text-red-500">{error}</div>
             ) : (
-              <div className="overflow-x-auto p-4">
+              <div className="overflow-x-auto p-1">
                 <table className="w-full table-auto border-collapse border border-gray-400 p-2">
                   <thead className="border border-gray-400 bg-gray-300 text-black text-center">
-                    <tr className="text-center">
+                    <tr className="text-center w-full">
                       {[
                         "username",
                         "sportName",
@@ -235,12 +235,12 @@ const BetList = ({ Userid }) => {
                       ].map((key) => (
                         <th
                           key={key}
-                          className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer p-1"
+                          className="border border-gray-400 text-left px-1  w-auto py-1 text-sm font-medium text-black cursor-pointer p-1"
                           onClick={() => handleSort(key)}
                         >
-                          <div className="flex flex-col border-b border-gray-300 pb-2">
-                            <div className="flex justify-between items-center">
-                              <span>
+                          <div className="flex flex-col border-b border-gray-300">
+                            <div className="flex justify-between items-center ">
+                              <span className="w-full text-center">
                                 {key === "username"
                                   ? "Username"
                                   : key === "sportName"
@@ -399,36 +399,36 @@ const BetList = ({ Userid }) => {
                               setSelectedUsername(item.username);
                               setIsModalOpen(true);
                             }}
-                            className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+                            className="border border-gray-400 px-1 min-w-32 w-auto py-1 font-bold text-blue cursor-pointer"
                           >
                             {item.username}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 min-w-32 w-auto py-1">
                             {item.sport}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-5 text-nowrap  py-1">
                             {item.event}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 min-w-32 w-auto py-1">
                             {/* {item.market} */}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 min-w-32 w-auto py-1">
                             {item.selection}
                           </td>
                           <td
-                            className={`border border-gray-400 px-4 py-3 font-bold ${
-                              item.type === "no" ? "text-red-600" : "text-blue"
+                            className={`border border-gray-400 px-1 min-w-32 w-auto py-1 font-bold ${
+                              (item.betType === "no" || item?.betType == 'lay') ? "text-red-600" : "text-blue"
                             }`}
                           >
-                            {item.type === "no" ? "Lay" : "Back"}
+                            {(item.betType === "no" ||  item?.betType == 'lay') ? "Lay" : "Back"}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
-                            {item.oddsRequested}
+                          <td className="border border-gray-400 px-1 min-w-32 w-auto py-1">
+                            {item?.fancyOdds > 0? item?.fancyOdds+'/'+item.oddsRequested : item.oddsRequested}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3 font-bold">
+                          <td className="border border-gray-400 px-1 min-w-32 w-auto py-1 font-bold">
                             {item.stake?.toFixed(2)}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 w-auto py-1">
                             {new Date(item.placeTime).toLocaleDateString(
                               "en-GB",
                               {
@@ -446,7 +446,7 @@ const BetList = ({ Userid }) => {
                               }
                             )}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1  w-auto py-1">
                             {new Date(item.matchTime).toLocaleDateString(
                               "en-GB",
                               {
@@ -478,36 +478,36 @@ const BetList = ({ Userid }) => {
                               setSelectedUsername(item.username);
                               setIsModalOpen(true);
                             }}
-                            className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+                            className="border border-gray-400 px-1 min-w-32 text-[13px] w-auto py-2 font-bold text-blue cursor-pointer"
                           >
                             {item.username}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 min-w-32 text-[13px] w-auto py-2">
                             {item.sport}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 text-nowrap text-[13px] w-auto py-2">
                             {item.event}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 min-w-32 w-auto text-[13px] py-2">
                             {item.type == 'odds' ? 'MATCH ODDS' : item?.type == 'bookmakers' ? 'BOOKMAKERS' : item?.type == 'toss' ? 'TOSS' : item?.type == 'fancy' ? 'FANCY' : ''}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 text-nowrap w-auto py-2">
                             {item.selection}
                           </td>
                           <td
-                            className={`border border-gray-400 px-4 py-3 font-bold ${
-                              item.type === "no" ? "text-red-600" : "text-blue"
+                            className={`border border-gray-400 px-1 text-[13px]  py-2 font-bold ${
+                              (item.betType === "no" || item?.betType == 'lay') ? "text-red-600" : "text-blue"
                             }`}
                           >
-                            {item.type === "no" ? "Lay" : "Back"}
+                            {(item.type === "no" || item?.betType == 'lay')  ? "Lay" : "Back"}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
-                            {item.oddsRequested}
+                          <td className="border border-gray-400 px-1 text-[13px] min-w-32 w-auto py-2">
+                          {item?.fancyOdds > 0? item?.fancyOdds+'/'+item.oddsRequested : item.oddsRequested}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3 font-bold">
+                          <td className="border border-gray-400 px-1 text-[13px] min-w-32 w-auto py-2 font-bold">
                             {item.stake?.toFixed(2)}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 text-[13px] py-2 min-w-32 w-auto text-nowrap">
                             {moment(item.placeTime).format("MMMM Do YYYY, h:mm:ss")}{" "}
                             {/* {new Date(item.placeTime).toLocaleTimeString(
                               "en-US",
@@ -518,7 +518,7 @@ const BetList = ({ Userid }) => {
                               }
                             )} */}
                           </td>
-                          <td className="border border-gray-400 px-4 py-3">
+                          <td className="border border-gray-400 px-1 py-2 text-[13px] min-w-32 w-auto text-nowrap">
                           {moment(item.matchTime).format("MMMM Do YYYY, h:mm:ss")}{" "}
                           </td>
                         </tr>
@@ -527,7 +527,7 @@ const BetList = ({ Userid }) => {
                       <tr>
                         <td
                           colSpan="10"
-                          className="border border-gray-400 px-4 py-3"
+                          className="border border-gray-400 px-1 min-w-32 w-auto py-2"
                         >
                           No data found!
                         </td>

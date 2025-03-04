@@ -175,7 +175,7 @@ export const putUpdateMatchAPIAuth = async (url, params) => {
 };
 
 // Api to get list of everyone in downline list
-export const fetchDownlineData = async (currentPage, entriesToShow, roleId) => {
+export const fetchDownlineData = async (currentPage, entriesToShow, roleId,status) => {
   try {
     const token = localStorage.getItem("authToken");
     const params = {
@@ -188,7 +188,7 @@ export const fetchDownlineData = async (currentPage, entriesToShow, roleId) => {
       params.role = roleId;
     }
 
-    const response = await axios.get(`${BASE_URL}/user/get-user`, {
+    const response = await axios.get(`${BASE_URL}/user/get-user${status ? `?status=${status == 'All'? '' : status}` : ''}`, {
       params: params,
       headers: {
         "Content-Type": "application/json",

@@ -54,7 +54,7 @@ const ActivityLog = ({ Userid }) => {
   //     fetchActivityLogs();
   //   }
   // }, [Userid, currentPage, entriesToShow, dispatch]);
-  console.log("Userid", Userid);
+  console.log("Userid", logs);
   console.log("userId", userId);
   useEffect(() => {
     const id = Userid || userId;
@@ -175,9 +175,9 @@ const ActivityLog = ({ Userid }) => {
                 <th className="border border-gray-400 px-4 py-2 text-left">
                   IP Address
                 </th>
-                <th className="border border-gray-400 px-4 py-2 text-left">
+                {/* <th className="border border-gray-400 px-4 py-2 text-left">
                   ISP
-                </th>
+                </th> */}
                 <th className="border border-gray-400 px-4 py-2 text-left">
                   City/State/Country
                 </th>
@@ -203,9 +203,9 @@ const ActivityLog = ({ Userid }) => {
                   <td className="border border-gray-400 px-4 py-2">
                     {log.ipAddress}
                   </td>
-                  <td className="border border-gray-400 px-4 py-2">
+                  {/* <td className="border border-gray-400 px-4 py-2">
                     {log.isp}
-                  </td>
+                  </td> */}
                   <td className="border border-gray-400 px-4 py-2">
                     {log.city}/{log.country}
                   </td>

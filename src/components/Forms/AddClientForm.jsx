@@ -259,6 +259,10 @@ export const AddClientForm = ({ closeModal }) => {
     closeModal();
   };
 
+
+
+  console.log(formData)
+
   return (
     <div className="bg-white shadow-lg">
       <h2 className="flex text-white font-custom text-[15px] font-semibold mb-4 py-2 px-2 bg-gradient-blue">
@@ -269,6 +273,7 @@ export const AddClientForm = ({ closeModal }) => {
         />
       </h2>
       <form
+       autoComplete="off"
         onSubmit={handleSubmit}
         className="gap-2.5 md:px-6 px-4 flex flex-col"
       >
@@ -280,6 +285,7 @@ export const AddClientForm = ({ closeModal }) => {
             type="text"
             name="username"
             value={formData.username}
+             autoComplete="username"
             placeholder="Username..."
             onChange={handleChange}
             className="w-full md:w-2/3 h-8 p-2 border border-whiteGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
@@ -303,6 +309,7 @@ export const AddClientForm = ({ closeModal }) => {
           <input
             type="text"
             name="name"
+            autoComplete="off"
             value={formData.name}
             placeholder="Name..."
             onChange={handleChange}
@@ -410,6 +417,7 @@ export const AddClientForm = ({ closeModal }) => {
               onChange={handleChange}
               className="w-full h-8 p-2 border border-lightGray rounded focus:outline-none focus:ring-1 focus:ring-gray-700 text-[13px]"
               required
+              autoComplete="new-password"
             />
             <span
               onClick={() => setShowPassword(!showPassword)}

@@ -155,7 +155,9 @@ const MenuHeader = () => {
         ref={menuWrapperRef}
       >
         <ul className="flex">
-          {menuItems.map((item, index) => (
+          {menuItems.map((item, index) =>{
+            console.log( location.pathname?.includes(item?.subMenu?.find((item)=>item?.link == location.pathname)?.link)  ,'papapapapapaapapappa')
+            return  (
             <li
               key={index}
               className="relative text-sm border-r border-gray-500"
@@ -176,8 +178,8 @@ const MenuHeader = () => {
                     setActiveMenu(item.link);
                     item.subMenu && toggleSubMenu(item.name, index);
                   }}
-                  className={` border-b-2 h-full flex items-center px-2 py-1.5 text-[13px] ${
-                    activeMenu === item.link
+                  className={` border-b-1 h-full flex items-center px-2 py-1.5 text-[13px] ${
+                  item?.subMenu?.length > 0 ? item?.subMenu?.find((item)=>item?.link == location.pathname)  : location.pathname?.includes(item.link)
                       ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
                       : "border-transparent hover:underline hover:decoration-black"
                   }`}
@@ -189,7 +191,7 @@ const MenuHeader = () => {
                 </Link>
               )}
             </li>
-          ))}
+          )})}
         </ul>
 
         {menuItems.map((item, index) =>

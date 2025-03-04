@@ -134,6 +134,9 @@ const MyProfile = ({ Userid, Role }) => {
   };
 
 
+  console.log((userData?.data?._id == profile?.createdBy) || !profile?.createdBy,'(userData?.data?._id == profile?.createdBy) || !profile?.createdBy')
+
+
   return (
     <div className="border border-gray-400 rounded-[4px] bg-white shadow-sm">
       {/* Header */}
@@ -220,7 +223,8 @@ const MyProfile = ({ Userid, Role }) => {
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Password</span>
           <span className="flex items-center sm:ml-4 sm:py-0 py-4">
             <span className="mr-2">********</span>
-          {userData?.data?._id == profile?.createdBy &&  <FaRegEdit
+          {((userData?.data?._id == profile?.createdBy) || !profile?.createdBy )&&  
+          <FaRegEdit
               className="text-blue cursor-pointer"
               onClick={handleOpenChangePasswordModal}
             />}
@@ -280,19 +284,19 @@ const MyProfile = ({ Userid, Role }) => {
         />
       )}
 
-      {isChangePasswordModalOpen && (
+      {/* {isChangePasswordModalOpen && (
         <ChangePasswordModal
           userId={Userid}
           onCancel={() => setIsChangePasswordModalOpen(false)}
         />
-      )}
+      )} */}
 
-      {/* {betpasswordModal && (
+      {betpasswordModal && (
         <BetPasswordModal
           userId={Userid}
           onCancel={() => setBetpasswordModal(false)}
         />
-      )} */}
+      )}
       {isEditExposureLimitModalOpen && modalData && (
         <EditExposureLimitModal
           username={modalData.username}

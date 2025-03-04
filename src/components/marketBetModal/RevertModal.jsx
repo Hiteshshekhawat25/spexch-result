@@ -23,6 +23,7 @@ function RevertModal({ showUser, setShowUser,setRemark,remark,handleDeleteBet,pa
             <div className="modal-body flex-1 overflow-y-auto p-4 text-sm relative">
               <div className=' mt-2 mx-2 flex justify-between'>
                 <input
+                type='password'
                 value={password} 
                 className='shadow border-1 w-full  max-w-[200px]  border-gray-800 outline-gray-400 rounded-md p-2  '
                 placeholder='Password'

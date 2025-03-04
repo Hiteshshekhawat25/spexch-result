@@ -260,8 +260,9 @@ function ManageBets({ Userid }) {
                   "date",
                   "odds",
                   // "status",
-                  "amount",
-                  "potential",
+                  "type",
+                  "selection",
+                  "P&L",
                   "Actions",
                 ].map((key) => (
                   <th
@@ -269,9 +270,9 @@ function ManageBets({ Userid }) {
                     className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer p-1"
                     onClick={() => handleSort(key)}
                   >
-                    <div className="flex flex-col border-b border-gray-300 pb-2">
+                    <div className="flex flex-col border-b border-gray-300 pb-1">
                       <div className="flex justify-between items-center">
-                        <span>
+                        <span className="w-full text-center">
                           {key === "sportName" ? (
                             "Sport Name"
                           ) : key === "event" ? (
@@ -284,10 +285,12 @@ function ManageBets({ Userid }) {
                             "Odds"
                           ) : // : key === "status"
                           // ? "Bet Status"
-                          key === "amount" ? (
-                            "Amount"
-                          ) : key === "potential" ? (
-                            "Potentialwin"
+                          key === "p&l" ? (
+                            "P&L"
+                          ) : key === "selection" ? (
+                            "Selection"
+                          ) : key === "type" ? (
+                            "Type"
                           ) : key === "" ? (
                             <input
                               type="checkbox"
@@ -338,12 +341,14 @@ function ManageBets({ Userid }) {
                 dataLiability.map((item, index) => (
                   <tr key={index}>
                     <td>
+                      <label>
                       <input
                         type="checkbox"
                         checked={checkbox?.includes(item?._id) ? true : false}
                         value={item?._id}
                         onChange={handleCheckbox}
                       />
+                      </label>
                     </td>
 
                     <td
@@ -360,13 +365,13 @@ function ManageBets({ Userid }) {
                       {item.sport}
                     </td>
 
-                    <td className="border border-gray-400 px-4 py-3">
+                    <td className="border text-nowrap border-gray-400 px-4 py-3">
                       {item.event}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
                       {item.type == 'toss' ? 'TOSS' : item?.type == 'odds' ? 'MATCH ODDS' : item?.type == 'bookmakers' ? 'BOOKMAKERS' : item?.type == 'fancy' ? 'FANCY' : ''}
                     </td>
-                    <td className="border border-gray-400 px-4 py-3">
+                    <td className="border border-gray-400 px-4 text-nowrap py-3">
                       {moment(item.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
@@ -375,11 +380,14 @@ function ManageBets({ Userid }) {
                     {/* <td className="border border-gray-400 px-4 py-3">
                       {item?.betstatus?.toUpperCase()}
                     </td> */}
-                    <td className="border border-gray-400 px-4 py-3">
-                      {item.amount.toFixed(2) || 0}
+                      <td className={`border border-gray-400 px-4 py-3 text-nowrap`}>
+                      {item.selection}
                     </td>
-                    <td className="border border-gray-400 px-4 py-3">
-                      {item.potentialWin.toFixed(2) || 0}
+                    <td className={`border border-gray-400 px-4 py-3 ${(item.betType == 'no' || item.betType == 'lay') ? 'text-red-500 font-bold' : 'text-blue font-bold'}`}>
+                      {(item.betType == 'no' || item.betType == 'lay') ? 'Lay' : 'Back'}
+                    </td>
+                    <td className="border text-nowrap border-gray-400 px-4 py-3">
+                    <span className={item.potentialWin < 0 ? "text-red-600" : "text-green-600 font-bold"}>{item.potentialWin.toFixed(2)}</span> <span className="text-red-700 font-bold">(-{item.amount.toFixed(2) || 0})</span>
                     </td>
                     <td className="border border-gray-400  py-3">
                       <div className="sm:flex gap-y-2 gap-x-3 justify-center">

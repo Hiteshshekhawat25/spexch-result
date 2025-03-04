@@ -51,9 +51,9 @@ const Banking = () => {
 
   const columns = [
     { key: "username", label: "UID" },
-    { key: "openingBalance", label: "Balance" },
-    { key: "totalBalance", label: "Available D/W" },
-    { key: "exposure", label: "Exposure" },
+    { key: "totalOpeningBalance", label: "Balance" },
+    { key: "totalOpeningBalance", label: "Available D/W" },
+    { key: "totalExposureBalance", label: "Exposure" },
     { key: "creditReference", label: "Credit Referance" },
     { key: "referance", label: "Referance P/L" },
     { key: "depositwithdraw", label: "Deposit/Withdraw" },
@@ -143,6 +143,7 @@ const Banking = () => {
   const handleButtonClick = (status, index) => {
     setEditedData((prevState) => {
       const updatedData = [...prevState];
+      console.log(updatedData,'updatedData')
 
       if (selectedButtonRow !== null && selectedButtonRow !== index) {
         updatedData[selectedButtonRow] = {
@@ -178,7 +179,7 @@ const Banking = () => {
         updatedData[index] = {
           ...updatedData[index],
           depositwithdrawStatus: "W",
-          depositwithdraw: filteredData[index]?.totalBalance || "",
+          depositwithdraw: filteredData[index]?.totalAvailableBalance || "",
           highlightFull: true,
         };
       } else {
@@ -335,7 +336,11 @@ const Banking = () => {
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
       direction = "descending";
     }
-    setSortConfig({ key, direction });
+    setSortConfig((prev) =>
+      prev.key === key && prev.direction === "ascending"
+        ? { key, direction: "descending" }
+        : { key, direction: "ascending" }
+    );
   };
 
   const sortedData = [...filteredData].sort((a, b) => {
@@ -396,24 +401,24 @@ const Banking = () => {
               role.role_name.toLowerCase() === "master" ||
               role.role_name.toLowerCase() === "agent"
           );
-          if (masterAgentRoles.length > 0) {
-            const fetchPromises = masterAgentRoles.map((role) =>
-              fetchDownlineData(1, 10000, role.role_id)
-            );
-            const results = await Promise.all(fetchPromises);
+          // if (masterAgentRoles.length > 0) {
+          //   const fetchPromises = masterAgentRoles.map((role) =>
+          //     fetchDownlineData(1, 10000, role.role_id)
+          //   );
+          //   const results = await Promise.all(fetchPromises);
 
-            const combinedData = results.flatMap((result) => result.data || []);
-            const totalUsers = combinedData.length;
-            setTotalUsers(totalUsers);
+          //   const combinedData = results.flatMap((result) => result.data || []);
+          //   const totalUsers = combinedData.length;
+          //   setTotalUsers(totalUsers);
 
-            const startIndex = (currentPage - 1) * entriesToShow;
-            const endIndex = startIndex + entriesToShow;
-            const paginatedData = combinedData.slice(startIndex, endIndex);
+          //   const startIndex = (currentPage - 1) * entriesToShow;
+          //   const endIndex = startIndex + entriesToShow;
+          //   const paginatedData = combinedData.slice(startIndex, endIndex);
 
-            dispatch(setDownlineData(paginatedData));
-          } else if (rolesData.length > 0) {
+          //   dispatch(setDownlineData(paginatedData));
+          // } else if (rolesData.length > 0) {
             setRoleId(rolesData[0].role_id);
-          }
+          // }
         } else if (location.pathname.includes("/user-banking")) {
           const userRole = rolesData.find((role) => role.role_name === "user");
           if (userRole) {
@@ -553,7 +558,28 @@ const Banking = () => {
               </tr>
             </thead>
             <tbody>
-              {sortedData.map((item, index) => (
+              {sortedData?.sort((a, b) => {
+                      if (sortConfig?.key !== '') {
+                        if(sortConfig?.direction == 'ascending'){
+                          console.log('runnnnn2',a[sortConfig.key] , b[sortConfig.key],a)
+                          if(sortConfig?.key == 'referance'){
+                            return (a?.totalOpeningBalance - a?.creditReference) - (b?.totalOpeningBalance - b?.creditReference)
+                          }else if(sortConfig?.key == 'username'){
+                            return a.name?.localeCompare(a.name)
+                          }else{
+                            return a[sortConfig.key] - b[sortConfig.key]
+                          }
+                        }else if(sortConfig?.direction == 'descending'){
+                          console.log('runnnnn3', b[sortConfig.key] , a[sortConfig.key])
+                          if(sortConfig?.key == 'referance'){
+                            return (b?.totalOpeningBalance - b?.creditReference) - (a?.totalOpeningBalance - a?.creditReference)
+                          }else if(sortConfig?.key == 'username'){
+                            return b?.name?.localeCompare(a?.name)
+                          }else{
+                        return  b[sortConfig.key] - a[sortConfig.key]
+                          }
+                        }}
+                    }).map((item, index) => (
                 <tr
                   key={item._id}
                   className="border border-gray-400 bg-white"
@@ -801,6 +827,7 @@ const Banking = () => {
                 currentCreditRef={selectedUser.creditReference}
                 onSubmit={handleSubmitFunction}
                 user={selectedUser}
+                fetchData={fetchData}
                 userId={selectedUser?._id}
                 currentPage={currentPage}
                 entriesToShow={entriesToShow}

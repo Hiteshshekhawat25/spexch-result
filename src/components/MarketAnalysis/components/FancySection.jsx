@@ -204,8 +204,8 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
         </div>
         <div className="flex items-center justify-end border-t border-[#7e97a7]">
           <div className="w-[calc(5rem_*_6)] flex justify-end pt-2 ">
-            <div className="flex items-center justify-center text-xs font-semibold py-1 md:w-[5rem] w-[3rem] rounded-tl-lg bg-[#faa9ba]">No</div>
-            <div className="flex items-center justify-center text-xs font-semibold py-1 md:w-[5rem] w-[3rem] rounded-tr-lg bg-[#72bbef]">Yes</div>
+            <div className="flex items-center justify-center text-xs font-semibold py-1 md:w-[5rem] w-[4rem] rounded-tl-lg bg-[#faa9ba]">No</div>
+            <div className="flex items-center justify-center text-xs font-semibold py-1 md:w-[5rem] w-[4rem] rounded-tr-lg bg-[#72bbef]">Yes</div>
             <div className="w-[calc(5rem_*_2)] p-1 flex justify-center text-xs font-semibold max-md:hidden">
               Min/Max
             </div>
@@ -269,7 +269,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
                           onClick={() => handleBetData(item, 'no', item?.oddsNo)}
                           className={`${(blink && previous?.length && isNoBlinking) ? 'blink !bg-yellow-100' : ''} 
                               ${(item?.marketId === betData?.selectionId && betData?.betType === 'no') ? 'active' : ''}
-                              h-[2.625rem] md:w-[5rem] w-[3rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#f4496d] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#faa9ba]`}>
+                              h-[2.625rem] md:w-[5rem] w-[4rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#f4496d] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#faa9ba]`}>
                           <div className="text-xs font-semibold text-[#212529]">{item?.runsNo}</div>
                           <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsNo).toFixed(2))}</div>
                         </div>
@@ -277,7 +277,7 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
                           onClick={() => handleBetData(item, 'yes', item?.oddsYes)}
                           className={`${(blink && previous?.length && isYesBlinking) ? 'blink !bg-yellow-100' : ''} 
                             ${(item?.marketId === betData?.selectionId && betData?.betType === 'yes') ? 'active' : ''}
-                              h-[2.625rem] md:w-[5rem] w-[3rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#1a8ee1] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#72bbef]`}>
+                              h-[2.625rem] md:w-[5rem] w-[4rem] flex flex-col items-center justify-center cursor-pointer  [&.active]:bg-[#1a8ee1] [&.active]:shadow-[inset_0_1px_3px_#0000007f] [&.active]:text-white bg-[#72bbef]`}>
                           <div className="text-xs font-semibold text-[#212529]">{item?.runsYes}</div>
                           <div className="text-[0.688rem] text-[#212529]">{formatNumber(Number(item?.oddsYes).toFixed(2))}</div>
                         </div>

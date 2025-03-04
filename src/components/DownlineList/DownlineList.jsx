@@ -6,6 +6,13 @@ import { RiArrowUpDownFill } from "react-icons/ri";
 import { MdSettings, MdDelete, MdManageHistory } from "react-icons/md";
 import { FaUserAlt } from "react-icons/fa";
 import { BsBuildingFillLock } from "react-icons/bs";
+import banking from '../../assets/banking-icon.svg';
+import pl from '../../assets/profit-loss-icon.svg';
+import betHistory from '../../assets/bet-history-icon.svg';
+import setting from '../../assets/settting-icon.svg';
+import profile from '../../assets/profile-icon.svg';
+import sportSetting from '../../assets/sport-setting-icon.svg';
+import deleteIcon from '../../assets/delete-icon.svg';
 import CreditEditReferenceModal from "../Modal/CreditEditReferanceModal";
 import EditExposureLimitModal from "../Modal/EditExposureLimitModal";
 import {
@@ -83,9 +90,7 @@ const DownlineList = () => {
   const { startFetchData } = useSelector((state) => state.downline);
   const navigate = useNavigate();
 
-  console.log("startFetchDatastartFetchData", startFetchData);
 
-  console.log("roleIdroleIdroleId", roleId);
   const isMasterDownlineList = location.pathname.includes(
     "/master-downline-list"
   );
@@ -138,15 +143,22 @@ const DownlineList = () => {
 
 
   useEffect(() => {
-    let arr = searchTerm?.length
-      ? searchData
-      : userFetchList.length > 0
-        ? userFetchList
-        : userList.length > 0
-          ? userList
-          : downlineData
-          console.log(arr,'098765432098765432876543')
-    setDataList(arr)
+    console.log(userFetchList,userList,downlineData,searchData,'098765432098765432876543')
+    if(!location?.pathname?.includes('/user-downline-list')){
+            let arr = searchTerm?.length
+              ? searchData
+              : userFetchList.length > 0
+                ? userFetchList
+                : userList.length > 0
+                  ? userList
+                  : downlineData
+            setDataList(arr)
+          }else{
+            let arr2 = searchTerm?.length
+            ? searchData : 
+            downlineData
+            setDataList(arr2)
+          }
   }, [searchData?.length, userFetchList.length, userList.length, downlineData?.length,isDeleteModalOpen])
 
   useEffect(() => {
@@ -158,7 +170,6 @@ const DownlineList = () => {
 
 
   const handleSearch = async () => {
-    if (searchTerm?.length) {
       try {
         const res = await searchDownline(
           `user/get-user?page=1&limit=10&search=${searchTerm}&role=${roleId}`
@@ -168,7 +179,6 @@ const DownlineList = () => {
         console.log(error);
       }
     }
-  };
 
 
   const fetchData = async (roleId) => {
@@ -185,7 +195,8 @@ const DownlineList = () => {
         const result = await fetchDownlineData(
           currentPage,
           entriesToShow,
-          roleId
+          roleId,
+          
         );
   
         if (result && result.data) {
@@ -206,7 +217,7 @@ const DownlineList = () => {
 
   useEffect(() => {
     if (roleId) {
-      console.log("098765432098765432876543");
+      console.log("Abcd2");
       const fetchData = async () => {
         try {
           const token = localStorage.getItem("authToken");
@@ -219,7 +230,8 @@ const DownlineList = () => {
           const result = await fetchDownlineData(
             currentPage,
             entriesToShow,
-            roleId
+            roleId,
+            selectedFilter
           );
     
           if (result && result.data) {
@@ -234,13 +246,14 @@ const DownlineList = () => {
           dispatch(setLoading(false));
         }
       };
-    
+
       fetchData();
     }
   }, [
     currentPage,
     entriesToShow,
     roleId,
+    selectedFilter,
     isDeleteModalOpen,
     startFetchData,
     location.pathname,
@@ -252,8 +265,8 @@ const DownlineList = () => {
 
   useEffect(() => {
     if (location.pathname.includes("/master-downline-list")) {
+      console.log('riiiiiiiiiiiii')
       const fetchUserRoles = async () => {
-        console.log("rrrrrruuuuuunnnnnnnn2");
         try {
           const token = localStorage.getItem("authToken");
           if (token) {
@@ -264,37 +277,39 @@ const DownlineList = () => {
                 role_id: role._id,
               }));
               setRoles(rolesData);
-
+              
               const masterAgentRoles = rolesData.filter(
                 (role) =>
                   role.role_name.toLowerCase() === "master" ||
-                  role.role_name.toLowerCase() === "agent" ||
-                  role.role_name.toLowerCase() === "sub-admin" ||
-                  role.role_name.toLowerCase() === "super" ||
-                  role.role_name.toLowerCase() === "white-level"
+                role.role_name.toLowerCase() === "agent" ||
+                role.role_name.toLowerCase() === "sub-admin" ||
+                role.role_name.toLowerCase() === "super" ||
+                role.role_name.toLowerCase() === "white-level"
               );
-
+              
               if (masterAgentRoles.length > 0) {
                 // Fetch all data for each role without pagination
                 const fetchPromises = masterAgentRoles.map((role) =>
-                  fetchDownlineData(1, 10000, role.role_id)
-                );
-
-                const results = await Promise.all(fetchPromises);
-
-                const combinedData = results.flatMap(
-                  (result) => result.data || []
-                );
-
-                const totalUsers = combinedData.length;
-                setTotalUsers(totalUsers);
-
-                const startIndex = (currentPage - 1) * entriesToShow;
-                const endIndex = startIndex + entriesToShow;
-                const paginatedData = combinedData.slice(startIndex, endIndex);
-
-                dispatch(setDownlineData(paginatedData));
-              } else if (rolesData.length > 0) {
+                  fetchDownlineData(1, 10000, role.role_id,selectedFilter)
+              );
+              
+              const results = await Promise.all(fetchPromises);
+              
+              const combinedData = results.flatMap(
+                (result) => result.data || []
+              );
+              console.log("Abcd1",rolesData[0].role_id);
+              
+              const totalUsers = combinedData.length;
+              setTotalUsers(totalUsers);
+              
+              const startIndex = (currentPage - 1) * entriesToShow;
+              const endIndex = startIndex + entriesToShow;
+              const paginatedData = combinedData.slice(startIndex, endIndex);
+              setDataList(paginatedData)
+              dispatch(setDownlineData(paginatedData));
+            } else if (rolesData.length > 0) {
+                console.log("Abcd1");
                 setRoleId(rolesData[0].role_id);
               }
             } else {
@@ -307,10 +322,11 @@ const DownlineList = () => {
       };
       fetchUserRoles();
     }
-  }, [token, location.pathname, currentPage, entriesToShow, dispatch]);
+  }, [token, location.pathname, currentPage,selectedFilter, entriesToShow, dispatch]);
 
   useEffect(() => {
     if (location.pathname.includes("/user-downline-list")) {
+      console.log("Abcd3");
       const fetchUserRoles = async () => {
         console.log("rrrrrruuuuuunnnnnnnn1");
         try {
@@ -342,7 +358,9 @@ const DownlineList = () => {
       };
       fetchUserRoles();
     }
-  }, [token, location.pathname]);
+
+    return ()=>setUserFetchList([])
+  }, [token, location.pathname,selectedFilter]);
   // const sortedData = useMemo(() => {
   //   // console.log("filteredData", filteredData);
   //   if (!sortConfig.key) return filteredData;
@@ -388,6 +406,7 @@ const DownlineList = () => {
         : { key, direction: "ascending" }
     );
   };
+
   const handleSubmitFunction = (newCreditRef, password) => {
     console.log("New Credit Ref:", newCreditRef, "Password:", password);
   };
@@ -396,6 +415,7 @@ const DownlineList = () => {
     setSelectedUser(user);
     setIsModalOpen(true);
   };
+
   const handleListView = (user) => {
     setCreditReferenceTransactionList(user);
   };
@@ -521,22 +541,22 @@ const DownlineList = () => {
   //   }
   // };
 
-  const fetchUsers = async () => {
-    if (!selectedFilter) return;
-    try {
-      const fetchedUsers = await fetchUsersByStatus(selectedFilter, roleId);
-      setUserList(fetchedUsers);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-    }
-  };
+  // const fetchUsers = async () => {
+  //   if (!selectedFilter) return;
+  //   try {
+      // const fetchedUsers = await fetchUsersByStatus(selectedFilter, roleId);
+  //     setUserList(fetchedUsers);
+  //   } catch (error) {
+  //     console.error("Error fetching users:", error);
+  //   }
+  // };
 
   const handleFilterChange = (e) => {
     setSelectedFilter(e.target.value);
   };
 
   useEffect(() => {
-    fetchUsers();
+    // fetchUsers();
   }, [selectedFilter]);
 
   const handleDelete = async (item) => {
@@ -596,7 +616,7 @@ const DownlineList = () => {
   };
 
 
-  console.log(dataList)
+  console.log({roleId,role,roles},'rorlorolorl')
 
   return (
     <>
@@ -710,7 +730,7 @@ const DownlineList = () => {
                     ].map(({ key, label }) => (
                       <th
                         key={key}
-                        className="border border-gray-400 text-left px-3 p-2 text-[12.5px] text-nowrap text-black cursor-pointer"
+                        className="border border-gray-400 text-left px-3 p-2 text-md text-nowrap text-black cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between">
@@ -749,7 +769,6 @@ const DownlineList = () => {
                   {dataList?.length ? (
                     [...dataList]?.sort((a, b) => {
                       if (sortConfig?.key !== '') {
-                        console.log('runnnnn1',sortConfig?.key)
                         if(sortConfig?.direction == 'ascending'){
                           console.log('runnnnn2',a[sortConfig.key] - b[sortConfig.key])
                           if(sortConfig?.key == 'refPL'){
@@ -947,7 +966,7 @@ const DownlineList = () => {
                               fontFamily: "Tahoma, Helvetica, sans-serif",
                             }}
                           >
-                            {item?.partnership}
+                            {location?.pathname?.includes('/user-downline-list') ? 100 : item?.partnership}
                           </td>
                         )}
                         <td
@@ -1048,14 +1067,14 @@ const DownlineList = () => {
                                   }
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                                 >
-                                  <RiArrowUpDownFill className="text-darkgray" />
+                                   <img src={pl} className="text-darkgray" />
                                 </div>
 
                                 <div
                                   onClick={() => handleHistoryClick(item)}
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                                 >
-                                  <MdManageHistory className="text-darkgray" />
+                                  <img src={betHistory} className="text-darkgray" />
                                 </div>
 
                                 <div
@@ -1065,7 +1084,7 @@ const DownlineList = () => {
                                   }}
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >
-                                  <FaUserAlt className="text-darkgray" />
+                                  <img src={profile} className="text-darkgray" />
                                 </div>
                               </>
                             ) : (
@@ -1075,7 +1094,7 @@ const DownlineList = () => {
                                   title="Banking"
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
                                 >
-                                  <AiFillDollarCircle className="text-darkgray" />
+                                  <img src={banking} className="text-darkgray" />
                                 </div>
 
                                 {!isMasterDownlineList && (
@@ -1085,7 +1104,7 @@ const DownlineList = () => {
                                     }
                                     className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                                   >
-                                    <RiArrowUpDownFill className="text-darkgray" />
+                                    <img src={pl} className="text-darkgray" />
                                   </div>
                                 )}
 
@@ -1094,7 +1113,7 @@ const DownlineList = () => {
                                     onClick={() => handleHistoryClick(item)}
                                     className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                                   >
-                                    <MdManageHistory className="text-darkgray" />
+                                    <img src={betHistory} className="text-darkgray" />
                                   </div>
                                 )}
 
@@ -1103,7 +1122,7 @@ const DownlineList = () => {
                                   title="Change status"
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
                                 >
-                                  <MdSettings className="text-darkgray" />
+                                  <img src={setting} className="text-darkgray" />
                                 </div>
 
                                 <div
@@ -1113,7 +1132,7 @@ const DownlineList = () => {
                                   }}
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >
-                                  <FaUserAlt className="text-darkgray" />
+                                  <img src={profile} className="text-darkgray" />
                                 </div>
 
                                 <div
@@ -1121,7 +1140,7 @@ const DownlineList = () => {
                                   title="Sports Settings"
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >
-                                  <BsBuildingFillLock className="text-darkgray" />
+                                  <img src={sportSetting} className="text-darkgray" />
                                 </div>
 
                                 <div
@@ -1129,7 +1148,7 @@ const DownlineList = () => {
                                   title="Delete"
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >
-                                  <MdDelete className="text-darkgray" />
+                                  <img src={deleteIcon} className="text-darkgray" />
                                 </div>
                               </>
                             )}

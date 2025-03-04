@@ -122,6 +122,7 @@ const EditExposureLimitModal = ({
         // toast.error(fetchResult.error);
       } else {
         fetchData(roleId)
+        onCancel()
       }
     } catch (error) {
       console.error("Error:", error);
@@ -153,7 +154,10 @@ const EditExposureLimitModal = ({
               Current
             </label>
             <p className="w-full sm:w-2/3 text-black font-custom font-bold text-[13px]">
-              {currentExposureLimit}
+              {new Intl.NumberFormat("en-IN", {
+                              minimumFractionDigits: 0,
+                              maximumFractionDigits: 2,
+                            }).format(currentExposureLimit)}
             </p>
           </div>
 

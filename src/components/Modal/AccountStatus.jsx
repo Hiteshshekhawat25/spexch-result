@@ -139,7 +139,7 @@ const AccountStatus = ({
       } else {
         fetchData(roleId)
           dispatch(setLoading(false));
-          dispatch(setDownlineData(result.data));
+          // dispatch(setDownlineData(result.data));
           setPassword("");
           toast.success("Status updated successfully.");
         

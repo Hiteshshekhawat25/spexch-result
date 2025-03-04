@@ -69,7 +69,7 @@ const ProfitLossUser = () => {
   const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
 
   const handleRowClick = (matchId, id, selectionId,type,userId) => {
-    navigate(`/bet-history/${matchId}/${selectionId}/${id}`,{state : {color  : true,fromDate,toDate,type,userId}});
+    navigate(`/bet-history/${matchId}/${selectionId}/${id}`,{state : {color  : true,fromDate,toDate,type,userId,selectionId}});
   };
 
   useEffect(() => {
@@ -172,11 +172,11 @@ const ProfitLossUser = () => {
                     ].map((key) => (
                       <th
                         key={key}
-                        className="border border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                        className="border border-gray-400 px-2 py-1 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
-                        <div className="flex justify-between items-center text-center">
-                          <span>
+                        <div className="flex justify-between w-full items-center text-center">
+                          <span className="text-center w-full">
                             {key === "User Name"
                               ? "User Name"
                               : key === "Sport Name"

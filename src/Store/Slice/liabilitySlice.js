@@ -12,9 +12,9 @@ const initialState = {
 export const liabilityBook = createAsyncThunk('liability', async (data) => {
   try {
     const token = localStorage.getItem("authToken");
-
+    console.log(data,'data12345')
     // Construct the base URL
-    let url = `${BASE_URL}/user/get-pending-liability-list?page=${data.page}&limit=${data.limit}&sport=${data.sport}&matchId=${data?.matchId}&sessionId=${data?.sessionId}`;
+    let url = `${BASE_URL}/user/get-pending-liability-list?page=${data.page}${data?.fromTime ? `&fromDate=${data?.fromTime}` : ''}${data?.toTime ? `&toDate=${data?.toTime}` : ''}&limit=${data.limit}&sport=${data.sport}&matchId=${data?.matchId}&sessionId=${data?.sessionId}`;
 
     // Add status and type filters
     if (data?.status === 'settled') {

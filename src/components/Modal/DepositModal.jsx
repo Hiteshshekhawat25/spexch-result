@@ -8,6 +8,8 @@ import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { setDownlineData } from "../../Store/Slice/downlineSlice";
 import { fetchRoles } from "../../Utils/LoginApi";
+import { getUserData } from "../../Services/UserInfoApi";
+import { fetchUserDataFailure, fetchUserDataStart, fetchUserDataSuccess } from "../../Store/Slice/userInfoSlice";
 
 const DepositModal = ({
   isOpen,
@@ -39,6 +41,30 @@ const DepositModal = ({
     setRemark("");
     setPassword("");
   };
+
+
+   const refreshData = () => {
+      dispatch(fetchUserDataStart());
+      getUserData()
+        .then((data) => {
+          console.error("Error fetching user data: Header", { data });
+          if (data?.status == 403 || data?.status == 401) {
+            localStorage.clear();
+            navigate("/");
+          }
+          if (data && data.data) {
+            dispatch(fetchUserDataSuccess(data));
+          } else {
+            dispatch(fetchUserDataFailure("Invalid data format"));
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching user data: Header", { err });
+          dispatch(fetchUserDataFailure(err.message));
+        });
+    };
+  
+
   const handleTransaction = async (type) => {
     setLoading(true);
 
@@ -71,7 +97,7 @@ const DepositModal = ({
 
       if (response.success) {
         toast.success(response.message || "Transaction Successful");
-
+        refreshData()
         const rolesArray = await fetchRoles(token);
         if (!Array.isArray(rolesArray) || rolesArray.length === 0) {
           toast.warning("No roles found. Please check your configuration.");
