@@ -11,7 +11,7 @@ const initialState = {
 export const matchListBook = createAsyncThunk('matchList', async (gameId)=> {
   try {
     const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${BASE_URL}/match/getmatchesviagameid/${gameId.gameId}/?flag=${gameId?.flag}`, {
+    const response = await axios.get(`${BASE_URL}/match/getmatchesviagameid/${gameId.gameId}/${gameId?.flag ? `?flag=${gameId?.flag}` : ''}`, {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json",

@@ -12,7 +12,7 @@ import RevertModal from "../marketBetModal/RevertModal";
 import RemarkModal from "../marketBetModal/RemarkModal";
 import { DeleteBet, RevertBet } from "../../Services/manageBetapi";
 
-const AllSessionListRevert = () => {
+const BookMakersBets = () => {
   const dispatch = useDispatch();
   const { sessions, loading, error } = useSelector((state) => state);
   const [editingRow, setEditingRow] = useState(null);
@@ -94,15 +94,15 @@ const handleCheckbox = (e)=>{
 
 
   useEffect(()=>{
-    let status = location?.pathname?.includes('/AllSessionListRevert')
+    let status = location.pathname?.includes('/bookmaker-revert-bets') ? 'DELETED' : ''
     dispatch(
       liabilityBook({
        matchId : selectedMatch,
-       sessionId : selectedSession,
+       type : 'bookmakers',
        status : status
       })
     )
-  },[selectedSession,selectedMatch])
+  },[selectedSession,selectedMatch,remarkModal2,remarkModal,location.pathname])
 
  const handleRevertBet = async (item) => {
     try {
@@ -120,7 +120,8 @@ const handleCheckbox = (e)=>{
           dispatch(
             liabilityBook({
              matchId : selectedMatch,
-             sessionId : selectedSession
+             type : 'bookmakers',
+             status : ''
             })
           )
       }
@@ -142,12 +143,14 @@ const handleCheckbox = (e)=>{
             remark: remark,
             betDeletePassword : password
           });
+          console.log({res})
           if (res?.data?.success) {
             setList([])
             dispatch(
               liabilityBook({
                matchId : selectedMatch,
-               sessionId : selectedSession
+               type : 'bookmakers',
+                status : 'DELETED'
               })
             )
             setRemark("");
@@ -163,15 +166,15 @@ const handleCheckbox = (e)=>{
     };
 
 
-
-  console.log(list,'listlistlistlistlist')
+    
+    console.log(list,dataLiability,'listlistlistlistlist')
   return (
     <div className="w-full p-4">
       {/* Title Section */}
       <div className="text-center mb-4">
         <h2 className="text-lg font-semibold flex items-center justify-center gap-2">
           <ImBook />
-          Session Bets
+          Bookmakers Bets
         </h2>
         <hr className="border-t border-gray-300 my-2" />
       </div>
@@ -216,41 +219,17 @@ const handleCheckbox = (e)=>{
 
 
 
-        {/* Select Session Dropdown */}
-        <div className="w-full sm:w-1/4">
-          <label
-            htmlFor="session"
-            className="block text-md font-bold text-gray-700 mb-1 text-left"
-          >
-            Select Session
-          </label>
-          <select
-            value={selectedSession}
-            onChange={(e) => setSelectedSession(e.target.value)}
-            id="session"
-            className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
-          >
-            <option value="">Select Session</option>
-            {sessions.sessions.filter((item)=> !item.result).map((session, index) => {
-              console.log({session},'session')
-              return (
-              <option key={index} value={session.marketId}>
-                {session.marketName}
-              </option>
-            )})}
-          </select>
-        </div>
 
         {/* Result Input and Submit Button */}
 
-       {location?.pathname?.includes('/AllSessionListRevert') ? 
-        <div className="w-1/4 md:w-1/2 flex justify-end" onClick={()=>setRemarkModal2(true)}>
+       {location?.pathname?.includes('/bookmaker-revert-bets') ? 
+        <div className="w-full flex justify-end" onClick={()=>setRemarkModal2(true)}>
           <button disabled={checkbox?.length == 0 ? true : false} className="bg-lightblue disabled:bg-sky-300 py-2 max-w-32  mt-7 px-4 rounded-md text-white w-full font-medium">
             Revert Bets
             </button>
         </div>
         :
-        <div className="w-full sm:w-1/4 md:w-1/2 flex justify-end" onClick={()=>setRemarkModal(true)}>
+        <div className="w-full flex justify-end" onClick={()=>setRemarkModal(true)}>
           <button disabled={checkbox?.length == 0 ? true : false} className="bg-red-500 disabled:bg-red-200 py-2 max-w-32  mt-7 px-4 rounded-md text-white w-full font-medium">
             Delete Bets
             </button>
@@ -365,4 +344,4 @@ const handleCheckbox = (e)=>{
     </div>
   );
 };
-export default AllSessionListRevert;
+export default BookMakersBets;

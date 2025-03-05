@@ -612,7 +612,7 @@ function ManageBetFilter({
                 ) : (
                   [
                     { name: "Active Bets", _id: "REVERT" },
-                    { name: "Settled Bets", _id: "settled" },
+                    // { name: "Settled Bets", _id: "settled" },
                     { name: "Delete Bets", _id: "DELETED" },
                   ].map((sport) => (
                     <option

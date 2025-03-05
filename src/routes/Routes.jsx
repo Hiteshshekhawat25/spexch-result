@@ -45,6 +45,7 @@ import Libility from "../components/libility/Libility";
 import TossResult from "../components/toss/TossResult";
 import PendingMarket from "../components/libility/PendingMarket";
 import CommissionPage from "../components/Commission/CommissionPage";
+import BookMakersBets from "../components/Matches/BookMarkersBets";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -238,6 +239,16 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
+        path={`${ROUTES_CONST.MatchOddsRevertBets}/:matchId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <MatchOddsBets />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
         path={ROUTES_CONST.TossMatchList}
         element={
           <ProtectedRoutes>
@@ -259,7 +270,40 @@ const RoutesComp = ({ socket }) => {
         }
       />
       <Route
-        path={ROUTES_CONST.AllSessionList}
+        path={`${ROUTES_CONST.AllSessionList}/:matchId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <AllSessionList />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+
+      <Route
+        path={`${ROUTES_CONST.BookmakerRevertBet}/:matchId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <BookMakersBets />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+
+      <Route
+        path={`${ROUTES_CONST.BookmakerBet}/:matchId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+            <BookMakersBets />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+
+      <Route
+        path={`${ROUTES_CONST.AllSessionListRevert}/:matchId`}
         element={
           <ProtectedRoutes>
             <LayoutHeader>

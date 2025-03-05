@@ -47,6 +47,7 @@ function Libility({ Userid }) {
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [selectBet, setSelectBet] = useState({})
   const [selectedUsername, setSelectedUsername] = useState(null);
+   const PendingMarket = useSelector((state) => state.pendingMarket?.data)
 
   const [isDataFetched, setIsDataFetched] = useState(false);
   const [sortConfig, setSortConfig] = useState({
@@ -225,6 +226,7 @@ function Libility({ Userid }) {
                   "event",
                   "market type",
                   "date",
+                  "status",
                   // "odds",
                   // "amount",
                   // "potential",
@@ -245,6 +247,9 @@ function Libility({ Userid }) {
                                 ? "Market Type"
                                 : key === "date"
                                   ? "Date"
+                                  :
+                                  key === "status"
+                                  ? "Status"
                                   // : key === "odds"
                                   //   ? "Odds"
                                     // : key === "amount"
@@ -289,8 +294,8 @@ function Libility({ Userid }) {
             </thead>
 
             <tbody className="text-center">
-              {dataLiability?.length > 0 ? (
-                dataLiability.map((item, index) => {
+              {PendingMarket?.length > 0 ? (
+                PendingMarket.map((item, index) => {
                   console.log(item,'item')
                   return(
                   <tr key={index}>
@@ -303,17 +308,20 @@ function Libility({ Userid }) {
                     </td>
 
                     <td className="border border-gray-400 text-lightblue font-bold px-4 py-3"
-                    onClick={()=>{
-                      navigate(`${ROUTES_CONST.PendingMarket}/${selectFilterData?.sport}/${item?._id}`)
-                    }}
+                    // onClick={()=>{
+                    //   navigate(`${ROUTES_CONST.PendingMarket}/${selectFilterData?.sport}/${item?._id}`)
+                    // }}
                     >
                       {item.match}
                     </td>
-                    <td className="border border-gray-400 px-4 py-3">
-                      {item.marketType}
+                    <td className="border font-bold border-gray-400 px-4 py-3">
+                      {item?.PendingSelection?.toUpperCase()}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
                       {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
+                    </td>
+                    <td className="border border-gray-400 text-yellow-500 font-medium px-4 py-3">
+                      Pending...
                     </td>
                     {/* <td className="border border-gray-400 px-4 py-3">
                       {item.odds}
@@ -345,27 +353,7 @@ function Libility({ Userid }) {
         </div>
       )}
 
-      <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
-        {/* Showing entries text */}
-        <div className="text-sm text-gray-600">
-          Showing{" "}
-          {totalBets === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
-          {Math.min(currentPage * entriesToShow, totalBets)} of{" "}
-          {totalBets} entries
-        </div>
-
-        {
-          total.total < 1 ? '' :
-            <Pagination pageNo={currentPage} setPageNo={setCurrentPage} totalPages={total?.pages} />
-        }
-      </div>
-      <RemarkModal
-        showUser={remarkModal}
-        remark={remark}
-        handleDeleteBet={handleDeleteBet}
-        setRemark={setRemark}
-        setShowUser={setRemarkModal}
-      />
+      
     </>
   )
 }

@@ -14,7 +14,7 @@ export const loginUser = async (username, password) => {
         'Content-Type': 'application/json',
       },
       
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password ,roleName : 'super-admin'}),
       
     });
 

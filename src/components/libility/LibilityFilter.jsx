@@ -13,6 +13,7 @@ import { liabilityBook } from '../../Store/Slice/liabilitySlice';
 import { matchListBook } from '../../Store/Slice/matchlistGameIdSlice';
 import { fetchSessions } from '../../Store/Slice/SessionSlice';
 import { pendingLiabilityBook } from '../../Store/Slice/pendingLiability';
+import { pendingMarketBook } from '../../Store/Slice/pendingMarket';
 
 function LibilityFilter({
   setBetlistData,
@@ -71,10 +72,11 @@ function LibilityFilter({
      dispatch(fetchSessions(selectFilterData?.match));
   },[selectFilterData?.match])
 
+  
     
   useEffect(() => {
     if(remarkModal == false){
-      dispatch(pendingLiabilityBook({
+      dispatch(pendingMarketBook({
         page : currentPage,
         limit : 10,
         sport : selectFilterData?.sport  ,
@@ -232,7 +234,7 @@ function LibilityFilter({
             </button>
           </div>
 
-          <div className=' sm:col-span-4 w-full items-end col-span-12'>
+          {/* <div className=' sm:col-span-4 w-full items-end col-span-12'>
             <div className='flex gap-x-4 justify-end items-center'>
             <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
         <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
@@ -255,7 +257,7 @@ function LibilityFilter({
           </div>
             
             </div>
-          </div>
+          </div> */}
         </div>
     </>
   )

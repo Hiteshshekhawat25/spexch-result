@@ -13,7 +13,7 @@ const initialState = {
 export const pendingMarketBook = createAsyncThunk('pendingMarket', async (data)=> {
   try {
     const token = localStorage.getItem("authToken");
-    const response = await axios.get(`${BASE_URL}/user/get-pending-bets?matchId=${data?.matchId}`, {
+    const response = await axios.get(`${BASE_URL}/user/get-pending-bets?sportsId=${data?.sport}`, {
       headers: {
         "Content-Type": "application/json; charset=utf-8",
         Accept: "application/json",

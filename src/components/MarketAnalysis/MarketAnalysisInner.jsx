@@ -464,6 +464,7 @@ const MarketAnalysisInner = () => {
         setShowUser={setShowUserBook}
         matchBetsData={matchBetsData}
         userId={userId}
+        type={type}
         setUserId={setUserId}
         book={books}
         userBookList={books == 'user' ? userBooks : masterBook}

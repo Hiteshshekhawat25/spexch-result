@@ -561,7 +561,8 @@ const DownlineList = () => {
 
   const handleDelete = async (item) => {
     try {
-      await deleteData(`user/delete-user/${item._id}`);
+   const res =   await deleteData(`user/delete-user/${item._id}`);
+   console.log(res,'resresresresresres123')
       toast.success("User deleted successfully.");
 
       const token = localStorage.getItem("authToken");
@@ -599,6 +600,8 @@ const DownlineList = () => {
         roleId
       );
       if (result && result.data) {
+        setUserToDelete(item);
+        setIsDeleteModalOpen(true);
         dispatch(setDownlineData(result.data));
       }
 
@@ -609,7 +612,9 @@ const DownlineList = () => {
         err.response?.data?.message ||
         err.message ||
         "An error occurred. Please try again.";
-      toast.error(errorMessage);
+      toast.error(errorMessage,{
+        autoClose : 2000
+      });
     } finally {
       setLoading(false);
     }
@@ -1144,7 +1149,7 @@ const DownlineList = () => {
                                 </div>
 
                                 <div
-                                  onClick={() => handleDeleteClick(item)}
+                                  onClick={() => handleDelete(item)}
                                   title="Delete"
                                   className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >

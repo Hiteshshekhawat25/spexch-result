@@ -14,13 +14,13 @@ export const liabilityBook = createAsyncThunk('liability', async (data) => {
     const token = localStorage.getItem("authToken");
     console.log(data,'data12345')
     // Construct the base URL
-    let url = `${BASE_URL}/user/get-pending-liability-list?page=${data.page}${data?.fromTime ? `&fromDate=${data?.fromTime}` : ''}${data?.toTime ? `&toDate=${data?.toTime}` : ''}&limit=${data.limit}&sport=${data.sport}&matchId=${data?.matchId}&sessionId=${data?.sessionId}`;
+    let url = `${BASE_URL}/user/get-pending-liability-list?${data.page ? `page=${data.page}` : ''}${data?.fromTime ? `&fromDate=${data?.fromTime}` : ''}${data?.toTime ? `&toDate=${data?.toTime}` : ''}${data.limit ? `&limit=${data.limit}` : ''}${data.sport ? `&sport=${data.sport}` : ''}${data?.matchId ? `&matchId=${data?.matchId}` : ''}${data?.sessionId ? `&selectionId=${data?.sessionId}` : ''}`;
 
     // Add status and type filters
     if (data?.status === 'settled') {
-      url += `&isSettled=${data.status}`;
+      url +=  data?.status ? `&isSettled=${data.status}` : '';
     } else {
-      url += `&deleteStatus=${data?.status}`;
+      url += data?.status ? `&deleteStatus=${data?.status}` : ''
     }
 
     if (data?.type) {

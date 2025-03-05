@@ -14,9 +14,11 @@ export const ROUTES_CONST = {
   CoinLog: "/CoinLog",
   ManageBets : '/manageBets',
   MatchOddsBets: "/MatchOddsBets",
+  MatchOddsRevertBets: "/MatchOddsRevertBets",
   TossMatchList: "/TossMatchList",
   MultipleSession: "/MultipleSession",
   AllSessionList: "/AllSessionList",
+  AllSessionListRevert: "/AllSessionListRevert",
   Banner: "/Banner",
   SessionPreBook: "/SessionPreBook",
   SessionResult: "/SessionResult",
@@ -38,5 +40,7 @@ export const ROUTES_CONST = {
   CasinoGamesList : "/casino-games-list",
   liabilty : '/liability',
   TossResult : '/toss-result',
-  PendingMarket : '/pending-market'
+  PendingMarket : '/pending-market',
+  BookmakerBet : '/bookmakerbets',
+  BookmakerRevertBet : '/bookmaker-revert-bets',
 };

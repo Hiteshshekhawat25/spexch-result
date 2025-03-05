@@ -417,10 +417,10 @@ const BetList = ({ Userid }) => {
                           </td>
                           <td
                             className={`border border-gray-400 px-1 min-w-32 w-auto py-1 font-bold ${
-                              (item.betType === "no" || item?.betType == 'lay') ? "text-red-600" : "text-blue"
+                              (item.betType == "no" || item?.betType == 'lay') ? "text-red-600" : "text-blue"
                             }`}
                           >
-                            {(item.betType === "no" ||  item?.betType == 'lay') ? "Lay" : "Back"}
+                            {(item.betType == "no" ||  item?.betType == 'lay') ? "Lay" : "Back"}
                           </td>
                           <td className="border border-gray-400 px-1 min-w-32 w-auto py-1">
                             {item?.fancyOdds > 0? item?.fancyOdds+'/'+item.oddsRequested : item.oddsRequested}
@@ -468,7 +468,10 @@ const BetList = ({ Userid }) => {
                       ))
                     ) : sortedData.length > 0 ? (
                       // If no search results but sortedData exists, display sortedData
-                      sortedData.map((item, index) => (
+                      sortedData.map((item, index) => {
+
+                        console.log(item?.betType,'yesyesyes')
+                        return (
                         <tr key={index}>
                           <td
                             onMouseEnter={() => handleMouseEnter(item)}
@@ -496,10 +499,13 @@ const BetList = ({ Userid }) => {
                           </td>
                           <td
                             className={`border border-gray-400 px-1 text-[13px]  py-2 font-bold ${
-                              (item.betType === "no" || item?.betType == 'lay') ? "text-red-600" : "text-blue"
+                              item.betType == "no" || item?.betType == 'lay' ? "text-red-600" : "text-blue"
                             }`}
                           >
-                            {(item.type === "no" || item?.betType == 'lay')  ? "Lay" : "Back"}
+                            {item?.betType  == "no" ? 'Lay' : 
+                              item?.betType == 'lay'  ? 'Lay' :
+                              item?.betType == 'yes' ? 'Back' :
+                                item?.betType == 'back' ? 'Back' : ''}
                           </td>
                           <td className="border border-gray-400 px-1 text-[13px] min-w-32 w-auto py-2">
                           {item?.fancyOdds > 0? item?.fancyOdds+'/'+item.oddsRequested : item.oddsRequested}
@@ -522,7 +528,7 @@ const BetList = ({ Userid }) => {
                           {moment(item.matchTime).format("MMMM Do YYYY, h:mm:ss")}{" "}
                           </td>
                         </tr>
-                      ))
+                      )})
                     ) : (
                       <tr>
                         <td

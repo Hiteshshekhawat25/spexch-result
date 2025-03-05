@@ -19,6 +19,7 @@ import EditMatchModal from "../Modal/EditMatchModal";
 import ScoreModal from "../Modal/ScoreModal";
 import { toast } from "react-toastify";
 import TossModal from "../Modal/TossModal";
+import { ROUTES_CONST } from "../../Constant/routesConstant";
 
 const AllMatches = () => {
   const dispatch = useDispatch();
@@ -328,8 +329,8 @@ const AllMatches = () => {
                 <th className="px-4 py-2">Toss</th>
                 <th className="px-4 py-2">Set Result</th>
                 <th className="px-4 py-2">Result</th>
-                <th className="px-4 py-2">Add Market</th>
                 <th className="px-4 py-2">Delete Bets</th>
+                <th className="px-4 py-2">Revert Bets</th>
               </tr>
             </thead>
             <tbody>
@@ -488,7 +489,6 @@ const AllMatches = () => {
                       </div>
                     </td>
                     <td className="px-4 py-2 border border-gray-300"></td>
-                    <td className="px-4 py-2 border border-gray-300"></td>
                     <td className="px-4 py-2 border border-gray-300">
                       <div className="space-y-2">
                         <Link
@@ -498,13 +498,13 @@ const AllMatches = () => {
                           Odds Bets
                         </Link>
                         <Link
-                          to={`/BookmakerBets`}
+                          to={`${ROUTES_CONST.BookmakerBet}/${match?._id}`}
                           className="py-1 px-3 rounded-full text-white bg-amber whitespace-nowrap inline-block"
                         >
                           Bookmaker Bets
                         </Link>
                         <Link
-                          to={`/AllSessionList`}
+                          to={`/AllSessionList/${match?._id}`}
                           className="py-1 px-3 rounded-full text-white bg-amber whitespace-nowrap inline-block"
                         >
                           Session Bets
@@ -512,6 +512,34 @@ const AllMatches = () => {
                         <Link
                           to={`/TossBets`}
                           className="py-1 px-3 rounded-full text-white bg-amber whitespace-nowrap inline-block"
+                        >
+                          Toss Bets
+                        </Link>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2 border border-gray-300">
+                    <div className="space-y-2">
+                        <Link
+                          to={`${ROUTES_CONST.MatchOddsRevertBets}/${match?._id}`}
+                          className="py-1 px-3 rounded-full text-white bg-lightblue whitespace-nowrap inline-block"
+                        >
+                          Odds Bets
+                        </Link>
+                        <Link
+                          to={`${ROUTES_CONST.BookmakerRevertBet}/${match?._id}`}
+                          className="py-1 px-3 rounded-full text-white bg-lightblue whitespace-nowrap inline-block"
+                        >
+                          Bookmaker Bets
+                        </Link>
+                        <Link
+                          to={`/AllSessionListRevert/${match?._id}`}
+                          className="py-1 px-3 rounded-full text-white bg-lightblue whitespace-nowrap inline-block"
+                        >
+                          Session Bets
+                        </Link>
+                        <Link
+                          to={`/TossBets`}
+                          className="py-1 px-3 rounded-full text-white bg-lightblue whitespace-nowrap inline-block"
                         >
                           Toss Bets
                         </Link>

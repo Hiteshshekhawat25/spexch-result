@@ -152,9 +152,16 @@ const MatchOddsBets = () => {
       {/* Row Section */}
       <div className="flex items-center gap-4 mb-4">
         {/* Delete Button */}
-        <button onClick={handleDeleteAllBets} className="px-6 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600">
+     {location?.pathname?.includes('/MatchOddsRevertBets')
+     ?
+     <button onClick={handleDeleteAllBets} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-red-600">
+          Revert All Odds Bets
+        </button>
+     :  
+      <button onClick={handleDeleteAllBets} className="px-6 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600">
           Delete All Odds Bets
         </button>
+        }
 
         {/* Input Box */}
         <input
@@ -222,9 +229,16 @@ const MatchOddsBets = () => {
     <div className="pt-4">
       <Pagination totalPages={totalPage} pageNo={page} setPageNo={setPage}/>
     </div>
-    <button onClick={handleDeleteBets} className="px-6 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 mt-4">
+   {location?.pathname?.includes('/MatchOddsRevertBets') 
+   ? 
+    <button onClick={handleDeleteBets} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-red-600 mt-4">
+          Revert Selected Match Odds Bets
+        </button> 
+        : 
+        <button onClick={handleDeleteBets} className="px-6 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 mt-4">
           Delete Selected Match Odds Bets
-        </button>
+        </button> 
+        }
     </div>
     
   );

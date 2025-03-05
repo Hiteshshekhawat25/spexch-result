@@ -260,8 +260,8 @@ function ManageBets({ Userid }) {
                   "date",
                   "odds",
                   // "status",
-                  "type",
                   "selection",
+                  "type",
                   "P&L",
                   "Actions",
                 ].map((key) => (
