@@ -53,11 +53,6 @@ const CreditEditReferenceModal = ({
       return;
     }
 
-    if (newCreditRef <= 0 || isNaN(newCreditRef)) {
-      toast.error("Please enter a valid credit reference greater than 0.");
-      return;
-    }
-
     // Start loading state
     dispatch(setLoading(true));
 

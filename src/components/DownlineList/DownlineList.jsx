@@ -511,6 +511,8 @@ const DownlineList = () => {
           console.log(data,'donenondoenodnods')
           if(data?.length > 0){
             setIsNested(true);
+          }else{
+            setIsNested(false)
           }
         }
       } else if (item.role_name == "user") {
@@ -635,7 +637,10 @@ const DownlineList = () => {
             <>
               <div
                 className="border rounded p-2 mb-3 w-full sm:w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-custom font-medium"
-                onClick={() => setUserFetchList([])}
+                onClick={() =>{
+                   setUserFetchList([])
+                   setIsNested(false)
+                  }}
               >
                 <div className="bg-green-500 text-white px-2 py-1 mr-2 rounded font-custom font-medium text-xs sm:text-sm w-14">
                   Master
@@ -682,7 +687,7 @@ const DownlineList = () => {
                       // className="border rounded py-1 px-2 text-sm bg-gray-200 text-black border-gray-400 sm:ml-10 "
                       className="border rounded py-1 px-2 text-sm bg-gray-200 text-black border-gray-400"
                     >
-                      <option value="">Status</option>
+                      <option value="">All</option>
                       <option value="active">Active</option>
                       <option value="suspended">Suspended</option>
                       <option value="locked">Locked</option>

@@ -277,6 +277,7 @@ export const postInstance = async (url,data) => {
       alert("Session expired. Please log in again.");
     }
     // Handle other API errors
+    toast.error(error.response?.data?.message)
     console.error("API error:", error.response?.data || error.message);
     throw new Error(error.response?.data?.message || "An error occurred, please try again.");
   }

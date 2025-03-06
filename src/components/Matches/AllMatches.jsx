@@ -20,6 +20,7 @@ import ScoreModal from "../Modal/ScoreModal";
 import { toast } from "react-toastify";
 import TossModal from "../Modal/TossModal";
 import { ROUTES_CONST } from "../../Constant/routesConstant";
+import SessionStakeModal from "../Modal/SessionStakeModal";
 
 const AllMatches = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,7 @@ const AllMatches = () => {
   const [isMatchModalOpen, setIsMatchModalOpen] = useState(false);
   const [tossModal,setTossModal] = useState(false);
   const [isScoreModalOpen, setIsScoreModalOpen] = useState(false);
+  const [sessionStakeModal,setSessionStakeModal] = useState(false);
   const [selectedMatch, setSelectedMatch] = useState(null);
   const [loading, setLoading] = useState(true);
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -206,6 +208,7 @@ const AllMatches = () => {
   const closeModals = () => {
     setIsStakeModalOpen(false);
     setTossModal(false)
+    setSessionStakeModal(false)
     setIsMatchModalOpen(false);
     setIsScoreModalOpen(false); // Close the Score Modal
     setSelectedMatch(null);
@@ -222,6 +225,13 @@ const AllMatches = () => {
     }
   };
 
+  useEffect(() => {
+    if (sessionStakeModal) {
+      document.body.classList.add("overflow-y-hidden")
+    } else {
+      document.body.classList.remove("overflow-y-hidden")
+    }
+},[sessionStakeModal])
   return (
     <div className="p-4">
       {isStakeModalOpen && (
@@ -235,6 +245,11 @@ const AllMatches = () => {
           }}
         />
       )}
+      {sessionStakeModal && 
+      <div className="w-full h-lvh flex z-[500] items-center justify-center fixed top-0 left-0  shadow-lg bg-gray-500/50" style={{backdropFilter : 'blur(5px)'}}> 
+      <SessionStakeModal onCancel={closeModals} match={selectedMatch}/>
+      </div>
+      }
       {isMatchModalOpen && (
         <EditMatchModal match={selectedMatch} onCancel={closeModals} />
       )}
@@ -373,6 +388,14 @@ const AllMatches = () => {
                           }}
                           >
                             T
+                          </div>
+                          <div className="p-[2px] h-7 text-center text-white font-bold w-7 rounded-full bg-gradient-green2" 
+                          onClick={()=>{
+                            setSessionStakeModal(true)
+                          setSelectedMatch(match)
+                          }}
+                          >
+                            S
                           </div>
                         </div>
                       </div>
