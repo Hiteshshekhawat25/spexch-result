@@ -614,8 +614,8 @@ const MatchProfitandLoss = () => {
           `${BASE_URL}/user/get-selection-group-amount-profit-loss`,
           {
             params: {
-              page: 1,
-              limit: 10,
+              page: currentPage,
+              limit: entriesToShow,
               matchId: matchId,
               userId: user_id,
               fromDate: fromDate,
@@ -628,20 +628,20 @@ const MatchProfitandLoss = () => {
             },
           }
         );
-
         setData(response.data.data); // No sorting here
-        setTotalEntries(response.data.total);
-        setTotalPages(Math.ceil(response.data.total / entriesToShow));
+        setTotalEntries(response.data?.pagination?.totalRecords);
+        setTotalPages(response.data?.pagination);
       } catch (error) {
         console.error("Error fetching match bet profit loss data:", error);
       } finally {
         setLoading(false);
       }
     };
-
+    
     fetchData();
-  }, [matchId, entriesToShow, fromDate, toDate]);
-
+  }, [matchId, entriesToShow, fromDate,currentPage,totalEntries, toDate]);
+  
+  console.log(currentPage,totalPages?.totalPages,'paginationpagination')
   const handleSort = (key) => {
     let direction = "ascending";
     if (sortConfig.key === key && sortConfig.direction === "ascending") {
@@ -777,7 +777,7 @@ const MatchProfitandLoss = () => {
             </tr>
           </thead>
           <tbody>
-            {paginatedData.map((item, index) => (
+            {sortedData.map((item, index) => (
               <tr key={index} className="border-b border-gray-400">
                 <td className="px-4 py-2 border border-gray-400 text-center">{item.sport}</td>
                 <td className="px-4 border border-gray-400 py-2 text-center">{item.match}</td>
@@ -804,7 +804,9 @@ const MatchProfitandLoss = () => {
                       : ""}
                   </p>
                 </td>
-                <td className="px-4 py-2 border border-gray-400 text-center">{item?.marketName ? item?.marketName :  item?.marketNameTwo }</td>
+                <td className="px-4 py-2 border border-gray-400 text-center"> 
+                  { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo}
+                </td>
                 <td
                   className="px-4 py-2 border border-gray-400 text-center"
                   style={{
@@ -834,13 +836,13 @@ const MatchProfitandLoss = () => {
         {/* Showing entries text */}
         <div className="text-sm text-gray-600 mb-2 sm:mb-0">
           Showing{" "}
-          {data.length === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
-          {Math.min(currentPage * entriesToShow, data.length)} of {data.length}{" "}
+          {totalEntries === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+          {Math.min(currentPage * entriesToShow, totalEntries)} of {totalEntries}{" "}
           entries
         </div>
 
         {/* Pagination Buttons */}
-        {totalPages > 1 && (
+        {totalPages?.totalPages > 1 && (
           <div className="flex space-x-2">
             {/* First Button */}
             <button
@@ -869,10 +871,10 @@ const MatchProfitandLoss = () => {
             </button>
 
             {/* Page Numbers */}
-            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+            {Array.from({ length: totalPages?.totalPages }, (_, i) => i + 1).map((page) => {
               if (
                 page === 1 ||
-                page === totalPages ||
+                page === totalPages?.totalPages ||
                 (page >= currentPage - 1 && page <= currentPage + 1)
               ) {
                 return (

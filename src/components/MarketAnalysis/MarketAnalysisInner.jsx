@@ -334,7 +334,7 @@ const MarketAnalysisInner = () => {
                 <div onClick={() => setShowScore(!showScore)} className="bg-gradient-blue text-white  text-[12px] sm:text-[15px] p-[5px] sm:py-2  font-semibold px-2  rounded mb-2 cursor-pointer">Score Card</div>
                 {
                   showScore ?
-                    <div className="w-full h-[200px] bg-[#141435] overflow-hidden rounded ">
+                    <div className="w-full h-[145px] bg-[#141435] overflow-hidden rounded ">
                       <iframe src={matchBetsData?.scoreUrl} className="w-full h-full" frameBorder="0"></iframe>
                     </div>
                     : ''

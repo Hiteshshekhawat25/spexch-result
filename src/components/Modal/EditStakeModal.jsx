@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { IoClose } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { updateField } from "../../Store/Slice/editStakeSlice";
-import { putUpdateMatchAPIAuth } from "../../Services/Newmatchapi";
+import { postInstance, putUpdateMatchAPIAuth } from "../../Services/Newmatchapi";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -10,6 +10,7 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
   console.log(match);
   const dispatch = useDispatch();
 
+  const [checkbox,setCheckbox] = useState(false)
   // Local state for form values
   const [formValues, setFormValues] = useState({
     oddsDelay: "",
@@ -111,6 +112,34 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
     }
   };
 
+
+  const SetStakeLimit =async()=>{
+    try{
+      const res = await postInstance(`/match/updatematchStake?matchId=${match?._id}`,
+        { maxStake:0,
+        oddsOnly:checkbox
+      })
+
+      console.log(res,'setStakelimit')
+    }catch(error){
+      console.log(error)
+    }
+  }
+
+
+  const RevertStakeLimit =async()=>{
+    try{
+      const res = await postInstance(`/match/restoreMatchStake?matchId=${match?._id}`,
+        { 
+          oddsOnly:checkbox
+      })
+
+      console.log(res,'setStakelimit')
+    }catch(error){
+      console.log(error)
+    }
+  }
+
   const moveFocus = (direction, currentField) => {
     const fieldNames = Object.keys(formValues);
     const currentIndex = fieldNames.indexOf(currentField);
@@ -152,6 +181,30 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
               onClick={onCancel}
               className="cursor-pointer text-gray-600 text-2xl"
             />
+          </div>
+
+          <div className="mt-2 flex flex-col gap-1 bg-gray-100 rounded-md max-w-44 p-3">
+          <p className="block items-center text-sm font-custom text-black">Set Maxstake</p>
+          <div className="items-center ">
+           <label className=" flex items-center  gap-3 text-xs w-full font-custom text-black">
+            Only Odds
+          <input 
+          className=" mt-1"
+          type="checkbox"
+          checked={checkbox}  
+          onChange={(e)=>setCheckbox(e.target.checked)}/>
+           </label>
+            <button 
+            onClick={SetStakeLimit}
+            className=" text-white mt-2 text-center px-3 hover:bg-sky-700 bg-sky-900 p-1 text-xs rounded-md  w-full">
+              Set Stake
+              </button>
+              <button 
+            onClick={RevertStakeLimit}
+            className=" text-white mt-2 text-center px-3 hover:bg-sky-700 bg-sky-900 p-1 text-xs rounded-md  w-full">
+              Revert Stake
+              </button>
+          </div>
           </div>
 
           {/* Form */}

@@ -32,7 +32,7 @@ const SportsandLossEvents = () => {
     { display: "Event Name", key: "event" },
     { display: "Profit & Loss", key: "totalUplineProfitLoss" },
     { display: "Commission", key: "commission" },
-    { display: "Total P&l", key: "total P&L" },
+    { display: "Total P&L", key: "total P&L" },
   ];
 
   console.log("userId", userId);
@@ -226,7 +226,7 @@ const SportsandLossEvents = () => {
                       )?.toFixed(2)}
                 </td>
              { location?.state?.downline ? 
-             <td className="px-4 py-2 text-center">
+             <td className="px-4 py-2 text-center border border-gray-400">
              {item?.totalCommission?.toFixed(2)}
            </td>
              :  <td
@@ -251,7 +251,7 @@ const SportsandLossEvents = () => {
                     item?.totalCommission).toFixed(2)}
             </td>
              : 
-                <td className="px-4 py-2 text-center">
+                <td className="px-4 py-2 text-center border border-gray-400">
                   {item?.totalCommission?.toFixed(2)}
                 </td>
                 }

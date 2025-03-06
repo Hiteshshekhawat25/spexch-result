@@ -152,7 +152,8 @@ const EventPLFilter = ({
         </select>
       </div>
 
-      <div className="flex flex-col items-start">
+      <div className=" flex">
+      <div className="flex flex-col w-full items-start">
         <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
           From Date
         </label>
@@ -160,7 +161,7 @@ const EventPLFilter = ({
           type="date"
           value={fromDate || today}
           onChange={(e) => dispatch(setFromDate(e.target.value))}
-          className="border rounded w-full px-1 py-1 h-[38px] text-sm"
+          className="border rounded w-full  px-1 py-1 h-[38px] text-sm"
           disabled={dataSource !== "live"}
         />
       </div>
@@ -177,8 +178,10 @@ const EventPLFilter = ({
           disabled={dataSource !== "live"}
         />
       </div>
+      </div>
 
-      <div className="flex flex-col items-start">
+      <div className=" flex">
+      <div className="flex flex-col w-full items-start">
         <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
           To Date
         </label>
@@ -203,8 +206,9 @@ const EventPLFilter = ({
           disabled={dataSource !== "live"}
         />
       </div>
+      </div>
 
-      <div className="flex space-x-2  items-center">
+      <div className="flex space-x-2 mt-2 md:mt-5 items-center">
         <button
           onClick={handleGetPL}
           className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"

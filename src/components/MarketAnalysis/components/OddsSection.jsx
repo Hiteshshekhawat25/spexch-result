@@ -90,6 +90,7 @@ const OddsSection = ({matchBetsData, betData, setBetData, openBets}) => {
       <div className=" bg-white shadow-md overflow-hidden rounded-md">
         <div className="flex align-center justify-between bg-white pr-2 flex-wrap">
           <SportsHeading title={'Match Odds'}/>
+          
           <div className="text-xs  flex gap-1 items-center">
             Matched 
             <span className="font-semibold">€ 170.5 K</span>

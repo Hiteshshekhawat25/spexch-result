@@ -253,19 +253,17 @@ const ProfitLossUser = () => {
                           {item.match}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.type === "odds"
+                          {item.type == "odds"
                             ? "Match odds"
-                            : item.type === "bookmakers"
+                            : item.type == "bookmakers"
                             ? "Bookmaker"
-                            : item.type === "toss"
+                            : item.type == "toss"
                             ? "Toss"
-                            : item.marketNameTwo}
+                            : item.marketName}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {/* {item?.marketName ? " " : "void"} */}
-                          {item?.isDeleted
-                            ? "Void"
-                            : item?.marketName ? item?.marketName : item?.marketNameTwo}
+                          { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo}
                         </td>
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400"
