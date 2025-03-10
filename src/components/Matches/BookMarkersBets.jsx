@@ -11,6 +11,7 @@ import moment from "moment";
 import RevertModal from "../marketBetModal/RevertModal";
 import RemarkModal from "../marketBetModal/RemarkModal";
 import { DeleteBet, RevertBet } from "../../Services/manageBetapi";
+import { useParams } from "react-router-dom";
 
 const BookMakersBets = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const BookMakersBets = () => {
   const [remark,setRemark] = useState('');
   const [password,setPassword] = useState('');
   const [selectedMatch, setSelectedMatch] = useState("");
+  const { matchId} = useParams()
   const [sortMatch,setSortMatch] = useState('new')
   const [filteredSessions, setFilteredSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState("");
@@ -94,10 +96,10 @@ const handleCheckbox = (e)=>{
 
 
   useEffect(()=>{
-    let status = location.pathname?.includes('/bookmaker-revert-bets') ? 'DELETED' : ''
+    let status = location.pathname?.includes('/bookmaker-revert-bets') ? 'DELETED' : 'ACTIVE'
     dispatch(
       liabilityBook({
-       matchId : selectedMatch,
+       matchId : matchId,
        type : 'bookmakers',
        status : status
       })
@@ -167,7 +169,7 @@ const handleCheckbox = (e)=>{
 
 
     
-    console.log(list,dataLiability,'listlistlistlistlist')
+    console.log(matchId,'listlistlistlistlist')
   return (
     <div className="w-full p-4">
       {/* Title Section */}
@@ -182,39 +184,6 @@ const handleCheckbox = (e)=>{
       {/* Row Section with Select Match, Select Session, and Result */}
       <div className="sm:flex gap-6 mb-4">
         {/* Select Match Dropdown */}
-
-
-
-
-        <div className="w-full sm:w-1/4">
-          <label
-            htmlFor="match"
-            className="block text-md font-bold text-gray-700 mb-1 text-left"
-          >
-            Select Match
-          </label>
-          <select
-            id="match"
-            className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
-            // onFocus={handleMatchSelectFocus}
-            onChange={handleMatchChange}
-            value={selectedMatch}
-            disabled={matchLoading}
-          >
-            <option value="">Select Match</option>
-            {matchLoading ? (
-              <option>Loading...</option> // Display loading text
-            ) : matchError ? (
-              <option>{matchError}</option> // Display error message
-            ) : (
-              matchList.map((match) => (
-                <option key={match._id} value={match._id}>
-                  {match.match} {match?.inPlay ? "(In Play)" : ""}
-                </option>
-              ))
-            )}
-          </select>
-        </div>
 
 
 
@@ -265,7 +234,8 @@ const handleCheckbox = (e)=>{
               </th>
               <th className="px-4 py-2 text-center items-center">Match</th>
               <th className="px-4 py-2 text-center items-center">Session Name</th>
-              {/* <th className="px-4 py-2 text-center items-center">Result</th> */}
+              <th className="px-4 py-2 text-center items-center">Username</th>
+              <th className="px-4 py-2 text-center items-center">Amount</th>
               {/* <th className="px-4 py-2 text-center items-center">Edit/Update</th> */}
               <th className="px-4 py-2 text-center items-center">Market Type</th>
               <th className="px-4 py-2 text-center items-center">odds</th>
@@ -280,7 +250,7 @@ const handleCheckbox = (e)=>{
             </tr>
           </thead>
           <tbody>
-            {selectedMatch ? (
+            {
               dataLiability?.length ? (
                 dataLiability?.map((session, index) => (
                   <tr key={session?.marketId}>
@@ -294,6 +264,8 @@ const handleCheckbox = (e)=>{
                       </td>
                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.event}</td>
                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.selection}</td>
+                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.username}</td>
+                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.amount}</td>
                       
                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.type}</td>
                       {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
@@ -304,14 +276,8 @@ const handleCheckbox = (e)=>{
                       </td>
                     </tr>
                   ))
-              ) : (
-                <tr>
-                  <td colSpan={5} className="text-center py-5 border">
-                    No data found
-                  </td>
-                </tr>
-              )
-            ) : (
+              ) 
+             : (
               <tr>
                 <td colSpan={7} className="text-center py-5 border">
                   Please Select Match

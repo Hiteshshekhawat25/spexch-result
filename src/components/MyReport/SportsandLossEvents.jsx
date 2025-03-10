@@ -12,9 +12,10 @@ const SportsandLossEvents = () => {
   const [loading, setLoading] = useState(true);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
-  const [search,setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const location = useLocation();
   const userId = location.state?.userId;
+  const list = location.state?.list;
   const [sortConfig, setSortConfig] = useState({
     key: "event",
     direction: "ascending",
@@ -51,7 +52,7 @@ const SportsandLossEvents = () => {
             params: {
               page: 1,
               limit: 10,
-              search:search,
+              search: search,
               gameId: gameId,
               userId,
               fromDate: fromDate,
@@ -73,7 +74,7 @@ const SportsandLossEvents = () => {
     };
 
     fetchData();
-  }, [gameId,search]);
+  }, [gameId, search]);
 
   const handleSort = (key) => {
     let direction = "ascending";
@@ -133,12 +134,12 @@ const SportsandLossEvents = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-1 md:p-4">
       <h1 className="text-xl font-bold mb-4 bg-gradient-blue text-white p-1">
         Profit & Loss Events
       </h1>
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex items-center">
+      <div className="md:flex-row flex flex-col gap-2 md:gap-0 justify-between items-center mb-4">
+        <div className="flex w-full md:w-auto items-center">
           <label className="mr-2 text-sm font-medium text-black">Show</label>
           <select
             value={entriesToShow}
@@ -154,15 +155,15 @@ const SportsandLossEvents = () => {
               </option>
             ))}
           </select>
-          <label className="ml-2 text-sm font-medium text-black">entries</label>
+          <label className="md:ml-2 text-sm font-medium text-black">entries</label>
         </div>
         <div>
           <input
-          name='search'
-          className="border-2 rounded-md py-1 px-2"
-          value={search}
-          placeholder="Search..."
-          onChange={(e)=>setSearch(e.target.value)}
+            name='search'
+            className="border-2 w-full md:w-auto rounded-md py-1 px-2"
+            value={search}
+            placeholder="Search..."
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
       </div>
@@ -171,41 +172,39 @@ const SportsandLossEvents = () => {
           <thead className="bg-gray-300 text-black border border-gray-400">
             <tr>
               {(location?.state?.downline
-               ? header2
+                ? header2
                 : headers).map((header) => (
-                <th
-                  key={header.key}
-                  className="px-4 py-2 text-sm border border-gray-400 cursor-pointer"
-                  onClick={() => handleSort(header.key)}
+                  <th
+                    key={header.key}
+                    className="px-4 py-2 text-sm border border-gray-400 cursor-pointer"
+                    onClick={() => handleSort(header.key)}
                   // className=" bg-red-500 border border-gray-400 text-center justify-between"
-                >
-                  <div className="flex justify-between items-center">
-                    <div className="items-center text-center w-full justify-between">
-                      {header.display}
+                  >
+                    <div className="flex justify-between items-center">
+                      <div className="items-center text-center w-full justify-between">
+                        {header.display}
+                      </div>
+                      <div className="flex flex-col items-center ml-2">
+                        <FaSortUp
+                          className={`${sortConfig.key === header.key &&
+                              sortConfig.direction === "ascending"
+                              ? "text-black"
+                              : "text-gray-400"
+                            }`}
+                          style={{ marginBottom: "-6px" }}
+                        />
+                        <FaSortDown
+                          className={`${sortConfig.key === header.key &&
+                              sortConfig.direction === "descending"
+                              ? "text-black"
+                              : "text-gray-400"
+                            }`}
+                          style={{ marginTop: "-6px" }}
+                        />
+                      </div>
                     </div>
-                    <div className="flex flex-col items-center ml-2">
-                      <FaSortUp
-                        className={`${
-                          sortConfig.key === header.key &&
-                          sortConfig.direction === "ascending"
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                        style={{ marginBottom: "-6px" }}
-                      />
-                      <FaSortDown
-                        className={`${
-                          sortConfig.key === header.key &&
-                          sortConfig.direction === "descending"
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                        style={{ marginTop: "-6px" }}
-                      />
-                    </div>
-                  </div>
-                </th>
-              ))}
+                  </th>
+                ))}
             </tr>
           </thead>
           <tbody>
@@ -221,52 +220,70 @@ const SportsandLossEvents = () => {
                   {item.match}
                 </td>
 
-                <td
-                  className="px-4 py-2 text-center border border-gray-400"
-                  style={{
-                    color: item.totalUplineProfitLoss < 0 ? "red" : "green",
-                  }}
-                >
-                  {item.totalUplineProfitLoss < 0
-                    ? `-${(
-                        Math.abs(item.totalUplineProfitLoss) 
+                {list ?
+
+                  <td
+                    className="px-4 py-2 text-center border border-gray-400"
+                    style={{
+                      color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
+                    }}
+                  >
+                    {item.totalDownlineProfitLoss < 0
+                      ? `-${(
+                        Math.abs(item.totalDownlineProfitLoss)
                       )?.toFixed(2)}`
-                    : (
+                      : (
+                        Math.abs(item.totalDownlineProfitLoss) +
+                        item?.totalCommission
+                      )?.toFixed(2)}
+                  </td> :
+                  <td
+                    className="px-4 py-2 text-center border border-gray-400"
+                    style={{
+                      color: item.totalUplineProfitLoss < 0 ? "red" : "green",
+                    }}
+                  >
+                    {item.totalUplineProfitLoss < 0
+                      ? `-${(
+                        Math.abs(item.totalUplineProfitLoss)
+                      )?.toFixed(2)}`
+                      : (
                         Math.abs(item.totalUplineProfitLoss) +
                         item?.totalCommission
                       )?.toFixed(2)}
-                </td>
-             { location?.state?.downline ? 
-             <td className="px-4 py-2 text-center border border-gray-400">
-             {item?.totalCommission?.toFixed(2)}
-           </td>
-             :  <td
-                  className="px-4 py-2 text-center border border-gray-400"
-                  style={{
-                    color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
-                  }}
-                >
-                  {item.totalDownlineProfitLoss < 0
-                    ? `-${Math.abs(item.totalDownlineProfitLoss +
-                      item?.totalCommission)?.toFixed(2)}`
-                    : (item.totalDownlineProfitLoss + 
-                    item?.totalCommission).toFixed(2)}
-                </td>}
-               
-             {location?.state?.downline ?
-              <td className="px-4 py-2 text-center">
-               {item.totalDownlineProfitLoss < 0
-                    ? `-${Math.abs(item.totalDownlineProfitLoss +
-                      item?.totalCommission)?.toFixed(2)}`
-                    : (item.totalDownlineProfitLoss + 
-                    item?.totalCommission).toFixed(2)}
-            </td>
-             : 
-                <td className="px-4 py-2 text-center border border-gray-400">
-                  {item?.totalCommission?.toFixed(2)}
-                </td>
+                  </td>
                 }
-               
+                {location?.state?.downline ?
+                  <td className="px-4 py-2 text-center border border-gray-400">
+                    {item?.totalCommission?.toFixed(2)}
+                  </td>
+                  : <td
+                    className="px-4 py-2 text-center border border-gray-400"
+                    style={{
+                      color: item.totalDownlineProfitLoss < 0 ? "red" : "green",
+                    }}
+                  >
+                    {item.totalDownlineProfitLoss < 0
+                      ? `-${Math.abs(item.totalDownlineProfitLoss +
+                        item?.totalCommission)?.toFixed(2)}`
+                      : (item.totalDownlineProfitLoss +
+                        item?.totalCommission).toFixed(2)}
+                  </td>}
+
+                {location?.state?.downline ?
+                  <td className={`px-4 py-2 text-center ${item?.totalDownlineProfitLoss > 0 ? 'text-green-500' : 'text-red-500'}`}>
+                    {item.totalDownlineProfitLoss < 0
+                      ? `-${Math.abs(item.totalDownlineProfitLoss +
+                        item?.totalCommission)?.toFixed(2)}`
+                      : (item.totalDownlineProfitLoss +
+                        item?.totalCommission).toFixed(2)}
+                  </td>
+                  :
+                  <td className="px-4 py-2 text-center border border-gray-400">
+                    {item?.totalCommission?.toFixed(2)}
+                  </td>
+                }
+
               </tr>
             ))}
           </tbody>
@@ -277,9 +294,9 @@ const SportsandLossEvents = () => {
           Showing{" "}
           {data.length > 0
             ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
-                currentPage * entriesToShow,
-                data.length
-              )}`
+              currentPage * entriesToShow,
+              data.length
+            )}`
             : "0 to 0"}{" "}
           of {data.length} entries
         </div>

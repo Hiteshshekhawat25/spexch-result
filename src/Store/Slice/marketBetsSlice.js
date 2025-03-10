@@ -13,13 +13,13 @@ export const fetchMarketBets = createAsyncThunk(
   async (data) => {
     try {
       const token = localStorage.getItem("authToken");
-      console.log(data?.matchId,'==============================12')
+      console.log(data,'==============================12')
       // Construct base URL
       let url = `${BASE_URL}/user/marketBetHistory?matchId=${data?.matchId}`;
 
       // Append search query if available
-      if (search) {
-        url += `&search=${encodeURIComponent(search)}`;
+      if (data?.searchTerm  || data?.search ) {
+        url += `&search=${encodeURIComponent(data?.searchTerm || data?.search)}`;
       }
 
       const response = await axios.get(url, {

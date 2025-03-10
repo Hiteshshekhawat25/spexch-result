@@ -17,6 +17,7 @@ import { fetchUserBook } from "../../Store/Slice/UserBookSlice"
 import MarketListModal from "../marketBetModal/MarketListModal"
 import { fetchmasterBook } from "../../Store/Slice/masterListSlice"
 import TossSection from "../toss/TossSecttion"
+import moment from "moment"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -49,6 +50,7 @@ const MarketAnalysisInner = () => {
   const betList = useSelector(state => state?.marketBetList)
   const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef()
+  const [searchTerm, setSearchTerm] = useState("");
   const intervalRef = useRef();
   const { data: backBets } = useSelector(state => state?.marketBetList)
   const [listData, setListData] = useState([]);
@@ -165,7 +167,8 @@ const MarketAnalysisInner = () => {
 
   useEffect(() => {
     let timer ;
-    if(gameId && liveBets){
+    if(gameId && liveBets && search == ''){
+      console.log('==============================1234')
          timer = setInterval(() => {
           dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
         }, 5000);
@@ -176,9 +179,10 @@ const MarketAnalysisInner = () => {
 
   useEffect(()=>{
     if(gameId){
-      dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+      console.log('==============================123')
+      dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,searchTerm,search}))
     }
-  },[gameId,liveBets])
+  },[gameId,liveBets,searchTerm,search])
 
   useEffect(() => {
     if (showUserBook) {
@@ -411,6 +415,12 @@ const MarketAnalysisInner = () => {
                     {
                       backBets?.data?.length > 0 ? 
                       backBets?.data?.map(item => (
+                        <>
+                        <tr className={`${(item?.betType === "back" || item?.betType === "yes") ? 'bg-[#d7e8f4a1]' : 'bg-[#f6e6ea92]'}`}>
+                          <td className="text-[9px] px-5  " colSpan={12}>
+                           Time: {moment(item?.createdAt).format('LLL')}
+                          </td>
+                        </tr>
                           <tr key={item?._id}>
                             <td className={` p-2 border-b border-b-black ${(item?.betType === "back" || item?.betType === "yes") ? 'bg-[#d7e8f4]' : 'bg-[#f6e6ea]'}`}>
                               <div className="flex items-center gap-2">
@@ -432,6 +442,7 @@ const MarketAnalysisInner = () => {
                               }}>{item?.userDetails?.username}</div>
                             </td>
                           </tr>
+                          </>
                         ))
                         : ''
                     }
@@ -446,8 +457,12 @@ const MarketAnalysisInner = () => {
         </div>
       </div>
       {/* <MatchRulesModal/> */}
-      <MarketBetModal matchId={gameId} show={showBetsModal}
+      <MarketBetModal 
+      matchId={gameId} 
+      show={showBetsModal}
        setShow={setShowBetsModal}
+       setSearchTerm={setSearchTerm}
+       searchTerm={searchTerm}
        setShowUser={setShowUser} 
        setSelectedUser={setSelectedUser} 
       //  matchId={gameId}

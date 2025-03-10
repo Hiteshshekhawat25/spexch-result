@@ -4,6 +4,7 @@ import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
 import { ClipLoader } from "react-spinners";
 import { useSelector } from "react-redux";
+import moment from "moment";
 
 const ProfitLossUser = () => {
   const [entriesToShow, setEntriesToShow] = useState(10);
@@ -120,7 +121,7 @@ const ProfitLossUser = () => {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-1 md:p-4">
       {localLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
@@ -138,7 +139,7 @@ const ProfitLossUser = () => {
               Profit Loss User
             </h1>
 
-            <div className="flex justify-between items-center mb-4 p-4">
+            <div className="flex md:flex-row flex-col justify-between items-center mb-4 p-4">
               <div className="flex items-center">
                 <label className="mr-2 text-sm font-medium text-black">
                   Show
@@ -265,7 +266,7 @@ const ProfitLossUser = () => {
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.sport}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-4 py-3 text-sm text-nowrap  text-center border-r border-gray-400">
                           { item?.provider ? item?.provider :  item.match}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
@@ -277,7 +278,7 @@ const ProfitLossUser = () => {
                             ? "Toss"
                             : item?.type == 'casino' ? item?.name :  item.marketName}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-4 py-3 text-sm text-nowrap text-center border-r border-gray-400">
                           {/* {item?.marketName ? " " : "void"} */}
                           { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
                         </td>
@@ -299,17 +300,7 @@ const ProfitLossUser = () => {
                         </td>
                         <td className="px-4 py-3 text-nowrap text-sm text-center border-r border-gray-400">
                           <p>
-                            {new Date(item.settledTime).toLocaleString(
-                              "en-US",
-                              {
-                                year: "numeric",
-                                month: "long",
-                                day: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                                second: "2-digit",
-                              }
-                            )}
+                            {moment(item.settledTime)?.format('LLL')}
                           </p>
                         </td>
                       </tr>

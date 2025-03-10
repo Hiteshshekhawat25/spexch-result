@@ -159,7 +159,7 @@ const DownlineList = () => {
             downlineData
             setDataList(arr2)
           }
-  }, [searchData?.length, userFetchList.length, userList.length, downlineData?.length,isDeleteModalOpen])
+  }, [searchData?.length, userFetchList?.length, userList?.length, downlineData?.length,isDeleteModalOpen])
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -498,8 +498,11 @@ const DownlineList = () => {
       ];
 
       if (allowedRoles.includes(item.role_name)) {
-        const data = await fetchallUsers(item._id);
-        setUserFetchList(data);
+        const data = await fetchallUsers(item._id,currentPage,entriesToShow);
+        console.log(data,'hitesh')
+        setUserFetchList(data?.data);
+        setTotalUsers(data?.pagination?.totalUsers)
+
         if (
           item.role_name == "agent" ||
           item.role_name == "user" ||
@@ -509,7 +512,7 @@ const DownlineList = () => {
           item.role_name == "super"
         ) {
           console.log(data,'donenondoenodnods')
-          if(data?.length > 0){
+          if(data?.data?.length > 0){
             setIsNested(true);
           }else{
             setIsNested(false)
@@ -633,7 +636,7 @@ const DownlineList = () => {
         </div>
       ) : (
         <>
-          {userFetchList.length ? (
+          {userFetchList?.length ? (
             <>
               <div
                 className="border rounded p-2 mb-3 w-full sm:w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-custom font-medium"

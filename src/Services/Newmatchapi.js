@@ -111,7 +111,7 @@ export const getMatchList = async ( sortMatch) => {
   const token = localStorage.getItem("authToken");
 
   try {
-    const response = await axios.get(`${BASE_URL}/match/getAllMatchesSession?page=1&limit=2&matchStatus=${sortMatch}`, {
+    const response = await axios.get(`${BASE_URL}/match/getAllMatchesSession?page=1&matchStatus=${sortMatch}`, {
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,

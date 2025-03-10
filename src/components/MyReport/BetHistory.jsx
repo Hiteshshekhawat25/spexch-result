@@ -129,7 +129,7 @@ const BetHistory = () => {
 
 
   return (
-    <div className="p-4">
+    <div className="p-1 md:p-4">
       {localLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
@@ -148,7 +148,7 @@ const BetHistory = () => {
             </h1>
 
             <div className="flex justify-between items-center  p-2 pt-4">
-              <div className="flex w-full justify-between">
+              <div className="flex md:flex-row flex-col w-full justify-between">
               <div className="flex items-center">
                 <label className="mr-2 text-sm font-medium text-black">
                   Show
@@ -181,7 +181,7 @@ const BetHistory = () => {
               </div>
               </div>
             </div>
-            <div className="w-full justify-end flex">
+            <div className="w-full justify-center md:justify-end flex">
               {color ?
                 <div className="flex gap-2">
                   <div className="border-2 border-gray-600 px-2 h-8 items-center text-center bg-[#faa9ba] ">

@@ -533,7 +533,7 @@ const AllMatches = () => {
                           Session Bets
                         </Link>
                         <Link
-                          to={`/TossBets`}
+                          to={`/toss-bet/${match?._id}`}
                           className="py-1 px-3 rounded-full text-white bg-amber whitespace-nowrap inline-block"
                         >
                           Toss Bets
@@ -561,7 +561,7 @@ const AllMatches = () => {
                           Session Bets
                         </Link>
                         <Link
-                          to={`/TossBets`}
+                         to={`/toss-revert-bets/${match?._id}`}
                           className="py-1 px-3 rounded-full text-white bg-lightblue whitespace-nowrap inline-block"
                         >
                           Toss Bets

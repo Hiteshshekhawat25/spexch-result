@@ -43,5 +43,7 @@ export const ROUTES_CONST = {
   PendingMarket : '/pending-market',
   BookmakerBet : '/bookmakerbets',
   BookmakerRevertBet : '/bookmaker-revert-bets',
-  CasinoSportList : '/casino-sport-list'
+  CasinoSportList : '/casino-sport-list',
+  tossBetList: '/toss-bet',
+  tossBetRevertList : '/toss-revert-bets'
 };

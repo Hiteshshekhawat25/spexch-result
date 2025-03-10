@@ -18,7 +18,7 @@ const EventProfitLoss = ({ Userid }) => {
 
   const location = useLocation();
   const userId = location.state?.userId;
-  const [search,setSearch] = useState('');
+  const [search, setSearch] = useState('');
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
     direction: "ascending",
@@ -77,9 +77,15 @@ const EventProfitLoss = ({ Userid }) => {
   };
 
   const handleRowClick = (gameId) => {
-    navigate(`${ROUTES_CONST.SportsandLossEvents}/${gameId}`, {
-      state: { userId: userId ,downline : location?.pathname?.includes('/EventProfitLoss') ? false :true},
-    });
+    if(location.pathname?.includes('/MyAccount')){
+      navigate(`${ROUTES_CONST.SportsandLossEvents}/${gameId}`, {
+        state: { userId: userId,list: true, downline: location?.pathname?.includes('/EventProfitLoss') ? false : true },
+      });
+    }else{
+      navigate(`${ROUTES_CONST.SportsandLossEvents}/${gameId}`, {
+        state: { userId: userId, downline: location?.pathname?.includes('/EventProfitLoss') ? false : true },
+      });
+    }
   };
 
   const handlePageChange = (direction) => {
@@ -122,7 +128,7 @@ const EventProfitLoss = ({ Userid }) => {
             <h1 className="text-[15px] rounded-t-lg p-2 px-4 bg-gradient-seablue text-white font-bold">
               Event Profit Loss
             </h1>
-           
+
 
             <div className="flex justify-between items-center mb-4 p-4">
               <div className="flex items-center">
@@ -148,149 +154,146 @@ const EventProfitLoss = ({ Userid }) => {
                 </label>
               </div>
               <div>
-              <input
-              name="search"
-              className="border-2 px-2 text-sm py-1 rounded-md"
-              autoComplete="search"
-              placeholder="Search..."
-              value={search}
-              onChange={(e)=>setSearch(e.target.value)}
-              />
-            </div>
+                <input
+                  name="search"
+                  className="border-2 px-2 text-sm py-1 rounded-md"
+                  autoComplete="search"
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
             </div>
             <div className="overflow-x-auto my-4 mx-4">
               <table className="w-full table-auto border-collapse border border-gray-400">
                 <thead className="border border-gray-400 bg-gray-300 text-black text-center">
-               {!location?.pathname?.includes('/MyAccount') ? 
-                  <tr>
-                    {[ 
-                      "sportName",
-                      "Upline Profit/Loss",
-                      "Downline Profit/Loss",
-                      "commission",
-                    ].map((key) => (
-                      <th
-                        key={key}
-                        className="border-r border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
-                        onClick={() => handleSort(key)}
-                      >
-                        <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
-                          <span className="text-center w-full">
-                            {key === "sportName"
-                              ? "Sport Name"
-                              : key === "Upline Profit/Loss"
-                              ? "Upline Profit/Loss"
-                              : key === "Downline Profit/Loss"
-                              ? "Downline Profit/Loss"
-                              : key === "commission"
-                              ? "Commission"
-                              : "Total P & L"}
-                          </span>
-                          <div className="flex flex-col items-center ml-2">
-                            <FaSortUp
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "ascending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                              }`}
-                              style={{
-                                marginBottom: "-6px",
-                              }}
-                            />
-                            <FaSortDown
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "descending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                              }`}
-                              style={{
-                                marginTop: "-6px",
-                              }}
-                            />
+                  {!location?.pathname?.includes('/MyAccount') ?
+                    <tr>
+                      {[
+                        "sportName",
+                        "Upline Profit/Loss",
+                        "Downline Profit/Loss",
+                        "commission",
+                      ].map((key) => (
+                        <th
+                          key={key}
+                          className="border-r border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                          onClick={() => handleSort(key)}
+                        >
+                          <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
+                            <span className="text-center w-full">
+                              {key === "sportName"
+                                ? "Sport Name"
+                                : key === "Upline Profit/Loss"
+                                  ? "Upline Profit/Loss"
+                                  : key === "Downline Profit/Loss"
+                                    ? "Downline Profit/Loss"
+                                    : key === "commission"
+                                      ? "Commission"
+                                      : "Total P & L"}
+                            </span>
+                            <div className="flex flex-col items-center ml-2">
+                              <FaSortUp
+                                className={`${sortConfig.key === key &&
+                                    sortConfig.direction === "ascending"
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                  }`}
+                                style={{
+                                  marginBottom: "-6px",
+                                }}
+                              />
+                              <FaSortDown
+                                className={`${sortConfig.key === key &&
+                                    sortConfig.direction === "descending"
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                  }`}
+                                style={{
+                                  marginTop: "-6px",
+                                }}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </th>
-                    ))}
-                  </tr>
-                  :
-                  <tr>
-                    {[ 
-                      "sportName",
-                      "Profit & Loss",
-                      "commission",
-                      "Total Profit&Loss",
-                    ].map((key) => (
-                      <th
-                        key={key}
-                        className="border-r border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
-                        onClick={() => handleSort(key)}
-                      >
-                        <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
-                          <span className="text-center w-full">
-                            {key === "sportName"
-                              ? "Sport Name"
-                              : key === "Profit & Loss"
-                              ? "Profit & Loss"
-                              : key === "Downline Profit/Loss"
-                              ? "Downline Profit/Loss"
-                              : key === "commission"
-                              ? "Commission"
-                              : "Total P & L"}
-                          </span>
-                          <div className="flex flex-col items-center ml-2">
-                            <FaSortUp
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "ascending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                              }`}
-                              style={{
-                                marginBottom: "-6px",
-                              }}
-                            />
-                            <FaSortDown
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "descending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                              }`}
-                              style={{
-                                marginTop: "-6px",
-                              }}
-                            />
+                        </th>
+                      ))}
+                    </tr>
+                    :
+                    <tr>
+                      {[
+                        "sportName",
+                        "Profit & Loss",
+                        "commission",
+                        "Total Profit&Loss",
+                      ].map((key) => (
+                        <th
+                          key={key}
+                          className="border-r border-gray-400 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                          onClick={() => handleSort(key)}
+                        >
+                          <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
+                            <span className="text-center w-full">
+                              {key === "sportName"
+                                ? "Sport Name"
+                                : key === "Profit & Loss"
+                                  ? "Profit & Loss"
+                                  : key === "Downline Profit/Loss"
+                                    ? "Downline Profit/Loss"
+                                    : key === "commission"
+                                      ? "Commission"
+                                      : "Total P & L"}
+                            </span>
+                            <div className="flex flex-col items-center ml-2">
+                              <FaSortUp
+                                className={`${sortConfig.key === key &&
+                                    sortConfig.direction === "ascending"
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                  }`}
+                                style={{
+                                  marginBottom: "-6px",
+                                }}
+                              />
+                              <FaSortDown
+                                className={`${sortConfig.key === key &&
+                                    sortConfig.direction === "descending"
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                  }`}
+                                style={{
+                                  marginTop: "-6px",
+                                }}
+                              />
+                            </div>
                           </div>
-                        </div>
-                      </th>
-                    ))}
-                  </tr>}
+                        </th>
+                      ))}
+                    </tr>}
                 </thead>
                 <tbody>
                   {profitLossData.length > 0 ? (
                     [...paginatedData]?.sort((a, b) => {
                       if (sortConfig?.key !== '') {
-                        if(sortConfig?.direction == 'ascending'){
-                          console.log('runnnnn2',a[sortConfig.key] - b[sortConfig.key])
-                          if(sortConfig?.key == 'refPL'){
+                        if (sortConfig?.direction == 'ascending') {
+                          console.log('runnnnn2', a[sortConfig.key] - b[sortConfig.key])
+                          if (sortConfig?.key == 'refPL') {
                             return (a?.totalOpeningBalance - a?.creditReference) - (b?.totalOpeningBalance - b?.creditReference)
-                          }else if(sortConfig?.key == 'username'){
+                          } else if (sortConfig?.key == 'username') {
                             return a.name?.localeCompare(a.name)
-                          }else{
+                          } else {
                             return a[sortConfig.key] - b[sortConfig.key]
                           }
-                        }else if(sortConfig?.direction == 'descending'){
+                        } else if (sortConfig?.direction == 'descending') {
                           console.log('runnnnn3', b[sortConfig.key] - a[sortConfig.key])
-                          if(sortConfig?.key == 'refPL'){
+                          if (sortConfig?.key == 'refPL') {
                             return (b?.totalOpeningBalance - b?.creditReference) - (a?.totalOpeningBalance - a?.creditReference)
-                          }else if(sortConfig?.key == 'username'){
+                          } else if (sortConfig?.key == 'username') {
                             return b?.name?.localeCompare(a?.name)
-                          }else{
-                        return  b[sortConfig.key] - a[sortConfig.key]
+                          } else {
+                            return b[sortConfig.key] - a[sortConfig.key]
                           }
-                        }}
+                        }
+                      }
                     }).map((item, index) => (
                       <tr
                         key={index}
@@ -298,9 +301,9 @@ const EventProfitLoss = ({ Userid }) => {
                       >
                         <td
                           onClick={() => {
-                            if(item._id == 'Casino'){
+                            if (item._id == 'Casino') {
                               navigate(`${ROUTES_CONST.CasinoSportList}/${item?.gameId}`)
-                            }else{
+                            } else {
                               handleRowClick(item.gameId)
                             }
                           }}
@@ -308,74 +311,88 @@ const EventProfitLoss = ({ Userid }) => {
                         >
                           {item._id}
                         </td>
-                        <td
-                          className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
-                          style={{
-                            color:
-                              item.totalUplineProfitLoss < 0 ? "red" : "green",
-                          }}
-                        >
-                          {item.totalUplineProfitLoss < 0
-                            ? `-${Math.abs(
-                                item.totalUplineProfitLoss.toFixed(2)
+
+                        {location?.pathname?.includes('/MyAccount') ?
+                          <td
+                            className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
+                            style={{
+                              color:
+                                item.totalDownlineProfitLoss < 0 ? "red" : "green",
+                            }}
+                          >
+                            {item.totalDownlineProfitLoss < 0
+                              ? `-${Math.abs(
+                                (item.totalDownlineProfitLoss + item?.totalCommission).toFixed(2)
                               )}`
-                            : item.totalUplineProfitLoss.toFixed(2)}
-                        </td>
-                      {location?.pathname?.includes('/MyAccount') ? 
-                      <td className="px-4 py-3 text-sm text-center font-medium">
-                      {Math.abs(item.totalCommission.toFixed(2))}
-                    </td>
-                      :  <td
-                          className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
-                          style={{
-                            color:
-                              item.totalDownlineProfitLoss < 0
-                                ? "red"
-                                : "green",
-                          }}
-                        >
-                          {item.totalDownlineProfitLoss < 0
-                            ? Math.abs(
+                              : (item.totalDownlineProfitLoss + item?.totalCommission).toFixed(2)}
+                          </td> 
+                          :
+                          <td
+                            className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
+                            style={{
+                              color:
+                                item.totalUplineProfitLoss < 0 ? "red" : "green",
+                            }}
+                          >
+                            {item.totalUplineProfitLoss < 0
+                              ? `-${Math.abs(
+                                (item.totalUplineProfitLoss + item?.totalCommission).toFixed(2)
+                              )}`
+                              : (item.totalUplineProfitLoss + item?.totalCommission).toFixed(2)}
+                          </td>
+                        }
+                        {location?.pathname?.includes('/MyAccount') ?
+                          <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                            {Math.abs(item.totalCommission.toFixed(2))}
+                          </td>
+                          : 
+                          <td
+                            className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
+                            style={{
+                              color:
+                                item.totalUplineProfitLoss < 0
+                                  ? "red"
+                                  : "green",
+                            }}
+                          >
+                            {item.totalUplineProfitLoss < 0
+                              ? Math.abs(
                                 (
-                                  item.totalDownlineProfitLoss +
-                                  item.totalCommission
+                                  item.totalUplineProfitLoss
                                 )
                               ).toFixed(2)
-                            : (
-                                item.totalDownlineProfitLoss +
-                                item.totalCommission
+                              : (
+                                item.totalUplineProfitLoss
                               ).toFixed(2)}
-                        </td>}
+                          </td>}
 
-                        {location?.pathname?.includes('/MyAccount') ? 
-                        <td
-                        className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
-                        style={{
-                          color:
-                            item.totalDownlineProfitLoss < 0
-                              ? "red"
-                              : "green",
-                        }}
-                      >
-                        {item.totalDownlineProfitLoss < 0
-                          ? Math.abs(
-                              (
-                                item.totalDownlineProfitLoss +
-                                item.totalCommission
-                              ).toFixed(2)
-                            )
-                          : (
-                              item.totalDownlineProfitLoss +
-                              item.totalCommission
-                            ).toFixed(2)}
-                      </td>
-                        :
-                        <td className="px-4 py-3 text-sm text-center font-medium">
-                          {Math.abs(item.totalCommission)?.toFixed(2)}
-                        </td>
-                        
+                        {location?.pathname?.includes('/MyAccount') ?
+                          <td
+                            className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
+                            style={{
+                              color:
+                                item.totalDownlineProfitLoss < 0
+                                  ? "red"
+                                  : "green",
+                            }}
+                          >
+                            {item.totalDownlineProfitLoss < 0
+                              ? Math.abs(
+                                (
+                                  item.totalDownlineProfitLoss
+                                ).toFixed(2)
+                              )
+                              : (
+                                item.totalDownlineProfitLoss
+                              ).toFixed(2)}
+                          </td>
+                          :
+                          <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                            {Math.abs(item.totalCommission)?.toFixed(2)}
+                          </td>
+
                         }
-                     
+
                       </tr>
                     ))
                   ) : (
@@ -393,59 +410,71 @@ const EventProfitLoss = ({ Userid }) => {
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
                         {totalData.username}
                       </td>
+                      {location?.pathname?.includes('/MyAccount') ?
                       <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
                         <span
-                          className={`${
-                            totalData.profitLoss < 0
+                          className={`${totalData.downlineProfitLoss < 0
                               ? "text-red-500"
                               : "text-green-500"
-                          }`}
+                            }`}
+                        >
+                          {totalData.downlineProfitLoss < 0
+                            ? `-${Math.abs(totalData.downlineProfitLoss)?.toFixed(2)}`
+                            : Math.abs(totalData.downlineProfitLoss)?.toFixed(2)}
+                        </span>
+                      </td>
+                      :
+                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                        <span
+                          className={`${totalData.profitLoss < 0
+                              ? "text-red-500"
+                              : "text-green-500"
+                            }`}
                         >
                           {totalData.profitLoss < 0
                             ? `-${Math.abs(totalData.profitLoss)?.toFixed(2)}`
                             : Math.abs(totalData.profitLoss)?.toFixed(2)}
                         </span>
                       </td>
-                      
-                     {location?.pathname?.includes('/MyAccount') ?
-                       <td className="px-4 py-3 text-sm text-center font-medium">
-                       {totalData.commission?.toFixed(2)}
-                     </td>
-                     :
-                     <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
-                     <span
-                       className={`${
-                         totalData.downlineProfitLoss < 0
-                           ? "text-red-500"
-                           : "text-green-500"
-                       }`}
-                     >
-                       {Math.abs(
-                         totalData.downlineProfitLoss + totalData.commission
-                       )?.toFixed(2)}
-                     </span>
-                   </td> 
+                          }
+
+                      {location?.pathname?.includes('/MyAccount') ?
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                          {totalData.commission?.toFixed(2)}
+                        </td>
+                        :
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                          <span
+                            className={`${totalData.downlineProfitLoss < 0
+                                ? "text-red-500"
+                                : "text-green-500"
+                              }`}
+                          >
+                            {Math.abs(
+                              totalData.downlineProfitLoss + totalData.commission
+                            )?.toFixed(2)}
+                          </span>
+                        </td>
                       }
 
-                      {location?.pathname?.includes('/MyAccount') ? 
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
-                      <span
-                        className={`${
-                          totalData.downlineProfitLoss < 0
-                            ? "text-red-500"
-                            : "text-green-500"
-                        }`}
-                      >
-                        {Math.abs(
-                          totalData.downlineProfitLoss + totalData.commission
-                        )?.toFixed(2)}
-                      </span>
-                    </td> 
-                      : 
-                      <td className="px-4 py-3 text-sm text-center font-medium">
-                        {totalData.commission?.toFixed(2)}
-                      </td> 
-                      
+                      {location?.pathname?.includes('/MyAccount') ?
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                          <span
+                            className={`${totalData.downlineProfitLoss < 0
+                                ? "text-red-500"
+                                : "text-green-500"
+                              }`}
+                          >
+                            {Math.abs(
+                              totalData.downlineProfitLoss + totalData.commission
+                            )?.toFixed(2)}
+                          </span>
+                        </td>
+                        :
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium">
+                          {totalData.commission?.toFixed(2)}
+                        </td>
+
                       }
                     </tr>
                   </tfoot>
@@ -468,11 +497,10 @@ const EventProfitLoss = ({ Userid }) => {
                   <button
                     onClick={() => handlePageChange("first")}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded ${
-                      currentPage === 1
+                    className={`px-3 py-1 text-sm rounded ${currentPage === 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     First
                   </button>
@@ -481,11 +509,10 @@ const EventProfitLoss = ({ Userid }) => {
                   <button
                     onClick={() => handlePageChange("prev")}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded ${
-                      currentPage === 1
+                    className={`px-3 py-1 text-sm rounded ${currentPage === 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     Previous
                   </button>
@@ -502,11 +529,10 @@ const EventProfitLoss = ({ Userid }) => {
                           <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${
-                              currentPage === page
+                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${currentPage === page
                                 ? "bg-gray-200"
                                 : "hover:bg-gray-100"
-                            }`}
+                              }`}
                           >
                             {page}
                           </button>
@@ -529,11 +555,10 @@ const EventProfitLoss = ({ Userid }) => {
                   <button
                     onClick={() => handlePageChange("next")}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm rounded ${
-                      currentPage === totalPages
+                    className={`px-3 py-1 text-sm rounded ${currentPage === totalPages
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     Next
                   </button>
@@ -542,11 +567,10 @@ const EventProfitLoss = ({ Userid }) => {
                   <button
                     onClick={() => handlePageChange("last")}
                     disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm rounded ${
-                      currentPage === totalPages
+                    className={`px-3 py-1 text-sm rounded ${currentPage === totalPages
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
-                    }`}
+                      }`}
                   >
                     Last
                   </button>

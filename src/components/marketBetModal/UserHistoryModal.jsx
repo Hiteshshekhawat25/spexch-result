@@ -28,7 +28,7 @@ const UserHistoryModal = ({selectedUser, showUser, setShowUser}) => {
                         selectedUser?.levelUsers?.map(item => (
                           <tr key={item?._id}>
                             <td className="font-semibold p-2 border text-nowrap text-center">
-                              {item?.name} <span className="uppercase">({item?.roleName})</span>
+                              {item?.name} <span className="uppercase">({item?.role_name})</span>
                             </td>
                           </tr>
                         ))
@@ -36,7 +36,7 @@ const UserHistoryModal = ({selectedUser, showUser, setShowUser}) => {
                     }
                     <tr>
                       <td className="font-semibold p-2 border text-nowrap text-center">
-                        {selectedUser?.userDetails?.name} <span className="uppercase">({selectedUser?.userDetails?.roleName})</span>
+                        {selectedUser?.userDetails?.name} <span className="uppercase">({selectedUser?.userDetails?.role_name})</span>
                       </td>
                     </tr>
                   </tbody>

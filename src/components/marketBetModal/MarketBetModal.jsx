@@ -11,13 +11,15 @@ const MarketBetModal = ({
   showUser,
   setShowUser,
   selectedUser,
+searchTerm, 
+setSearchTerm,
   setSelectedUser,
 }) => {
   const dispatch = useDispatch();
   const { data, loading, error } = useSelector((state) => state.marketBetList);
   const [currentPage, setCurrentPage] = useState(1);
   const [entriesToShow, setEntriesToShow] = useState(10);
-  const [searchTerm, setSearchTerm] = useState("");
+  
 
   const handleClose = () => {
     setShow(false);

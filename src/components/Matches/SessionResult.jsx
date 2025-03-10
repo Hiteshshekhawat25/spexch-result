@@ -137,14 +137,14 @@ console.log({sessions},'sessions')
       </div>
 
       {/* Row Section with Select Match, Select Session, and Result */}
-      <div className="flex gap-6 mb-4">
+      <div className="md:flex gap-6 mb-4">
         {/* Select Match Dropdown */}
 
 
-        <div className="w-1/4">
+        <div className="w-full md:w-1/4">
           <label
             htmlFor="match"
-            className="block text-md font-bold text-gray-700 mb-1 text-left"
+            className="block text-sm md:text-md  font-bold text-gray-700 mb-1 text-left"
           >
             Sort
           </label>
@@ -166,10 +166,10 @@ console.log({sessions},'sessions')
 
 
 
-        <div className="w-1/4">
+        <div className="w-full md:w-1/4">
           <label
             htmlFor="match"
-            className="block text-md font-bold text-gray-700 mb-1 text-left"
+            className="block text-sm md:text-md font-bold text-gray-700 mb-1 text-left"
           >
             Select Match
           </label>
@@ -200,10 +200,10 @@ console.log({sessions},'sessions')
 
 
         {/* Select Session Dropdown */}
-        <div className="w-1/4">
+        <div className="w-full md:w-1/4">
           <label
             htmlFor="session"
-            className="block text-md font-bold text-gray-700 mb-1 text-left"
+            className="block text-sm md:text-md font-bold text-gray-700 mb-1 text-left"
           >
             Select Session
           </label>
@@ -225,11 +225,11 @@ console.log({sessions},'sessions')
         </div>
 
         {/* Result Input and Submit Button */}
-        <div className="w-2/4 flex items-end gap-4">
-          <div className="w-1/2">
+        <div className="w-full md:w-2/4 flex items-end gap-4">
+          <div className="w-full md:w-1/4">
             <label
               htmlFor="result"
-              className="block text-md font-bold text-gray-700 mb-1 text-left"
+              className="block text-sm md:text-md font-bold text-gray-700 mb-1 text-left"
             >
               Result
             </label>

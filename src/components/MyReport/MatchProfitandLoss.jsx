@@ -724,11 +724,11 @@ const MatchProfitandLoss = () => {
   }
 
   return (
-    <div className="p-4">
+    <div className="p-1 md:p-4">
       <h1 className="text-xl font-bold mb-4 bg-gradient-blue text-white p-1">
         Match Bet Profit & Loss
       </h1>
-      <div className="flex justify-between items-center mb-4">
+      <div className=" flex flex-col md:flex-row gap-2 justify-between items-center mb-4">
         <div className="flex items-center">
           <label className="mr-2 text-sm font-medium text-black">Show</label>
           <select
@@ -750,7 +750,7 @@ const MatchProfitandLoss = () => {
         <div>
           <input
           value={search}
-          className="border-2 rounded-md py-1 px-2"
+          className="border-2 w-full md:w-auto rounded-md py-1 px-2"
           placeholder="Search..."
           onChange={(e)=>setSearch(e.target.value)}
           />

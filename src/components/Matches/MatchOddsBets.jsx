@@ -193,7 +193,9 @@ const MatchOddsBets = () => {
             </th>
             <th className="px-4 py-2 text-center items-center">Match</th>
               <th className="px-4 py-2 text-center items-center">Session Name</th>
-              {/* <th className="px-4 py-2 text-center items-center">Result</th> */}
+              <th className="px-4 py-2 text-center items-center">Username</th>
+              <th className="px-4 py-2 text-center items-center">Amount</th>
+
               {/* <th className="px-4 py-2 text-center items-center">Edit/Update</th> */}
               <th className="px-4 py-2 text-center items-center">Market Type</th>
               <th className="px-4 py-2 text-center items-center">odds</th>
@@ -212,7 +214,9 @@ const MatchOddsBets = () => {
                 </td>
                  <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.event}</td>
                                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.selection}</td>
-                                      
+                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.username}</td>
+                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.amount}</td>
+
                                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.type}</td>
                                       {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
                                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.odds}</td>

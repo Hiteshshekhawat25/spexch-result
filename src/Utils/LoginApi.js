@@ -96,11 +96,11 @@ export const fetchUserDetails = async ( userId) => {
 };
 
 //get api to get all users of selected master
-export const fetchallUsers = async ( userId) => {
+export const fetchallUsers = async ( userId,page = 1,limit = 10) => {
   const token = localStorage.getItem("authToken");
 
 try {
-const response = await axios.get(`${BASE_URL}/user/get-user-hierarchy/${userId}?page=1&limit=3`, {
+const response = await axios.get(`${BASE_URL}/user/get-user-hierarchy/${userId}?page=${page}&limit=${limit}`, {
 headers: { Authorization: `Bearer ${token}` },
 });
 
@@ -112,7 +112,7 @@ if(response?.data?.pagination?.totalUsers === 0) {
 console.log('get-user-hierarchy', response?.data?.pagination?.totalUsers)
 
 // Return the user details if the request is successful
-return response.data.data;
+return response.data;
 } catch (error) {
 console.error("Error fetching user details:", error);
 throw new Error(error.message || "Failed to fetch user details.");
