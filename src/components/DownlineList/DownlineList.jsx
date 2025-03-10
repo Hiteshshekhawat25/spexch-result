@@ -147,9 +147,9 @@ const DownlineList = () => {
     if(!location?.pathname?.includes('/user-downline-list')){
             let arr = searchTerm?.length
               ? searchData
-              : userFetchList.length > 0
+              : userFetchList?.length > 0
                 ? userFetchList
-                : userList.length > 0
+                : userList?.length > 0
                   ? userList
                   : downlineData
             setDataList(arr)
@@ -301,6 +301,7 @@ const DownlineList = () => {
               console.log("Abcd1",rolesData[0].role_id);
               
               const totalUsers = combinedData.length;
+              console.log(totalUsers,'totalUserstotalUserstotalUserstotalUserstotalUsers')
               setTotalUsers(totalUsers);
               
               const startIndex = (currentPage - 1) * entriesToShow;
@@ -499,9 +500,11 @@ const DownlineList = () => {
 
       if (allowedRoles.includes(item.role_name)) {
         const data = await fetchallUsers(item._id,currentPage,entriesToShow);
-        console.log(data,'hitesh')
+        console.log(data?.pagination?.totalUsers,'totalUserstotalUserstotalUserstotalUserstotalUsers')
         setUserFetchList(data?.data);
-        setTotalUsers(data?.pagination?.totalUsers)
+        if(data?.pagination?.totalUsers){
+          setTotalUsers(data?.pagination?.totalUsers || 0)
+        }
 
         if (
           item.role_name == "agent" ||
@@ -743,7 +746,7 @@ const DownlineList = () => {
                     ].map(({ key, label }) => (
                       <th
                         key={key}
-                        className="border border-gray-400 text-left px-3 p-2 text-md text-nowrap text-black cursor-pointer"
+                        className="border border-gray-400 text-left px-3 p-2 text-sm text-nowrap text-black cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between">

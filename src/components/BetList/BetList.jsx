@@ -423,7 +423,7 @@ const BetList = ({ Userid }) => {
                             {(item.betType == "no" ||  item?.betType == 'lay') ? "Lay" : "Back"}
                           </td>
                           <td className="border border-gray-400 px-1 min-w-32 w-auto py-1">
-                            {item?.fancyOdds > 0? item?.fancyOdds+'/'+item.oddsRequested : item.oddsRequested}
+                            {item?.type == 'fancy' ? item?.fancyOdds+'/'+item.oddsRequested : item.oddsRequested}
                           </td>
                           <td className="border border-gray-400 px-1 min-w-32 w-auto py-1 font-bold">
                             {item.stake?.toFixed(2)}

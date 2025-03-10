@@ -517,7 +517,7 @@ const Banking = () => {
             </div>
           </div>
           {/* </div> */}
-          <table className="w-full table-auto border-collapse border border-gray-300">
+          <table className="w-full  table-auto border-collapse border border-gray-300">
             <thead className="border border-gray-300">
               <tr className="bg-gray-300">
                 {columns.map(({ key, label }) => (
@@ -690,7 +690,7 @@ const Banking = () => {
               ))}
             </tbody>
           </table>
-          <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+          <div className="flex justify-between sm:mb-0 mb-16 items-center mt-4 flex-col sm:flex-row">
             {/* Showing entries text */}
             <div className="text-sm text-gray-600 mb-2 sm:mb-0">
               Showing{" "}
@@ -792,7 +792,7 @@ const Banking = () => {
             )}
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center mt-4 space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 w-full">
+          <div className="flex fixed left-0 bg-white p-2 bottom-0 sm:relative flex-col sm:flex-row items-center mt-4 space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 w-full">
             <div className="flex space-x-2">
               <button
                 onClick={handleClearAll}

@@ -286,7 +286,7 @@ const BetHistory = () => {
                               : "Casino"}
                         </td>
                         <td className="px-1 min-w-32 w-auto py-2 text-nowrap text-sm text-center border-r border-gray-400">
-                        {item.fancyOdds ? `${item?.fancyOdds}/${item.odds}` : item?.odds + '/' + item.fancyOdds}
+                        {item?.type == 'fancy' ? `${item?.fancyOdds}/${item.odds}` : item?.odds + '/' + item.fancyOdds}
                         </td>
                         <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.totalAmount?.toFixed(2)}
