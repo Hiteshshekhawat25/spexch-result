@@ -18,6 +18,7 @@ const EventProfitLoss = ({ Userid }) => {
 
   const location = useLocation();
   const userId = location.state?.userId;
+  const [search,setSearch] = useState('');
   const [sortConfig, setSortConfig] = useState({
     key: "sportName",
     direction: "ascending",
@@ -110,6 +111,7 @@ const EventProfitLoss = ({ Userid }) => {
             setTotalPages={setTotalPages}
             setIsDataFetched={setIsDataFetched}
             entriesToShow={entriesToShow}
+            search={search}
             currentPage={currentPage}
             setCurrentPage={setCurrentPage}
             Userid={Userid}
@@ -120,6 +122,7 @@ const EventProfitLoss = ({ Userid }) => {
             <h1 className="text-[15px] rounded-t-lg p-2 px-4 bg-gradient-seablue text-white font-bold">
               Event Profit Loss
             </h1>
+           
 
             <div className="flex justify-between items-center mb-4 p-4">
               <div className="flex items-center">
@@ -144,6 +147,16 @@ const EventProfitLoss = ({ Userid }) => {
                   entries
                 </label>
               </div>
+              <div>
+              <input
+              name="search"
+              className="border-2 px-2 text-sm py-1 rounded-md"
+              autoComplete="search"
+              placeholder="Search..."
+              value={search}
+              onChange={(e)=>setSearch(e.target.value)}
+              />
+            </div>
             </div>
             <div className="overflow-x-auto my-4 mx-4">
               <table className="w-full table-auto border-collapse border border-gray-400">
@@ -284,7 +297,13 @@ const EventProfitLoss = ({ Userid }) => {
                         className="border-b border-gray-400 font-medium"
                       >
                         <td
-                          onClick={() => handleRowClick(item.gameId)}
+                          onClick={() => {
+                            if(item._id == 'Casino'){
+                              navigate(`${ROUTES_CONST.CasinoSportList}/${item?.gameId}`)
+                            }else{
+                              handleRowClick(item.gameId)
+                            }
+                          }}
                           className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer font-medium"
                         >
                           {item._id}
@@ -320,8 +339,8 @@ const EventProfitLoss = ({ Userid }) => {
                                 (
                                   item.totalDownlineProfitLoss +
                                   item.totalCommission
-                                ).toFixed(2)
-                              )
+                                )
+                              ).toFixed(2)
                             : (
                                 item.totalDownlineProfitLoss +
                                 item.totalCommission
@@ -352,7 +371,7 @@ const EventProfitLoss = ({ Userid }) => {
                       </td>
                         :
                         <td className="px-4 py-3 text-sm text-center font-medium">
-                          {Math.abs(item.totalCommission.toFixed(2))}
+                          {Math.abs(item.totalCommission)?.toFixed(2)}
                         </td>
                         
                         }
@@ -383,8 +402,8 @@ const EventProfitLoss = ({ Userid }) => {
                           }`}
                         >
                           {totalData.profitLoss < 0
-                            ? `-${Math.abs(totalData.profitLoss?.toFixed(2))}`
-                            : Math.abs(totalData.profitLoss?.toFixed(2))}
+                            ? `-${Math.abs(totalData.profitLoss)?.toFixed(2)}`
+                            : Math.abs(totalData.profitLoss)?.toFixed(2)}
                         </span>
                       </td>
                       

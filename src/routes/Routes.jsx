@@ -46,6 +46,7 @@ import TossResult from "../components/toss/TossResult";
 import PendingMarket from "../components/libility/PendingMarket";
 import CommissionPage from "../components/Commission/CommissionPage";
 import BookMakersBets from "../components/Matches/BookMarkersBets";
+import CasinoSportList from "../components/MyReport/CasinoSportList";
 
 const RoutesComp = ({ socket }) => {
   return (
@@ -292,6 +293,16 @@ const RoutesComp = ({ socket }) => {
       />
 
       <Route
+        path={`${ROUTES_CONST.CasinoSportList}/:matchId`}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <CasinoSportList />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+      <Route
         path={`${ROUTES_CONST.BookmakerBet}/:matchId`}
         element={
           <ProtectedRoutes>
@@ -403,6 +414,7 @@ const RoutesComp = ({ socket }) => {
           </ProtectedRoutes>
         }
       />
+      
 
       <Route
         path={ROUTES_CONST.EventProfitLoss}

@@ -581,6 +581,7 @@ const MatchProfitandLoss = () => {
   const [loading, setLoading] = useState(true);
   const [entriesToShow, setEntriesToShow] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [search,setSearch] = useState('');
   const [totalPages, setTotalPages] = useState(1);
   const [totalEntries, setTotalEntries] = useState(0);
   const [sortConfig, setSortConfig] = useState({
@@ -610,17 +611,25 @@ const MatchProfitandLoss = () => {
     const fetchData = async () => {
       const token = localStorage.getItem("authToken");
       try {
+        let obj ={
+          page: currentPage,
+          search:search,
+          limit: entriesToShow,
+          userId: user_id,
+          fromDate: fromDate,
+          toDate: toDate,
+        }
+        if(location.state == 'casino'){
+          obj.providerId = matchId,
+          obj.sportsId = '3'
+        }else{
+          obj.matchId = matchId
+        }
+        
         const response = await axios.get(
           `${BASE_URL}/user/get-selection-group-amount-profit-loss`,
           {
-            params: {
-              page: currentPage,
-              limit: entriesToShow,
-              matchId: matchId,
-              userId: user_id,
-              fromDate: fromDate,
-              toDate: toDate,
-            },
+            params: obj,
             headers: {
               "Content-Type": "application/json; charset=utf-8",
               Accept: "application/json",
@@ -689,7 +698,7 @@ const MatchProfitandLoss = () => {
       navigate(url, {
         state: { 
           userId ,
-          type : type == 'odds' ? type : type == 'bookmakers' ? type : '',
+          type : type == 'odds' ? type : type == 'bookmakers' ? type : type=='fancy' ? ''  : 'casino',
           selectionId : selectionId
         },
       });
@@ -738,6 +747,14 @@ const MatchProfitandLoss = () => {
           </select>
           <label className="ml-2 text-sm font-medium text-black">entries</label>
         </div>
+        <div>
+          <input
+          value={search}
+          className="border-2 rounded-md py-1 px-2"
+          placeholder="Search..."
+          onChange={(e)=>setSearch(e.target.value)}
+          />
+        </div>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full table-auto border-collapse border border-gray-400">
@@ -746,7 +763,7 @@ const MatchProfitandLoss = () => {
               {headers.map((header) => (
                 <th
                   key={header.key}
-                  className="px-4 py-2 cursor-pointer border border-gray-400"
+                  className="px-4 py-2 cursor-pointer text-nowrap border border-gray-400"
                   onClick={() => handleSort(header.key)}
                 >
                   <div className="flex justify-between items-center">
@@ -779,17 +796,26 @@ const MatchProfitandLoss = () => {
           <tbody>
             {sortedData.map((item, index) => (
               <tr key={index} className="border-b border-gray-400">
-                <td className="px-4 py-2 border border-gray-400 text-center">{item.sport}</td>
-                <td className="px-4 border border-gray-400 py-2 text-center">{item.match}</td>
+                <td className="px-4 py-1 border border-gray-400 text-center">{item.sport}</td>
+                <td className="px-4 border text-nowrap border-gray-400 py-1 text-center">{item?.provider ? item?.provider : item.match}</td>
                 <td
-                  className="px-4 py-2 border border-gray-400 text-center text-lightblue cursor-pointer"
+                  className="px-4 py-1 border text-nowrap border-gray-400 text-center text-lightblue cursor-pointer"
                   onClick={() => {
-                    handleMarketNameClick(
-                      item.matchId,
-                      item.selectionId,
-                      item?.userId,
-                      item?.type
-                    );
+                    if(item?.providerId){
+                      handleMarketNameClick(
+                        item?.providerId,
+                        item?.game_id,
+                        item?.userId,
+                        item?.type
+                      )
+                    }else{
+                      handleMarketNameClick(
+                        item.matchId,
+                        item.selectionId,
+                        item?.userId,
+                        item?.type
+                      );
+                    }
                   }}
                 >
                   <p>
@@ -801,14 +827,14 @@ const MatchProfitandLoss = () => {
                       ? "Toss" 
                       : item?.type === "bookmakers"
                       ? "Bookmaker"
-                      : ""}
+                      : item?.name}
                   </p>
                 </td>
-                <td className="px-4 py-2 border border-gray-400 text-center"> 
-                  { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo}
+                <td className="px-4 py-1 border text-nowrap border-gray-400 text-center"> 
+                  { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
                 </td>
                 <td
-                  className="px-4 py-2 border border-gray-400 text-center"
+                  className="px-4 py-1 text-nowrap border border-gray-400 text-center"
                   style={{
                     color: item.totalProfitLoss < 0 ? "red" : "green",
                   }}
@@ -824,7 +850,7 @@ const MatchProfitandLoss = () => {
                 <td className="px-4 py-2 border border-gray-400 text-center">
                   {item?.totalCommission.toFixed(2)}
                 </td>
-                <td className="px-4 py-2 border border-gray-400 text-center">
+                <td className="px-4 py-2 text-nowrap border border-gray-400 text-center">
                 {moment(item.settledTime).format("MMMM Do YYYY, h:mm:ss a")}
                 </td>
               </tr>

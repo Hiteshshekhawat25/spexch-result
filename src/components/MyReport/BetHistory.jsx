@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { BASE_URL } from "../../Constant/Api";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { FaSortDown, FaSortUp } from "react-icons/fa";
@@ -12,6 +12,8 @@ const BetHistory = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [search,setSearch] = useState('');
+  const time = useRef();
   const [localLoading, setLocalLoading] = useState(false);
   const { matchId, selectionId, id } = useParams();
   const [totalTransactions, setTotalTransactions] = useState(0);
@@ -80,33 +82,46 @@ const BetHistory = () => {
     commission: sortedData.reduce((sum, row) => sum + row.commission, 0),
   };
 
+  const handleChange=(e)=>{
+    setSearch(e.target.value) 
+    if(time.current){
+      clearTimeout(time.current)
+    }
+    time.current = setTimeout(()=>{
+      fetchData(e.target.value)
+    },1000)
+    
+  }
+
+  const fetchData = async (input) => {
+    setLocalLoading(true);
+    try {
+      const token = localStorage.getItem("authToken");
+      const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200${location?.state?.type == 'casino' ? `&game_id=${matchId}` :`&matchId=${matchId}`}${location?.state?.type !== 'fancy' ? `&type=${location?.state?.type}` : ''}${location?.state?.type == 'fancy' ? `&selectionId=${location?.state?.selectionId}` : ''}&userId=${location?.state?.userId}&fromDate=${fromDate ? fromDate : ''}&toDate=${toDate ? toDate : ''}&search=${input ? input :search}`;
+      const response = await fetch(url, {
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+      console.log(data, 'paginatedDatapaginatedDatapaginatedData')
+      setProfitLossData(data.data);
+      setTotalEntries(data?.pagination?.totalRecords);
+      setTotalPages(data?.pagination?.totalPages);
+      setIsDataFetched(true);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLocalLoading(false);
+    }
+  };
+
+
   useEffect(() => {
     console.log("inside", matchId, id, selectionId);
-    const fetchData = async () => {
-      setLocalLoading(true);
-      try {
-        const token = localStorage.getItem("authToken");
-        const url = `${BASE_URL}/user/get-user-bet?page=1&limit=200&matchId=${matchId}${location?.state?.type !== 'fancy' ? `&type=${location?.state?.type}` : ''}${location?.state?.type == 'fancy' ? `&selectionId=${location?.state?.selectionId}` : ''}&userId=${location?.state?.userId}&fromDate=${fromDate ? fromDate : ''}&toDate=${toDate ? toDate : ''}`;
-        const response = await fetch(url, {
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-        console.log(data, 'paginatedDatapaginatedDatapaginatedData')
-        setProfitLossData(data.data);
-        setTotalEntries(data?.pagination?.totalRecords);
-        setTotalPages(data?.pagination?.totalPages);
-        setIsDataFetched(true);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setLocalLoading(false);
-      }
-    };
 
     fetchData();
   }, [matchId, id]);
@@ -132,7 +147,7 @@ const BetHistory = () => {
               Bet History
             </h1>
 
-            <div className="flex justify-between items-center mb-4 p-4">
+            <div className="flex justify-between items-center  p-2 pt-4">
               <div className="flex w-full justify-between">
               <div className="flex items-center">
                 <label className="mr-2 text-sm font-medium text-black">
@@ -156,6 +171,17 @@ const BetHistory = () => {
                   entries
                 </label>
               </div>
+              <div>
+                <input
+                value={search}
+                className="border-2 rounded-md py-1 px-2"
+                placeholder="Search..."
+                onChange={handleChange}
+                />
+              </div>
+              </div>
+            </div>
+            <div className="w-full justify-end flex">
               {color ?
                 <div className="flex gap-2">
                   <div className="border-2 border-gray-600 px-2 h-8 items-center text-center bg-[#faa9ba] ">
@@ -168,8 +194,7 @@ const BetHistory = () => {
                     Void
                   </div>
                 </div> : ''}
-              </div>
-            </div>
+                </div>
             <div className="overflow-x-auto my-4 mx-4">
               <table className="w-full table-auto border-collapse border border-gray-400">
                 <thead className="border border-gray-400 bg-gray-300 text-black text-center">
@@ -189,7 +214,7 @@ const BetHistory = () => {
                     ].map((key) => (
                       <th
                         key={key}
-                        className="border border-gray-400 px-1 min-w-32 w-auto py-2 text-sm font-custom font-medium text-center cursor-pointer"
+                        className="border border-gray-400 text-nowrap px-1 min-w-32 w-auto py-2 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between w-full items-center text-center">
@@ -222,7 +247,7 @@ const BetHistory = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {profitLossData.length > 0 ? (
+                {
                     paginatedData.map((item, index) => (
                       <tr
                         key={index}
@@ -233,33 +258,34 @@ const BetHistory = () => {
                               : ""
                           }`}
                       >
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.sport}
                         </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.match}
                         </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.type == 'odds'
                             ? 'Match odds'
                             : item?.type == 'bookmakers' ?
                               'Bookmakers' : item?.type == 'fancy'
                                 ? item.marketNameTwo :
                                 item?.type == 'toss' ?
-                                  'TOSS' : item?.type
+                                  'TOSS' : item?.name ? 
+                                  item?.name : ''
                           }
                         </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.marketNameTwo}
                         </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto text-nowrap py-2 text-sm text-center border-r border-gray-400">
                           {item.betType === "no" || item.betType === "lay"
                             ? "Lay"
                             : item.betType === "yes" || item.betType === "back"
                               ? "Back"
-                              : "Void"}
+                              : "Casino"}
                         </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 w-auto py-2 text-nowrap text-sm text-center border-r border-gray-400">
                         {item.fancyOdds ? `${item?.fancyOdds}/${item.odds}` : item?.odds + '/' + item.fancyOdds}
                         </td>
                         <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
@@ -288,7 +314,7 @@ const BetHistory = () => {
                             </>
                           )}
                         </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
                           {new Date(item.placeTime).toLocaleString("en-US", {
                             year: "numeric",
                             month: "short",
@@ -299,7 +325,7 @@ const BetHistory = () => {
                             hour12: true,
                           })}
                         </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
+                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
                           {new Date(item.matchTime).toLocaleString("en-US", {
                             year: "numeric",
                             month: "short",
@@ -315,16 +341,7 @@ const BetHistory = () => {
                         </td>
                       </tr>
                     ))
-                  ) : (
-                    <tr>
-                      <td
-                        colSpan="11"
-                        className="px-1 min-w-32 w-auto py-2 text-sm text-center"
-                      >
-                        No data available
-                      </td>
-                    </tr>
-                  )}
+                  }
                 </tbody>
               </table>
             </div>

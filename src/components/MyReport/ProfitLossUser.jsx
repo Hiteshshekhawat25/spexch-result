@@ -12,6 +12,7 @@ const ProfitLossUser = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [profitLossData, setProfitLossData] = useState([]);
   const [isDataFetched, setIsDataFetched] = useState(false);
+  const [search,setSearch] = useState('')
   const [localLoading, setLocalLoading] = useState(false);
   const location = useLocation();
   const { selectionId, id } = useParams();
@@ -68,8 +69,13 @@ const ProfitLossUser = () => {
 
   const { fromDate, toDate } = useSelector((state) => state.eventPLFilter);
 
-  const handleRowClick = (matchId, id, selectionId,type,userId) => {
-    navigate(`/bet-history/${matchId}/${selectionId}/${id}`,{state : {color  : true,fromDate,toDate,type,userId,selectionId}});
+  const handleRowClick = (matchId, id, selectionId,game_id,type,userId) => {
+    console.log(game_id,'game_id')
+    if(game_id){
+      navigate(`/bet-history/${game_id}/${id}`,{state : {color  : true,fromDate,toDate,type,userId,selectionId}});
+    }else{
+      navigate(`/bet-history/${matchId}/${selectionId}/${id}`,{state : {color  : true,fromDate,toDate,type,userId,selectionId}});
+    }
   };
 
   useEffect(() => {
@@ -78,7 +84,7 @@ const ProfitLossUser = () => {
       try {
         const token = localStorage.getItem("authToken");
         const response = await fetch(
-          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&${location?.state?.type == 'odds' ||  location?.state?.type == 'bookmakers'? `type=${location?.state?.type}` : `&selectionId=${location?.state?.selectionId}` }&matchId=${selectionId}&fromDate=${fromDate ? fromDate : ''}&toDate=${toDate ? toDate :  ''}`,
+          `${BASE_URL}/user/get-selection-bet-profit-loss?page=1&limit=200&${location?.state?.type == 'odds' ||  location?.state?.type == 'bookmakers' || location?.state?.type == 'casino' ? `type=${location?.state?.type}` : `&selectionId=${location?.state?.selectionId}` }${location?.state?.type == 'casino' ? `&game_id=${id}` : ''}${location?.state?.type == 'casino' ? '' : `&matchId=${selectionId}`}&fromDate=${fromDate ? fromDate : ''}&toDate=${toDate ? toDate :  ''}&search=${search}`,
           {
             headers: {
               "Content-Type": "application/json; charset=utf-8",
@@ -155,6 +161,14 @@ const ProfitLossUser = () => {
                   entries
                 </label>
               </div>
+              <div>
+                <input
+                className="border-2 rounded-md py-1 px-2 "
+                placeholder="Search..."
+                value={search}
+                onChange={(e)=>setSearch(e.target.value)}
+                />
+              </div>
             </div>
             <div className="overflow-x-auto my-4 mx-4">
               <table className="w-full table-auto border-collapse border border-gray-400">
@@ -175,7 +189,7 @@ const ProfitLossUser = () => {
                         className="border border-gray-400 px-2 py-1 text-sm font-custom font-medium text-center cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
-                        <div className="flex justify-between w-full items-center text-center">
+                        <div className="flex justify-between text-nowrap w-full items-center text-center">
                           <span className="text-center w-full">
                             {key === "User Name"
                               ? "User Name"
@@ -231,6 +245,7 @@ const ProfitLossUser = () => {
                             console.log(
                               "Clicked",
                               item.selectionId,
+                              item?.game_id,
                               item.matchDetails._id,
                               item._id
                             );
@@ -238,19 +253,20 @@ const ProfitLossUser = () => {
                               item.matchDetails._id,
                               item._id,
                               item.selectionId,
+                              item?.game_id,
                               item?.type,
                               item?.userId
                             );
                           }}
                           className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
                         >
-                          {item.username}
+                          { item.username }
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.sport}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.match}
+                          { item?.provider ? item?.provider :  item.match}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.type == "odds"
@@ -259,11 +275,11 @@ const ProfitLossUser = () => {
                             ? "Bookmaker"
                             : item.type == "toss"
                             ? "Toss"
-                            : item.marketName}
+                            : item?.type == 'casino' ? item?.name :  item.marketName}
                         </td>
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {/* {item?.marketName ? " " : "void"} */}
-                          { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo}
+                          { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
                         </td>
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400"
@@ -281,7 +297,7 @@ const ProfitLossUser = () => {
                         <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
                           {item.totalCommission?.toFixed(2)}
                         </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                        <td className="px-4 py-3 text-nowrap text-sm text-center border-r border-gray-400">
                           <p>
                             {new Date(item.settledTime).toLocaleString(
                               "en-US",

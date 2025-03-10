@@ -13,6 +13,7 @@ import { getProfitLossData } from "../../Services/Downlinelistapi";
 const EventPLFilter = ({
   setPLData,
   setTotalTransactions,
+  search,
   setTotalPages,
   setIsDataFetched,
   entriesToShow,
@@ -102,6 +103,7 @@ const EventPLFilter = ({
     toDate,
     fromTime,
     toTime,
+    search,
     dataSource,
     entriesToShow,
   ]);
@@ -115,7 +117,7 @@ const EventPLFilter = ({
       const { fromDate: adjustedFromDate, toDate: adjustedToDate } =
         getDateRange(dataSource);
 
-      const url = `user/get-event-profit-loss?page=${currentPage}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}${
+      const url = `user/get-event-profit-loss?page=${currentPage}${search ? `&search=${search}` : ''}&limit=${entriesToShow}&fromDate=${adjustedFromDate}&toDate=${adjustedToDate}&fromTime=${fromTime}&toTime=${toTime}${
         Userid ? `&userId=${Userid}` : ""
       }`;
       const response = await getProfitLossData(url);

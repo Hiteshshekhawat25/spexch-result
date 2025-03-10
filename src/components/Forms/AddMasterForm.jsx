@@ -77,6 +77,7 @@ export const AddMasterForm = ({ closeModal }) => {
     const { name, value, type, checked } = e.target;
     if (name === "username") {
       const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, "");
+      console.log(sanitizedValue,'sanitizedValuesanitizedValue')
       setFormData((prevData) => ({
         ...prevData,
         [name]: sanitizedValue,
@@ -256,7 +257,8 @@ export const AddMasterForm = ({ closeModal }) => {
           className="cursor-pointer text-white text-2xl ml-auto"
         />
       </h2>
-      <form onSubmit={handleSubmit} className="md:px-6 px-4">
+      <form onSubmit={handleSubmit} autoComplete="off" className="md:px-6 px-4">
+        
         <div className="flex flex-col gap-2.5">
           {/* Username */}
           <div className="flex flex-col md:flex-row md:items-center">
@@ -268,6 +270,7 @@ export const AddMasterForm = ({ closeModal }) => {
                 type="text"
                 name="username"
                 placeholder="Username.."
+                autoComplete="username"
                 value={formData.username}
                 onChange={handleChange}
                 required
@@ -294,6 +297,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type="text"
                 name="name"
+                autoComplete="name"
                 placeholder="Name.."
                 value={formData.name}
                 onChange={handleChange}
@@ -513,6 +517,7 @@ export const AddMasterForm = ({ closeModal }) => {
               <input
                 type={showPassword ? "text" : "password"}
                 name="password"
+                autoComplete="newpassword"
                 placeholder="Password.."
                 value={formData.password}
                 onChange={handleChange}

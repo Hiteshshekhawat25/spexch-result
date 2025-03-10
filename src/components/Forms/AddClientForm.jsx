@@ -126,6 +126,7 @@ export const AddClientForm = ({ closeModal }) => {
 
     if (name === "username") {
       const sanitizedValue = value.replace(/[^a-zA-Z0-9]/g, "");
+      console.log(sanitizedValue,'sanitizedValuesanitizedValue')
       setFormData((prevData) => ({
         ...prevData,
         [name]: sanitizedValue,

@@ -6,6 +6,7 @@ const UserHistoryModal = ({selectedUser, showUser, setShowUser}) => {
     setShowUser(false)
   }
 
+  console.log({selectedUser})
 
   return (
     <>
