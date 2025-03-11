@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 const BetPasswordModal = ({ userId, onCancel }) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);

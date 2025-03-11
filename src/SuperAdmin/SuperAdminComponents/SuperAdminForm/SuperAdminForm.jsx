@@ -5,12 +5,18 @@ import { globalsettingsPostAPIAuth, globalsettingsPutAPIAuth, globalsettingsGetA
 import { setSport } from "../../../Store/Slice/allMatchSlice";
 import { getCreateNewMatchAPIAuth } from "../../../Services/Downlinelistapi";
 import { toast } from "react-toastify";
+import BannerModal from "../../../components/Modal/BannerModal";
 
 const SuperAdminForm = () => {
   const formData = useSelector((state) => state.superAdminForm);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
+  const [image,setImage] = useState({
+    file : [],
+    url : []
+});
    const { sport } = useSelector((state) => state.allMatch);
+   const [bannerModal,setBannerModal] = useState(false);
   const [recordId, setRecordId] = useState(null); // Store the ID from API response
   const [sportOptions,setSportsOptions] = useState([])
 
@@ -150,7 +156,10 @@ const SuperAdminForm = () => {
         <form
       onSubmit={handleSubmit}
       className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded"
-    >
+      >
+        <div className="flex justify-between">
+     
+
     <div className="border border-slate-500 rounded-md max-w-44 mx-3 p-2 ">
       <select value={sport} onChange={handleSportChange} className="w-full">
         <option>
@@ -163,6 +172,15 @@ const SuperAdminForm = () => {
         ))}
       </select>
     </div>
+    <div>
+      <button type="button" className="bg-lightblue px-4 rounded-md text-white font-bold py-2" onClick={(e)=>{
+        e.stopPropagation()
+        setBannerModal(true)
+        }}>
+      Add  Banner
+        </button>
+      </div>
+        </div>
       <div className="grid grid-cols-6 md:grid-cols-4 gap-2 p-3 md:p-0 md:gap-4">
         {Object.keys(formData).map((key) => (
           <div key={key} className="col-span-6 md:col-span-1">
@@ -207,6 +225,19 @@ const SuperAdminForm = () => {
         </button>
       </div>
     </form>
+    {bannerModal && 
+    <BannerModal 
+    setImage={setImage}
+    image={image}
+    onCancel={()=>{
+      setBannerModal(false)
+      setImage({
+        file:[],
+        url:''
+      })
+    }}
+      />
+}
     </>
 
   );

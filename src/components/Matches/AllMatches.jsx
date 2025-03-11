@@ -338,6 +338,7 @@ const AllMatches = () => {
                 <th className="px-4 py-2">ID</th>
                 <th className="px-4 py-2">Match Name</th>
                 <th className="px-4 py-2">Open Date</th>
+                <th className="px-4 py-2">Match Status</th>
                 <th className="px-4 py-2">Odds</th>
                 <th className="px-4 py-2">BookMaker</th>
                 <th className="px-4 py-2">Session</th>
@@ -402,6 +403,24 @@ const AllMatches = () => {
                     </td>
                     <td className="px-4 py-2 border border-gray-300">
                       {new Date(match.event?.openDate).toLocaleString()}
+                    </td>
+                    <td 
+                    className="px-4 py-2 border items-center text-center border-gray-300"
+                        >
+                          <button className={`py-1 px-3 rounded-full text-white hover:bg-green-500 ${
+                          match.oddsStatus === "active"
+                            ? "bg-lightblue"
+                            : "bg-gray-400"
+                        } whitespace-nowrap `}
+                        onClick={() =>
+                          handleStatusToggle(
+                            match._id,
+                            "matchStatus",
+                            match.matchStatus
+                          )
+                        }>
+                      {match?.matchStatus}
+                          </button>
                     </td>
                     <td className="px-4 py-2 border border-gray-300">
                       <button
