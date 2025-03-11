@@ -96,7 +96,7 @@ const handleCheckbox = (e)=>{
 
 
   useEffect(()=>{
-    let status = location.pathname?.includes('/toss-bet') ? 'DELETED' : 'ACTIVE'
+    let status = location.pathname?.includes('/toss-bet') ? 'ACTIVE' : 'DELETED' 
     dispatch(
       liabilityBook({
        matchId : matchId,
