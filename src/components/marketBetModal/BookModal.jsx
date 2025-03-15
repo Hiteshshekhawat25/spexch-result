@@ -149,7 +149,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                                     (matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2) : 0}
                                 </td>
                                 :
-                                 <td className={`font-semibold p-2 border text-nowrap text-center ${((matchBetsData?.matchodds?.[0]?.selectionId == item?.selectionResults?.[0]?.selectionId) ?
+                                 <td className={`font-semibold p-2 border text-nowrap text-center ${((matchBetsData?.bookmakersOdds?.[0]?.selectionId == item?.selectionResults?.[0]?.selectionId) ?
                                     item?.selectionResults?.[0]?.result?.toFixed(2) :
                                     (matchBetsData?.bookmakersOdds?.[0]?.selectionId == item?.selectionResults?.[1]?.selectionId) ? item?.selectionResults?.[1]?.result?.toFixed(2) : 0)
                                     < 0

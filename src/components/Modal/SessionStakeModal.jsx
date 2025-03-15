@@ -45,11 +45,9 @@ function SessionStakeModal({ match, onCancel }) {
     }, []);
 
     useEffect(() => {
-        if (selectedMatch) {
             console.log('sortMatchsortMatchsortMatchsortMatchsortMatchsortMatchsortMatch')
-            dispatch(fetchSessions(selectedMatch));
-        }
-    }, [dispatch, selectedMatch]);
+            dispatch(fetchSessions(match?._id));
+    }, [dispatch]);
 
 
     const handleSubmit = async () => {
@@ -66,6 +64,9 @@ function SessionStakeModal({ match, onCancel }) {
             console.log({error})
         }
     }
+
+
+    console.log(sessions,'sessionssessions')
     return (
         <div className='max-w-fit bg-white w-full p-4 rounded-md z-10 '>
 
@@ -94,7 +95,7 @@ function SessionStakeModal({ match, onCancel }) {
                         className="px-2 py-1 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
                     >
                         <option value="">Select Session</option>
-                        {sessions.sessions.filter((item) => !item.result).map((session, index) => {
+                        {sessions?.sessions?.filter((item) => !item.result).map((session, index) => {
                             console.log({ session }, 'session')
                             return (
                                 <option key={index} value={session.marketId}>

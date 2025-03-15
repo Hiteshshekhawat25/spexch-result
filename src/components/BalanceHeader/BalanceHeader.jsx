@@ -51,7 +51,7 @@ const BalanceHeader = () => {
         </div>
         {/* Total Available Balance */}
         <div className="text-left py-1 text-gray-500 text-sm font-medium pl-2">
-          Total Avail. Bal
+          Total Avail. Bal.
         </div>
         {/* Upline P/L */}
         <div className="text-left py-1 text-xs font-medium text-gray-500 pl-2">
