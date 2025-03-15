@@ -56,6 +56,7 @@ const MarketAnalysisInner = () => {
   const [listData, setListData] = useState([]);
   const { data: userBooks } = useSelector(state => state?.userBookList)
   const [showUser, setShowUser] = useState(false)
+  const socketRef = useRef();
   const [pages, setPages] = useState({
     userPage: 1,
     masterPage: 1,
@@ -101,23 +102,63 @@ const MarketAnalysisInner = () => {
     }
   };
 
+  // useEffect(() => {
+  //   socket.connect()
+  //   socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId });
+
+  //   const matchUpdateListener = (data) => {
+  //     console.log({ data }, 'data')
+  //     setMatchBetsData(data);
+  //     setFancyBets(data)
+  //   };
+  //   socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
+
+  //   return () => {
+  //     socket.off(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
+  //     socket.disconnect();
+  //   };
+  // }, [gameId]);
+
+
   useEffect(() => {
-    socket.connect()
-    socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId });
+    socket.connect();
+   socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId });
 
-    const matchUpdateListener = (data) => {
-      console.log({ data }, 'data')
-      setMatchBetsData(data);
-      setFancyBets(data)
-    };
-    socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
+  const matchUpdateListener = (data) => {
+    setMatchBetsData(data);
+    setFancyBets(data);
+  };
+  
+  socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
 
-    return () => {
-      socket.off(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
-      socket.disconnect();
-    };
-  }, [gameId]);
+   const reconnectSocket = (el) => {
+    // alert('Socket disconnected, attempting to reconnect...');
+    socket.connect();
+    console.log(socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener), socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId }),"reconnectSocket 0re",el);
+  };
+  
+  // socket.on('disconnect', ()=>reconnectSocket("1"));
+  
+  const handleVisibilityChange = () => {
+    console.log("reconnectSocket 1","document.hidden",document.visibilityState);
+    if (document.visibilityState == 'visible') {
+      reconnectSocket('4'); 
+      console.log("reconnectSocket 2on");
+    }else{
+      socket.disconnect()
+    }
+  };
 
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  return () => {
+    socket.off('disconnect', ()=>reconnectSocket("2"));
+    socket.disconnect();
+    socket.off(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+     clearInterval(socketRef.current);
+  };
+}, [gameId]); 
   console.log('backBetsbackBets', backBets?.data)
 
 
