@@ -138,7 +138,7 @@ const SportsandLossEvents = () => {
       <h1 className="text-xl font-bold mb-4 bg-gradient-blue text-white p-1">
         Profit & Loss Events
       </h1>
-      <div className="md:flex-row flex flex-col gap-2 md:gap-0 justify-between items-center mb-4">
+      <div className="md:flex-row flex flex-col gap-2 md:gap-0 justify-between md:items-center mb-4">
         <div className="flex w-full md:w-auto items-center">
           <label className="mr-2 text-sm font-medium text-black">Show</label>
           <select
@@ -181,7 +181,7 @@ const SportsandLossEvents = () => {
                   // className=" bg-red-500 border border-gray-400 text-center justify-between"
                   >
                     <div className="flex justify-between items-center">
-                      <div className="items-center text-center w-full justify-between">
+                      <div className="items-center text-center text-nowrap w-full justify-between">
                         {header.display}
                       </div>
                       <div className="flex flex-col items-center ml-2">
@@ -214,7 +214,7 @@ const SportsandLossEvents = () => {
                   {item.sport}
                 </td>
                 <td
-                  className="px-4 py-2 text-sm text-center text-lightblue cursor-pointer border border-gray-400"
+                  className="px-4 py-2 text-sm text-center text-nowrap text-lightblue cursor-pointer border border-gray-400"
                   onClick={() => handleMatchClick(item._id)}
                 >
                   {item.match}

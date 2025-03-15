@@ -85,7 +85,7 @@ const TopHeader = () => {
                 <span className="text-white rounded-md font-custom font-bold md:text-[16px] text-[14px]">
                   IRP{" "}
                   {new Intl.NumberFormat("en-IN").format(
-                    userData?.data?.openingBalance
+                    userData?.data?.totalBalance
                   )}
                 </span>
                 <button
@@ -126,7 +126,7 @@ const TopHeader = () => {
               <span className="text-white rounded-md font-custom font-bold text-[13px]">
                 IRP{" "}
                 {new Intl.NumberFormat("en-IN").format(
-                  userData?.data?.openingBalance
+                  userData?.data?.totalBalance
                 )}
               </span>
               <button

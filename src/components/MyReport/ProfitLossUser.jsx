@@ -139,7 +139,7 @@ const ProfitLossUser = () => {
               Profit Loss User
             </h1>
 
-            <div className="flex md:flex-row flex-col justify-between items-center mb-4 p-4">
+            <div className="flex md:flex-row flex-col gap-3 md:justify-between md:items-center mb-4 p-4">
               <div className="flex items-center">
                 <label className="mr-2 text-sm font-medium text-black">
                   Show
@@ -164,7 +164,7 @@ const ProfitLossUser = () => {
               </div>
               <div>
                 <input
-                className="border-2 rounded-md py-1 px-2 "
+                className="border-2 rounded-md w-full md:w-auto py-1 px-2 "
                 placeholder="Search..."
                 value={search}
                 onChange={(e)=>setSearch(e.target.value)}

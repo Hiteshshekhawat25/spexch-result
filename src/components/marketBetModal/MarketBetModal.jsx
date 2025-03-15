@@ -175,7 +175,7 @@ setSearchTerm,
                                 setSelectedUser(item);
                               }}
                             >
-                              {item?.userDetails?.name}
+                              {item?.userDetails?.username}
                             </div>
                           </td>
                           <td className="text-left p-2 border text-nowrap">

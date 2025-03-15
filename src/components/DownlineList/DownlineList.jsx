@@ -629,7 +629,7 @@ const DownlineList = () => {
   };
 
 
-  console.log({roleId,role,roles},'rorlorolorl')
+  console.log(userData?.data?.role_name,'rorlorolorl')
 
   return (
     <>
@@ -1092,7 +1092,15 @@ const DownlineList = () => {
                                 >
                                   <img src={betHistory} className="text-darkgray" />
                                 </div>
-
+                             {userData?.data?.role_name == 'super-admin' ? 
+                                <div
+                                  onClick={() => statushandlechange(item)}
+                                  title="Change status"
+                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                >
+                                  <img src={setting} className="text-darkgray" />
+                                </div>
+                                :''}
                                 <div
                                   onClick={() => {
                                     handleProfileClick(item, item._id);

@@ -165,7 +165,7 @@ const DepositModal = ({
       <div className="bg-white rounded-md mt-12 w-[95%] sm:w-[500px]">
         {/* Modal Header */}
         <div className="flex justify-between items-center bg-gradient-blue text-white text-sm font-custom font-semibold w-full rounded-t-md px-2 py-1">
-          <span>Banking - MasterBalance:{userData?.data?.openingBalance}</span>
+          <span>Banking - MasterBalance:{' '}{userData?.data?.openingBalance}</span>
           <button
             onClick={() => {
               resetState();

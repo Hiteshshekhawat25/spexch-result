@@ -256,6 +256,7 @@ function ManageBets({ Userid }) {
                   "",
                   "sportName",
                   "event",
+                  "username",
                   "market type",
                   "date",
                   "odds",
@@ -279,7 +280,8 @@ function ManageBets({ Userid }) {
                             "Event"
                           ) : key === "market type" ? (
                             "Market Type"
-                          ) : key === "date" ? (
+                          ) : key === "username" ? (
+                            "Username" ) : key === "date" ? (
                             "Date"
                           ) : key === "odds" ? (
                             "Odds"
@@ -367,6 +369,9 @@ function ManageBets({ Userid }) {
 
                     <td className="border text-nowrap border-gray-400 px-4 py-3">
                       {item.event}
+                    </td>
+                    <td className="border text-nowrap border-gray-400 px-4 py-3">
+                      {item.username}
                     </td>
                     <td className="border border-gray-400 px-4 py-3">
                       {item.type == 'toss' ? 'TOSS' : item?.type == 'odds' ? 'MATCH ODDS' : item?.type == 'bookmakers' ? 'BOOKMAKERS' : item?.type == 'fancy' ? 'FANCY' : ''}

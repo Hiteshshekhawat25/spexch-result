@@ -37,6 +37,7 @@ const Banking = () => {
   const error = useSelector(selectDownlineError);
   const [editedData, setEditedData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [chipSummary,setChipSummary] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null);
   const [totalUsers, setTotalUsers] = useState(0);
   const { startFetchData } = useSelector((state) => state.downline);
@@ -54,8 +55,8 @@ const Banking = () => {
     { key: "totalOpeningBalance", label: "Balance" },
     { key: "totalOpeningBalance", label: "Available D/W" },
     { key: "totalExposureBalance", label: "Exposure" },
-    { key: "creditReference", label: "Credit Referance" },
-    { key: "referance", label: "Referance P/L" },
+    { key: "creditReference", label: "Credit Reference" },
+    { key: "referance", label: "Reference P/L" },
     { key: "depositwithdraw", label: "Deposit/Withdraw" },
     { key: "remark", label: "Remark" },
   ];
@@ -481,6 +482,46 @@ const Banking = () => {
   };
 
   return (
+    <>
+    <div className="flex justify-end my-3">
+      <span className="font-bold mx-3">Chips Summary </span>
+     <div
+            className={`relative inline-flex items-center rounded-[4px] h-7 w-14 p-[2px] border border-whiteGray cursor-pointer transition-colors ${
+              chipSummary
+                ? "bg-gradient-seablue"
+                : "bg-white"
+            }`}
+            onClick={() =>setChipSummary(!chipSummary)}
+          >
+            <span
+              className={`absolute right-2 text-sm font-bold ${
+                chipSummary
+                  ? "text-transparent"
+                  : "text-whiteGray"
+              }`}
+            >
+              ✗
+            </span>
+
+            <span
+              className={`absolute left-2 text-sm font-bold ${
+                chipSummary
+                  ? "text-white"
+                  : "text-transparent"
+              }`}
+            >
+              ✓
+            </span>
+
+            <span
+              className={`inline-block size-[21px] border rounded-[2px] border-whiteGray bg-white transform transition-transform ${
+                chipSummary
+                  ? "translate-x-7"
+                  : "translate-x-[1.5px]"
+              }`}
+            ></span>
+          </div>
+    </div>
     <div className="p-4 border border-gray-200 rounded-md bg-white overflow-x-auto">
       {loading ? (
         <div className="flex justify-center items-center h-64">
@@ -489,6 +530,7 @@ const Banking = () => {
       ) : (
         <>
           {/* <div className="p-4"> */}
+         
           <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
             <div className="flex items-center space-x-2 sm:ml-0 ml-10">
               <label className="mr-2 text-sm font-medium">Show</label>
@@ -837,6 +879,7 @@ const Banking = () => {
         </>
       )}
     </div>
+    </>
   );
 };
 

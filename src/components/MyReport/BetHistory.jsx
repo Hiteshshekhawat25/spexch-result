@@ -148,7 +148,7 @@ const BetHistory = () => {
             </h1>
 
             <div className="flex justify-between items-center  p-2 pt-4">
-              <div className="flex md:flex-row flex-col w-full justify-between">
+              <div className="flex md:flex-row flex-col w-full gap-3 md:justify-between">
               <div className="flex items-center">
                 <label className="mr-2 text-sm font-medium text-black">
                   Show
@@ -174,14 +174,14 @@ const BetHistory = () => {
               <div>
                 <input
                 value={search}
-                className="border-2 rounded-md py-1 px-2"
+                className="border-2 w-full md:w-auto rounded-md py-1 px-2"
                 placeholder="Search..."
                 onChange={handleChange}
                 />
               </div>
               </div>
             </div>
-            <div className="w-full justify-center md:justify-end flex">
+            <div className="w-full justify-end flex">
               {color ?
                 <div className="flex gap-2">
                   <div className="border-2 border-gray-600 px-2 h-8 items-center text-center bg-[#faa9ba] ">

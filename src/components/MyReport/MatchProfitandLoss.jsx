@@ -728,7 +728,7 @@ const MatchProfitandLoss = () => {
       <h1 className="text-xl font-bold mb-4 bg-gradient-blue text-white p-1">
         Match Bet Profit & Loss
       </h1>
-      <div className=" flex flex-col md:flex-row gap-2 justify-between items-center mb-4">
+      <div className=" flex flex-col md:flex-row gap-2 md:justify-between md:items-center mb-4">
         <div className="flex items-center">
           <label className="mr-2 text-sm font-medium text-black">Show</label>
           <select
@@ -767,7 +767,7 @@ const MatchProfitandLoss = () => {
                   onClick={() => handleSort(header.key)}
                 >
                   <div className="flex justify-between items-center">
-                    <span className="w-full text-center">{header.display}</span>
+                    <span className="w-full text text-center">{header.display}</span>
                     <div className="flex flex-col items-center ml-2">
                       <FaSortUp
                         className={`${

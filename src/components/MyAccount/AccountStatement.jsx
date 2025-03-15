@@ -129,11 +129,11 @@ const AccountStatement = ({ Userid }) => {
                 ].map(({ key, label }) => (
                   <th
                     key={key}
-                    className="border border-gray-300 px-4 py-3 text-sm font-custom font-medium text-center cursor-pointer"
+                    className="border border-gray-300 px-4 py-3  border border-gray-400 text-sm font-custom font-medium text-center cursor-pointer"
                     onClick={() => handleSort(key)}
                   >
                     <div className="flex justify-between items-center">
-                      <span className="text-center">{label}</span>
+                      <span className="text-center w-full">{label}</span>
 
                       <div className="flex flex-col items-center ml-2">
                         <FaSortUp

@@ -92,7 +92,7 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
     }
   }, [userBookList])
 
-  console.log({ type }, 'listDatalistData')
+  console.log({ userBookList }, 'listDatalistData')
   return (
     <>
       <div onClick={handleClose} className={`h-dvh w-full fixed z-[500] top-0 left-0 items-center justify-center bg-black/40 transition-all duration-500 ease-in-out ${showUser ? 'flex' : 'hidden'}`} style={{ backdropFilter: 'blur(4px)' }}>

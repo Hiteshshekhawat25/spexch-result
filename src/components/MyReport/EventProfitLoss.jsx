@@ -130,7 +130,7 @@ const EventProfitLoss = ({ Userid }) => {
             </h1>
 
 
-            <div className="flex justify-between items-center mb-4 p-4">
+            <div className="flex md:flex-row flex-col gap-3 md:justify-between md:items-center mb-4 p-4">
               <div className="flex items-center">
                 <label className="mr-2 text-sm text-black">
                   Show
@@ -156,7 +156,7 @@ const EventProfitLoss = ({ Userid }) => {
               <div>
                 <input
                   name="search"
-                  className="border-2 px-2 text-sm py-1 rounded-md"
+                  className="border-2 px-2 text-sm py-1 w-full md:w-auto rounded-md"
                   autoComplete="search"
                   placeholder="Search..."
                   value={search}
@@ -181,7 +181,7 @@ const EventProfitLoss = ({ Userid }) => {
                           onClick={() => handleSort(key)}
                         >
                           <div className="flex justify-between items-center text-center font-semibold font-custom text-[13px]">
-                            <span className="text-center w-full">
+                            <span className="text-center text-nowrap w-full">
                               {key === "sportName"
                                 ? "Sport Name"
                                 : key === "Upline Profit/Loss"
