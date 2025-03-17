@@ -37,6 +37,7 @@ const Banking = () => {
   const error = useSelector(selectDownlineError);
   const [editedData, setEditedData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+   const { userData } = useSelector((state) => state.user);
   const [chipSummary,setChipSummary] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null);
   const [totalUsers, setTotalUsers] = useState(0);
@@ -399,8 +400,8 @@ const Banking = () => {
         if (location.pathname.includes("/master-banking")) {
           const masterAgentRoles = rolesData.filter(
             (role) =>
-              role.role_name.toLowerCase() === "master" ||
-              role.role_name.toLowerCase() === "agent"
+              role.role_name.toLowerCase() !== userData?.data?.role_name && role.role_name.toLowerCase() !== 'user'
+
           );
           // if (masterAgentRoles.length > 0) {
           //   const fetchPromises = masterAgentRoles.map((role) =>
@@ -418,7 +419,7 @@ const Banking = () => {
 
           //   dispatch(setDownlineData(paginatedData));
           // } else if (rolesData.length > 0) {
-            setRoleId(rolesData[0].role_id);
+            setRoleId(masterAgentRoles[0].role_id);
           // }
         } else if (location.pathname.includes("/user-banking")) {
           const userRole = rolesData.find((role) => role.role_name === "user");
@@ -481,6 +482,8 @@ const Banking = () => {
     return "text-gray-600 border-gray-600 bg-gray-100";
   };
 
+
+  console.log(userData,'resresresresresresresresresres')
   return (
     <>
     <div className="flex justify-end my-3">

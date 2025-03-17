@@ -212,7 +212,23 @@ const FancySection = ({ matchBetsData, setBetData, betData, openBets }) => {
           </div>
         </div>
         {
-          matchBetsData?.matchfancies?.length ? matchBetsData?.matchfancies?.map((item, pIndex) => {
+          matchBetsData?.matchfancies?.length ? matchBetsData?.matchfancies?.sort((a, b) => {
+            const numA = parseInt(a?.marketName.match(/^\d+/)?.[0] || 0, 10);
+            const numB = parseInt(b?.marketName.match(/^\d+/)?.[0] || 0, 10);
+        
+            const isANumeric = /^\d+/.test(a?.marketName); // True if it starts with a number
+            const isBNumeric = /^\d+/.test(b?.marketName);
+        
+            if (isANumeric && isBNumeric) {
+                return numA - numB; // Sort by number if both are numeric
+            } else if (isANumeric) {
+                return -1; // Ensure numeric values come first
+            } else if (isBNumeric) {
+                return 1; // Ensure non-numeric values come after numeric ones
+            } else {
+                return a?.marketName.localeCompare(b?.marketName); // Sort alphabetically if both are text
+            }
+        })?.map((item, pIndex) => {
             const previousOdds = previous?.[pIndex];
             const isYesBlinking = previousOdds?.runsYes !== item?.runsYes;
             const isNoBlinking = previousOdds?.runsNo !== item?.runsNo;

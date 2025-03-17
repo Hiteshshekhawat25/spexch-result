@@ -18,6 +18,7 @@ import { DeleteBet, RevertBet } from "../../Services/manageBetapi";
 import Pagination from "../pagination/Pagination";
 import moment from "moment";
 import RevertModal from "../marketBetModal/RevertModal";
+import { toast } from "react-toastify";
 
 function ManageBets({ Userid }) {
   const dispatch = useDispatch();
@@ -85,17 +86,20 @@ function ManageBets({ Userid }) {
           remark: remark,
           betDeletePassword : password
         });
+console.log(res,'resresresresresresresresresres')
+
         if (res?.data?.success) {
           setSelectBet({});
           setRemark("");
           setRemarkModal(false);
           setPassword('')
+          toast.success(res?.data?.message)
         }
         console.log({ res });
       } catch (error) {
         setSelectBet({});
         setRemarkModal(false);
-        console.log(error);
+        console.log(error,'resresresresresresresresresres');
       }
     }
   };
@@ -112,8 +116,9 @@ function ManageBets({ Userid }) {
           : selectBet?.matchType,
           betDeletePassword : password
       });
-
+console.log(res,'resresresresresresresresresres')
       if (res?.data?.success) {
+        toast.success(res?.data?.message)
         setSelectBet({});
           setRemark("");
           setRemarkModal2(false);
@@ -140,7 +145,9 @@ function ManageBets({ Userid }) {
       }
       console.log({ res });
     } catch (error) {
-      console.log(error);
+      toast.error(error)
+console.log(error,'resresresresresresresresresres')
+      
     }
   };
 
