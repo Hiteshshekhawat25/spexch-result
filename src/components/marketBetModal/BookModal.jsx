@@ -26,23 +26,18 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
     for (let i = 0; i < marketData?.length; i++) {
       if (marketData?.[i]?.selectionId == sid) {
         if (marketData?.[i]?.type === "back") {
-          console.log(marketData?.[i]?.type, 'marketData?.[i]?.selectionId1')
           wintotal += marketData?.[i]?.potentialWin
         } else {
-          console.log(marketData?.[i]?.type, 'marketData?.[i]?.selectionId2')
           wintotal -= marketData?.[i]?.amount
         }
       } else {
         if (marketData?.[i]?.type === "back") {
-          console.log(marketData?.[i]?.type, 'marketData?.[i]?.selectionId3')
           amounttotal -= marketData?.[i]?.amount
         } else {
-          console.log(marketData?.[i]?.type, 'marketData?.[i]?.selectionId4')
           amounttotal += marketData?.[i]?.potentialWin
         }
       }
 
-      console.log(wintotal, amounttotal, 'wintotal + amounttotal123444')
     }
     total = wintotal + amounttotal
     return total
@@ -87,12 +82,10 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
   useEffect(() => {
     if (userBookList?.length > 0) {
       const aggregatedData = aggregateBetsByMarket(userBookList);
-      console.log(aggregatedData, 'aggregatedData');
       setListData(aggregatedData)
     }
   }, [userBookList])
 
-  console.log({ userBookList }, 'listDatalistData')
   return (
     <>
       <div onClick={handleClose} className={`h-dvh w-full fixed z-[500] top-0 left-0 items-center justify-center bg-black/40 transition-all duration-500 ease-in-out ${showUser ? 'flex' : 'hidden'}`} style={{ backdropFilter: 'blur(4px)' }}>
@@ -117,7 +110,6 @@ function BookModal({ showUser, setShowUser, userBookList, matchBetsData, book, t
                     {
                       userBookList?.length ?
                         userBookList?.map(item => {
-                          console.log(item?.market, 'listlist')
 
                           return (
                             <tr key={item?._id}>

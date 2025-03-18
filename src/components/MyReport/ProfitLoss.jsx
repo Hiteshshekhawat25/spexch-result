@@ -126,6 +126,7 @@ const ProfitLoss = () => {
     setCurrentPage(newPage);
   };
 
+  console.log(totalData,sortedData,'totalData')
   return (
     <div className="p-4">
       <PLFilter

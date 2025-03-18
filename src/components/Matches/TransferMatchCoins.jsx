@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 const TransferMatchCoins = () => {
   const { matchId } = useParams();
   const [loading,setLoading] = useState(false);
+  const [loading2,setLoading2] = useState(false);
   const [marketData, setMarketData] = useState([])
   const [formValue, setFormValue] = useState({
     selectionId: '',
@@ -171,7 +172,7 @@ const TransferMatchCoins = () => {
       // status : formValue?.selectionId === 'ABANDONED' ? 'ABANDONED' : formValue?.selectionId === 'TIE' ? 'TIE' : 'WINNER'
     }
     try {
-      setLoading(true)
+      setLoading2(true)
       setTimeout(async()=>{
         const response = await axios.post(`${BASE_URL}/user/transfer-bookmakers-coin/`, body, {
           headers: {
@@ -180,14 +181,15 @@ const TransferMatchCoins = () => {
           },
         });
         console.log("response", response);
-        setLoading(false)
+        setLoading2(false)
         if (response?.data?.success) {
           toast.success(response?.data?.message);
           getMatchDetails()
         }
       },3000)
+      
     } catch (error) {
-      setLoading(false)
+      setLoading2(false)
       // Handle specific token expiry case
       if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
         localStorage.clear();
@@ -233,7 +235,7 @@ const TransferMatchCoins = () => {
 
   const handleRevertBookmakersCoins = async () => {
     try {
-      setLoading(true)
+      setLoading2(true)
       setTimeout(async()=>{
         const body = {
           matchId: marketData?.[0]?._id,
@@ -246,14 +248,14 @@ const TransferMatchCoins = () => {
           },
         });
         console.log("response", response);
-        setLoading(false)
+        setLoading2(false)
         if (response?.data?.success) {
           toast.success(response?.data?.message);
           getMatchDetails()
         }
       },3000)
     } catch (error) {
-      setLoading(false)
+      setLoading2(false)
       console.log(error, 'Error Fetching')
     }
   }
@@ -271,14 +273,14 @@ const TransferMatchCoins = () => {
       </div>
 
       {/* Row Section */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="md:flex items-center gap-3  justify-center md:justify-between mb-4">
         {/* Dropdown */}
-        <div className="flex-1">
+        <div className="flex-1 my-2">
           <select
             value={formValue?.selectionId}
             disabled={marketData?.[0]?.transferredOddsCoin === 1}
             onChange={(e) => setFormValue(prev => ({ ...prev, selectionId: e.target.value }))}
-            className="w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
+            className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
             <option value="" selected disabled>Select Status</option>
             {
               marketData?.[0]?.market?.length ?
@@ -293,34 +295,34 @@ const TransferMatchCoins = () => {
         </div>
 
         {/* Button */}
-        <div className="mx-4">
+        <div className="md:mx-4">
           <button 
           disabled={marketData?.[0]?.transferredOddsCoin === 1} 
-          onClick={handleOddsWinnerDeclare} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
+          onClick={handleOddsWinnerDeclare} className="px-6 py-2 md:w-auto w-full bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
             {marketData?.[0]?.oddsResult === 1 ? 'Re-Declare' : 'Declare Winner'}
           </button>
         </div>
 
         {/* Transfer Coins */}
-        <div className="flex-1 text-right">
+        <div className="flex-1 my-2 text-right">
           {marketData?.[0]?.transferredOddsCoin == 1 && marketData?.[0]?.oddsResult == 1 ?
           loading ?   
-          <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+          <button className="px-6 py-2 bg-red-800 md:w-auto w-full text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
             // onClick={handleTossRevertCoin}
             >
              Loading...
            </button>
            :
-           <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertOddsCoins}>
+           <button className="px-6 py-2 bg-red-800 text-white md:w-auto w-full font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertOddsCoins}>
               Revert Coins
             </button>
             :
             loading ?   
-            <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+            <button className="px-6 py-2 bg-red-800 text-white md:w-auto w-full font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
               // onClick={handleTossRevertCoin}
               >
                Loading...
-             </button>: <button disabled={marketData?.[0]?.oddsResult === 0 || marketData?.[0]?.transferredOddsCoin === 1} onClick={handleOddsTransferCoin} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
+             </button>: <button disabled={marketData?.[0]?.oddsResult === 0 || marketData?.[0]?.transferredOddsCoin === 1} onClick={handleOddsTransferCoin} className="px-6 py-2 md:w-auto w-full bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
 
               {marketData?.[0]?.transferredOddsCoin === 1 ? "Coins Transferred Successfully" : 'Transfer Coins'}
             </button>
@@ -340,13 +342,13 @@ const TransferMatchCoins = () => {
       </div>
 
       {/* Row Section */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="md:flex items-center justify-center md:justify-between mb-4">
         {/* Dropdown */}
-        <div className="flex-1">
+        <div className="flex-1 my-2">
           <select
             value={formValue?.bookmakerId}
             onChange={(e) => setFormValue(prev => ({ ...prev, bookmakerId: e.target.value }))}
-            className="w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
+            className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
             <option value="" selected disabled>Select Status</option>
             {
               marketData?.[0]?.bookmaker?.length ?
@@ -361,20 +363,34 @@ const TransferMatchCoins = () => {
         </div>
 
         {/* Button */}
-        <div className="mx-4">
-          <button disabled={marketData?.[0]?.transferredBookmakerCoin === 1} onClick={handleBookmakerWinnerDeclare} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300">
+        <div className="md:mx-4">
+          <button disabled={marketData?.[0]?.transferredBookmakerCoin === 1} 
+          onClick={handleBookmakerWinnerDeclare} 
+          className="px-6 py-2 bg-lightblue md:w-auto w-full text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300">
             {marketData?.[0]?.bookMakerResult === 1 ? 'Re-Declare' : 'Declare Winner'}
           </button>
         </div>
 
         {/* Transfer Coins */}
-        <div className="flex-1 text-right">
+        <div className="flex-1 my-2 text-right">
           {marketData?.[0]?.transferredBookmakerCoin == 1 && marketData?.[0]?.bookMakerResult == 1 ?
-            <button className="px-6 py-2 bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertBookmakersCoins}>
+            loading2 ?   
+            <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+              // onClick={handleTossRevertCoin}
+              >
+               Loading...
+             </button>
+             :  <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertBookmakersCoins}>
               Revert Coins
             </button>
             :
-            <button disabled={marketData?.[0]?.bookMakerResult === 0} onClick={handleBookmakerTransferCoin} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
+            loading2 ?   
+            <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+              // onClick={handleTossRevertCoin}
+              >
+               Loading...
+             </button>  : <button disabled={marketData?.[0]?.bookMakerResult === 0} 
+             onClick={handleBookmakerTransferCoin} className="px-6 py-2 md:w-auto w-full bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
               Transfer Coins
             </button>
           }

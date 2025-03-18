@@ -20,7 +20,7 @@ const MyAccount = () => {
   // console.log(role_name);
 
   const Userid = location.state?.selectedUser?._id;
-  // console.log(Userid);
+  console.log(Userid,'location');
 
   useEffect(() => {
     if (loading) {

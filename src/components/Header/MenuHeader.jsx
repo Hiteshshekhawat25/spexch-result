@@ -17,10 +17,8 @@ const MenuHeader = () => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
-  console.log("userDatauserData", location);
-
+ 
   const handleLogout = () => {
-    console.log("logout Clicked");
     dispatch(clearUserData());
     localStorage.clear();
     window.location.reload();
@@ -143,7 +141,6 @@ const MenuHeader = () => {
       document.removeEventListener("click", handleClickOutside);
     };
   }, []);
-
   return (
     <div className="bg-gradient-green text-black font-bold">
       <div
@@ -156,7 +153,6 @@ const MenuHeader = () => {
       >
         <ul className="flex">
           {menuItems.map((item, index) =>{
-            console.log( location.pathname?.includes(item?.subMenu?.find((item)=>item?.link == location.pathname)?.link)  ,'papapapapapaapapappa')
             return  (
             <li
               key={index}
@@ -176,10 +172,14 @@ const MenuHeader = () => {
                   to={item.link}
                   onClick={() => {
                     setActiveMenu(item.link);
-                    item.subMenu && toggleSubMenu(item.name, index);
+                    setActiveSubMenu('')
+                    item.subMenu?.length > 0 && toggleSubMenu(item.name, index);
                   }}
                   className={` border-b-1 h-full flex items-center px-2 py-1.5 text-[13px] ${
-                  item?.subMenu?.length > 0 ? item?.subMenu?.find((item)=>item?.link == location.pathname)  : location.pathname?.includes(item.link)
+                 ( item?.subMenu  ? 
+                  location.pathname?.includes(item?.subMenu?.find((item)=>item?.link == location.pathname)?.link) 
+                   : 
+                   location.pathname?.includes(item.link))
                       ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
                       : "border-transparent hover:underline hover:decoration-black"
                   }`}
@@ -194,8 +194,9 @@ const MenuHeader = () => {
           )})}
         </ul>
 
-        {menuItems.map((item, index) =>
-          item.subMenu && activeSubMenu === item.name ? (
+        {menuItems.map((item, index) =>{
+          return(
+         ( item.subMenu?.length > 0 && activeSubMenu === item.name) ? (
             <ul
               key={index}
               ref={subMenuRef}
@@ -225,7 +226,7 @@ const MenuHeader = () => {
                 </li>
               ))}
             </ul>
-          ) : null
+          ) : null)}
         )}
       </div>
       <div className="xl:block hidden whitespace-nowrap">

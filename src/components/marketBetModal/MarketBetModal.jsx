@@ -61,7 +61,6 @@ setSearchTerm,
   };
 
 
-  console.log(data,'datadatadatadatadatadatadata')
   return (
     <>
       <div

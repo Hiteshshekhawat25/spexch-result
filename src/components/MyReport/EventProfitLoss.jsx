@@ -97,6 +97,8 @@ const EventProfitLoss = ({ Userid }) => {
 
     setCurrentPage(newPage);
   };
+
+
   return (
     <div className="">
       {localLoading ? (
@@ -336,9 +338,9 @@ const EventProfitLoss = ({ Userid }) => {
                           >
                             {item.totalUplineProfitLoss < 0
                               ? `-${Math.abs(
-                                (item.totalUplineProfitLoss + item?.totalCommission).toFixed(2)
+                                (item.totalUplineProfitLoss ).toFixed(2)
                               )}`
-                              : (item.totalUplineProfitLoss + item?.totalCommission).toFixed(2)}
+                              : (item.totalUplineProfitLoss ).toFixed(2)}
                           </td>
                         }
                         {location?.pathname?.includes('/MyAccount') ?
@@ -350,19 +352,17 @@ const EventProfitLoss = ({ Userid }) => {
                             className="px-4 py-3 text-sm text-center border-r border-gray-400 font-medium"
                             style={{
                               color:
-                                item.totalUplineProfitLoss < 0
+                                item.totalDownlineProfitLoss < 0
                                   ? "red"
                                   : "green",
                             }}
                           >
-                            {item.totalUplineProfitLoss < 0
-                              ? Math.abs(
-                                (
-                                  item.totalUplineProfitLoss
-                                )
-                              ).toFixed(2)
+                            {item.totalDownlineProfitLoss < 0
+                              ?  `-${Math.abs(
+                                (item.totalDownlineProfitLoss + item?.totalCommission).toFixed(2)
+                              )}`
                               : (
-                                item.totalUplineProfitLoss
+                                item.totalDownlineProfitLoss
                               ).toFixed(2)}
                           </td>}
 

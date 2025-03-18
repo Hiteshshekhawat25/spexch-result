@@ -210,7 +210,7 @@ function TossResult() {
              <button 
              disabled={marketData?.[0]?.transferredTossCoin === 1} 
              onClick={handleTossWinnerDeclare} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
-               {marketData?.[0]?.oddsResult === 1 ? 'Re-Declare' : 'Declare Winner'}
+               {marketData?.[0]?.tossResult === 1 ? 'Re-Declare' : 'Declare Winner'}
              </button>
            </div>
    

@@ -32,7 +32,7 @@ const MatchOddsBets = () => {
       const token = localStorage.getItem("authToken");
       try {
         let status = location?.pathname?.includes('/MatchOddsRevertBets') ? 'DELETED' : 'ACTIVE'
-        const response = await axios.get(`${BASE_URL}/user/get-pending-liability-list?matchId=${matchId}&limit=10&page=${page}&search=${search}&deleteStatus=${status}`, {
+        const response = await axios.get(`${BASE_URL}/user/get-pending-liability-list?matchId=${matchId}&type=odds&limit=10&page=${page}&search=${search}&deleteStatus=${status}`, {
           headers: {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
@@ -87,7 +87,7 @@ const MatchOddsBets = () => {
             const res = await RevertBet("user/revert-delete-bets", {
               betIds: selectedBets,
               matchId: matchId,
-              betDeletePassword : password
+              betDeletePassword : 'Admin1234'
             });
       
             if (res?.data?.success) {
@@ -215,7 +215,7 @@ const MatchOddsBets = () => {
                  <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.event}</td>
                                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.selection}</td>
                                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.username}</td>
-                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.amount}</td>
+                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.amount?.toFixed(2)}</td>
 
                                       <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.type}</td>
                                       {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}

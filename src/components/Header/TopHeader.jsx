@@ -17,7 +17,6 @@ const TopHeader = () => {
   const location = useLocation();
   const userLogRef = useRef();
   const navigate = useNavigate();
-  console.log("userData", userData);
 
   const refreshData = () => {
     dispatch(fetchUserDataStart());

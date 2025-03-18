@@ -18,6 +18,7 @@ import MarketListModal from "../marketBetModal/MarketListModal"
 import { fetchmasterBook } from "../../Store/Slice/masterListSlice"
 import TossSection from "../toss/TossSecttion"
 import moment from "moment"
+import { postInstance } from "../../Services/Newmatchapi"
 
 const MarketAnalysisInner = () => {
   const [matchBetsData, setMatchBetsData] = useState({});
@@ -48,6 +49,9 @@ const MarketAnalysisInner = () => {
   const dispatch = useDispatch()
   const openBets = useSelector(state => state?.openBets)
   const betList = useSelector(state => state?.marketBetList)
+  const [checkbox,setCheckbox] = useState(false);
+  const [loading,setLoading] = useState(false)
+  const [loading2,setLoading2] = useState(false)
   const [currentPage, setCurrentPage] = useState(1);
   const iframeRef = useRef()
   const [searchTerm, setSearchTerm] = useState("");
@@ -56,6 +60,7 @@ const MarketAnalysisInner = () => {
   const [listData, setListData] = useState([]);
   const { data: userBooks } = useSelector(state => state?.userBookList)
   const [showUser, setShowUser] = useState(false)
+  const socketRef = useRef();
   const [pages, setPages] = useState({
     userPage: 1,
     masterPage: 1,
@@ -67,14 +72,11 @@ const MarketAnalysisInner = () => {
   const [showUserBook, setShowUserBook] = useState(false)
   const [fanyBets, setFancyBets] = useState({})
 
-  console.log('matchBetsData321', backBets)
-
 
 
   const check = (enteries) => {
     const [entry] = enteries
     const data = structuredClone(backBets?.data);
-    console.log(entry.isIntersecting == true , data?.length >= 10 ,'(entry.isIntersecting == true) && (data?.length >= 10)')
     if ((entry.isIntersecting == true) && (data?.length >= 10) ) {
       setPages((pre) => ({ ...pre, viewBet: pages.viewBet + 1 }))
     }
@@ -84,8 +86,6 @@ const MarketAnalysisInner = () => {
     rootMargin: "0px",
     threshold: 0.5
   }
-
-  console.log('checkcheckcheck', pages)
 
   const handleFullscreen = () => {
     if (iframeRef.current) {
@@ -101,24 +101,67 @@ const MarketAnalysisInner = () => {
     }
   };
 
+  // useEffect(() => {
+  //   socket.connect()
+  //   socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId });
+
+  //   const matchUpdateListener = (data) => {
+  //     console.log({ data }, 'data')
+  //     setMatchBetsData(data);
+  //     setFancyBets(data)
+  //   };
+  //   socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
+
+  //   return () => {
+  //     socket.off(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
+  //     socket.disconnect();
+  //   };
+  // }, [gameId]);
+
+
   useEffect(() => {
-    socket.connect()
-    socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId });
+    if(!socket.connect().id){
+      socket.connect();
+    }
 
-    const matchUpdateListener = (data) => {
-      console.log({ data }, 'data')
-      setMatchBetsData(data);
-      setFancyBets(data)
-    };
-    socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
+   socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId });
 
-    return () => {
-      socket.off(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
-      socket.disconnect();
-    };
-  }, [gameId]);
+  const matchUpdateListener = (data) => {
+    setMatchBetsData(data);
+    setFancyBets(data);
+  };
+  
+  socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
 
-  console.log('backBetsbackBets', backBets?.data)
+   const reconnectSocket = (el) => {
+    // alert('Socket disconnected, attempting to reconnect...');
+    if(!socket.connect().id){
+    socket.connect();
+    }
+    socket.emit(SOCKET_ROUTES.JOIN_MATCH, { matchId: gameId })
+    socket.on(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener)
+  };
+  
+  // socket.on('disconnect', ()=>reconnectSocket("1"));
+  
+  const handleVisibilityChange = () => {
+    if (document.visibilityState == 'visible') {
+      reconnectSocket('4'); 
+    }else{
+      socket.disconnect()
+    }
+  };
+
+  document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  return () => {
+    socket.off('disconnect', ()=>reconnectSocket("2"));
+    socket.disconnect();
+    socket.off(SOCKET_ROUTES.MATCH_UPDATE, matchUpdateListener);
+    document.removeEventListener('visibilitychange', handleVisibilityChange);
+     clearInterval(socketRef.current);
+  };
+}, [gameId]); 
 
 
   const [cached, setCached] = useState({});
@@ -133,9 +176,7 @@ const MarketAnalysisInner = () => {
         setStatusSuspend('SUSPEND')
       }
       setIsCached(true);
-      console.log("if", "cached");
     } else {
-      console.log("cached else")
       if (fanyBets?.matchfancies?.length > 0) {
         setCached(fanyBets);
         setStatusSuspend('')
@@ -157,7 +198,6 @@ const MarketAnalysisInner = () => {
 
   useEffect(() => {
     if (fanyBets?.matchfancies?.length === 0 && counter < 60 && isCached) {
-      console.log("cached interval");
       counterRef.current = setInterval(() => {
         setCounter(prev => prev + 1)
       }, 1000)
@@ -165,21 +205,19 @@ const MarketAnalysisInner = () => {
     }
   }, [isCached]);
 
-  useEffect(() => {
-    let timer ;
-    if(gameId && liveBets && search == ''){
-      console.log('==============================1234')
-         timer = setInterval(() => {
-          dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
-        }, 5000);
+  // useEffect(() => {
+  //   let timer ;
+  //   if(gameId && liveBets && search == ''){
+  //        timer = setInterval(() => {
+  //         dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,search}))
+  //       }, 5000);
       
-    }
-    return ()=>clearInterval(timer)
-  }, [liveBets,gameId,pages.viewBet,search,backBets?.data?.length])
+  //   }
+  //   return ()=>clearInterval(timer)
+  // }, [liveBets,gameId,pages.viewBet,search,backBets?.data?.length])
 
   useEffect(()=>{
     if(gameId){
-      console.log('==============================123')
       dispatch(fetchMarketBets({ page: pages.userPage,matchId: gameId,searchTerm,search}))
     }
   },[gameId,liveBets,searchTerm,search])
@@ -193,21 +231,46 @@ const MarketAnalysisInner = () => {
   useEffect(() => {
     if (showUserBook) {
       let uid = userDetails?.role_name == 'super-admin' ? '' : userDetails?._id
-      console.log(userId ,userDetails?.role_name ,'userIduserIduserIduserIduserIduserId')
       dispatch(fetchmasterBook({ page: 1, limit: 100, type: type, masterId: userId ? userId : uid  ,matchId : gameId}))
     }
   }, [showUserBook, userId])
 
   useEffect(() => {
     const total = backBets?.pagination?.totalChildrenCount
-    console.log(backBets?.data?.length && (listData?.length + backBets?.data?.length) <= total, 'backBets?.data?.length && (listData?.length + backBets?.data?.length) <=  total ')
     if (backBets?.pagination?.totalPages > 1) {
       if (backBets?.data?.length && (listData?.length + backBets?.data?.length) <= total) {
-        console.log([...listData, ...backBets?.data], '[...listData,...backBets?.data]')
         setListData([...listData, ...backBets?.data])
       }
     }
   }, [currentPage, backBets?.data?.length])
+
+  const SetStakeLimit =async()=>{
+    try{
+      setLoading(true)
+      const res = await postInstance(`/match/updatematchStake?matchId=${gameId}`,
+        { 
+          maxStake:0,
+        oddsOnly:checkbox
+      })
+      setLoading(false)
+     }catch(error){
+      setLoading(false)
+     }
+  }
+
+
+  const RevertStakeLimit =async()=>{
+    try{
+      setLoading2(true)
+      const res = await postInstance(`/match/restoreMatchStake?matchId=${gameId}`,
+        { 
+          oddsOnly:checkbox
+      })
+      setLoading2(false)
+     }catch(error){
+      setLoading2(false)
+     }
+  }
 
   useEffect(() => {
     const observer = new IntersectionObserver(check, options)
@@ -218,6 +281,8 @@ const MarketAnalysisInner = () => {
     }
   }, [backBets?.data?.length,infiniteLoadRef.current])
 
+  console.log(checkbox,'checkbox')
+ 
   return (
     <>
       <div className="grid lg:grid-cols-12 grid-cols-1 gap-4">
@@ -294,7 +359,50 @@ const MarketAnalysisInner = () => {
          
           </div>
         </div>
+
         <div className="lg:col-span-5 col-span-1">
+
+        <div className="mt-2 flex flex-col sm:flex-row justify-between items-center w-full gap-1 bg-gray-100 rounded-md  p-3">
+          <p className="block items-center text-sm font-custom text-black">Set Maxstake</p>
+          <div className="items-center flex  sm:flex-row justify-between gap-1 sm:gap-3">
+           <label className=" flex items-center text-center text-nowrap  gap-3 text-xs w-full font-custom text-black">
+            Only Odds
+          <input 
+          className=" mt-1"
+          type="checkbox"
+          checked={checkbox}  
+          onChange={(e)=>setCheckbox(e.target.checked)}/>
+           </label>
+          {loading ? 
+          <button 
+          // onClick={SetStakeLimit}
+          className=" text-white mt-2 text-center px-3 hover:bg-sky-700 bg-sky-900 p-1 text-xs rounded-md  w-full">
+            Loading
+            </button>
+            :
+          <button 
+            onClick={SetStakeLimit}
+            className=" text-white mt-2 text-center px-3 hover:bg-sky-700 bg-sky-900 p-1 text-xs rounded-md  w-full">
+              Set Stake
+              </button>
+              }
+
+              {loading2 ? 
+              <button 
+              // onClick={RevertStakeLimit}
+              className=" text-white mt-2 text-nowrap text-center px-3 hover:bg-sky-700 bg-sky-900 p-1 text-xs rounded-md  w-full">
+                Loading
+                </button>
+                :
+              <button 
+            onClick={RevertStakeLimit}
+            className=" text-white mt-2 text-nowrap text-center px-3 hover:bg-sky-700 bg-sky-900 p-1 text-xs rounded-md  w-full">
+              Revert Stake
+              </button>
+              }
+          </div>
+          </div>
+
           {
             matchBetsData && matchBetsData?.liveTv ?
               <>
