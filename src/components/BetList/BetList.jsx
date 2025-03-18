@@ -180,7 +180,7 @@ const BetList = ({ Userid }) => {
               Bet History
             </h1>
 
-            <div className="flex flex-col sm:flex-row justify-between items-center p-4 sm:pb-0 pb-2 gap-4">
+            <div className="flex flex-col sm:flex-row justify-between items-start md:items-center p-4 sm:pb-0 pb-2 gap-4">
               <div className="flex items-center">
                 <label className="mr-2 text-sm text-black">
                   Show
@@ -543,7 +543,7 @@ const BetList = ({ Userid }) => {
                 </table>
               </div>
             )}
-            <div className="flex justify-between sm:items-center mt-1 flex-col sm:flex-row p-4">
+            <div className="md:flex justify-between sm:items-center mt-1 flex-col sm:flex-row p-2 md:p-4">
               {/* Showing entries text */}
               <div className="text-sm text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}
@@ -554,12 +554,12 @@ const BetList = ({ Userid }) => {
 
               {/* Pagination Buttons */}
               {totalPages > 1 && (
-                <div className="flex space-x-2">
+                <div className="flex flex-wrap space-x-2">
                   {/* First Button */}
                   <button
                     onClick={() => handlePageChange("first")}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded ${
+                    className={`px-2 md:px-3 py-1 text-sm rounded ${
                       currentPage === 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
@@ -572,7 +572,7 @@ const BetList = ({ Userid }) => {
                   <button
                     onClick={() => handlePageChange("prev")}
                     disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded ${
+                    className={`px-1 md:px-3 py-1 text-sm rounded ${
                       currentPage === 1
                         ? "opacity-50 cursor-not-allowed"
                         : "hover:bg-gray-100"
@@ -593,7 +593,7 @@ const BetList = ({ Userid }) => {
                           <button
                             key={page}
                             onClick={() => setCurrentPage(page)}
-                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                            className={`px-2 md:px-3 py-1 text-sm border border-gray-300 rounded ${
                               currentPage === page
                                 ? "bg-gray-200"
                                 : "hover:bg-gray-100"
@@ -607,7 +607,7 @@ const BetList = ({ Userid }) => {
                         page === currentPage + 2
                       ) {
                         return (
-                          <span key={page} className="px-3 py-1 text-sm">
+                          <span key={page} className="px-2 md:px-3 py-1 text-sm">
                             ...
                           </span>
                         );

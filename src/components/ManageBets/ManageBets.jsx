@@ -86,8 +86,6 @@ function ManageBets({ Userid }) {
           remark: remark,
           betDeletePassword : password
         });
-console.log(res,'resresresresresresresresresres')
-
         if (res?.data?.success) {
           setSelectBet({});
           setRemark("");
@@ -95,11 +93,9 @@ console.log(res,'resresresresresresresresresres')
           setPassword('')
           toast.success(res?.data?.message)
         }
-        console.log({ res });
       } catch (error) {
         setSelectBet({});
         setRemarkModal(false);
-        console.log(error,'resresresresresresresresresres');
       }
     }
   };
@@ -116,7 +112,6 @@ console.log(res,'resresresresresresresresresres')
           : selectBet?.matchType,
           betDeletePassword : password
       });
-console.log(res,'resresresresresresresresresres')
       if (res?.data?.success) {
         toast.success(res?.data?.message)
         setSelectBet({});
@@ -143,10 +138,8 @@ console.log(res,'resresresresresresresresresres')
           })
         );
       }
-      console.log({ res });
     } catch (error) {
       toast.error(error)
-console.log(error,'resresresresresresresresresres')
       
     }
   };
@@ -170,7 +163,6 @@ console.log(error,'resresresresresresresresresres')
     currentPage * entriesToShow
   );
 
-  console.log("Paginated Data:", paginatedData);
   useEffect(() => {
     if (total.total) {
       setTotalBets(total.total);
@@ -196,7 +188,6 @@ console.log(error,'resresresresresresresresresres')
   });
 
   const handleCheckbox = (e) => {
-    console.log(e.target.checked, checkbox, "e.target.checked");
     if (e.target.checked && e.target.value == "all") {
       const id = dataLiability?.map((item) => {
         return item?._id;
@@ -214,7 +205,6 @@ console.log(error,'resresresresresresresresresres')
     }
   };
 
-  console.log({ pages }, "dataLiability");
 
   return (
     <>
@@ -362,10 +352,7 @@ console.log(error,'resresresresresresresresresres')
 
                     <td
                       onClick={() => {
-                        console.log("Clicked Item:", item); // Log the entire item object
-                        console.log("Selected User ID:", item.createdBy);
-                        console.log("Selected User Name:", item.username);
-                        setSelectedUserId(item.createdBy);
+                      setSelectedUserId(item.createdBy);
                         setSelectedUsername(item.username);
                         setIsModalOpen(true);
                       }}

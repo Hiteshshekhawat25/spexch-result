@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 const TransferMatchCoins = () => {
   const { matchId } = useParams();
   const [loading,setLoading] = useState(false);
+  const [loading2,setLoading2] = useState(false);
   const [marketData, setMarketData] = useState([])
   const [formValue, setFormValue] = useState({
     selectionId: '',
@@ -171,7 +172,7 @@ const TransferMatchCoins = () => {
       // status : formValue?.selectionId === 'ABANDONED' ? 'ABANDONED' : formValue?.selectionId === 'TIE' ? 'TIE' : 'WINNER'
     }
     try {
-      setLoading(true)
+      setLoading2(true)
       setTimeout(async()=>{
         const response = await axios.post(`${BASE_URL}/user/transfer-bookmakers-coin/`, body, {
           headers: {
@@ -180,14 +181,15 @@ const TransferMatchCoins = () => {
           },
         });
         console.log("response", response);
-        setLoading(false)
+        setLoading2(false)
         if (response?.data?.success) {
           toast.success(response?.data?.message);
           getMatchDetails()
         }
       },3000)
+      
     } catch (error) {
-      setLoading(false)
+      setLoading2(false)
       // Handle specific token expiry case
       if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
         localStorage.clear();
@@ -233,7 +235,7 @@ const TransferMatchCoins = () => {
 
   const handleRevertBookmakersCoins = async () => {
     try {
-      setLoading(true)
+      setLoading2(true)
       setTimeout(async()=>{
         const body = {
           matchId: marketData?.[0]?._id,
@@ -246,14 +248,14 @@ const TransferMatchCoins = () => {
           },
         });
         console.log("response", response);
-        setLoading(false)
+        setLoading2(false)
         if (response?.data?.success) {
           toast.success(response?.data?.message);
           getMatchDetails()
         }
       },3000)
     } catch (error) {
-      setLoading(false)
+      setLoading2(false)
       console.log(error, 'Error Fetching')
     }
   }
@@ -372,7 +374,7 @@ const TransferMatchCoins = () => {
         {/* Transfer Coins */}
         <div className="flex-1 my-2 text-right">
           {marketData?.[0]?.transferredBookmakerCoin == 1 && marketData?.[0]?.bookMakerResult == 1 ?
-            loading ?   
+            loading2 ?   
             <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
               // onClick={handleTossRevertCoin}
               >
@@ -382,7 +384,7 @@ const TransferMatchCoins = () => {
               Revert Coins
             </button>
             :
-            loading ?   
+            loading2 ?   
             <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
               // onClick={handleTossRevertCoin}
               >

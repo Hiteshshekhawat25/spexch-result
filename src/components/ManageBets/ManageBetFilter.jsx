@@ -423,7 +423,6 @@ function ManageBetFilter({
     const fetchSports = async () => {
       try {
         const response = await getCreateNewMatchAPIAuth("games/getgames");
-        console.log({ response });
         if (response.status === 200) {
           setSportsOptions(response.data.data || []); // Adjust based on API response
         }
@@ -434,7 +433,6 @@ function ManageBetFilter({
     fetchSports();
   }, []);
 
-  console.log(sessions, "selectFilterData");
   return (
     <>
       <div className="grid grid-cols-12 gap-2 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
@@ -528,7 +526,7 @@ function ManageBetFilter({
               className="border w-full text-[12px] sm:text-sm p-2 rounded"
             >
               <option value="">Select Session</option>
-              {filteredSessions
+              {sessions?.sessions
                 .filter((session) => !session.result)
                 .map((session, index) => (
                   <option key={index} value={session.marketId}>

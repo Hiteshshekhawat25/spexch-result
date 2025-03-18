@@ -144,15 +144,14 @@ const BookFancyModal = ({openBets, selectedFancy,matchBetsData,bookData,show,set
 
   useEffect(() => {
     const array = [];
-  
+    
     if (openBets?.length) {
       // Filter and sort the data
       const bookData1 = bookData?.filter((item) =>item?.marketName == selectedFancy)
-
+     
       if (bookData1?.length) {
         // Calculate the global range
         const allOdds = bookData.map((item) => Number(item?.fancyOdds));
-        console.log(allOdds,'yuioop')
         const globalLowerBound = Math.min(...allOdds) - 10;
         const globalUpperBound = Math.max(...allOdds) + 10;
         
@@ -162,28 +161,62 @@ const BookFancyModal = ({openBets, selectedFancy,matchBetsData,bookData,show,set
           const amount = bookData[i]?.amount;
           const potentialWin = bookData[i]?.potentialWin;
           
+          console.log(bookData,'currentOdds')
           
-          console.log('potentialWinpotentialWin', allOdds,potentialWin,selectedFancy)
-  
+          console.log('potentialWinpotentialWin', potentialWin)
+          
           const element = {};
+          console.log('allOdds',{allOdds,globalLowerBound,globalUpperBound,currentOdds})
   
           // Loop through the global range
           for (let j = globalLowerBound; j <= globalUpperBound; j++) {
-            if (j < currentOdds) {
-              element[j] =
-                bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no'
-                  ? -amount
-                  : potentialWin;
-            } else if (j === currentOdds) {
-              element[j] =
-                bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no'
-                  ? amount
-                  : -potentialWin;
-            } else {
-              element[j] =
-                bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no'
-                  ? amount
-                  : -potentialWin;
+            if(bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no'){
+              if (j < currentOdds) {
+                console.log( i > allOdds?.[i], i , allOdds?.[i],'allOdds1')
+                element[j] =
+                  // (bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no') && i > allOdds?.[0]
+                   i > allOdds?.[i]
+                    ? amount
+                    : -potentialWin;
+              } else if (j === currentOdds) {
+                console.log(j ,i,currentOdds,potentialWin,'allOdds2')
+                element[j] =
+                  // (bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no') && i >= allOdds?.[0]
+                   i <= allOdds?.[i]
+                    ? amount
+                    : -potentialWin;
+              } else {
+                console.log(j ,i,currentOdds,potentialWin,'allOdds3')
+                element[j] =
+                //  ( bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no')  && i < allOdds?.[0]
+                  i < allOdds?.[i]
+                    ? amount
+                    : -potentialWin;
+              }
+            }else if(bookData[i]?.betType === 'back' || bookData[i]?.betType === 'yes'){
+              if (j < currentOdds) {
+                console.log(j ,i,currentOdds,potentialWin,'allOdds1')
+                element[j] =
+                // (bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no') && i > allOdds?.[0]
+                j < allOdds?.[i]
+                
+                ? amount
+                : -potentialWin;
+              } else if (j === currentOdds) {
+                console.log(j ,i,currentOdds,potentialWin,'allOddsb2')
+                element[j] =
+                // (bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no') && i >= allOdds?.[0]
+                j== allOdds?.[i]
+                ? 
+                 -potentialWin : amount
+              } else {
+                console.log(j ,i,currentOdds,potentialWin,'allOdds3')
+                element[j] =
+                //  ( bookData[i]?.betType === 'lay' || bookData[i]?.betType === 'no')  && i < allOdds?.[0]
+                  i > allOdds?.[i]
+                    ? amount
+                    : -potentialWin;
+              }
             }
           }
   
@@ -195,6 +228,7 @@ const BookFancyModal = ({openBets, selectedFancy,matchBetsData,bookData,show,set
   
         // Aggregate all elements into the final result
         if (array?.length) {
+          console.log('Final Result:', array);
           const result = array.reduce((acc, curr) => {
             Object.keys(curr).forEach((key) => {
               acc[key] = (acc[key] || 0) + curr[key];
@@ -203,7 +237,6 @@ const BookFancyModal = ({openBets, selectedFancy,matchBetsData,bookData,show,set
           }, {});
   
           setBookDataArray(result);
-          console.log('Final Result:', result);
         }
       }
     }

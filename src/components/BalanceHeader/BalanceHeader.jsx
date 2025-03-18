@@ -64,33 +64,32 @@ const BalanceHeader = () => {
       <div className="hidden md:grid lg:grid-cols-7 md:grid-cols-6 divide-x divide-gray-200">
         {/* Total Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
-          IRP {new Intl.NumberFormat("en-IN").format(data?.totalBalance)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.totalBalance?.toFixed(2) || 0)}
         </div>
         {/* Total Exposure Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP{" "}
           <span className="text-red-500">
-            ({new Intl.NumberFormat("en-IN").format(data?.totalExposure)})
+            ({new Intl.NumberFormat("en-IN").format(data?.totalExposure?.toFixed(2) || 0)})
           </span>
         </div>
         {/* Available Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP{" "}
-          {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance) ||
-            0}
+          {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance?.toFixed(2) || 0)}
         </div>
         {/* Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
-          IRP {new Intl.NumberFormat("en-IN").format(data?.balance) || 0}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.balance?.toFixed(2) || 0) }
         </div>
         {/* Total Available Balance Value */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]">
           IRP{" "}
-          {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance)}
+          {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance?.toFixed(2) || 0)}
         </div>
         {/* Upline P/L Value */}
         <div className={`text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px] ${data?.uplineProfitLoss < 0 ? 'text-red-600' : ''}`}>
-          IRP {new Intl.NumberFormat("en-IN").format(data?.uplineProfitLoss)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.uplineProfitLoss?.toFixed(2) || 0)}
         </div>
         {/* Empty space */}
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-2 text-[15px]"></div>
@@ -103,7 +102,7 @@ const BalanceHeader = () => {
           Total Balance
         </div>
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
-          IRP {new Intl.NumberFormat("en-IN").format(data?.totalBalance)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.totalBalance?.toFixed(2) || 0)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
 
@@ -114,7 +113,7 @@ const BalanceHeader = () => {
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
           IRP{" "}
           <span className="text-red-500">
-            ({new Intl.NumberFormat("en-IN").format(data?.totalExposure)})
+            ({new Intl.NumberFormat("en-IN").format(data?.totalExposure?.toFixed(2) || 0)})
           </span>
         </div>
         <div className="w-full border-t border-gray-200"></div>
@@ -124,7 +123,7 @@ const BalanceHeader = () => {
           Available Balance
         </div>
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
-          IRP {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.allAvailableBalance?.toFixed(2) || 0)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
 
@@ -133,7 +132,7 @@ const BalanceHeader = () => {
           Balance
         </div>
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
-          IRP {new Intl.NumberFormat("en-IN").format(data?.balance)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.balance?.toFixed(2) || 0)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
 
@@ -143,7 +142,7 @@ const BalanceHeader = () => {
         </div>
         <div className="text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px]">
           IRP{" "}
-          {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance)}
+          {new Intl.NumberFormat("en-IN").format(data?.totalAvailableBalance?.toFixed(2) || 0)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
 
@@ -152,7 +151,7 @@ const BalanceHeader = () => {
           Upline P/L
         </div>
         <div className={`text-left py-1 text-blue-800 text-md font-bold pl-1 text-[14px] ${data?.uplineProfitLoss < 0 ? 'text-red-500' : ''}`}>
-          IRP {new Intl.NumberFormat("en-IN").format(data?.uplineProfitLoss)}
+          IRP {new Intl.NumberFormat("en-IN").format(data?.uplineProfitLoss?.toFixed(2) || 0)}
         </div>
         <div className="w-full border-t border-gray-200"></div>
       </div>

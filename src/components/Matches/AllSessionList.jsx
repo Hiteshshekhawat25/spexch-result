@@ -36,11 +36,11 @@ const AllSessionListRevert = () => {
   const [selectedSession, setSelectedSession] = useState("");
 
   useEffect(() => {
-    if (selectedMatch) {
+    if (matchId) {
       console.log('sortMatchsortMatchsortMatchsortMatchsortMatchsortMatchsortMatch')
-      dispatch(fetchSessions(selectedMatch));
+      dispatch(fetchSessions(matchId));
     }
-  }, [dispatch, selectedMatch]);
+  }, [dispatch, matchId]);
 
   useEffect(() => {
     if (selectedMatch) {
@@ -123,7 +123,9 @@ const handleCheckbox = (e)=>{
           dispatch(
             liabilityBook({
              matchId : selectedMatch,
-             sessionId : selectedSession
+             sessionId : selectedSession,
+             type:'fancy',
+             status : 'DELETED'
             })
           )
       }
@@ -150,7 +152,9 @@ const handleCheckbox = (e)=>{
             dispatch(
               liabilityBook({
                matchId : matchId,
-               sessionId : selectedSession
+               sessionId : selectedSession,
+               type:'fancy',
+               status : 'ACTIVE'
               })
             )
             setRemark("");
@@ -166,8 +170,7 @@ const handleCheckbox = (e)=>{
     };
 
 
-
-  console.log(list,'listlistlistlistlist')
+  console.log(sessions,'listlistlistlistlist')
   return (
     <div className="w-full p-4">
       {/* Title Section */}

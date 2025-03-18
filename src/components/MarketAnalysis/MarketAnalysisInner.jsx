@@ -248,7 +248,8 @@ const MarketAnalysisInner = () => {
     try{
       setLoading(true)
       const res = await postInstance(`/match/updatematchStake?matchId=${gameId}`,
-        { maxStake:0,
+        { 
+          maxStake:0,
         oddsOnly:checkbox
       })
       setLoading(false)
