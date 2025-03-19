@@ -154,7 +154,7 @@ const MyProfile = ({ Userid, Role }) => {
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Commission</span>
           <div className=" sm:py-0 py-3 flex">
             <span className="text-left sm:ml-4">{profile.commission}%</span>
-            {Userid && (
+            {((userData?.data?._id == profile?.createdBy) || profile?.createdBy == 'self' )&&  (
               <span className="text-left sm:ml-4 flex items-center">
                 <FaEdit
                   className="ml-2 text-blue cursor-pointer"
@@ -203,7 +203,7 @@ const MyProfile = ({ Userid, Role }) => {
             <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Exposure Limit</span>
             <div className="flex items-center gap-3 sm:py-0 py-3">
               <span className="text-left sm:ml-4">{profile.exposureLimit}</span>
-              {userData?.data?._id == profile?.createdBy  && 
+              {(userData?.data?._id == profile?.createdBy  || profile?.createdBy == 'self') && 
               <FaRegEdit
                 className="text-blue cursor-pointer"
                 onClick={handleOpenEditExposureModal}
@@ -223,11 +223,12 @@ const MyProfile = ({ Userid, Role }) => {
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Password</span>
           <span className="flex items-center sm:ml-4 sm:py-0 py-4">
             <span className="mr-2">********</span>
-          {((userData?.data?._id == profile?.createdBy) || !profile?.createdBy )&&  
+          {((userData?.data?._id == profile?.createdBy) || profile?.createdBy == 'self' )&&  
           <FaRegEdit
               className="text-blue cursor-pointer"
               onClick={handleOpenChangePasswordModal}
-            />}
+            />
+             } 
           </span>
         </div>
         {/* <div className="flex sm:py-3 border-b sm:flex-row flex-col">
