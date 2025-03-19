@@ -291,7 +291,7 @@ const BetHistory = () => {
                         <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
                           {item.totalAmount?.toFixed(2)}
                         </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400 whitespace-nowrap">
+                        {/* <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400 whitespace-nowrap">
                           {item?.betType === "lay" || item?.betType === "no" ? (
                             <>
                               <span className="text-green-800">
@@ -306,6 +306,29 @@ const BetHistory = () => {
                             <>
                               <span className="text-green-800">
                                 ({(item?.totalProfitLoss  + item?.totalCommission)?.toFixed(2)})
+                              </span>
+                              <span className="text-red-500">
+                                {" "}
+                                (-{item?.totalAmount?.toFixed(2) || 0})
+                              </span>
+                            </>
+                          )}
+                        </td> */}
+                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400 whitespace-nowrap">
+                          {item?.betType === "lay" || item?.betType === "no" ? (
+                            <>
+                              <span className="text-green-800">
+                                {item?.potentialWin}
+                              </span>
+                              <span className="text-red-500">
+                                {" "}
+                              (-{item?.totalAmount?.toFixed(2)})
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <span className="text-green-800">
+                                {(item?.potentialWin)?.toFixed(2)}
                               </span>
                               <span className="text-red-500">
                                 {" "}

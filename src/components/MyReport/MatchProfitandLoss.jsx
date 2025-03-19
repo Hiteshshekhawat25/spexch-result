@@ -831,7 +831,15 @@ const MatchProfitandLoss = () => {
                   </p>
                 </td>
                 <td className="px-4 py-1 border text-nowrap border-gray-400 text-center"> 
-                  { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
+                  { item?.result == 'ABANDONED' ? 
+                  'ABANDONED' : 
+                  item?.result == 'CANCELLED' 
+                  ? 'ABANDONED' : 
+                  item?.result == 'TIE' 
+                  ? 'TIE' : 
+                  item?.marketName
+                   ? item?.marketName 
+                   : item?.result}
                 </td>
                 <td
                   className="px-4 py-1 text-nowrap border border-gray-400 text-center"

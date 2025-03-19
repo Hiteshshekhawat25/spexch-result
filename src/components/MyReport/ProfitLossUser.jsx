@@ -276,11 +276,18 @@ const ProfitLossUser = () => {
                             ? "Bookmaker"
                             : item.type == "toss"
                             ? "Toss"
-                            : item?.type == 'casino' ? item?.name :  item.marketName}
+                            : item?.type == 'casino' ? item?.name :  item.marketNameTwo}
                         </td>
                         <td className="px-4 py-3 text-sm text-nowrap text-center border-r border-gray-400">
                           {/* {item?.marketName ? " " : "void"} */}
-                          { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
+                          { item?.result == 'ABANDONED' 
+                          
+                          ? 'ABANDONED' : item?.result == 'CANCELLED' 
+                          
+                          ? 'ABANDONED' : item?.result == 'TIE'
+                           ? 'TIE' : item?.marketName ? 
+                           item?.marketName : 
+                           item?.result}
                         </td>
                         <td
                           className="px-4 py-3 text-sm text-center border-r border-gray-400"

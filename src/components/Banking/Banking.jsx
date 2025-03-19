@@ -837,7 +837,7 @@ const Banking = () => {
             )}
           </div>
 
-          <div className="flex fixed left-0 bg-white p-2 bottom-0 sm:relative flex-col sm:flex-row items-center mt-4 space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 w-full">
+          <div className="flex fixed h-[100px] sm:h-auto left-0 bg-white p-2 bottom-[55px] sm:relative flex-col sm:flex-row items-center mt-4 space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 w-full">
             <div className="flex space-x-2">
               <button
                 onClick={handleClearAll}
@@ -855,7 +855,7 @@ const Banking = () => {
             </div>
             <button
               onClick={() => handleSubmitPaymentForRow()}
-              className={`px-3 py-1 lg:px-32 lg:py-2 ${
+              className={`px-3 py-3 lg:px-32 lg:py-2 ${
                 isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
               } text-white text-sm lg:text-md font-medium rounded-md w-full sm:w-auto`}
             >
