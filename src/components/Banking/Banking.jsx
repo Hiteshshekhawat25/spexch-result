@@ -486,124 +486,123 @@ const Banking = () => {
   console.log(userData,'resresresresresresresresresres')
   return (
     <>
-    <div className="flex justify-end my-3">
-      <span className="font-bold mx-3">Chips Summary </span>
-     <div
-            className={`relative inline-flex items-center rounded-[4px] h-7 w-14 p-[2px] border border-whiteGray cursor-pointer transition-colors ${
+    <div className="md:mx-0 mx-2">
+      <div className="flex justify-end items-center md:my-3 my-2">
+        <span className="font-bold mx-3 text-sm">Chips Summary </span>
+        <div
+          className={`relative inline-flex items-center rounded-[4px] h-7 w-14 p-[2px] border border-whiteGray cursor-pointer transition-colors ${
+            chipSummary
+              ? "bg-gradient-seablue"
+              : "bg-white"
+          }`}
+          onClick={() =>setChipSummary(!chipSummary)}
+        >
+          <span
+            className={`absolute right-2 text-sm font-bold ${
               chipSummary
-                ? "bg-gradient-seablue"
-                : "bg-white"
+                ? "text-transparent"
+                : "text-whiteGray"
             }`}
-            onClick={() =>setChipSummary(!chipSummary)}
           >
-            <span
-              className={`absolute right-2 text-sm font-bold ${
-                chipSummary
-                  ? "text-transparent"
-                  : "text-whiteGray"
-              }`}
-            >
-              ✗
-            </span>
+            ✗
+          </span>
 
-            <span
-              className={`absolute left-2 text-sm font-bold ${
-                chipSummary
-                  ? "text-white"
-                  : "text-transparent"
-              }`}
-            >
-              ✓
-            </span>
+          <span
+            className={`absolute left-2 text-sm font-bold ${
+              chipSummary
+                ? "text-white"
+                : "text-transparent"
+            }`}
+          >
+            ✓
+          </span>
 
-            <span
-              className={`inline-block size-[21px] border rounded-[2px] border-whiteGray bg-white transform transition-transform ${
-                chipSummary
-                  ? "translate-x-7"
-                  : "translate-x-[1.5px]"
-              }`}
-            ></span>
-          </div>
-    </div>
-    <div className="p-4 border border-gray-200 rounded-md bg-white overflow-x-auto">
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-        <AnimatedLoader/>
+          <span
+            className={`inline-block size-[21px] border rounded-[2px] border-whiteGray bg-white transform transition-transform ${
+              chipSummary
+                ? "translate-x-7"
+                : "translate-x-[1.5px]"
+            }`}
+          ></span>
         </div>
-      ) : (
-        <>
-          {/* <div className="p-4"> */}
-         
-          <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
-            <div className="flex items-center space-x-2 sm:ml-0 ml-10">
-              <label className="mr-2 text-sm font-medium">Show</label>
-              <select
-                value={entriesToShow}
-                onChange={handleEntriesChange}
-                className="border border-gray-300 rounded px-2 py-1 text-sm"
-              >
-                {[10, 25, 50, 100].map((number) => (
-                  <option key={number} value={number}>
-                    {number}
-                  </option>
-                ))}
-              </select>
-              <label className="ml-2 text-sm font-medium">entries</label>
-            </div>
-            <div className="p-2 rounded-md">
-              <label className="p-1">Search:</label>
-              <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={handleSearchChange}
-                className="border border-gray-300 rounded px-2 py-1 text-sm"
-              />
-            </div>
+      </div>
+      <div className="md:p-4 p-3 border border-gray-300 rounded-md bg-white">
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+          <AnimatedLoader/>
           </div>
-          {/* </div> */}
-          <table className="w-full  table-auto border-collapse border border-gray-300">
-            <thead className="border border-gray-300">
-              <tr className="bg-gray-300">
-                {columns.map(({ key, label }) => (
-                  <th
-                    key={key}
-                    className="border border-gray-400 text-left p-2 px-4  text-sm font-bold text-black cursor-pointer"
-                    onClick={() => handleSort(key)}
-                  >
-                    <div className="flex justify-between items-center">
-                      {label}
-                      <div className="flex flex-col items-center ml-2">
-                        <FaSortUp
-                          className={`${
-                            sortConfig.key === key &&
-                            sortConfig.direction === "ascending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{
-                            marginBottom: "-6px",
-                          }}
-                        />
-                        <FaSortDown
-                          className={`${
-                            sortConfig.key === key &&
-                            sortConfig.direction === "descending"
-                              ? "text-black"
-                              : "text-gray-400"
-                          }`}
-                          style={{
-                            marginTop: "-6px",
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {sortedData?.sort((a, b) => {
+        ) : (
+          <>
+            <div className="flex flex-wrap justify-between items-center sm:flex-row flex-col sm:gap-4 gap-2 md:mb-4 mb-3">
+              <div className="flex items-center">
+                <label className="mr-1 text-[12px] font-medium">Show</label>
+                <select
+                  value={entriesToShow}
+                  onChange={handleEntriesChange}
+                  className="border border-gray-300 rounded px-2 py-1 text-sm"
+                >
+                  {[10, 25, 50, 100].map((number) => (
+                    <option key={number} value={number}>
+                      {number}
+                    </option>
+                  ))}
+                </select>
+                <label className="ml-1 text-[12px] font-medium">entries</label>
+              </div>
+              <div className="p-2 rounded-md">
+                <label className="p-1 text-[13px]">Search:</label>
+                <input
+                  type="text"
+                  placeholder="Search"
+                  value={searchTerm}
+                  onChange={handleSearchChange}
+                  className="border border-gray-300 rounded px-2 py-1 outline-none text-[13px]"
+                />
+              </div>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full  table-auto border-collapse border border-gray-300">
+                <thead className="border border-gray-300">
+                  <tr className="bg-gray-200">
+                    {columns.map(({ key, label }) => (
+                      <th
+                        key={key}
+                        className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-black cursor-pointer text-center"
+                        onClick={() => handleSort(key)}
+                      >
+                        <div className="flex justify-between items-center">
+                          {label}
+                          <div className="flex flex-col items-center ml-2">
+                            <FaSortUp
+                              className={`${
+                                sortConfig.key === key &&
+                                sortConfig.direction === "ascending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                              }`}
+                              style={{
+                                marginBottom: "-6px",
+                              }}
+                            />
+                            <FaSortDown
+                              className={`${
+                                sortConfig.key === key &&
+                                sortConfig.direction === "descending"
+                                  ? "text-black"
+                                  : "text-gray-400"
+                              }`}
+                              style={{
+                                marginTop: "-6px",
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {sortedData?.sort((a, b) => {
                       if (sortConfig?.key !== '') {
                         if(sortConfig?.direction == 'ascending'){
                           console.log('runnnnn2',a[sortConfig.key] , b[sortConfig.key],a)
@@ -625,262 +624,266 @@ const Banking = () => {
                           }
                         }}
                     }).map((item, index) => (
-                <tr
-                  key={item._id}
-                  className="border border-gray-400 bg-white"
-                  onClick={() => handleRowClick(index)}
-                >
-                  <td className="px-4 py-2 text-sm">
-                    <span className="text-black font-semibold">
-                      {item.username}
-                    </span>
-                  </td>
-                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(
-                      item.totalOpeningBalance
-                    )}
-                  </td>
-                  <td className="border border-gray-400 px-4 py-2 text-sm font-semibold">
-                    {new Intl.NumberFormat("en-IN").format(
-                      item.totalAvailableBalance
-                    )}
-                  </td>
-                  <td className="border border-gray-400 px-4 py-2 text-sm text-red-500 font-bold">
-                    {new Intl.NumberFormat("en-IN").format(
-                      item.totalExposureBalance
-                    )}
-                  </td>
-                  <td className=" px-4 py-2 text-md text-blue font-semibold flex items-center">
-                    {new Intl.NumberFormat("en-IN").format(
-                      item.creditReference
-                    )}
-                    <FaEdit
-                      className="text-blue cursor-pointer ml-2"
-                      onClick={() => handleEditClick(item)}
-                    />
-                  </td>
-                  <td
-                    className={`border border-gray-400 px-4 py-2 text-sm font-bold ${
-                      item?.totalOpeningBalance - item?.creditReference <= 0
-                        ? "text-red-500"
-                        : "text-green-500"
+                    <tr
+                      key={item._id}
+                      className="border border-gray-400 bg-white hover:bg-gray-100"
+                      onClick={() => handleRowClick(index)}
+                    >
+                      <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                        <span className="text-black font-semibold">
+                          {item.username}
+                        </span>
+                      </td>
+                      <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(
+                          item.totalOpeningBalance
+                        )}
+                      </td>
+                      <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(
+                          item.totalAvailableBalance
+                        )}
+                      </td>
+                      <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-red-500 font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(
+                          item.totalExposureBalance
+                        )}
+                      </td>
+                      <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-NavyBlue font-semibold">
+                        {new Intl.NumberFormat("en-IN").format(
+                          item.creditReference
+                        )}
+                        <FaEdit
+                          className="text-blue cursor-pointer ml-2"
+                          onClick={() => handleEditClick(item)}
+                        />
+                      </td>
+                      <td
+                        className={`sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-red-500 font-semibold ${
+                          item?.totalOpeningBalance - item?.creditReference <= 0
+                            ? "text-red-500"
+                            : "text-green-500"
+                        }`}
+                      >
+                        {new Intl.NumberFormat("en-IN").format(
+                          item?.totalOpeningBalance - item?.creditReference
+                        )}
+                      </td>
+                      <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300">
+                        <div className="flex items-center space-x-1.5">
+                          <button
+                            onClick={() => handleButtonClick("D", index)}
+                            className={`px-3 py-1 text-sm text-white font-semibold rounded-md ${
+                              editedData[index]?.depositwithdrawStatus === "D"
+                                ? "bg-green-600 text-white"
+                                : "bg-gray-400 text-white"
+                            } border border-black`}
+                          >
+                            D
+                          </button>
+
+                          <button
+                            onClick={() => handleButtonClick("W", index)}
+                            className={`px-3 py-1 text-sm text-white font-semibold rounded-md ${
+                              editedData[index]?.depositwithdrawStatus === "W" ||
+                              editedData[index]?.highlightFull
+                                ? "bg-red-600 text-white"
+                                : "bg-gray-400 text-white"
+                            } border border-black`}
+                          >
+                            W
+                          </button>
+
+                          <input
+                            type="text"
+                            value={
+                              editedData[index]?.depositwithdraw ||
+                              item.depositwithdraw ||
+                              ""
+                            }
+                            onChange={(e) =>
+                              handleInputChange(e, "depositwithdraw", index)
+                            }
+                            className="border border-gray-300 px-2 w-[130px] outline-none text-[15px] text-gray-600 py-1.5 rounded text-sm"
+                          />
+
+                          <button
+                            onClick={() => handleButtonClick("Full", index)}
+                            className={`px-2.5 py-1.5 text-sm font-semibold rounded-md ${
+                              editedData[index]?.highlightFull
+                                ? "bg-gradient-blue text-white"
+                                : "bg-gray-500 text-white"
+                            }  `}
+                            disabled={!editedData[index]?.highlightFull}
+                          >
+                            Full
+                          </button>
+                        </div>
+                      </td>
+
+                      <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300">
+                        <input
+                          type="text"
+                          value={editedData[index]?.remark || ""}
+                          onChange={(e) => handleInputChange(e, "remark", index)}
+                          placeholder="Remark"
+                          className="border border-gray-300 rounded-[3px] outline-none px-2 py-1.5 text-sm"
+                        />
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+              {/* Showing entries text */}
+              <div className="text-[12px] text-gray-600 mb-2 sm:mb-0">
+                Showing{" "}
+                {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+                {Math.min(currentPage * entriesToShow, totalUsers)} of{" "}
+                {totalUsers} entries
+              </div>
+
+              {/* Pagination Buttons */}
+              {totalPages > 1 && (
+                <div className="flex space-x-2">
+                  {/* First Button */}
+                  <button
+                    onClick={() => handlePageChange("first")}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === 1
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
                     }`}
                   >
-                    {new Intl.NumberFormat("en-IN").format(
-                      item?.totalOpeningBalance - item?.creditReference
-                    )}
-                  </td>
-                  <td className="border border-gray-400 px-4 py-2 text-md">
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => handleButtonClick("D", index)}
-                        className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
-                          editedData[index]?.depositwithdrawStatus === "D"
-                            ? "bg-green-600 text-white"
-                            : "bg-gray-400 text-white"
-                        } border border-black`}
-                      >
-                        D
-                      </button>
+                    First
+                  </button>
 
-                      <button
-                        onClick={() => handleButtonClick("W", index)}
-                        className={`px-3 py-1 text-sm text-white font-medium rounded-md ${
-                          editedData[index]?.depositwithdrawStatus === "W" ||
-                          editedData[index]?.highlightFull
-                            ? "bg-red-600 text-white"
-                            : "bg-gray-400 text-white"
-                        } border border-black`}
-                      >
-                        W
-                      </button>
+                  {/* Previous Button */}
+                  <button
+                    onClick={() => handlePageChange("prev")}
+                    disabled={currentPage === 1}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === 1
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Previous
+                  </button>
 
-                      <input
-                        type="text"
-                        value={
-                          editedData[index]?.depositwithdraw ||
-                          item.depositwithdraw ||
-                          ""
-                        }
-                        onChange={(e) =>
-                          handleInputChange(e, "depositwithdraw", index)
-                        }
-                        className="border border-gray-300 px-2 py-1 text-sm"
-                      />
-
-                      <button
-                        onClick={() => handleButtonClick("Full", index)}
-                        className={`px-3 py-1 text-sm font-medium rounded-md ${
-                          editedData[index]?.highlightFull
-                            ? "bg-gradient-blue text-white"
-                            : "bg-gray-400 text-white"
-                        } border border-black `}
-                        disabled={!editedData[index]?.highlightFull}
-                      >
-                        Full
-                      </button>
-                    </div>
-                  </td>
-
-                  <td className="border border-gray-400 px-4 py-2 text-md">
-                    <input
-                      type="text"
-                      value={editedData[index]?.remark || ""}
-                      onChange={(e) => handleInputChange(e, "remark", index)}
-                      placeholder="Remark"
-                      className="border border-gray-300 px-2 py-1 text-sm"
-                    />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className="flex justify-between sm:mb-0 mb-16 items-center mt-4 flex-col sm:flex-row">
-            {/* Showing entries text */}
-            <div className="text-sm text-gray-600 mb-2 sm:mb-0">
-              Showing{" "}
-              {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
-              {Math.min(currentPage * entriesToShow, totalUsers)} of{" "}
-              {totalUsers} entries
-            </div>
-
-            {/* Pagination Buttons */}
-            {totalPages > 1 && (
-              <div className="flex space-x-2">
-                {/* First Button */}
-                <button
-                  onClick={() => handlePageChange("first")}
-                  disabled={currentPage === 1}
-                  className={`px-3 py-1 text-sm rounded ${
-                    currentPage === 1
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  First
-                </button>
-
-                {/* Previous Button */}
-                <button
-                  onClick={() => handlePageChange("prev")}
-                  disabled={currentPage === 1}
-                  className={`px-3 py-1 text-sm rounded ${
-                    currentPage === 1
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  Previous
-                </button>
-
-                {/* Page Numbers */}
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => {
-                    if (
-                      page === 1 ||
-                      page === totalPages ||
-                      (page >= currentPage - 1 && page <= currentPage + 1)
-                    ) {
-                      return (
-                        <button
-                          key={page}
-                          onClick={() => setCurrentPage(page)}
-                          className={`px-3 py-1 text-sm border border-gray-300 rounded ${
-                            currentPage === page
-                              ? "bg-gray-200"
-                              : "hover:bg-gray-100"
-                          }`}
-                        >
-                          {page}
-                        </button>
-                      );
-                    } else if (
-                      page === currentPage - 2 ||
-                      page === currentPage + 2
-                    ) {
-                      return (
-                        <span key={page} className="px-3 py-1 text-sm">
-                          ...
-                        </span>
-                      );
+                  {/* Page Numbers */}
+                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                    (page) => {
+                      if (
+                        page === 1 ||
+                        page === totalPages ||
+                        (page >= currentPage - 1 && page <= currentPage + 1)
+                      ) {
+                        return (
+                          <button
+                            key={page}
+                            onClick={() => setCurrentPage(page)}
+                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                              currentPage === page
+                                ? "bg-gray-200"
+                                : "hover:bg-gray-100"
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        );
+                      } else if (
+                        page === currentPage - 2 ||
+                        page === currentPage + 2
+                      ) {
+                        return (
+                          <span key={page} className="px-3 py-1 text-sm">
+                            ...
+                          </span>
+                        );
+                      }
+                      return null;
                     }
-                    return null;
-                  }
-                )}
+                  )}
 
-                {/* Next Button */}
-                <button
-                  onClick={() => handlePageChange("next")}
-                  disabled={currentPage === totalPages}
-                  className={`px-3 py-1 text-sm rounded ${
-                    currentPage === totalPages
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  Next
-                </button>
+                  {/* Next Button */}
+                  <button
+                    onClick={() => handlePageChange("next")}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Next
+                  </button>
 
-                {/* Last Button */}
-                <button
-                  onClick={() => handlePageChange("last")}
-                  disabled={currentPage === totalPages}
-                  className={`px-3 py-1 text-sm rounded ${
-                    currentPage === totalPages
-                      ? "opacity-50 cursor-not-allowed"
-                      : "hover:bg-gray-100"
-                  }`}
-                >
-                  Last
-                </button>
-              </div>
-            )}
-          </div>
-
-          <div className="flex fixed h-[100px] sm:h-auto left-0 bg-white p-2 bottom-[55px] sm:relative flex-col sm:flex-row items-center mt-4 space-x-0 sm:space-x-4 space-y-2 sm:space-y-0 w-full">
-            <div className="flex space-x-2">
-              <button
-                onClick={handleClearAll}
-                className="px-8 py-1 bg-lightred text-white font-bold text-md rounded-md w-full sm:w-72"
-              >
-                Clear All
-              </button>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="Password.."
-                className="border border-gray-300 px-2 py-1 lg:px-24 text-sm w-full sm:w-auto"
-              />
+                  {/* Last Button */}
+                  <button
+                    onClick={() => handlePageChange("last")}
+                    disabled={currentPage === totalPages}
+                    className={`px-3 py-1 text-sm rounded ${
+                      currentPage === totalPages
+                        ? "opacity-50 cursor-not-allowed"
+                        : "hover:bg-gray-100"
+                    }`}
+                  >
+                    Last
+                  </button>
+                </div>
+              )}
             </div>
-            <button
-              onClick={() => handleSubmitPaymentForRow()}
-              className={`px-3 py-3 lg:px-32 lg:py-2 ${
-                isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
-              } text-white text-sm lg:text-md font-medium rounded-md w-full sm:w-auto`}
-            >
-              Submit Payment
-            </button>
-          </div>
 
-          {isModalOpen && selectedUser && (
-            <>
-              <CreditEditReferenceModal
-                isOpen={isModalOpen}
-                onCancel={handleModalClose}
-                username={selectedUser.username}
-                currentCreditRef={selectedUser.creditReference}
-                onSubmit={handleSubmitFunction}
-                user={selectedUser}
-                fetchData={fetchData}
-                userId={selectedUser?._id}
-                currentPage={currentPage}
-                entriesToShow={entriesToShow}
-              />
-            </>
-          )}
-        </>
-      )}
+            <div className="grid md:grid-cols-4 grid-cols-1 gap-3 left-0 bg-white bottom-0 sm:relative flex-col sm:flex-row items-center mt-4 w-full">
+              <div className="md:col-span-2">
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    onClick={handleClearAll}
+                    className="px-2 py-2 bg-lightred text-white font-bold text-sm rounded-[5px] w-full "
+                  >
+                    Clear All
+                  </button>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Password.."
+                    className="border border-gray-300 outline-none rounded-md px-2 py-2 text-gray-600 text-sm w-full sm:w-auto"
+                  />
+                </div>
+              </div>
+              <button
+                onClick={() => handleSubmitPaymentForRow()}
+                className={`px-3 py-2 ${
+                  isSubmitClicked ? "bg-gradient-green" : "bg-gradient-seablue"
+                } text-white text-sm lg:text-md rounded-md w-full font-semibold`}
+              >
+                Submit Payment
+              </button>
+            </div>
+
+            {isModalOpen && selectedUser && (
+              <>
+                <CreditEditReferenceModal
+                  isOpen={isModalOpen}
+                  onCancel={handleModalClose}
+                  username={selectedUser.username}
+                  currentCreditRef={selectedUser.creditReference}
+                  onSubmit={handleSubmitFunction}
+                  user={selectedUser}
+                  fetchData={fetchData}
+                  userId={selectedUser?._id}
+                  currentPage={currentPage}
+                  entriesToShow={entriesToShow}
+                />
+              </>
+            )}
+          </>
+        )}
+      </div>
     </div>
     </>
   );

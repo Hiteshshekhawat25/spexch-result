@@ -67,80 +67,82 @@ const CreateManualMatch = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto mt-6">
-      <h1 className="text-2xl font-custom text-center mb-6">
-        Create Manual Match
-      </h1>
-      <div className="p-8 border border-gray-300 rounded-lg bg-white shadow">
-        <form onSubmit={handleSubmit} className="grid grid-cols-4 gap-4">
-          {/* Select Sport */}
-          <div>
-            <label className="block font-custom">Select Sport</label>
-            <select
-              value={formState.sport}
-              onChange={(e) => handleInputChange("sport", e.target.value)}
-              className="border p-2 rounded w-full"
-              ref={(el) => (inputRefs.current[0] = el)}
-              onKeyDown={(e) => handleKeyDown(e, 0)}
-            >
-              <option value="">Select</option>
-              {sportsOptions.map((sport) => (
-                <option key={sport.id} value={sport.name}>
-                  {sport.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          {/* All fields from the Redux slice */}
-          {[
-            "league",
-            "match",
-            "marketType",
-            "marketID",
-            "eventId",
-            "team1",
-            "team2",
-            "team1Selectionid",
-            "team2Selectionid",
-            "runners",
-            "datetime",
-            "oddsDelay",
-            "oddsMinStake",
-            "oddsMaxStake",
-            "oddsMaxProfit",
-            "sessionDelay",
-            "sessionMinStake",
-            "sessionMaxStake",
-            "sessionMaxProfit",
-            "bookDelay",
-            "bookMinStake",
-            "bookMaxStake",
-            "bookMaxProfit",
-          ].map((field, index) => (
-            <div key={field}>
-              <label className="block font-custom capitalize">{field}</label>
-              <input
-                type="text"
-                value={formState[field] || ""}
-                onChange={(e) => handleInputChange(field, e.target.value)}
-                className="border p-2 rounded w-full"
-                ref={(el) => (inputRefs.current[index + 1] = el)}
-                onKeyDown={(e) => handleKeyDown(e, index + 1)}
-              />
+    <div className="md:mx-0 mx-2 sm:mt-3 mt-2">
+      <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+        <h1 className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
+          Create Manual Match
+        </h1>
+        <div className="md:p-4 p-3">
+          <form onSubmit={handleSubmit} className="grid lg:grid-cols-5 md:grid-cols-4 grid-cols-2 md:gap-4 gap-2.5">
+            {/* Select Sport */}
+            <div>
+              <label className="text-lightblack text-[14px] capitalize">Select Sport</label>
+              <select
+                value={formState.sport}
+                onChange={(e) => handleInputChange("sport", e.target.value)}
+                className="w-full border border-gray-300 rounded p-2 sm:h-[38px] h-[35px] mt-0.5 sm:text-[14px] text-[13px] text-gray-700 outline-none"
+                ref={(el) => (inputRefs.current[0] = el)}
+                onKeyDown={(e) => handleKeyDown(e, 0)}
+              >
+                <option value="">Select</option>
+                {sportsOptions.map((sport) => (
+                  <option key={sport.id} value={sport.name}>
+                    {sport.name}
+                  </option>
+                ))}
+              </select>
             </div>
-          ))}
 
-          {/* Submit Button */}
-          <div className="col-span-4 flex justify-center items-center mt-4">
-            <button
-              type="submit"
-              className="bg-lightblue text-white px-6 py-2 rounded"
-            >
-              Submit
-            </button>
-          </div>
-        </form>
+            {/* All fields from the Redux slice */}
+            {[
+              "league",
+              "match",
+              "marketType",
+              "marketID",
+              "eventId",
+              "team1",
+              "team2",
+              "team1Selectionid",
+              "team2Selectionid",
+              "runners",
+              "datetime",
+              "oddsDelay",
+              "oddsMinStake",
+              "oddsMaxStake",
+              "oddsMaxProfit",
+              "sessionDelay",
+              "sessionMinStake",
+              "sessionMaxStake",
+              "sessionMaxProfit",
+              "bookDelay",
+              "bookMinStake",
+              "bookMaxStake",
+              "bookMaxProfit",
+            ].map((field, index) => (
+              <div key={field}>
+                <label className="text-lightblack text-[14px] capitalize">{field}</label>
+                <input
+                  type="text"
+                  value={formState[field] || ""}
+                  onChange={(e) => handleInputChange(field, e.target.value)}
+                  className="w-full border border-gray-300 rounded p-2 sm:h-[38px] h-[35px] mt-0.5 sm:text-[14px] text-[13px] text-gray-700 outline-none"
+                  ref={(el) => (inputRefs.current[index + 1] = el)}
+                  onKeyDown={(e) => handleKeyDown(e, index + 1)}
+                />
+              </div>
+            ))}
+
+            {/* Submit Button */}
+            <div className="lg:col-span-5 md:col-span-4 sm:col-span-2 col-span-2 flex justify-center items-center mt-3">
+              <button
+                type="submit"
+                className="bg-gradient-seablue font-semibold text-sm text-white px-6 py-2 rounded hover:bg-blue-600"
+              >
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
@@ -221,11 +223,11 @@ export default CreateManualMatch;
 //     <form onSubmit={handleSubmit} className="grid grid-cols-4 gap-4 p-4">
 //       {/* Select Sport */}
 //       <div>
-//         <label className="block font-custom">Select Sport</label>
+//         <label className="text-lightblack text-[14px] capitalize">Select Sport</label>
 //         <select
 //           value={formState.sport}
 //           onChange={(e) => handleInputChange("sport", e.target.value)}
-//           className="border p-2 rounded w-full"
+//           className="w-full border border-gray-300 rounded p-2 sm:h-[38px] h-[35px] mt-0.5 sm:text-[14px] text-[13px] text-gray-700 outline-none"
 //           ref={(el) => (inputRefs.current[0] = el)} // Assign ref to this field
 //           onKeyDown={(e) => handleKeyDown(e, 0)} // Handle arrow key navigation
 //         >
@@ -265,12 +267,12 @@ export default CreateManualMatch;
 //         "bookMaxProfit",
 //       ].map((field, index) => (
 //         <div key={field}>
-//           <label className="block font-custom capitalize">{field}</label>
+//           <label className="text-lightblack text-[14px] capitalize capitalize">{field}</label>
 //           <input
 //             type="text"
 //             value={formState[field] || ""}
 //             onChange={(e) => handleInputChange(field, e.target.value)}
-//             className="border p-2 rounded w-full"
+//             className="w-full border border-gray-300 rounded p-2 sm:h-[38px] h-[35px] mt-0.5 sm:text-[14px] text-[13px] text-gray-700 outline-none"
 //             ref={(el) => (inputRefs.current[index + 1] = el)} // Assign refs dynamically
 //             onKeyDown={(e) => handleKeyDown(e, index + 1)} // Handle arrow key navigation
 //           />

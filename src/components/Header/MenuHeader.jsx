@@ -17,7 +17,8 @@ const MenuHeader = () => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
- 
+  console.log("userDatauserData", location);
+
   const handleLogout = () => {
     dispatch(clearUserData());
     localStorage.clear();
@@ -105,8 +106,11 @@ const MenuHeader = () => {
   const menuWrapperRef = useRef(null);
   const toggleSubMenu = (name, index) => {
     if (activeSubMenu === name) {
-      setActiveSubMenu(null);
-      setSubMenuStyles({});
+      setTimeout(()=> {
+        setActiveSubMenu(null);
+        setSubMenuStyles({});
+
+      }, 100)
     } else {
       setActiveSubMenu(name);
 
@@ -265,12 +269,12 @@ const MenuHeader = () => {
                   {item.subMenu.map((subItem, subIndex) => (
                     <li key={subIndex}>
                       <Link
-                        onClick={() => setActiveSubMenu(null)}
+                        // onClick={() => setActiveSubMenu(null)}
                         onMouseEnter={() => {
                           item.subMenu && toggleSubMenu(item.name, index);
                         }}
                         onMouseLeave={() => {
-                          setActiveSubMenu(null);
+                          // setActiveSubMenu(null);
                         }}
                         to={subItem.link}
                         className="block px-4 py-[6px] font-custom border-b border-gray-800 hover:bg-gradient-green text-white"

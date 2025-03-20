@@ -245,9 +245,9 @@ function ManageBets({ Userid }) {
       ) : error ? (
         <div className="text-red-500">{error}</div>
       ) : (
-        <div className="overflow-x-auto p-4">
+        <div className="overflow-x-auto mt-4">
           <table className="w-full table-auto border-collapse border border-gray-400 p-2">
-            <thead className="border border-gray-400 bg-gray-300 text-black text-center">
+            <thead className="border border-gray-400 bg-gray-200 text-black text-center">
               <tr className="text-center">
                 {[
                   "",
@@ -265,10 +265,10 @@ function ManageBets({ Userid }) {
                 ].map((key) => (
                   <th
                     key={key}
-                    className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer p-1"
+                    className="border border-gray-300 text-center sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer"
                     onClick={() => handleSort(key)}
                   >
-                    <div className="flex flex-col border-b border-gray-300 pb-1">
+                    <div className="flex flex-col">
                       <div className="flex justify-between items-center">
                         <span className="w-full text-center">
                           {key === "sportName" ? (
@@ -335,11 +335,11 @@ function ManageBets({ Userid }) {
               </tr>
             </thead>
 
-            <tbody className="text-center">
+            <tbody className="text-center bg-white">
               {dataLiability?.length > 0 ? (
                 dataLiability.map((item, index) => (
                   <tr key={index}>
-                    <td>
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       <label>
                       <input
                         type="checkbox"
@@ -356,39 +356,39 @@ function ManageBets({ Userid }) {
                         setSelectedUsername(item.username);
                         setIsModalOpen(true);
                       }}
-                      className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+                      className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-blue font-bold"
                     >
                       {item.sport}
                     </td>
 
-                    <td className="border text-nowrap border-gray-400 px-4 py-3">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       {item.event}
                     </td>
-                    <td className="border text-nowrap border-gray-400 px-4 py-3">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       {item.username}
                     </td>
-                    <td className="border border-gray-400 px-4 py-3">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       {item.type == 'toss' ? 'TOSS' : item?.type == 'odds' ? 'MATCH ODDS' : item?.type == 'bookmakers' ? 'BOOKMAKERS' : item?.type == 'fancy' ? 'FANCY' : ''}
                     </td>
-                    <td className="border border-gray-400 px-4 text-nowrap py-3">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       {moment(item.createdAt).format("MMMM Do YYYY, h:mm:ss a")}
                     </td>
-                    <td className="border border-gray-400 px-4 py-3">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       {item.odds}
                     </td>
                     {/* <td className="border border-gray-400 px-4 py-3">
                       {item?.betstatus?.toUpperCase()}
                     </td> */}
-                      <td className={`border border-gray-400 px-4 py-3 text-nowrap`}>
+                      <td className={`sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack`}>
                       {item.selection}
                     </td>
-                    <td className={`border border-gray-400 px-4 py-3 ${(item.betType == 'no' || item.betType == 'lay') ? 'text-red-500 font-bold' : 'text-blue font-bold'}`}>
+                    <td className={`sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 ${(item.betType == 'no' || item.betType == 'lay') ? 'text-red-500 font-bold' : 'text-blue font-bold'}`}>
                       {(item.betType == 'no' || item.betType == 'lay') ? 'Lay' : 'Back'}
                     </td>
-                    <td className="border text-nowrap border-gray-400 px-4 py-3">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                     <span className={item.potentialWin < 0 ? "text-red-600" : "text-green-600 font-bold"}>{item.potentialWin.toFixed(2)}</span> <span className="text-red-700 font-bold">(-{item.amount.toFixed(2) || 0})</span>
                     </td>
-                    <td className="border border-gray-400  py-3">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       <div className="sm:flex gap-y-2 gap-x-3 justify-center">
                         {item?.isDeleted ? (
                           <button
@@ -417,7 +417,7 @@ function ManageBets({ Userid }) {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="10" className="border border-gray-400 px-4 py-3">
+                  <td colSpan="11" className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack text-center">
                     No data !
                   </td>
                 </tr>
@@ -427,9 +427,9 @@ function ManageBets({ Userid }) {
         </div>
       )}
 
-      <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
+      <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-3 space-y-2 sm:space-y-0">
         {/* Showing entries text */}
-        <div className="text-sm text-gray-600">
+        <div className="text-[13px] text-gray-600">
           Showing {totalBets === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
           to {Math.min(currentPage * entriesToShow, totalBets)} of {totalBets}{" "}
           entries

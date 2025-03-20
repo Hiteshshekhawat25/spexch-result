@@ -124,12 +124,12 @@
 //     <>
 //       <div className="grid grid-cols-12 gap-2 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
 //         {/* Choose Type */}
-//         <div className=" col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-//           <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+//         <div className=" ">
+//           <label className="text-[13px] font-medium text-black mb-1">
 //             Select Sport
 //           </label>
 //           <select
-//             className="border text-[12px] sm:text-sm w-full p-2 rounded"
+//             className="border text-[13px] w-full p-2 rounded"
 //             value={selectFilterData.sport}
 //             onChange={(e) => handleSportChange(e, "sport")}
 //           >
@@ -148,12 +148,12 @@
 //           </select>
 //         </div>
 
-//         <div className="col-span-6 sm:col-span-2 !mt-0 mb-1 sm:mb-6">
-//           <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+//         <div className=" !mt-0">
+//           <label className="text-[13px] font-medium text-black mb-1">
 //             Select Match
 //           </label>
 //           <select
-//             className="border text-[12px] sm:text-sm w-full p-2 rounded"
+//             className="border text-[13px] w-full p-2 rounded"
 //             value={selectFilterData.match}
 //             onChange={(e) => handleSportChange(e, "match")}
 //           >
@@ -174,12 +174,12 @@
 //           </select>
 //         </div>
 //         {/* Choose Sport */}
-//         <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-//           <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+//         <div className="">
+//           <label className="text-[13px] font-medium text-black mb-1">
 //             Select Odds
 //           </label>
 //           <select
-//             className="border text-[12px] sm:text-sm p-2 w-full rounded"
+//             className="border text-[13px] p-2 w-full rounded"
 //             value={selectFilterData.odds}
 //             onChange={(e) => handleSportChange(e, "odds")}
 //           >
@@ -202,15 +202,15 @@
 //         </div>
 
 //         {selectFilterData.odds == "fancy" ? (
-//           <div className="col-span-6 sm:col-span-2">
-//             <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+//           <div className="">
+//             <label className="text-[13px] font-medium text-black mb-1">
 //               Select Sessions
 //             </label>
 //             <select
 //               value={selectFilterData.session}
 //               onChange={(e) => handleSportChange(e, "session")}
 //               id="session"
-//               className="border w-full text-[12px] sm:text-sm p-2 rounded"
+//               className="border w-full text-[13px] p-2 rounded"
 //             >
 //               <option value="">Select Session</option>
 //               {filteredSessions
@@ -254,8 +254,8 @@
 
 //         <div className=" sm:col-span-4 w-full items-end col-span-12">
 //           <div className="flex gap-x-4 justify-end items-center">
-//             <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-//               <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+//             <div className="">
+//               <label className="text-[13px] font-medium text-black mb-1">
 //                 Bet Status
 //               </label>
 //               <select
@@ -288,7 +288,7 @@
 //                   ? true
 //                   : false
 //               }
-//               className="bg-red-500  text-[12px] sm:text-sm text-white max-h-12 sm:py-3 disabled:bg-red-400 p-2 sm:px-5 text-center  rounded-md"
+//               className="bg-red-500  text-[13px] text-white max-h-12 sm:py-3 disabled:bg-red-400 p-2 sm:px-5 text-center  rounded-md"
 //               onClick={handleDeleteBet}
 //             >
 //               Delete Bets
@@ -299,7 +299,7 @@
 //                   ? true
 //                   : false
 //               }
-//               className="bg-lightblue text-[12px] sm:text-sm max-h-12 text-white p-2 sm:py-3 sm:px-5 disabled:bg-bluehover text-center  rounded-md"
+//               className="bg-lightblue text-[13px] max-h-12 text-white p-2 sm:py-3 sm:px-5 disabled:bg-bluehover text-center  rounded-md"
 //               onClick={handleRevertBet}
 //             >
 //               Revert Bets
@@ -435,14 +435,14 @@ function ManageBetFilter({
 
   return (
     <>
-      <div className="grid grid-cols-12 gap-2 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
+      <div className="grid md:mx-0 mx-2 lg:grid-cols-8 md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-2 mb-4 md:p-4 p-2.5 bg-[#e0e6e6] border border-black rounded-md">
         {/* Choose Type */}
-        <div className=" col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-          <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+        <div className=" ">
+          <label className="text-[13px] font-medium text-black mb-1">
             Select Sport
           </label>
           <select
-            className="border text-[12px] sm:text-sm w-full p-2 rounded"
+            className="border text-[13px] outline-none w-full p-2 rounded"
             value={selectFilterData.sport}
             onChange={(e) => handleSportChange(e, "sport")}
           >
@@ -461,12 +461,12 @@ function ManageBetFilter({
           </select>
         </div>
 
-        <div className="col-span-6 sm:col-span-2 !mt-0 mb-1 sm:mb-6">
-          <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+        <div className=" !mt-0">
+          <label className="text-[13px] font-medium text-black mb-1">
             Select Match
           </label>
           <select
-            className="border text-[12px] sm:text-sm w-full p-2 rounded"
+            className="border text-[13px] outline-none w-full p-2 rounded"
             value={selectFilterData.match}
             onChange={(e) => handleSportChange(e, "match")}
           >
@@ -487,12 +487,12 @@ function ManageBetFilter({
           </select>
         </div>
         {/* Choose Sport */}
-        <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-          <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+        <div className="">
+          <label className="text-[13px] font-medium text-black mb-1">
             Select Odds
           </label>
           <select
-            className="border text-[12px] sm:text-sm p-2 w-full rounded"
+            className="border outline-none text-[13px] p-2 w-full rounded"
             value={selectFilterData.odds}
             onChange={(e) => handleSportChange(e, "odds")}
           >
@@ -515,15 +515,15 @@ function ManageBetFilter({
         </div>
 
         {selectFilterData.odds == "fancy" ? (
-          <div className="col-span-6 sm:col-span-2">
-            <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+          <div className="">
+            <label className="text-[13px] font-medium text-black mb-1">
               Select Sessions
             </label>
             <select
               value={selectFilterData.session}
               onChange={(e) => handleSportChange(e, "session")}
               id="session"
-              className="border w-full text-[12px] sm:text-sm p-2 rounded"
+              className="border w-full text-[13px] outline-none p-2 rounded"
             >
               <option value="">Select Session</option>
               {sessions?.sessions
@@ -541,24 +541,24 @@ function ManageBetFilter({
 
         {selectFilterData.odds && (
           <>
-            <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-              <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+            <div className="">
+              <label className="text-[13px] font-medium text-black mb-1">
                 From Time
               </label>
               <input
                 type="datetime-local"
-                className="border text-[12px] sm:text-sm w-full p-2 rounded"
+                className="border text-[13px] outline-none w-full p-2 rounded"
                 value={selectFilterData?.fromTime}
                 onChange={(e) => handleSportChange(e, "fromTime")}
               />
             </div>
-            <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-              <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
+            <div className="">
+              <label className="text-[13px] font-medium text-black mb-1">
                 To Time
               </label>
               <input
                 type="datetime-local"
-                className="border text-[12px] sm:text-sm w-full p-2 rounded"
+                className="border text-[13px] outline-none w-full p-2 rounded"
                 value={selectFilterData?.toTime}
                 onChange={(e) => handleSportChange(e, "toTime")}
               />
@@ -566,7 +566,7 @@ function ManageBetFilter({
           </>
         )}
 
-        <div className="col-span-12 sm:col-span-2 justify-start sm:justify-center w-full sm:w-auto mt-6">
+        <div className="justify-start sm:justify-center w-full sm:w-auto sm:mt-6 mt-2">
           <button
             onClick={() => {
               dispatch(
@@ -588,64 +588,64 @@ function ManageBetFilter({
                 })
               );
             }}
-            className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm w-full sm:w-auto sm:px-8"
+            className="px-4 py-2 bg-gradient-seablue text-white font-semibold rounded-md text-sm w-auto sm:px-8"
           >
             Get Bets
           </button>
         </div>
 
-        <div className=" sm:col-span-4 w-full items-end col-span-12">
-          <div className="flex gap-x-4 justify-end items-center">
-            <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-              <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
-                Bet Status
-              </label>
-              <select
-                className="border text-[12px] font-bold sm:text-sm p-2 w-full rounded"
-                value={selectFilterData.status}
-                onChange={(e) => handleSportChange(e, "status")}
-              >
-                {loading ? (
-                  <option value="">Loading...</option>
-                ) : (
-                  [
-                    { name: "Active Bets", _id: "REVERT" },
-                    // { name: "Settled Bets", _id: "settled" },
-                    { name: "Delete Bets", _id: "DELETED" },
-                  ].map((sport) => (
-                    <option
-                      key={sport._id}
-                      value={sport._id}
-                      className="font-bold"
-                    >
-                      {sport.name}
-                    </option>
-                  ))
-                )}
-              </select>
-            </div>
-            <button
-              disabled={
-                checkbox?.length == 0 || selectFilterData.status == "DELETED"
-                  ? true
-                  : false
-              }
-              className="bg-red-500  text-[12px] sm:text-sm text-white max-h-12 sm:py-3 disabled:bg-red-400 p-2 sm:px-5 text-center  rounded-md"
-              onClick={handleDeleteBet}
+        <div className="w-full sm:mt-0 mt-2 flex gap-x-4 sm:flex-row flex-col sm:gap-2 gap-3 sm:items-end md:col-span-3 sm:col-span-2">
+          <div className="">
+            <label className="text-[13px] font-medium text-black mb-1">
+              Bet Status
+            </label>
+            <select
+              className="border text-[13px] outline-none p-2 w-full rounded"
+              value={selectFilterData.status}
+              onChange={(e) => handleSportChange(e, "status")}
             >
-              Delete Bets
-            </button>
-            <button
-              disabled={
-                checkbox?.length == 0 || selectFilterData.status == "REVERT"
-                  ? true
-                  : false
-              }
-              className="bg-lightblue text-[12px] sm:text-sm max-h-12 text-white p-2 sm:py-3 sm:px-5 disabled:bg-bluehover text-center  rounded-md"
-              onClick={()=>setRevertModal(true)}
-            >
-              Revert Bets
-            </button>
+              {loading ? (
+                <option value="">Loading...</option>
+              ) : (
+                [
+                  { name: "Active Bets", _id: "REVERT" },
+                  // { name: "Settled Bets", _id: "settled" },
+                  { name: "Delete Bets", _id: "DELETED" },
+                ].map((sport) => (
+                  <option
+                    key={sport._id}
+                    value={sport._id}
+                    className=""
+                  >
+                    {sport.name}
+                  </option>
+                ))
+              )}
+            </select>
+          </div>
+          <div className="flex gap-2">
+          <button
+            disabled={
+              checkbox?.length == 0 || selectFilterData.status == "DELETED"
+                ? true
+                : false
+            }
+            className="bg-red-500  text-[13px] text-white max-h-12 sm:py-2 disabled:bg-red-400 p-2 sm:px-5 text-center  rounded-md"
+            onClick={handleDeleteBet}
+          >
+            Delete Bets
+          </button>
+          <button
+            disabled={
+              checkbox?.length == 0 || selectFilterData.status == "REVERT"
+                ? true
+                : false
+            }
+            className="bg-lightblue text-[13px] text-white p-2 sm:py-2 sm:px-5 disabled:bg-blue/60 text-center  rounded-md"
+            onClick={()=>setRevertModal(true)}
+          >
+            Revert Bets
+          </button>
           </div>
         </div>
       </div>

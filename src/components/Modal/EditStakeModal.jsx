@@ -166,22 +166,16 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
 
   console.log('matchmatchmatchmatch',match)
   return (
-    <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50 overflow-y-auto">
-      <div className="bg-white rounded-lg w-[700px] mt-0 p-4 shadow-lg">
-        {/* Header */}
-        {/* <div className="bg-gray-100 p-3 rounded-t-lg flex justify-end items-center"> */}
-
-        {/* </div> */}
-
-        {/* Heading */}
-        <div className="overflow-y-auto">
-          <div className="flex justify-between">
-            <h2 className="text-gray-800 text-lg font-semibold">Edit Stake</h2>
-            <IoClose
-              onClick={onCancel}
-              className="cursor-pointer text-gray-600 text-2xl"
-            />
-          </div>
+    <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start sm:p-3 p-2 h-screen justify-center bg-gray-500 bg-opacity-50 z-50 ">
+      <div className="bg-white rounded-md flex flex-col w-full sm:w-[700px] h-full mb-3 overflow-hidden">
+        <div className="flex justify-between items-center rounded-t-lg bg-gradient-blue text-white text-[15px] font-custom font-semibold w-full px-3 py-2">
+          <h2>Edit Stake</h2>
+          <IoClose
+            onClick={onCancel}
+            className="cursor-pointer text-white text-2xl"
+          />
+        </div>
+        <div className="sm:p-4 p-3 overflow-y-auto h-full">
 
           <div className="mt-2 flex flex-col gap-1 bg-gray-100 rounded-md max-w-44 p-3">
           <p className="block items-center text-sm font-custom text-black">Set Maxstake</p>
@@ -208,7 +202,7 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3 mt-4">
+          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3 mt-6">
             {Object.keys(formValues).map((field) => (
               <div key={field} className="space-y-1">
                 <label className="block items-center text-xs font-custom text-black">
@@ -221,29 +215,30 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
                   onChange={handleChange}
                   onKeyDown={(e) => handleKeyDown(e, field)}
                   ref={(el) => (inputRefs.current[field] = el)}
-                  className="w-full p-1.5 border border-gray-300 rounded-md text-sm"
+                  className="w-full sm:p-2 p-1.5 border outline-none border-gray-300 rounded-[5px] text-sm mt-0.5"
                 />
               </div>
             ))}
           </form>
 
           {/* Buttons */}
-          <div className="flex justify-end space-x-3 mt-6">
+          <div className="flex justify-end space-x-3 mt-5">
             <button
               type="button"
               onClick={onCancel}
-              className="px-4 py-2 bg-gray-300 rounded-lg text-gray-800 hover:bg-gray-400 text-sm"
+              className="px-4 py-2 bg-gray-300 font-semibold rounded-[5px] transition-all ease-in-out duration-300 text-gray-800 hover:bg-gray-400 text-sm"
             >
               Cancel
             </button>
             <button
               type="submit"
               onClick={handleSubmit}
-              className="px-4 py-2 bg-lightblue text-white rounded-lg hover:bg-blue-700 text-sm"
+              className="px-4 py-2 bg-gradient-seablue font-semibold text-white transition-all ease-in-out duration-300 rounded-[5px] hover:bg-blue-700 text-sm"
             >
               Update
             </button>
           </div>
+
         </div>
       </div>
     </div>

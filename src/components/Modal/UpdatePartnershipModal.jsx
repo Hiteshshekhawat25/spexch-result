@@ -132,9 +132,9 @@ const UpdatePartnershipModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[500px] mt-20">
+      <div className="relative bg-white rounded-lg sm:mt-6 mt-3 shadow-lg w-[96%] md:w-3/4 lg:w-1/3 overflow-hidden">
         {/* Header */}
-        <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-2">
+        <div className="flex justify-between items-center bg-gradient-blue text-white text-[15px] font-custom font-semibold w-full p-2">
           <span>Update Partnership - {username}</span>
           <IoClose
             onClick={onCancel}
@@ -149,7 +149,7 @@ const UpdatePartnershipModal = ({
             <label className="block text-sm font-custom font-medium text-gray-700 w-1/3">
               Current
             </label>
-            <p className="w-2/3 text-black font-custom font-medium">{currentPartnership}</p>
+            <p className="w-2/3 text-black font-custom text-sm font-medium">{currentPartnership}</p>
           </div>
 
           {/* New Partnership */}
@@ -168,7 +168,7 @@ const UpdatePartnershipModal = ({
                   }
                 }}
                 // placeholder="New Partnership"
-                className="w-full p-2 border border-black rounded-lg text-gray-700"
+                className="w-full p-2 text-sm border border-gray-300 outline-none rounded-[5px] text-gray-700"
               />
             </div>
           </div>
@@ -182,7 +182,7 @@ const UpdatePartnershipModal = ({
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-2/3 p-2 border border-black rounded-lg text-gray-700"
+              className="w-2/3 p-2 border border-gray-300 text-sm rounded-[5px] outline-none text-gray-700"
               // placeholder="Enter your password"
             />
           </div>
@@ -192,7 +192,7 @@ const UpdatePartnershipModal = ({
             {/* Submit Button */}
             <button
               type="submit"
-              className="px-6 py-2 bg-black text-white rounded-lg"
+              className="px-6 py-2 bg-gradient-seablue text-sm font-semibold text-white rounded-[6px]"
             >
               Submit
             </button>
@@ -201,7 +201,7 @@ const UpdatePartnershipModal = ({
             <button
               type="button"
               onClick={onCancel} // Call onCancel to close the modal
-              className="px-6 py-2 bg-gray-300 text-gray-700 rounded-lg"
+              className="px-6 py-2 bg-gray-300 font-semibold text-sm text-gray-700 rounded-[6px]"
             >
               Cancel
             </button>
