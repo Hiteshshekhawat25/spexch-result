@@ -659,19 +659,19 @@ const DownlineList = () => {
           ) : (
             ""
           )}
-          <div className="md:p-4 p-3 border border-gray-200 rounded-md bg-white">
+          <div className="md:p-4 p-3 border border-gray-300 rounded-md bg-white">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 space-y-4 sm:space-y-0">
               <div className="flex items-center flex-1 w-full">
                 {/* Show Entries Dropdown */}
                 <div className="rounded-md flex items-center w-full sm:w-auto">
-                  <label className="mr-2 text-sm font-custom font-medium">
+                  <label className="mr-2 text-[13px] font-custom font-medium">
                     Show
                   </label>
                   <select
                     value={entriesToShow}
                     onChange={handleEntriesChange}
                     // className="border border-gray-300 rounded px-2 py-1 text-sm w-full sm:w-auto"
-                    className="border rounded px-2 py-1 text-sm  sm:w-auto"
+                    className="border rounded px-2 py-1 text-sm border-gray-400 sm:w-auto"
                   >
                     {[10, 25, 50, 100].map((number) => (
                       <option key={number} value={number}>
@@ -679,7 +679,7 @@ const DownlineList = () => {
                       </option>
                     ))}
                   </select>
-                  <label className="ml-2 text-sm font-custom font-medium">
+                  <label className="ml-2 text-[13px] font-custom font-medium">
                     entries
                   </label>
                 </div>
@@ -706,7 +706,7 @@ const DownlineList = () => {
               <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-6 w-full sm:w-auto">
                 {/* Search Input */}
                 <div className="flex w-full sm:flex-row sm:items-center sm:space-x-2">
-                  <label className="text-sm p-1">Search:</label>
+                  <label className=" text-[13px] p-1">Search:</label>
                   {!accountStatus && (
                     <div className="rounded-md w-full sm:w-28">
                       <input
@@ -714,7 +714,7 @@ const DownlineList = () => {
                         type="text"
                         value={searchTerm}
                         onChange={handleSearchChange}
-                        className="border border-gray-400 rounded px-2 py-1 text-sm w-full"
+                        className="border border-gray-300 rounded px-2 py-1 text-[13px] outline-none w-full"
                       />
                     </div>
                   )}
@@ -746,7 +746,7 @@ const DownlineList = () => {
                     ].map(({ key, label }) => (
                       <th
                         key={key}
-                        className="border border-gray-400 text-left px-3 p-2 text-sm text-nowrap text-black cursor-pointer"
+                        className="border border-gray-300 text-left sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer"
                         onClick={() => handleSort(key)}
                       >
                         <div className="flex justify-between">
@@ -776,7 +776,7 @@ const DownlineList = () => {
                         </div>
                       </th>
                     ))}
-                    <th className="border border-gray-400 text-left px-4 py-3 text-sm font-custom font-bold text-black">
+                    <th className="border border-gray-300 text-left sm:px-3 px-2 py-2 text-[13px] font-custom font-bold text-black">
                       Actions
                     </th>
                   </tr>
@@ -807,9 +807,9 @@ const DownlineList = () => {
                     })?.map((item) => (
                       <tr
                         key={item?._id}
-                        className="border border-gray-400 bg-white"
+                        className="border border-gray-300 bg-white"
                       >
-                        <td className="px-3 py-2 text-[13px] text-nowrap">
+                        <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack">
                           <div
                             onClick={() => handleUsernameList(item)}
                             className={`${item.role_name === "master"
@@ -836,10 +836,7 @@ const DownlineList = () => {
                           </div>
                         </td>
                         <td
-                          className="border border-gray-400 px-4 py-2 text-[13px] text-blue-700 font-semibold text-nowrap"
-                          style={{
-                            fontFamily: "Tahoma, Helvetica, sans-serif",
-                          }}
+                          className="border border-gray-300 text-darkblack sm:px-3 px-2 py-2 text-[13px] text-blue-700 font-semibold text-nowrap"
                         >
                           <span className="flex items-center">
                             {new Intl.NumberFormat("en-IN", {
@@ -861,10 +858,7 @@ const DownlineList = () => {
                         </td>
                         {!isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
-                            style={{
-                              fontFamily: "Tahoma, Helvetica, sans-serif",
-                            }}
+                            className="border border-gray-300 text-darkblack sm:px-3 px-2 py-2 text-[13px] text-blue-900 font-custom font-semibold"
                           >
                             {new Intl.NumberFormat("en-IN", {
                               minimumFractionDigits: 0,
@@ -874,10 +868,7 @@ const DownlineList = () => {
                         )}
                         {isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
-                            style={{
-                              fontFamily: "Tahoma, Helvetica, sans-serif",
-                            }}
+                            className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-darkblack font-custom font-semibold"
                           >
                             <span className="flex items-center">
                               {new Intl.NumberFormat("en-IN", {
@@ -896,10 +887,7 @@ const DownlineList = () => {
                         )}
                         {isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
-                            style={{
-                              fontFamily: "Tahoma, Helvetica, sans-serif",
-                            }}
+                            className="border border-gray-300 sm:px-3 px-2 text-darkblack py-2 text-[13px] text-blue-900 font-custom font-semibold"
                           >
                             {new Intl.NumberFormat("en-IN", {
                               minimumFractionDigits: 0,
@@ -908,10 +896,7 @@ const DownlineList = () => {
                           </td>
                         )}
                         <td
-                          className="border border-gray-400 px-4 py-2 text-[13px] text-red-700 font-custom font-semibold"
-                          style={{
-                            fontFamily: "Tahoma, Helvetica, sans-serif",
-                          }}
+                          className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-red-700 font-custom font-semibold"
                         >
                           (
                           {new Intl.NumberFormat("en-IN", {
@@ -922,10 +907,7 @@ const DownlineList = () => {
                         </td>
                         {!isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
-                            style={{
-                              fontFamily: "Tahoma, Helvetica, sans-serif",
-                            }}
+                            className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-darkblack font-custom font-semibold"
                           >
                             <span className="flex items-center">
                               {new Intl.NumberFormat("en-IN", {
@@ -942,10 +924,7 @@ const DownlineList = () => {
                           </td>
                         )}
                         <td
-                          className="border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold"
-                          style={{
-                            fontFamily: "Tahoma, Helvetica, sans-serif",
-                          }}
+                          className="border border-gray-300 sm:px-3 px-2 py-2 text-darkblack text-[13px] font-custom font-semibold"
                         >
                           {new Intl.NumberFormat("en-IN", {
                             minimumFractionDigits: 0,
@@ -953,14 +932,11 @@ const DownlineList = () => {
                           }).format(item.availableBalanceMainUsers || 0)}
                         </td>
                         <td
-                          className={`border border-gray-400 px-4 py-2 text-[13px] font-custom font-semibold ${item?.totalOpeningBalance - item?.creditReference <
+                          className={`border border-gray-300 sm:px-3 px-2 py-2 text-darkblack text-[13px] font-custom font-semibold ${item?.totalOpeningBalance - item?.creditReference <
                               0
                               ? "text-red-500"
                               : ""
                             }`}
-                          style={{
-                            fontFamily: "Tahoma, Helvetica, sans-serif",
-                          }}
                         >
                           ({item.profit_loss < 0
                             ? `(-${new Intl.NumberFormat("en-IN", {
@@ -977,23 +953,17 @@ const DownlineList = () => {
                         </td>
                         {!isMasterDownlineList && (
                           <td
-                            className="border border-gray-400 px-4 py-2 text-[13px] text-blue-900 font-custom font-semibold"
-                            style={{
-                              fontFamily: "Tahoma, Helvetica, sans-serif",
-                            }}
+                            className="border border-gray-300 sm:px-3 px-2 py-2 text-darkblack text-[13px] text-blue-900 font-custom font-semibold"
                           >
                             {location?.pathname?.includes('/user-downline-list') ? 100 : item?.partnership}
                           </td>
                         )}
                         <td
-                          className="border border-gray-400 px-4 py-2 font-custom font-bold text-l"
-                          style={{
-                            fontFamily: "Tahoma, Helvetica, sans-serif",
-                          }}
+                          className="border border-gray-300 sm:px-3 px-2 py-2 font-custom font-bold text-l"
                         >
                           <span
-                            className={`px-2 py-[4px] rounded-[5px] border text-[11px] ${item.status === "active"
-                                ? "text-green-600 border-green-600 bg-green-100"
+                            className={`px-2 py-[2px] rounded-[3px] border text-[11px] ${item.status === "active"
+                                ? "text-[#508d0e] border-[#bedca7] bg-[#e5f1dc]"
                                 : item.status === "suspended"
                                   ? "text-red-600 border-red-600 bg-red-100"
                                   : item.status === "locked"
@@ -1066,7 +1036,7 @@ const DownlineList = () => {
                             </div>
                           </div>
                         </td> */}
-                        <td className="px-4 py-2 text-sm">
+                        <td className="sm:px-3 px-2 py-2 text-sm">
                           <div className="flex md:space-x-2.5 space-x-2">
                             {isNested &&
                               (item.role_name == "agent" ||
@@ -1081,14 +1051,14 @@ const DownlineList = () => {
                                   onClick={() =>
                                     handleArrowClick(item, item._id)
                                   }
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200"
                                 >
                                    <img src={pl} className="text-darkgray" />
                                 </div>
 
                                 <div
                                   onClick={() => handleHistoryClick(item)}
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200"
                                 >
                                   <img src={betHistory} className="text-darkgray" />
                                 </div>
@@ -1096,7 +1066,7 @@ const DownlineList = () => {
                                 <div
                                   onClick={() => statushandlechange(item)}
                                   title="Change status"
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200"
                                 >
                                   <img src={setting} className="text-darkgray" />
                                 </div>
@@ -1106,7 +1076,7 @@ const DownlineList = () => {
                                     handleProfileClick(item, item._id);
                                     console.log("item", item._id);
                                   }}
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >
                                   <img src={profile} className="text-darkgray" />
                                 </div>
@@ -1116,7 +1086,7 @@ const DownlineList = () => {
                                 <div
                                   onClick={() => handleIconClick(item)}
                                   title="Banking"
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200 cursor-pointer hover:bg-gray-300 transition-all duration-200"
                                 >
                                   <img src={banking} className="text-darkgray" />
                                 </div>
@@ -1126,7 +1096,7 @@ const DownlineList = () => {
                                     onClick={() =>
                                       handleArrowClick(item, item._id)
                                     }
-                                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                    className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200"
                                   >
                                     <img src={pl} className="text-darkgray" />
                                   </div>
@@ -1135,7 +1105,7 @@ const DownlineList = () => {
                                 {!isMasterDownlineList && (
                                   <div
                                     onClick={() => handleHistoryClick(item)}
-                                    className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                    className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200"
                                   >
                                     <img src={betHistory} className="text-darkgray" />
                                   </div>
@@ -1144,7 +1114,7 @@ const DownlineList = () => {
                                 <div
                                   onClick={() => statushandlechange(item)}
                                   title="Change status"
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200"
                                 >
                                   <img src={setting} className="text-darkgray" />
                                 </div>
@@ -1154,7 +1124,7 @@ const DownlineList = () => {
                                     handleProfileClick(item, item._id);
                                     console.log("item", item._id);
                                   }}
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >
                                   <img src={profile} className="text-darkgray" />
                                 </div>
@@ -1162,7 +1132,7 @@ const DownlineList = () => {
                                 <div
                                   onClick={() => handleOpenSettings(item)}
                                   title="Sports Settings"
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >
                                   <img src={sportSetting} className="text-darkgray" />
                                 </div>
@@ -1170,7 +1140,7 @@ const DownlineList = () => {
                                 <div
                                   onClick={() => handleDelete(item)}
                                   title="Delete"
-                                  className="flex items-center justify-center w-8 h-8 border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
+                                  className="flex items-center justify-center size-[26px] border border-gray-400 rounded-md bg-gray-200 cursor-pointer"
                                 >
                                   <img src={deleteIcon} className="text-darkgray" />
                                 </div>
@@ -1204,7 +1174,7 @@ const DownlineList = () => {
                 {/* First Button */}
                 <button
                   onClick={() => handlePageChange("first")}
-                  className={`sm:px-3 px-2 py-1 text-sm rounded ${currentPage === 1
+                  className={`sm:sm:px-3 px-2 px-2 py-1 text-sm rounded ${currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
                     }`}
@@ -1216,7 +1186,7 @@ const DownlineList = () => {
                 {/* Previous Button */}
                 <button
                   onClick={() => handlePageChange("prev")}
-                  className={`sm:px-3 px-2 py-1 text-sm rounded ${currentPage === 1
+                  className={`sm:sm:px-3 px-2 px-2 py-1 text-sm rounded ${currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
                     }`}
@@ -1238,7 +1208,7 @@ const DownlineList = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`sm:px-3 px-2 sm:py-1 py-0.5 text-sm border border-white rounded ${currentPage === page
+                          className={`sm:sm:px-3 px-2 px-2 sm:py-1 py-0.5 text-sm border border-white rounded ${currentPage === page
                               ? "bg-gray-200 border-gray-700"
                               : "hover:bg-gray-100"
                             }`}
@@ -1251,7 +1221,7 @@ const DownlineList = () => {
                       (page === currentPage + 3 && currentPage < totalPages - 3)
                     ) {
                       return (
-                        <span key={page} className="sm:px-3 px-2 py-1 text-sm">
+                        <span key={page} className="sm:sm:px-3 px-2 px-2 py-1 text-sm">
                           ...
                         </span>
                       );
@@ -1263,7 +1233,7 @@ const DownlineList = () => {
                 {/* Next Button */}
                 <button
                   onClick={() => handlePageChange("next")}
-                  className={`sm:px-3 px-2 py-1 text-sm rounded ${currentPage === totalPages
+                  className={`sm:sm:px-3 px-2 px-2 py-1 text-sm rounded ${currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
                     }`}
@@ -1275,7 +1245,7 @@ const DownlineList = () => {
                 {/* Last Button */}
                 <button
                   onClick={() => handlePageChange("last")}
-                  className={`sm:px-3 px-2 py-1 text-sm rounded ${currentPage === totalPages
+                  className={`sm:sm:px-3 px-2 px-2 py-1 text-sm rounded ${currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
                     }`}

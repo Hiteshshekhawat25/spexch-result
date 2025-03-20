@@ -133,21 +133,21 @@ const RestoreUser = () => {
   }, [currentPage, entriesToShow]);
 
   return (
-    <div className="bg-gray-100">
-      <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="text-md bg-gradient-seablue text-white font-bold p-1">
+    <div className="md:mx-0 mx-2">
+      <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+        <h1 className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
           Restore User
         </h1>
-        <div className="p-4">
+        <div className="md:p-4 p-3">
           <div className="flex flex-wrap justify-between items-center gap-4 mb-4">
             {/* Entries Dropdown */}
             {/* <div className="flex items-center space-x-2 ml-10"> */}
             <div className="flex items-center space-x-2 sm:ml-0 ml-10">
-              <label className="">Show</label>
+              <label className="text-[13px]">Show</label>
               <select
                 value={entriesToShow}
                 onChange={handleEntriesChange}
-                className="border rounded px-2 py-1 text-sm"
+                className="border rounded px-1 outline-none py-1 text-[13px]"
               >
                 {[10, 25, 50, 100].map((number) => (
                   <option key={number} value={number}>
@@ -155,15 +155,15 @@ const RestoreUser = () => {
                   </option>
                 ))}
               </select>
-              <label className="">entries</label>
+              <label className="text-[13px]">entries</label>
             </div>
 
             {/* Search Input */}
             <div className="flex items-center space-x-2">
-              <label className="">Search:</label>
+              <label className="text-[13px]">Search:</label>
               <input
                 type="text"
-                className="border border-gray-300 rounded-md p-2 text-sm w-full sm:w-auto"
+                className="border border-gray-300 rounded-[5px] p-1.5 outline-none text-[13px] w-full sm:w-auto"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -171,19 +171,19 @@ const RestoreUser = () => {
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full border-collapse border border-gray-300">
+            <table className="w-full text-center border-collapse border border-gray-300">
               <thead className="bg-gray-200">
                 <tr>
-                  <th className="border border-gray-300 p-2 text-left text-center">
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                     Username
                   </th>
-                  <th className="border border-gray-300 p-2 text-left text-center">
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                     Name
                   </th>
-                  <th className="border border-gray-300 p-2 text-left text-center">
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                     Date & Time
                   </th>
-                  <th className="border border-gray-300 p-2 text-left text-center">
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                     Action
                   </th>
                 </tr>
@@ -196,18 +196,18 @@ const RestoreUser = () => {
                       (
                         <tr
                           key={index}
-                          className="even:bg-gray-100 odd:bg-white text-gray-700"
+                          className="even:bg-gray-100 odd:bg-white border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack"
                         >
-                          <td className="border border-gray-300 p-2 text-center">
+                          <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack">
                             {item.username}
                           </td>
-                          <td className="border border-gray-300 p-2 text-center">
+                          <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack">
                             {item.name}
                           </td>
-                          <td className="border border-gray-300 p-2 text-center">
+                          <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack">
                             {formatDateTime(item.deletedAt)}
                           </td>
-                          <td className="border border-gray-300 p-2 text-center">
+                          <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack">
                             <button
                               className="text-md bg-gradient-seablue text-white font-bold p-1 rounded"
                               onClick={() => handleRestoreUser(item._id)}
@@ -221,7 +221,7 @@ const RestoreUser = () => {
                   )
                 ) : (
                   <tr>
-                    <td colSpan="3" className="text-center text-gray-600 py-4">
+                    <td colSpan="4" className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack">
                       No user found
                     </td>
                   </tr>
@@ -231,7 +231,7 @@ const RestoreUser = () => {
           </div>
           <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
             {/* Showing entries text */}
-            <div className="text-sm text-gray-600 mb-2 sm:mb-0">
+            <div className="text-[12px] text-gray-600 mb-2 sm:mb-0">
               Showing{" "}
               {totalRecords === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
               to {Math.min(currentPage * entriesToShow, totalRecords)} of{" "}

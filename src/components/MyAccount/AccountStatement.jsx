@@ -85,14 +85,13 @@ const AccountStatement = ({ Userid }) => {
         Userid={Userid}
       />
 
-      <div className="border border-gray-300 rounded-md bg-white">
-        <h1 className="bg-gradient-seablue text-white font-custom font-semibold rounded-t-md text-[14px] p-2">
+      <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+        <h1 className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
           Account Statement
         </h1>
-
         <div className="flex justify-between items-center mb-4 p-4">
           <div className="flex items-center">
-            <label className="mr-2 text-sm font-custom font-medium text-black">
+            <label className="mr-2 text-[12px] font-custom font-medium text-black">
               Show
             </label>
             <select
@@ -101,7 +100,7 @@ const AccountStatement = ({ Userid }) => {
                 setEntriesToShow(Number(e.target.value));
                 setCurrentPage(1);
               }}
-              className="border rounded px-2 py-1 text-sm"
+              className="border rounded px-2 py-1 outline-none border-gray-400 text-[12px]"
             >
               {[10, 25, 50, 100].map((number) => (
                 <option key={number} value={number}>
@@ -109,15 +108,15 @@ const AccountStatement = ({ Userid }) => {
                 </option>
               ))}
             </select>
-            <label className="ml-2 text-sm font-custom font-medium text-black">
+            <label className="ml-2 text-[12px] font-custom font-medium text-black">
               entries
             </label>
           </div>
         </div>
 
         <div className="overflow-x-auto my-4 mx-4">
-          <table className="w-full table-auto border-collapse border border-gray-400">
-            <thead className="border border-gray-400 bg-gray-300 text-black">
+          <table className="w-full table-auto border-collapse border border-gray-300">
+            <thead className="border border-gray-300 bg-gray-200 text-black">
               <tr>
                 {[
                   { key: "createdAt", label: "Date" },
@@ -129,7 +128,7 @@ const AccountStatement = ({ Userid }) => {
                 ].map(({ key, label }) => (
                   <th
                     key={key}
-                    className="border border-gray-300 px-4 py-3  border border-gray-400 text-sm font-custom font-medium text-center cursor-pointer"
+                    className="border border-gray-300 text-center sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer"
                     onClick={() => handleSort(key)}
                   >
                     <div className="flex justify-between items-center">
@@ -189,30 +188,32 @@ const AccountStatement = ({ Userid }) => {
                       }
                     }}
                 }).map((item, index) => (
-                  <tr key={index} className="border-b border-gray-400">
-                    <td className="px-4 py-3 text-sm text-center border border-gray-400">
+                  <tr key={index} className="border border-gray-300 text-center">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       {formatDateTime(item.createdAt)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center font-bold border border-gray-400">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack font-bold">
                       {item.transactionType === "credit" ? item.amount : "-"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center font-bold text-red-600 border border-gray-400">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       {item.transactionType === "debit" ? item.amount : "-"}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center font-bold border border-gray-400">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack font-bold">
                       {item.currentMainWallet}
                     </td>
-                    <td className="px-4 py-3 text-sm text-center border text-nowrap border-gray-400">
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                       {item.description || userData?.data?.username}
                     </td>
-                    <td className="px-4 py-3 flex  items-center gap-2 text-sm text-center items-center">
-                      {item?.from} <FaRegArrowAltCircleRight/> {item?.to}
+                    <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                      <span className=" flex items-center gap-1">
+                        {item?.from} <FaRegArrowAltCircleRight/> {item?.to}
+                      </span>
                     </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="6" className="text-center py-4">
+                  <td colSpan="6" className="sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack text-center">
                     No data available
                   </td>
                 </tr>
@@ -222,7 +223,7 @@ const AccountStatement = ({ Userid }) => {
         </div>
         <div className="flex justify-between items-center mt-4 flex-col sm:flex-row p-4 pt-0">
           {/* Showing entries text */}
-          <div className="text-sm text-gray-600 mb-2 sm:mb-0">
+          <div className="text-[12px] text-gray-600 mb-2 sm:mb-0">
             Showing{" "}
             {totalTransactions === 0
               ? 0

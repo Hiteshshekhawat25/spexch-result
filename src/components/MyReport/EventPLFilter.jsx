@@ -138,7 +138,7 @@ const EventPLFilter = ({
   };
 
   return (
-    <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2 grid-cols-1 gap-2.5 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
+    <div className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-2.5 md:p-4 p-3 bg-[#e0e6e6] border border-black rounded-md mb-4">
       <div className=" gap-2 items-start">
         <label className="text-[12px] sm:text-sm font-custom text-black mb-2">
           Data Source
@@ -146,7 +146,7 @@ const EventPLFilter = ({
         <select
           value={dataSource || "live"}
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="text-[12px] sm:text-sm border w-full h-[38px] rounded px-10 py-1"
+          className="text-[12px] sm:text-sm border w-full h-[38px] outline-none rounded px-3 py-1"
         >
           <option value="live">LIVE DATA</option>
           <option value="backup">BACKUP DATA</option>
@@ -154,66 +154,64 @@ const EventPLFilter = ({
         </select>
       </div>
 
-      <div className=" flex">
-      <div className="flex flex-col w-full items-start">
-        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
-          From Date
-        </label>
-        <input
-          type="date"
-          value={fromDate || today}
-          onChange={(e) => dispatch(setFromDate(e.target.value))}
-          className="border rounded w-full  px-1 py-1 h-[38px] text-sm"
-          disabled={dataSource !== "live"}
-        />
+      <div className="flex gap-2">
+        <div className="flex flex-col w-full items-start">
+          <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
+            From Date
+          </label>
+          <input
+            type="date"
+            value={fromDate || today}
+            onChange={(e) => dispatch(setFromDate(e.target.value))}
+            className="border rounded w-full  px-1 py-1 h-[38px] outline-none text-sm"
+            disabled={dataSource !== "live"}
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
+            From Time
+          </label>
+          <input
+            type="time"
+            value={fromTime || "00:00"}
+            onChange={(e) => dispatch(setFromTime(e.target.value))}
+            className="border w-full rounded px-1 h-[38px] text-[13px] outline-none py-1"
+            disabled={dataSource !== "live"}
+          />
+        </div>
       </div>
-
-      <div className="flex flex-col items-start">
-        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
-          From Time
-        </label>
-        <input
-          type="time"
-          value={fromTime || "00:00"}
-          onChange={(e) => dispatch(setFromTime(e.target.value))}
-          className="border w-full rounded px-2 h-[38px] py-1 text-sm"
-          disabled={dataSource !== "live"}
-        />
-      </div>
-      </div>
-
-      <div className=" flex">
-      <div className="flex flex-col w-full items-start">
-        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
-          To Date
-        </label>
-        <input
-          type="date"
-          value={toDate || today}
-          onChange={(e) => dispatch(setToDate(e.target.value))}
-          className="border w-full rounded px-2 h-[38px] py-1 text-sm"
-          disabled={dataSource !== "live"}
-        />
-      </div>
-
-      <div className="flex flex-col items-start">
-        <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
-          To Time
-        </label>
-        <input
-          type="time"
-          value={toTime || "23:59"}
-          onChange={(e) => dispatch(setToTime(e.target.value))}
-          className="border w-full rounded px-2 py-1 h-[38px] text-sm"
-          disabled={dataSource !== "live"}
-        />
-      </div>
+      
+      <div className="flex gap-2">
+        <div className="flex flex-col w-full items-start">
+          <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
+            To Date
+          </label>
+          <input
+            type="date"
+            value={toDate || today}
+            onChange={(e) => dispatch(setToDate(e.target.value))}
+            className="border w-full rounded px-1 h-[38px] outline-none py-1 text-sm"
+            disabled={dataSource !== "live"}
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <label className="text-[12px] sm:text-sm font-custom text-black mb-1">
+            To Time
+          </label>
+          <input
+            type="time"
+            value={toTime || "23:59"}
+            onChange={(e) => dispatch(setToTime(e.target.value))}
+            className="border w-full rounded px-1 py-1 h-[38px] text-[13px] outline-none"
+            disabled={dataSource !== "live"}
+          />
+        </div>
       </div>
 
       <div className="flex space-x-2 mt-2 md:mt-5 items-center">
         <button
           onClick={handleGetPL}
-          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"
+          className="px-4 py-2 font-semibold bg-gradient-seablue text-white rounded-md text-sm"
         >
           Get P & L
         </button>

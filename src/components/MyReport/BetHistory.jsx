@@ -129,7 +129,7 @@ const BetHistory = () => {
 
 
   return (
-    <div className="p-1 md:p-4">
+    <div className="md:mx-0 mx-2 ">
       {localLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
@@ -142,306 +142,306 @@ const BetHistory = () => {
         </div>
       ) : (
         <>
-          <div className="border border-gray-300 p-3 rounded-md bg-white">
-            <h1 className="text-xl bg-gradient-blue text-white font-bold p-4">
+          <div className="w-full justify-end flex mb-2">
+            {color ?
+            <div className="flex gap-1">
+              <div className="border border-black px-2 h-8 text-[13px] flex items-center text-center bg-[#faa9ba] ">
+                Lay
+              </div>
+              <div className="border border-black px-2 h-8 text-[13px] flex items-center text-center bg-[#72bbef] ">
+                Back
+              </div>
+              <div className="border border-black px-2 h-8 text-[13px] flex items-center text-center">
+                Void
+              </div>
+            </div> : ''}
+          </div>
+          <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+            <h1 className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
               Bet History
             </h1>
-
-            <div className="flex justify-between items-center  p-2 pt-4">
-              <div className="flex md:flex-row flex-col w-full gap-3 md:justify-between">
-              <div className="flex items-center">
-                <label className="mr-2 text-sm font-medium text-black">
-                  Show
-                </label>
-                <select
-                  value={entriesToShow}
-                  onChange={(e) => {
-                    setEntriesToShow(Number(e.target.value));
-                    setCurrentPage(1);
-                  }}
-                  className="border rounded px-2 py-1 text-sm"
-                >
-                  {[10, 25, 50, 100].map((number) => (
-                    <option key={number} value={number}>
-                      {number}
-                    </option>
-                  ))}
-                </select>
-                <label className="ml-2 text-sm font-medium text-black">
-                  entries
-                </label>
-              </div>
-              <div>
-                <input
-                value={search}
-                className="border-2 w-full md:w-auto rounded-md py-1 px-2"
-                placeholder="Search..."
-                onChange={handleChange}
-                />
-              </div>
-              </div>
-            </div>
-            <div className="w-full justify-end flex">
-              {color ?
-                <div className="flex gap-2">
-                  <div className="border-2 border-gray-600 px-2 h-8 items-center text-center bg-[#faa9ba] ">
-                    Lay
-                  </div>
-                  <div className="border-2 border-gray-600 px-2 h-8  items-center text-center bg-[#72bbef] ">
-                    Back
-                  </div>
-                  <div className="border-2 border-gray-600 px-2 h-8 items-center text-center">
-                    Void
-                  </div>
-                </div> : ''}
-                </div>
-            <div className="overflow-x-auto my-4 mx-4">
-              <table className="w-full table-auto border-collapse border border-gray-400">
-                <thead className="border border-gray-400 bg-gray-300 text-black text-center">
-                  <tr>
-                    {[
-                      "Sport Name",
-                      "Event Name",
-                      "Market Name",
-                      "Runner Name",
-                      "Bet Type",
-                      "User Price",
-                      "Amount",
-                      "PL",
-                      "Place Date",
-                      "Match Date",
-                      "Details",
-                    ].map((key) => (
-                      <th
-                        key={key}
-                        className="border border-gray-400 text-nowrap px-1 min-w-32 w-auto py-2 text-sm font-custom font-medium text-center cursor-pointer"
-                        onClick={() => handleSort(key)}
-                      >
-                        <div className="flex justify-between w-full items-center text-center">
-                          <span className="w-full">{key}</span>
-                          <div className="flex flex-col items-center ml-2">
-                            <FaSortUp
-                              className={`${sortConfig.key === key &&
-                                  sortConfig.direction === "ascending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                                }`}
-                              style={{
-                                marginBottom: "-6px",
-                              }}
-                            />
-                            <FaSortDown
-                              className={`${sortConfig.key === key &&
-                                  sortConfig.direction === "descending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                                }`}
-                              style={{
-                                marginTop: "-6px",
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </th>
+            <div className="md:p-4 p-3">
+              <div className="flex md:flex-row flex-col items-center w-full gap-3 md:justify-between">
+                <div className="flex items-center">
+                  <label className="mr-1.5 text-[13px] font-medium text-black">
+                    Show
+                  </label>
+                  <select
+                    value={entriesToShow}
+                    onChange={(e) => {
+                      setEntriesToShow(Number(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                    className="border rounded px-2 py-1 text-[13px] border-gray-400"
+                  >
+                    {[10, 25, 50, 100].map((number) => (
+                      <option key={number} value={number}>
+                        {number}
+                      </option>
                     ))}
-                  </tr>
-                </thead>
-                <tbody>
-                {
-                    paginatedData.map((item, index) => (
-                      <tr
-                        key={index}
-                        className={`border-b  border-gray-400 ${item.betType === "no" || item.betType === "lay"
-                            ? "bg-[#faa9ba]"
-                            : item.betType === "back" || item.betType === "yes"
-                              ? "bg-[#72bbef]"
-                              : ""
-                          }`}
-                      >
-                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
-                          {item.sport}
-                        </td>
-                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
-                          {item.match}
-                        </td>
-                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
-                          {item.type == 'odds'
-                            ? 'Match odds'
-                            : item?.type == 'bookmakers' ?
-                              'Bookmakers' : item?.type == 'fancy'
-                                ? item.marketNameTwo :
-                                item?.type == 'toss' ?
-                                  'TOSS' : item?.name ? 
-                                  item?.name : ''
-                          }
-                        </td>
-                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
-                          {item.marketNameTwo}
-                        </td>
-                        <td className="px-1 min-w-32 w-auto text-nowrap py-2 text-sm text-center border-r border-gray-400">
-                          {item.betType === "no" || item.betType === "lay"
-                            ? "Lay"
-                            : item.betType === "yes" || item.betType === "back"
-                              ? "Back"
-                              : "Casino"}
-                        </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-nowrap text-sm text-center border-r border-gray-400">
-                        {item?.type == 'fancy' ? `${item?.fancyOdds}/${item.odds}` : item?.odds + '/' + item.fancyOdds}
-                        </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
-                          {item.totalAmount?.toFixed(2)}
-                        </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400 whitespace-nowrap">
-                          {item?.betType === "lay" || item?.betType === "no" ? (
-                            <>
-                              <span className="text-green-800">
-                                {item?.totalAmount}
-                              </span>
-                              <span className="text-red-500">
-                                {" "}
-                                ({item?.totalProfitLoss > 0 ? (-Math.abs(item?.totalProfitLoss + item?.totalCommission)?.toFixed(2)) : (item?.totalProfitLoss + item?.totalCommission)?.toFixed(2) || 0})
-                              </span>
-                            </>
-                          ) : (
-                            <>
-                              <span className="text-green-800">
-                                ({(item?.totalProfitLoss  + item?.totalCommission)?.toFixed(2)})
-                              </span>
-                              <span className="text-red-500">
-                                {" "}
-                                (-{item?.totalAmount?.toFixed(2) || 0})
-                              </span>
-                            </>
-                          )}
-                        </td>
-                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
-                          {new Date(item.placeTime).toLocaleString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            second: "2-digit",
-                            hour12: true,
-                          })}
-                        </td>
-                        <td className="px-1 min-w-32 text-nowrap w-auto py-2 text-sm text-center border-r border-gray-400">
-                          {new Date(item.matchTime).toLocaleString("en-US", {
-                            year: "numeric",
-                            month: "short",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                            second: "2-digit",
-                            hour12: true,
-                          })}
-                        </td>
-                        <td className="px-1 min-w-32 w-auto py-2 text-sm text-center border-r border-gray-400">
-                          <button className="text-EgyptianBlue">Info</button>
-                        </td>
-                      </tr>
-                    ))
-                  }
-                </tbody>
-              </table>
-            </div>
-            <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
-              {/* Showing entries text */}
-              <div className="text-sm text-gray-600 mb-2 sm:mb-0">
-                Showing{" "}
-                {totalEntries === 0
-                  ? 0
-                  : (currentPage - 1) * entriesToShow + 1}{" "}
-                to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
-                {totalEntries} entries
-              </div>
-
-              {/* Pagination Buttons */}
-              {totalPages > 1 && (
-                <div className="flex space-x-2">
-                  {/* First Button */}
-                  <button
-                    onClick={() => handlePageChange("first")}
-                    disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded ${currentPage === 1
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-gray-100"
-                      }`}
-                  >
-                    First
-                  </button>
-
-                  {/* Previous Button */}
-                  <button
-                    onClick={() => handlePageChange("prev")}
-                    disabled={currentPage === 1}
-                    className={`px-3 py-1 text-sm rounded ${currentPage === 1
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-gray-100"
-                      }`}
-                  >
-                    Previous
-                  </button>
-
-                  {/* Page Numbers */}
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => {
-                      if (
-                        page === 1 ||
-                        page === totalPages ||
-                        (page >= currentPage - 1 && page <= currentPage + 1)
-                      ) {
-                        return (
-                          <button
-                            key={page}
-                            onClick={() => setCurrentPage(page)}
-                            className={`px-3 py-1 text-sm border border-gray-300 rounded ${currentPage === page
-                                ? "bg-gray-200"
-                                : "hover:bg-gray-100"
-                              }`}
-                          >
-                            {page}
-                          </button>
-                        );
-                      } else if (
-                        page === currentPage - 2 ||
-                        page === currentPage + 2
-                      ) {
-                        return (
-                          <span key={page} className="px-3 py-1 text-sm">
-                            ...
-                          </span>
-                        );
-                      }
-                      return null;
-                    }
-                  )}
-
-                  {/* Next Button */}
-                  <button
-                    onClick={() => handlePageChange("next")}
-                    disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm rounded ${currentPage === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-gray-100"
-                      }`}
-                  >
-                    Next
-                  </button>
-
-                  {/* Last Button */}
-                  <button
-                    onClick={() => handlePageChange("last")}
-                    disabled={currentPage === totalPages}
-                    className={`px-3 py-1 text-sm rounded ${currentPage === totalPages
-                        ? "opacity-50 cursor-not-allowed"
-                        : "hover:bg-gray-100"
-                      }`}
-                  >
-                    Last
-                  </button>
+                  </select>
+                  <label className="ml-1.5 text-[13px] font-medium text-black">
+                    entries
+                  </label>
                 </div>
-              )}
+                <div className="flex items-center gap-2">
+                  <label htmlFor="" className="text-[13px]">Search:</label>
+                  <input
+                  value={search}
+                  className="border text-[13px] outline-none w-auto rounded-[5px] border-gray-300 py-1.5 px-2"
+                  placeholder="Search..."
+                  onChange={handleChange}
+                  />
+                </div>
+              </div>
+              <div className="overflow-x-auto my-4">
+                <table className="w-full table-auto border-collapse border border-gray-300">
+                  <thead className="border border-gray-300 bg-gray-200 text-black text-center">
+                    <tr>
+                      {[
+                        "Sport Name",
+                        "Event Name",
+                        "Market Name",
+                        "Runner Name",
+                        "Bet Type",
+                        "User Price",
+                        "Amount",
+                        "PL",
+                        "Place Date",
+                        "Match Date",
+                        "Details",
+                      ].map((key) => (
+                        <th
+                          key={key}
+                          className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center"
+                          onClick={() => handleSort(key)}
+                        >
+                          <div className="flex justify-between w-full items-center text-center">
+                            <span className="w-full">{key}</span>
+                            <div className="flex flex-col items-center ml-2">
+                              <FaSortUp
+                                className={`${sortConfig.key === key &&
+                                    sortConfig.direction === "ascending"
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                  }`}
+                                style={{
+                                  marginBottom: "-6px",
+                                }}
+                              />
+                              <FaSortDown
+                                className={`${sortConfig.key === key &&
+                                    sortConfig.direction === "descending"
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                  }`}
+                                style={{
+                                  marginTop: "-6px",
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="text-center">
+                  {
+                      paginatedData.map((item, index) => (
+                        <tr
+                          key={index}
+                          className={`border border-gray-400 ${item.betType === "no" || item.betType === "lay"
+                              ? "bg-[#faa9ba]"
+                              : item.betType === "back" || item.betType === "yes"
+                                ? "bg-[#72bbef]"
+                                : ""
+                            }`}
+                        >
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.sport}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.match}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.type == 'odds'
+                              ? 'Match odds'
+                              : item?.type == 'bookmakers' ?
+                                'Bookmakers' : item?.type == 'fancy'
+                                  ? item.marketNameTwo :
+                                  item?.type == 'toss' ?
+                                    'TOSS' : item?.name ? 
+                                    item?.name : ''
+                            }
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.marketNameTwo}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.betType === "no" || item.betType === "lay"
+                              ? "Lay"
+                              : item.betType === "yes" || item.betType === "back"
+                                ? "Back"
+                                : "Casino"}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                          {item?.type == 'fancy' ? `${item?.fancyOdds}/${item.odds}` : item?.odds + '/' + item.fancyOdds}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.totalAmount?.toFixed(2)}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack whitespace-nowrap">
+                            {item?.betType === "lay" || item?.betType === "no" ? (
+                              <>
+                                <span className="text-green-800">
+                                  {item?.totalAmount}
+                                </span>
+                                <span className="text-red-500">
+                                  {" "}
+                                  ({item?.totalProfitLoss > 0 ? (-Math.abs(item?.totalProfitLoss + item?.totalCommission)?.toFixed(2)) : (item?.totalProfitLoss + item?.totalCommission)?.toFixed(2) || 0})
+                                </span>
+                              </>
+                            ) : (
+                              <>
+                                <span className="text-green-800">
+                                  ({(item?.totalProfitLoss  + item?.totalCommission)?.toFixed(2)})
+                                </span>
+                                <span className="text-red-500">
+                                  {" "}
+                                  (-{item?.totalAmount?.toFixed(2) || 0})
+                                </span>
+                              </>
+                            )}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {new Date(item.placeTime).toLocaleString("en-US", {
+                              year: "numeric",
+                              month: "short",
+                              day: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                              hour12: true,
+                            })}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {new Date(item.matchTime).toLocaleString("en-US", {
+                              year: "numeric",
+                              month: "short",
+                              day: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit",
+                              second: "2-digit",
+                              hour12: true,
+                            })}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            <button className="text-EgyptianBlue">Info</button>
+                          </td>
+                        </tr>
+                      ))
+                    }
+                  </tbody>
+                </table>
+              </div>
+              <div className="flex justify-between items-center mt-2 flex-col sm:flex-row">
+                {/* Showing entries text */}
+                <div className="text-[13px] text-gray-600 mb-2 sm:mb-0">
+                  Showing{" "}
+                  {totalEntries === 0
+                    ? 0
+                    : (currentPage - 1) * entriesToShow + 1}{" "}
+                  to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}
+                  {totalEntries} entries
+                </div>
+
+                {/* Pagination Buttons */}
+                {totalPages > 1 && (
+                  <div className="flex space-x-2">
+                    {/* First Button */}
+                    <button
+                      onClick={() => handlePageChange("first")}
+                      disabled={currentPage === 1}
+                      className={`px-3 py-1 text-sm rounded ${currentPage === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-100"
+                        }`}
+                    >
+                      First
+                    </button>
+
+                    {/* Previous Button */}
+                    <button
+                      onClick={() => handlePageChange("prev")}
+                      disabled={currentPage === 1}
+                      className={`px-3 py-1 text-sm rounded ${currentPage === 1
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-100"
+                        }`}
+                    >
+                      Previous
+                    </button>
+
+                    {/* Page Numbers */}
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map(
+                      (page) => {
+                        if (
+                          page === 1 ||
+                          page === totalPages ||
+                          (page >= currentPage - 1 && page <= currentPage + 1)
+                        ) {
+                          return (
+                            <button
+                              key={page}
+                              onClick={() => setCurrentPage(page)}
+                              className={`px-3 py-1 text-sm border border-gray-300 rounded ${currentPage === page
+                                  ? "bg-gray-200"
+                                  : "hover:bg-gray-100"
+                                }`}
+                            >
+                              {page}
+                            </button>
+                          );
+                        } else if (
+                          page === currentPage - 2 ||
+                          page === currentPage + 2
+                        ) {
+                          return (
+                            <span key={page} className="px-3 py-1 text-sm">
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
+                      }
+                    )}
+
+                    {/* Next Button */}
+                    <button
+                      onClick={() => handlePageChange("next")}
+                      disabled={currentPage === totalPages}
+                      className={`px-3 py-1 text-sm rounded ${currentPage === totalPages
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-100"
+                        }`}
+                    >
+                      Next
+                    </button>
+
+                    {/* Last Button */}
+                    <button
+                      onClick={() => handlePageChange("last")}
+                      disabled={currentPage === totalPages}
+                      className={`px-3 py-1 text-sm rounded ${currentPage === totalPages
+                          ? "opacity-50 cursor-not-allowed"
+                          : "hover:bg-gray-100"
+                        }`}
+                    >
+                      Last
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </>

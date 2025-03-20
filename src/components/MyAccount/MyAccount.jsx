@@ -66,7 +66,7 @@ const MyAccount = () => {
     : "max-h-[calc(3.5*2.6rem)]";
 
   return (
-    <div className={`justify-center ${loading ?  `grid-cols-12` :`md:grid-cols-4 grid-cols-1 grid gap-5`}`}>
+    <div className={`justify-center ${loading ?  `grid-cols-12` :`md:grid-cols-4 grid-cols-1 grid gap-5 sm:px-4 px-3`}`}>
       {loading ? (
         <div className="flex justify-center mx-auto items-center h-64">
         <AnimatedLoader/>

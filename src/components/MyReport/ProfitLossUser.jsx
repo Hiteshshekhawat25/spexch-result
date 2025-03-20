@@ -121,7 +121,7 @@ const ProfitLossUser = () => {
   };
 
   return (
-    <div className="p-1 md:p-4">
+    <div className="md:mx-0 mx-2 ">
       {localLoading ? (
         <div className="flex justify-center items-center h-64">
           <div className="relative w-48 h-48">
@@ -134,252 +134,253 @@ const ProfitLossUser = () => {
         </div>
       ) : (
         <>
-          <div className="border border-gray-300 rounded-md bg-white">
-            <h1 className="text-xl bg-gradient-blue text-white font-bold p-4">
+          <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+            <h1 className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
               Profit Loss User
             </h1>
-
-            <div className="flex md:flex-row flex-col gap-3 md:justify-between md:items-center mb-4 p-4">
-              <div className="flex items-center">
-                <label className="mr-2 text-sm font-medium text-black">
-                  Show
-                </label>
-                <select
-                  value={entriesToShow}
-                  onChange={(e) => {
-                    setEntriesToShow(Number(e.target.value));
-                    setCurrentPage(1);
-                  }}
-                  className="border rounded px-2 py-1 text-sm"
-                >
-                  {[10, 25, 50, 100].map((number) => (
-                    <option key={number} value={number}>
-                      {number}
-                    </option>
-                  ))}
-                </select>
-                <label className="ml-2 text-sm font-medium text-black">
-                  entries
-                </label>
-              </div>
-              <div>
-                <input
-                className="border-2 rounded-md w-full md:w-auto py-1 px-2 "
-                placeholder="Search..."
-                value={search}
-                onChange={(e)=>setSearch(e.target.value)}
-                />
-              </div>
-            </div>
-            <div className="overflow-x-auto my-4 mx-4">
-              <table className="w-full table-auto border-collapse border border-gray-400">
-                <thead className="border border-gray-400 bg-gray-300 text-black text-center">
-                  <tr>
-                    {[
-                      "User Name",
-                      "Sport Name",
-                      "Event Name",
-                      "Market Name",
-                      "Result",
-                      "Profit/Loss",
-                      "Commission",
-                      "SettleTime",
-                    ].map((key) => (
-                      <th
-                        key={key}
-                        className="border border-gray-400 px-2 py-1 text-sm font-custom font-medium text-center cursor-pointer"
-                        onClick={() => handleSort(key)}
-                      >
-                        <div className="flex justify-between text-nowrap w-full items-center text-center">
-                          <span className="text-center w-full">
-                            {key === "User Name"
-                              ? "User Name"
-                              : key === "Sport Name"
-                              ? "Sport Name"
-                              : key === "Event Name"
-                              ? "Event Name"
-                              : key === "Market Name"
-                              ? "Market Name"
-                              : key === "Result"
-                              ? "Result"
-                              : key === "Profit/Loss"
-                              ? "Profit/Loss"
-                              : key === "SettleTime"
-                              ? "SettleTime"
-                              : "Commission"}
-                          </span>
-                          <div className="flex flex-col items-center ml-2">
-                            <FaSortUp
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "ascending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                              }`}
-                              style={{
-                                marginBottom: "-6px",
-                              }}
-                            />
-                            <FaSortDown
-                              className={`${
-                                sortConfig.key === key &&
-                                sortConfig.direction === "descending"
-                                  ? "text-black"
-                                  : "text-gray-400"
-                              }`}
-                              style={{
-                                marginTop: "-6px",
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </th>
+            <div className="sm:p-3 p-3.5">
+              <div className="flex md:flex-row flex-col gap-3 md:justify-between md:items-center">
+                <div className="flex items-center">
+                  <label className="mr-2 text-[13px] font-medium text-black">
+                    Show
+                  </label>
+                  <select
+                    value={entriesToShow}
+                    onChange={(e) => {
+                      setEntriesToShow(Number(e.target.value));
+                      setCurrentPage(1);
+                    }}
+                    className="border rounded px-2 py-1 border-gray-400 text-[13px]"
+                  >
+                    {[10, 25, 50, 100].map((number) => (
+                      <option key={number} value={number}>
+                        {number}
+                      </option>
                     ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {profitLossData.length > 0 ? (
-                    paginatedData.map((item, index) => (
-                      <tr key={index} className="border-b border-gray-400">
-                        <td
-                          onClick={() => {
-                            console.log(
-                              "Clicked",
-                              item.selectionId,
-                              item?.game_id,
-                              item.matchDetails._id,
-                              item._id
-                            );
-                            handleRowClick(
-                              item.matchDetails._id,
-                              item._id,
-                              item.selectionId,
-                              item?.game_id,
-                              item?.type,
-                              item?.userId
-                            );
-                          }}
-                          className="px-4 py-3 text-sm text-center text-lightblue border-r border-gray-400 cursor-pointer"
+                  </select>
+                  <label className="ml-2 text-[13px] font-medium text-black">
+                    entries
+                  </label>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <label htmlFor="" className="text-[13px]">Search: </label>
+                  <input
+                  className="border outline-none text-[13px] rounded-[5px] w-full md:w-auto py-1.5 px-2 "
+                  placeholder="Search..."
+                  value={search}
+                  onChange={(e)=>setSearch(e.target.value)}
+                  />
+                </div>
+              </div>
+              <div className="overflow-x-auto mt-4">
+                <table className="w-full table-auto border-collapse border border-gray-300">
+                  <thead className="border border-gray-300 bg-gray-200 text-black text-center">
+                    <tr>
+                      {[
+                        "User Name",
+                        "Sport Name",
+                        "Event Name",
+                        "Market Name",
+                        "Result",
+                        "Profit/Loss",
+                        "Commission",
+                        "SettleTime",
+                      ].map((key) => (
+                        <th
+                          key={key}
+                          className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center"
+                          onClick={() => handleSort(key)}
                         >
-                          { item.username }
-                        </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.sport}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-nowrap  text-center border-r border-gray-400">
-                          { item?.provider ? item?.provider :  item.match}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.type == "odds"
-                            ? "Match odds"
-                            : item.type == "bookmakers"
-                            ? "Bookmaker"
-                            : item.type == "toss"
-                            ? "Toss"
-                            : item?.type == 'casino' ? item?.name :  item.marketName}
-                        </td>
-                        <td className="px-4 py-3 text-sm text-nowrap text-center border-r border-gray-400">
-                          {/* {item?.marketName ? " " : "void"} */}
-                          { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
-                        </td>
-                        <td
-                          className="px-4 py-3 text-sm text-center border-r border-gray-400"
-                          style={{
-                            color: item.totalProfitLoss < 0 ? "red" : "green",
-                          }}
-                        >
-                          {item?.isDeleted
-                            ? "0.00"
-                            : item.totalProfitLoss < 0
-                            ? `-${(Math.abs(item?.totalProfitLoss + item?.totalCommission ))?.toFixed(2)}`
-                            : (Math.abs(item?.totalProfitLoss) + item?.totalCommission)?.toFixed(2)}
-                        </td>
+                          <div className="flex justify-between text-nowrap w-full items-center text-center">
+                            <span className="text-center w-full">
+                              {key === "User Name"
+                                ? "User Name"
+                                : key === "Sport Name"
+                                ? "Sport Name"
+                                : key === "Event Name"
+                                ? "Event Name"
+                                : key === "Market Name"
+                                ? "Market Name"
+                                : key === "Result"
+                                ? "Result"
+                                : key === "Profit/Loss"
+                                ? "Profit/Loss"
+                                : key === "SettleTime"
+                                ? "SettleTime"
+                                : "Commission"}
+                            </span>
+                            <div className="flex flex-col items-center ml-2">
+                              <FaSortUp
+                                className={`${
+                                  sortConfig.key === key &&
+                                  sortConfig.direction === "ascending"
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                }`}
+                                style={{
+                                  marginBottom: "-6px",
+                                }}
+                              />
+                              <FaSortDown
+                                className={`${
+                                  sortConfig.key === key &&
+                                  sortConfig.direction === "descending"
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                }`}
+                                style={{
+                                  marginTop: "-6px",
+                                }}
+                              />
+                            </div>
+                          </div>
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {profitLossData.length > 0 ? (
+                      paginatedData.map((item, index) => (
+                        <tr key={index} className="text-center">
+                          <td
+                            onClick={() => {
+                              console.log(
+                                "Clicked",
+                                item.selectionId,
+                                item?.game_id,
+                                item.matchDetails._id,
+                                item._id
+                              );
+                              handleRowClick(
+                                item.matchDetails._id,
+                                item._id,
+                                item.selectionId,
+                                item?.game_id,
+                                item?.type,
+                                item?.userId
+                              );
+                            }}
+                            className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-linkcolor"
+                          >
+                            { item.username }
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.sport}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            { item?.provider ? item?.provider :  item.match}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.type == "odds"
+                              ? "Match odds"
+                              : item.type == "bookmakers"
+                              ? "Bookmaker"
+                              : item.type == "toss"
+                              ? "Toss"
+                              : item?.type == 'casino' ? item?.name :  item.marketName}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {/* {item?.marketName ? " " : "void"} */}
+                            { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
+                          </td>
+                          <td
+                            className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack"
+                            style={{
+                              color: item.totalProfitLoss < 0 ? "red" : "green",
+                            }}
+                          >
+                            {item?.isDeleted
+                              ? "0.00"
+                              : item.totalProfitLoss < 0
+                              ? `-${(Math.abs(item?.totalProfitLoss + item?.totalCommission ))?.toFixed(2)}`
+                              : (Math.abs(item?.totalProfitLoss) + item?.totalCommission)?.toFixed(2)}
+                          </td>
 
-                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                          {item.totalCommission?.toFixed(2)}
-                        </td>
-                        <td className="px-4 py-3 text-nowrap text-sm text-center border-r border-gray-400">
-                          <p>
-                            {moment(item.settledTime)?.format('LLL')}
-                          </p>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            {item.totalCommission?.toFixed(2)}
+                          </td>
+                          <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                            <p>
+                              {moment(item.settledTime)?.format('LLL')}
+                            </p>
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="8" className="sm:px-3 px-2 py-2 text-[13px] text-center text-nowrap border border-gray-300 text-darkblack">
+                          No data available
                         </td>
                       </tr>
-                    ))
-                  ) : (
-                    <tr>
-                      <td colSpan="4" className="px-4 py-3 text-sm text-center">
-                        No data available
-                      </td>
-                    </tr>
+                    )}
+                  </tbody>
+                  {/* 
+                  {profitLossData.length > 0 && (
+                    <tfoot>
+                      <tr className="bg-gray-300 text-black">
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {totalData.sportName}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {totalData.uplineProfitLoss}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
+                          {totalData.downlineProfitLoss}
+                        </td>
+                        <td className="px-4 py-3 text-sm text-center">
+                          {totalData.commission}
+                        </td>
+                      </tr>
+                    </tfoot>
                   )}
-                </tbody>
-                {/* 
-                {profitLossData.length > 0 && (
-                  <tfoot>
-                    <tr className="bg-gray-300 text-black">
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.sportName}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.uplineProfitLoss}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-center border-r border-gray-400">
-                        {totalData.downlineProfitLoss}
-                      </td>
-                      <td className="px-4 py-3 text-sm text-center">
-                        {totalData.commission}
-                      </td>
-                    </tr>
-                  </tfoot>
-                )}
-                  */}
-              </table>
-            </div>
-
-            <div className="flex justify-between  items-center mt-4  flex-col sm:flex-row">
-              <div className="text-sm text-gray-600 sm:mb-0">
-                Showing{" "}
-                {totalEntries > 0
-                  ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
-                      currentPage * entriesToShow,
-                      totalEntries
-                    )}`
-                  : "0 to 0"}{" "}
-                of {totalEntries} entries
+                    */}
+                </table>
               </div>
-              <div className="flex space-x-2 sm:ml-auto">
-                <button
-                  onClick={() => setCurrentPage(1)}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                  disabled={currentPage === 1}
-                >
-                  First
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-                <button
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                  disabled={currentPage === totalPages}
-                >
-                  Next
-                </button>
-                <button
-                  onClick={() => setCurrentPage(totalPages)}
-                  className="px-3 py-1 text-gray-600 rounded text-sm border border-gray-300"
-                  disabled={currentPage === totalPages}
-                >
-                  Last
-                </button>
+              <div className="flex justify-between  items-center mt-4  flex-col sm:flex-row">
+                <div className="text-[13px] text-gray-600 sm:mb-0">
+                  Showing{" "}
+                  {totalEntries > 0
+                    ? `${(currentPage - 1) * entriesToShow + 1} to ${Math.min(
+                        currentPage * entriesToShow,
+                        totalEntries
+                      )}`
+                    : "0 to 0"}{" "}
+                  of {totalEntries} entries
+                </div>
+                <div className="flex space-x-2 sm:ml-auto">
+                  <button
+                    onClick={() => setCurrentPage(1)}
+                    className="px-3 py-1 text-gray-600 rounded text-sm"
+                    disabled={currentPage === 1}
+                  >
+                    First
+                  </button>
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.max(prev - 1, 1))
+                    }
+                    className="px-3 py-1 text-gray-600 rounded text-sm"
+                    disabled={currentPage === 1}
+                  >
+                    Previous
+                  </button>
+                  <button
+                    onClick={() =>
+                      setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                    }
+                    className="px-3 py-1 text-gray-600 rounded text-sm"
+                    disabled={currentPage === totalPages}
+                  >
+                    Next
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage(totalPages)}
+                    className="px-3 py-1 text-gray-600 rounded text-sm"
+                    disabled={currentPage === totalPages}
+                  >
+                    Last
+                  </button>
+                </div>
               </div>
             </div>
           </div>

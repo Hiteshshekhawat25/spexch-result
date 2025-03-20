@@ -56,56 +56,54 @@ function TossModal({ match, onCancel }) {
   console.log(match, 'matchmatch')
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="relative bg-white p-2 rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2 mt-0">
-        {/* Close Icon */}
-        <div className="bg-gray-200 p-3 rounded-t-lg flex justify-between items-center">
-          {/* <div className="flex justify-between items-center border-b pb-3 mt-4"> */}
-          <h2 className="text-gray-700 text-xl font-custom font-semibold">Toss odds</h2>
-          {/* </div> */}
+    <div className="fixed inset-0 flex items-start justify-center z-50 bg-black bg-opacity-50">
+      <div className="relative bg-white rounded-lg sm:mt-6 mt-3 shadow-lg w-[96%] md:w-3/4 lg:w-1/2">
+        <div className="flex justify-between items-center rounded-t-lg bg-gradient-blue text-white text-[15px] font-custom font-semibold w-full px-3 py-2">
+          <h2>Toss odds</h2>
           <IoClose
             onClick={onCancel}
-            className="cursor-pointer text-gray-700 text-2xl"
+            className="cursor-pointer text-white text-2xl"
           />
         </div>
+        <div className="sm:p-4 p-3 overflow-y-auto h-full">
+          
+          <div className='flex flex-col gap-2'>
+            {
+              formData?.length > 0 ?
 
-        {/* Edit Match Heading */}
+              formData?.sort((a,b)=>a.runnerName?.localeCompare(b?.runnerName))?.map((item) => {
 
-        {/* Form */}
-          {
-          formData?.length > 0 ?
-
-          formData?.sort((a,b)=>a.runnerName?.localeCompare(b?.runnerName))?.map((item) => {
-
-            return (
-              <div>
-                <label className="block text-sm my-1 font-custom font-medium text-black">
-                  {item?.runnerName}
-                </label>
-                <input
-                  type="text"
-                  value={item.odds}
-                  onChange={(e)=>handleChange(e,item)}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                />
-              </div>)
-
-          })
-          :
-          <div className='text-center font-bold'>
-            Loading...
-            </div>
-        }
-
+                return (
+                  <div className='flex flex-col '>
+                    <label className="block text-sm my-1 font-custom font-medium text-black">
+                      {item?.runnerName}
+                    </label>
+                    <input
+                      type="text"
+                      value={item.odds}
+                      onChange={(e)=>handleChange(e,item)}
+                      className="w-full p-2 border border-gray-300 rounded-md outline-none"
+                    />
+                  </div>
+                )
+              })
+              :
+              <div className='text-center font-bold'>
+                Loading...
+              </div>
+            }
+          </div>
           <div className="flex justify-end space-x-4 mt-6">
             <button
               type="submit"
               onClick={handleSubmit}
-              className="bg-lightblue text-white px-6 py-2 rounded-md hover:bg-blue-600"
+              className="bg-gradient-seablue font-semibold text-sm text-white px-6 py-2 rounded-md hover:bg-blue-600"
             >
               Update
             </button>
           </div>
+
+        </div>
       </div>
     </div>
   )

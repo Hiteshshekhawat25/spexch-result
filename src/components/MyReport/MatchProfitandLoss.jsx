@@ -724,233 +724,236 @@ const MatchProfitandLoss = () => {
   }
 
   return (
-    <div className="p-1 md:p-4">
-      <h1 className="text-xl font-bold mb-4 bg-gradient-blue text-white p-1">
+    <div className="md:mx-0 mx-2 border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+      <h1 className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
         Match Bet Profit & Loss
       </h1>
-      <div className=" flex flex-col md:flex-row gap-2 md:justify-between md:items-center mb-4">
-        <div className="flex items-center">
-          <label className="mr-2 text-sm font-medium text-black">Show</label>
-          <select
-            value={entriesToShow}
-            onChange={(e) => {
-              setEntriesToShow(Number(e.target.value));
-              setCurrentPage(1);
-            }}
-            className="border rounded px-2 py-1 text-sm"
-          >
-            {[10, 25, 50, 100].map((number) => (
-              <option key={number} value={number}>
-                {number}
-              </option>
-            ))}
-          </select>
-          <label className="ml-2 text-sm font-medium text-black">entries</label>
-        </div>
-        <div>
-          <input
-          value={search}
-          className="border-2 w-full md:w-auto rounded-md py-1 px-2"
-          placeholder="Search..."
-          onChange={(e)=>setSearch(e.target.value)}
-          />
-        </div>
-      </div>
-      <div className="overflow-x-auto">
-        <table className="w-full table-auto border-collapse border border-gray-400">
-          <thead className="bg-gray-300 text-black">
-            <tr>
-              {headers.map((header) => (
-                <th
-                  key={header.key}
-                  className="px-4 py-2 cursor-pointer text-nowrap border border-gray-400"
-                  onClick={() => handleSort(header.key)}
-                >
-                  <div className="flex justify-between items-center">
-                    <span className="w-full text text-center">{header.display}</span>
-                    <div className="flex flex-col items-center ml-2">
-                      <FaSortUp
-                        className={`${
-                          sortConfig.key === header.key &&
-                          sortConfig.direction === "ascending"
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                        style={{ marginBottom: "-6px" }}
-                      />
-                      <FaSortDown
-                        className={`${
-                          sortConfig.key === header.key &&
-                          sortConfig.direction === "descending"
-                            ? "text-black"
-                            : "text-gray-400"
-                        }`}
-                        style={{ marginTop: "-6px" }}
-                      />
-                    </div>
-                  </div>
-                </th>
+      <div className="md:p-4 p-3">
+        <div className=" flex flex-col md:flex-row gap-3 md:justify-between items-center mb-4">
+          <div className="flex items-center">
+            <label className="mr-2 text-[13px] font-medium text-black">Show</label>
+            <select
+              value={entriesToShow}
+              onChange={(e) => {
+                setEntriesToShow(Number(e.target.value));
+                setCurrentPage(1);
+              }}
+              className="border rounded px-2 py-1 text-[13px]"
+            >
+              {[10, 25, 50, 100].map((number) => (
+                <option key={number} value={number}>
+                  {number}
+                </option>
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {sortedData.map((item, index) => (
-              <tr key={index} className="border-b border-gray-400">
-                <td className="px-4 py-1 border border-gray-400 text-center">{item.sport}</td>
-                <td className="px-4 border text-nowrap border-gray-400 py-1 text-center">{item?.provider ? item?.provider : item.match}</td>
-                <td
-                  className="px-4 py-1 border text-nowrap border-gray-400 text-center text-lightblue cursor-pointer"
-                  onClick={() => {
-                    if(item?.providerId){
-                      handleMarketNameClick(
-                        item?.providerId,
-                        item?.game_id,
-                        item?.userId,
-                        item?.type
-                      )
-                    }else{
-                      handleMarketNameClick(
-                        item.matchId,
-                        item.selectionId,
-                        item?.userId,
-                        item?.type
-                      );
-                    }
-                  }}
-                >
-                  <p>
-                    {item?.type === "odds"
-                      ? "Match Odds"
-                      : item?.type === "fancy"
-                      ? item?.marketNameTwo
-                      : item?.type === "toss"
-                      ? "Toss" 
-                      : item?.type === "bookmakers"
-                      ? "Bookmaker"
-                      : item?.name}
-                  </p>
-                </td>
-                <td className="px-4 py-1 border text-nowrap border-gray-400 text-center"> 
-                  { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
-                </td>
-                <td
-                  className="px-4 py-1 text-nowrap border border-gray-400 text-center"
-                  style={{
-                    color: item.totalProfitLoss < 0 ? "red" : "green",
-                  }}
-                >
-                  {item.totalProfitLoss < 0
-                    ? `-${(
-                        Math.abs(item.totalProfitLoss) + item?.totalCommission
-                      ).toFixed(2)}`
-                    : (
-                        Math.abs(item.totalProfitLoss) + item?.totalCommission
-                      ).toFixed(2)}
-                </td>
-                <td className="px-4 py-2 border border-gray-400 text-center">
-                  {item?.totalCommission.toFixed(2)}
-                </td>
-                <td className="px-4 py-2 text-nowrap border border-gray-400 text-center">
-                {moment(item.settledTime).format("MMMM Do YYYY, h:mm:ss a")}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
-        {/* Showing entries text */}
-        <div className="text-sm text-gray-600 mb-2 sm:mb-0">
-          Showing{" "}
-          {totalEntries === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
-          {Math.min(currentPage * entriesToShow, totalEntries)} of {totalEntries}{" "}
-          entries
-        </div>
-
-        {/* Pagination Buttons */}
-        {totalPages?.totalPages > 1 && (
-          <div className="flex space-x-2">
-            {/* First Button */}
-            <button
-              onClick={() => handlePageChange("first")}
-              disabled={currentPage === 1}
-              className={`px-3 py-1 text-sm rounded ${
-                currentPage === 1
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              First
-            </button>
-
-            {/* Previous Button */}
-            <button
-              onClick={() => handlePageChange("prev")}
-              disabled={currentPage === 1}
-              className={`px-3 py-1 text-sm rounded ${
-                currentPage === 1
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              Previous
-            </button>
-
-            {/* Page Numbers */}
-            {Array.from({ length: totalPages?.totalPages }, (_, i) => i + 1).map((page) => {
-              if (
-                page === 1 ||
-                page === totalPages?.totalPages ||
-                (page >= currentPage - 1 && page <= currentPage + 1)
-              ) {
-                return (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`px-3 py-1 text-sm border border-gray-300 rounded ${
-                      currentPage === page ? "bg-gray-200" : "hover:bg-gray-100"
-                    }`}
-                  >
-                    {page}
-                  </button>
-                );
-              } else if (page === currentPage - 2 || page === currentPage + 2) {
-                return (
-                  <span key={page} className="px-3 py-1 text-sm">
-                    ...
-                  </span>
-                );
-              }
-              return null;
-            })}
-
-            {/* Next Button */}
-            <button
-              onClick={() => handlePageChange("next")}
-              disabled={currentPage === totalPages}
-              className={`px-3 py-1 text-sm rounded ${
-                currentPage === totalPages
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              Next
-            </button>
-
-            {/* Last Button */}
-            <button
-              onClick={() => handlePageChange("last")}
-              disabled={currentPage === totalPages}
-              className={`px-3 py-1 text-sm rounded ${
-                currentPage === totalPages
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:bg-gray-100"
-              }`}
-            >
-              Last
-            </button>
+            </select>
+            <label className="ml-2 text-[13px] font-medium text-black">entries</label>
           </div>
-        )}
+          <div className="flex items-center gap-1 text-nowrap">
+            <label htmlFor="" className="text-[14px]">Search:</label>
+            <input
+            value={search}
+            className="border outline-none w-auto text-[14px] rounded-[5px] py-1 px-2"
+            placeholder="Search..."
+            onChange={(e)=>setSearch(e.target.value)}
+            />
+          </div>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="w-full table-auto border-collapse border border-gray-300">
+            <thead className="bg-gray-200 text-black">
+              <tr>
+                {headers.map((header) => (
+                  <th
+                    key={header.key}
+                    className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center"
+                    onClick={() => handleSort(header.key)}
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="w-full text text-center">{header.display}</span>
+                      <div className="flex flex-col items-center ml-2">
+                        <FaSortUp
+                          className={`${
+                            sortConfig.key === header.key &&
+                            sortConfig.direction === "ascending"
+                              ? "text-black"
+                              : "text-gray-400"
+                          }`}
+                          style={{ marginBottom: "-6px" }}
+                        />
+                        <FaSortDown
+                          className={`${
+                            sortConfig.key === header.key &&
+                            sortConfig.direction === "descending"
+                              ? "text-black"
+                              : "text-gray-400"
+                          }`}
+                          style={{ marginTop: "-6px" }}
+                        />
+                      </div>
+                    </div>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {sortedData.map((item, index) => (
+                <tr key={index} className="border-b border-gray-300 text-center">
+                  <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">{item.sport}</td>
+                  <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">{item?.provider ? item?.provider : item.match}</td>
+                  <td
+                    className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-linkcolor"
+                    onClick={() => {
+                      if(item?.providerId){
+                        handleMarketNameClick(
+                          item?.providerId,
+                          item?.game_id,
+                          item?.userId,
+                          item?.type
+                        )
+                      }else{
+                        handleMarketNameClick(
+                          item.matchId,
+                          item.selectionId,
+                          item?.userId,
+                          item?.type
+                        );
+                      }
+                    }}
+                  >
+                    <p>
+                      {item?.type === "odds"
+                        ? "Match Odds"
+                        : item?.type === "fancy"
+                        ? item?.marketNameTwo
+                        : item?.type === "toss"
+                        ? "Toss" 
+                        : item?.type === "bookmakers"
+                        ? "Bookmaker"
+                        : item?.name}
+                    </p>
+                  </td>
+                  <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack"> 
+                    { item?.result == 'ABANDONED' ? 'ABANDONED' : item?.result == 'CANCELLED' ? 'ABANDONED' : item?.result == 'TIE' ? 'TIE' : item?.marketNameTwo ? item?.marketNameTwo : item?.result}
+                  </td>
+                  <td
+                    className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack font-semibold"
+                    style={{
+                      color: item.totalProfitLoss < 0 ? "red" : "green",
+                    }}
+                  >
+                    {item.totalProfitLoss < 0
+                      ? `-${(
+                          Math.abs(item.totalProfitLoss) + item?.totalCommission
+                        ).toFixed(2)}`
+                      : (
+                          Math.abs(item.totalProfitLoss) + item?.totalCommission
+                        ).toFixed(2)}
+                  </td>
+                  <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                    {item?.totalCommission.toFixed(2)}
+                  </td>
+                  <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
+                  {moment(item.settledTime).format("MMMM Do YYYY, h:mm:ss a")}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
+          {/* Showing entries text */}
+          <div className="text-[13px] text-gray-600 mb-2 sm:mb-0">
+            Showing{" "}
+            {totalEntries === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
+            {Math.min(currentPage * entriesToShow, totalEntries)} of {totalEntries}{" "}
+            entries
+          </div>
+
+          {/* Pagination Buttons */}
+          {totalPages?.totalPages > 1 && (
+            <div className="flex space-x-2">
+              {/* First Button */}
+              <button
+                onClick={() => handlePageChange("first")}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                First
+              </button>
+
+              {/* Previous Button */}
+              <button
+                onClick={() => handlePageChange("prev")}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === 1
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Previous
+              </button>
+
+              {/* Page Numbers */}
+              {Array.from({ length: totalPages?.totalPages }, (_, i) => i + 1).map((page) => {
+                if (
+                  page === 1 ||
+                  page === totalPages?.totalPages ||
+                  (page >= currentPage - 1 && page <= currentPage + 1)
+                ) {
+                  return (
+                    <button
+                      key={page}
+                      onClick={() => setCurrentPage(page)}
+                      className={`px-3 py-1 text-sm border border-gray-300 rounded ${
+                        currentPage === page ? "bg-gray-200" : "hover:bg-gray-100"
+                      }`}
+                    >
+                      {page}
+                    </button>
+                  );
+                } else if (page === currentPage - 2 || page === currentPage + 2) {
+                  return (
+                    <span key={page} className="px-3 py-1 text-sm">
+                      ...
+                    </span>
+                  );
+                }
+                return null;
+              })}
+
+              {/* Next Button */}
+              <button
+                onClick={() => handlePageChange("next")}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === totalPages
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Next
+              </button>
+
+              {/* Last Button */}
+              <button
+                onClick={() => handlePageChange("last")}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 text-sm rounded ${
+                  currentPage === totalPages
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:bg-gray-100"
+                }`}
+              >
+                Last
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

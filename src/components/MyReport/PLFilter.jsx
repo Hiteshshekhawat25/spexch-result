@@ -302,15 +302,15 @@ const PLFilter = ({
   };
 
   return (
-    <div className="grid grid-cols-12 gap-2 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
-      <div className="flex flex-col col-span-12 sm:col-span-2 items-start">
-        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
+    <div className="grid lg:grid-cols-10 md:grid-cols-6 grid-cols-2 md:gap-4 gap-3 sm:p-4 p-3 bg-gray-100 border border-gray-300 rounded-md mb-4">
+      <div className="flex flex-col items-start md:col-span-1 col-span-2">
+        <label className="text-[13px] font-custom font-medium text-black mb-1">
           Data Source
         </label>
         <select
           value={dataSource}
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border w-full text-[12px] sm:text-sm rounded px-10 py-1"
+          className="border w-full text-[13px] outline-none rounded px-1 py-1.5"
         >
           <option value="live">LIVE DATA</option>
           <option value="backup">BACKUP DATA</option>
@@ -319,56 +319,58 @@ const PLFilter = ({
       </div>
 
       {/* Date and Time Filters */}
-      <div className="flex flex-col col-span-8 sm:col-span-2 items-start">
-        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
-          From Date
-        </label>
-        <input
-          type="date"
-          value={fromDate}
-          onChange={(e) => dispatch(setFromDate(e.target.value))}
-          className="border w-full rounded px-2 py-1 text-[12px] sm:text-sm"
-        />
+      <div className="flex items-start gap-2 md:col-span-2 col-span-2">
+        <div className="flex-1">
+          <label className="text-[13px] font-custom font-medium text-black mb-1">
+            From Date
+          </label>
+          <input
+            type="date"
+            value={fromDate}
+            onChange={(e) => dispatch(setFromDate(e.target.value))}
+            className="border w-full rounded px-2 py-1 text-[13px] outline-none"
+          />
+        </div>
+        <div>
+          <label className="text-[13px] font-custom font-medium text-black mb-1">
+            From Time
+          </label>
+          <input
+            type="time"
+            value={fromTime}
+            onChange={(e) => dispatch(setFromTime(e.target.value))}
+            className="border w-full rounded px-1 outline-none py-1 text-[13px]"
+          />
+        </div>
       </div>
 
-      <div className="flex flex-col col-span-4 sm:col-span-2 items-start">
-        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
-          From Time
-        </label>
-        <input
-          type="time"
-          value={fromTime}
-          onChange={(e) => dispatch(setFromTime(e.target.value))}
-          className="border w-full rounded px-2 py-1 text-[12px] sm:text-sm"
-        />
-      </div>
-
-      <div className="flex flex-col col-span-8 sm:col-span-2 items-start">
-        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
-          To Date
-        </label>
-        <input
-          type="date"
-          value={toDate}
-          onChange={(e) => dispatch(setToDate(e.target.value))}
-          className="border w-full rounded px-2 py-1 text-[12px] sm:text-sm"
-        />
-      </div>
-
-      <div className="flex flex-col col-span-4 sm:col-span-2 items-start">
-        <label className="text-[12px] sm:text-sm font-custom font-medium text-black mb-1">
-          To Time
-        </label>
-        <input
-          type="time"
-          value={toTime}
-          onChange={(e) => dispatch(setToTime(e.target.value))}
-          className="border w-full rounded px-2 py-1 text-[12px] sm:text-sm"
-        />
+      <div className="flex items-start gap-2 md:col-span-2 col-span-2">
+        <div className="flex-1">
+          <label className="text-[13px] font-custom font-medium text-black mb-1">
+            To Date
+          </label>
+          <input
+            type="date"
+            value={toDate}
+            onChange={(e) => dispatch(setToDate(e.target.value))}
+            className="border w-full outline-none rounded px-2 py-1 text-[13px]"
+          />
+        </div>
+        <div>
+          <label className="text-[13px] font-custom font-medium text-black mb-1">
+            To Time
+          </label>
+          <input
+            type="time"
+            value={toTime}
+            onChange={(e) => dispatch(setToTime(e.target.value))}
+            className="border w-full outline-none rounded px-1 py-1 text-[13px]"
+          />
+        </div>
       </div>
 
       {/* Buttons */}
-      <div className="flex space-x-2 col-span-12 sm:col-span-2 items-center mt-5">
+      <div className="flex space-x-2 items-center sm:mt-5 mt-2 col-span-2">
         <button
           onClick={handleGetPL}
           className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm"

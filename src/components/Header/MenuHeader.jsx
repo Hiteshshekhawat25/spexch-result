@@ -230,7 +230,7 @@ const MenuHeader = () => {
         )}
       </div>
       <div className="xl:block hidden whitespace-nowrap">
-        <ul className="flex justify-center lg:justify-start text-lg ps-2 z-50">
+        <ul className="flex justify-center lg:justify-start text-lg ps-1 z-50">
           {menuItems.map((item, index) => (
             <li
               key={index}
@@ -239,7 +239,7 @@ const MenuHeader = () => {
               {item.name === "Logout" ? (
                 <button
                   onClick={item.onClick}
-                  className="py-1 px-1.5 ml-5 flex items-center h-full text-black border-transparent hover:border-gray-600 font-custom"
+                  className="py-1 px-1.5 ml-5 flex-1 flex items-center h-full text-black border-transparent hover:border-gray-600 font-custom"
                 >
                   {item.name}
                   <IoLogOutOutline className="inline ml-1 -mt-0.5" />

@@ -153,78 +153,76 @@ const SuperAdminForm = () => {
 
   return (
     <>
+    <div className="md:mx-0 mx-2 sm:mt-3 mt-2">
+      <div className="border border-gray-300 rounded-[5px] md:p-4 p-3 overflow-hidden bg-white">
         <form
-      onSubmit={handleSubmit}
-      className="max-w-6xl mx-auto p-4 space-y-6 bg-white shadow-md rounded"
-      >
-        <div className="flex justify-between">
-     
-
-    <div className="border border-slate-500 rounded-md max-w-44 mx-3 p-2 ">
-      <select value={sport} onChange={handleSportChange} className="w-full">
-        <option>
-          Select Sport
-        </option>
-        {sportOptions.map((sportOption)=>(
-          <option key={sportOption.id} value={sportOption.gameId}>
-            {sportOption.name}
-          </option>
-        ))}
-      </select>
-    </div>
-    <div>
-      <button type="button" className="bg-lightblue px-4 rounded-md text-white font-bold py-2" onClick={(e)=>{
-        e.stopPropagation()
-        setBannerModal(true)
-        }}>
-      Add  Banner
-        </button>
-      </div>
-        </div>
-      <div className="grid grid-cols-6 md:grid-cols-4 gap-2 p-3 md:p-0 md:gap-4">
-        {Object.keys(formData).map((key) => (
-          <div key={key} className="col-span-6 md:col-span-1">
-            <label className="block text-gray-700 text-lg font-bold mb-2 capitalize">
-              {key.replace(/([A-Z])/g, " $1")}
-            </label>
-            <input
-              type="text"
-              name={key}
-              value={formData[key] || ""} // Ensure the field is populated with data or empty
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded p-2"
-              placeholder={`Enter ${key.replace(/([A-Z])/g, " $1")}`}
-            />
-            
+          onSubmit={handleSubmit}
+          className=""
+        >
+          <div className="flex justify-between">
+            <div className=" rounded-md max-w-44">
+              <select value={sport} onChange={handleSportChange} className="w-full text-[13px] border outline-none px-4 py-2 border-gray-300 rounded-[5px]">
+                <option>
+                  Select Sport
+                </option>
+                {sportOptions.map((sportOption)=>(
+                  <option key={sportOption.id} value={sportOption.gameId}>
+                    {sportOption.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+            <button type="button" className="bg-gradient-seablue text-[14px] px-4 rounded-md text-white font-bold py-2" onClick={(e)=>{
+              e.stopPropagation()
+              setBannerModal(true)
+              }}>
+                Add Banner
+              </button>
+            </div>
           </div>
-          
-        ))}
+          <div className="grid lg:grid-cols-5 md:grid-cols-4 grid-cols-2 md:gap-4 gap-2.5 mt-4">
+            {Object.keys(formData).map((key) => (
+              <div key={key} className="">
+                <label className="text-lightblack text-[14px] capitalize">
+                  {key.replace(/([A-Z])/g, " $1")}
+                </label>
+                <input
+                  type="text"
+                  name={key}
+                  value={formData[key] || ""} // Ensure the field is populated with data or empty
+                  onChange={handleChange}
+                  className="w-full border border-gray-300 rounded p-2 sm:h-[38px] h-[35px] mt-0.5 sm:text-[14px] text-[13px] text-gray-700 outline-none"
+                  // placeholder={`Enter ${key.replace(/([A-Z])/g, " $1")}`}
+                />
+                
+              </div>
+              
+            ))}
 
-<div className="col-span-1"></div>
-
-{/* Submit button */}
-<div className="col-span-6 md:col-span-1 flex items-end">
-         
-        <button
-          type="submit"
-          className="bg-lightblue text-white px-4 py-2 rounded hover:bg-lightblue w-1/2"
-        >
-          Submit
-        </button>
+            {/* Submit button */}
+            <div className="lg:col-span-5 md:col-span-4 sm:col-span-2 col-span-2 flex justify-center items-center mt-3">
+              <button
+                type="submit"
+                className="bg-gradient-seablue font-semibold text-sm text-white px-6 py-2 rounded hover:bg-blue-600"
+              >
+                Submit
+              </button>
+            </div>
+          </div>
+          <div className="flex justify-between items-center mt-4">
+            
+            <button
+              type="button"
+              onClick={() => alert("Place Bet Allow Only In InPlay Mode")}
+              className="bg-yellow-500 text-white sm:px-6 px-3 py-2 sm:text-[14px] text-[12px] font-semibold rounded hover:bg-yellow-600"
+            >
+              Place Bet Allow Only In InPlay Mode
+            </button>
+          </div>
+        </form>
       </div>
-      </div>
-
-      <div className="flex justify-between items-center">
-        
-        <button
-          type="button"
-          onClick={() => alert("Place Bet Allow Only In InPlay Mode")}
-          className="bg-yellow-500 text-white px-6 py-2 rounded hover:bg-yellow-600"
-        >
-          Place Bet Allow Only In InPlay Mode
-        </button>
-      </div>
-    </form>
+    </div>
     {bannerModal && 
     <BannerModal 
     setImage={setImage}

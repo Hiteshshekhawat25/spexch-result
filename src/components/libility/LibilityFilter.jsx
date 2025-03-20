@@ -120,39 +120,38 @@ function LibilityFilter({
   console.log(sessions,'selectFilterData')
   return (
     <>
-       <div className="grid grid-cols-12 gap-2 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
+       <div className="grid lg:grid-cols-6 md:grid-cols-5 sm:grid-cols-2 grid-cols-1 items-end gap-3 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
           {/* Choose Type */}
-        <div className=" col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-        <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
-              Select Sport
-            </label>
-            <select className="border text-[12px] sm:text-sm w-full p-2 rounded" 
+        <div className="">
+          <label className="text-[13px] font-medium text-black mb-1">
+            Select Sport
+          </label>
+          <select className="border text-[13px] outline-none w-full p-2 rounded" 
             value={selectFilterData.sport} 
             onChange={(e)=>handleSportChange(e,'sport')}
-            >
-              <option value="">Select Sport</option>
-              {loading ? (
-                <option value="">Loading...</option>
+          >
+            <option value="">Select Sport</option>
+            {loading ? (
+              <option value="">Loading...</option>
+            ) : (
+              sportsOptions?.length > 0 ? (
+                sportsOptions.map((sportOption) => (
+                  <option key={sportOption.id} value={sportOption.gameId}>
+                    {sportOption.name}
+                  </option>
+                ))
               ) : (
-                sportsOptions?.length > 0 ? (
-                  sportsOptions.map((sportOption) => (
-                    <option key={sportOption.id} value={sportOption.gameId}>
-                      {sportOption.name}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">No Sports Available</option>
-                )
-              )}
-            </select>
-          </div>
-          
+                <option value="">No Sports Available</option>
+              )
+            )}
+          </select>
+        </div>
 
-          <div className="col-span-6 sm:col-span-2 !mt-0 mb-1 sm:mb-6">
-        <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
-              Select Match
-            </label>
-            <select className="border text-[12px] sm:text-sm w-full p-2 rounded" 
+        <div className="">
+          <label className="text-[13px] font-medium text-black mb-1">
+            Select Match
+          </label>
+          <select className="border text-[13px] w-full p-2 rounded outline-none" 
             value={selectFilterData.match} 
             onChange={(e)=>handleSportChange(e,'match')}
             >
@@ -171,68 +170,69 @@ function LibilityFilter({
                 )
               )}
             </select>
-          </div>
-          {/* Choose Sport */}
-          <div className="col-span-6 sm:col-span-2 mb-1 sm:mb-6">
-        <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
-              Select Odds
-            </label>
-            <select className="border text-[12px] sm:text-sm p-2 w-full rounded" 
-            value={selectFilterData.odds} 
-            onChange={(e)=>handleSportChange(e,'odds')}
-            >
-              <option value="">Select Odds</option>
-              {loading ? (
-                <option value="">Loading...</option>
-              ) : (
-                [{name : 'Match Odds',_id : 'odds'}, {name : 'Bookmakers',_id:'bookmakers'},{name : 'Fancy',_id :'fancy'},{name : 'Toss',_id :'toss'}].map((sport) => (
-                  <option key={sport._id} value={sport._id}>
-                    {sport.name}
-                  </option>
-                ))
-              )}
-            </select>
-          </div>
+        </div>
+
+        {/* Choose Sport */}
+        <div className="">
+          <label className="text-[13px] font-medium text-black mb-1">
+            Select Odds
+          </label>
+          <select className="border text-[13px] outline-none p-2 w-full rounded" 
+          value={selectFilterData.odds} 
+          onChange={(e)=>handleSportChange(e,'odds')}
+          >
+            <option value="">Select Odds</option>
+            {loading ? (
+              <option value="">Loading...</option>
+            ) : (
+              [{name : 'Match Odds',_id : 'odds'}, {name : 'Bookmakers',_id:'bookmakers'},{name : 'Fancy',_id :'fancy'},{name : 'Toss',_id :'toss'}].map((sport) => (
+                <option key={sport._id} value={sport._id}>
+                  {sport.name}
+                </option>
+              ))
+            )}
+          </select>
+        </div>
 
      {sessions?.length > 0 ? 
-      <div className="col-span-6 sm:col-span-2">
-          <label className="text-[12px] sm:text-sm font-medium text-black mb-1">
-              Select Sessions
-            </label>
-          <select
-            value={selectFilterData.session}
-            onChange={(e)=>handleSportChange(e,'session')}
-            id="session"
-            className="border w-full text-[12px] sm:text-sm p-2 rounded"
-          >
-            <option value="">Select Session</option>
-            {filteredSessions.filter((session) => !session.result).map((session, index) => (
-              <option key={index} value={session.marketId}>
-                {session.marketName}
-              </option>
-            ))}
-          </select>
-        </div> : <></>}
+      <div className="">
+        <label className="text-[13px] font-medium text-black mb-1">
+            Select Sessions
+          </label>
+        <select
+          value={selectFilterData.session}
+          onChange={(e)=>handleSportChange(e,'session')}
+          id="session"
+          className="border w-full text-[13px] outline-none p-2 rounded"
+        >
+          <option value="">Select Session</option>
+          {filteredSessions.filter((session) => !session.result).map((session, index) => (
+            <option key={index} value={session.marketId}>
+              {session.marketName}
+            </option>
+          ))}
+        </select>
+      </div> : <></>}
     
          
-          <div className="col-span-12 sm:col-span-2 justify-start sm:justify-center w-full sm:w-auto mt-6">
-            <button
-              onClick={()=>{
-                dispatch(liabilityBook({
-                  page : currentPage,
-                  limit : 10,
-                  sport : selectFilterData?.sport == '4' ? 'Cricket' : selectFilterData?.sport == '2' ? 'Tennis' : 'Soccer' ,
-                  type : selectFilterData?.odds,
-                  matchId : selectFilterData?.match,
-                  sessionId : selectFilterData?.session,
-                  status : selectFilterData?.status
-                 }))
-              }}
-              className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm w-full sm:w-auto sm:px-8"
-            >
-              Get Bets
-            </button>
-          </div>
+      <div className=" justify-start sm:justify-center w-full sm:w-auto sm:mt-0 mt-2">
+        <button
+          onClick={()=>{
+            dispatch(liabilityBook({
+              page : currentPage,
+              limit : 10,
+              sport : selectFilterData?.sport == '4' ? 'Cricket' : selectFilterData?.sport == '2' ? 'Tennis' : 'Soccer' ,
+              type : selectFilterData?.odds,
+              matchId : selectFilterData?.match,
+              sessionId : selectFilterData?.session,
+              status : selectFilterData?.status
+              }))
+          }}
+          className="px-4 py-2 bg-gradient-seablue text-white rounded-md text-sm font-semibold w-auto sm:px-8"
+        >
+          Get Bets
+        </button>
+      </div>
 
           {/* <div className=' sm:col-span-4 w-full items-end col-span-12'>
             <div className='flex gap-x-4 justify-end items-center'>

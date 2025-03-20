@@ -67,102 +67,102 @@ function BannerModal({ onCancel, image, setImage }) {
     return (
         <>
             <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-                <div className="bg-white rounded-lg w-[850px] mt-20">
-                    <div className="flex justify-between items-center bg-gradient-blue text-white text-lg font-custom font-semibold w-full p-2">
-                        <span>Add Banner</span>
+                <div className="bg-white rounded-md overflow-hidden lg:w-[850px] md:w-[700px] w-[96%] sm:mt-12 mt-4">
+                    <div className="flex justify-between items-center bg-gradient-blue text-white font-semibold w-full p-2">
+                        <div className='text-[15px]'>Add Banner</div>
                         <IoClose
                             onClick={onCancel}
                             className="cursor-pointer text-white text-2xl"
                         />
                     </div>
-                    <div className='bg-white items-center p-3'>
+                    <div className='md:p-4 p-3 overflow-y-auto'>
                         <div className='flex  gap-3'>
-                            <label>
-                                <input
-                                    className='w-[100px]'
-                                    type='file'
-                                    // multiple
-                                    onChange={handleChange}
-                                />
-                            </label>
-                          {imageUrl && 
-                            <div>
-                                <img
-                                src={imageUrl}
-                                className='h-24 w-full'
-                                />
-                            </div> }
-                        <div className='flex w-full justify-end '>
-                            <button className='bg-sky-500 max-h-12 rounded text-white font-bold  py-2 px-4' 
-                            onClick={handleSubmit}
-                            >
-                              {update?._id ? 'Update' : 'Add' }
-                            </button>
+                        <label className='text-[14px'>
+                            <input
+                                className='w-[100px]'
+                                type='file'
+                                // multiple
+                                onChange={handleChange}
+                            />
+                        </label>
+                        {imageUrl && 
+                        <div>
+                            <img
+                            src={imageUrl}
+                            className='h-24 w-full'
+                            />
+                        </div> }
+                            <div className='flex w-full justify-end '>
+                                <button className='bg-gradient-seablue max-h-12 rounded text-white font-bold text-[14px] py-2 px-4' 
+                                onClick={handleSubmit}
+                                >
+                                {update?._id ? 'Update' : 'Add' }
+                                </button>
+                            </div>
                         </div>
+                        <div className=' h-[400px] overflow-auto mt-4'>
+                            <table className='w-full'>
+                                <thead>
+                                    <tr className='bg-gray-200'>
+                                        <th className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente'>
+                                            SR no.
+                                        </th>
+                                        <th className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente'>
+                                            Banners
+                                        </th>
+                                        <th className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente'>
+                                            Actions
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        image?.url?.length > 0 ?
+                                    image?.url?.map((item,index)=>(
+                                    <tr>
+                                        <td className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center'>
+                                            {index+1}
+                                        </td>
+                                        <td className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center text-center'>
+                                        {item?.imageUrl ? 
+                                            <img
+                                            className='h-12 w-32 object-fill m-auto'
+                                            src={item?.imageUrl}
+                                            /> : 
+                                            <span className='h-12 items-center text-nowrap'>
+                                                No Banner, Please Update
+                                            </span>
+                                            }
+                                        </td>
+                                        <td className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center'>
+                                            <div className='flex gap-2 justify-center'>
+                                            <button 
+                                            className='bg-lightblue px-3 py-1 font-bold text-white rounded'
+                                            onClick={()=>{
+                                                setUpdate(item)
+                                                setImageUrl(item?.imageUrl)
+                                                }}>
+                                                Update
+                                            </button>
+                                            <button 
+                                            className='bg-red-500 px-3 py-1 font-bold text-white rounded'
+                                            onClick={()=>{
+                                                handleDelete(item)
+                                                }}>
+                                                Delete
+                                            </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    )):
+                                    <div>
+                                        No Data Found!
+                                    </div>
+                                
+                                }
+                                </tbody>
+                            </table>
                         </div>
-                    </div>
-                    <div className=' h-[400px] overflow-auto'>
-                        <table className='w-full'>
-                            <thead>
-                                <tr>
-                                    <th className='text-center border border-gray-800 bg-gray-400'>
-                                        SR no.
-                                    </th>
-                                    <th className='text-center border border-gray-800 bg-gray-400'>
-                                        Banners
-                                    </th>
-                                    <th className='text-center border border-gray-800 bg-gray-400'>
-                                        Actions
-                                    </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    image?.url?.length > 0 ?
-                                image?.url?.map((item,index)=>(
-                                <tr>
-                                    <td className='text-center  border border-gray-400'>
-                                        {index+1}
-                                    </td>
-                                    <td className='flex justify-center items-center text-center  border border-gray-400 py-1 '>
-                                    {item?.imageUrl ? 
-                                        <img
-                                        className='h-12 w-32 object-fill'
-                                        src={item?.imageUrl}
-                                        /> : 
-                                        <span className='h-12 items-center text-nowrap'>
-                                            No Banner, Please Update
-                                        </span>
-                                        }
-                                    </td>
-                                    <td className='text-center border  border-gray-400 py-1'>
-                                        <div className='flex gap-2 justify-center'>
-                                        <button 
-                                        className='bg-lightblue px-3 py-1 font-bold text-white rounded'
-                                        onClick={()=>{
-                                            setUpdate(item)
-                                            setImageUrl(item?.imageUrl)
-                                            }}>
-                                            Update
-                                        </button>
-                                        <button 
-                                        className='bg-red-500 px-3 py-1 font-bold text-white rounded'
-                                        onClick={()=>{
-                                            handleDelete(item)
-                                            }}>
-                                            Delete
-                                        </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                )):
-                                <div>
-                                    No Data Found!
-                                </div>
-                            
-                            }
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>

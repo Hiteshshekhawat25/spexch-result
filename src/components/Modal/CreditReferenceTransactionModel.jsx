@@ -119,7 +119,7 @@ const CreditReferenceTransactionModel = ({
   const pagination = data?.pagination || { totalPages: 1 };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-start justify-center z-50 md:pt-8 pt-5">
       <div
         ref={modalRef}
         className="bg-white rounded-lg shadow-lg p-0 w-[95%] sm:w-[80%] relative"
@@ -175,7 +175,7 @@ const CreditReferenceTransactionModel = ({
             <div className=" overflow-auto">
               <table className="table-auto w-full border-collapse border border-gray-300">
                 <thead>
-                  <tr className="bg-gray-100">
+                  <tr className="bg-gray-200">
                     {/* Table Header with Sorting Arrows */}
                     <th
                       className="border border-gray-300 px-2 py-2 cursor-pointer font-custom text-[13px] text-center"
@@ -353,35 +353,35 @@ const CreditReferenceTransactionModel = ({
 
         {/* Pagination Controls */}
 
-        <div className="flex items-center justify-between sm:mt-4 mt-3 sm:p-4 p-3">
+        <div className="flex items-center justify-between sm:flex-row flex-col sm:p-4 p-3 !pt-0">
           <p className="text-sm text-gray-600">
             Page {currentPage} of {pagination.totalPages}
           </p>
           <div className="flex space-x-2 sm:ml-auto">
             <button
               onClick={() => handlePageChange(1)}
-              className="px-3 py-1 text-gray-600 rounded text-sm "
+              className="px-3 py-1 text-gray-600 rounded text-[13px] "
               disabled={currentPage === 1}
             >
               First
             </button>
             <button
               onClick={() => handlePageChange(currentPage - 1)}
-              className="px-3 py-1 text-gray-600 rounded text-sm "
+              className="px-3 py-1 text-gray-600 rounded text-[13px] "
               disabled={currentPage === 1}
             >
               Previous
             </button>
             <button
               onClick={() => handlePageChange(currentPage + 1)}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-[13px]"
               disabled={currentPage === pagination.totalPages}
             >
               Next
             </button>
             <button
               onClick={() => handlePageChange(pagination.totalPages)}
-              className="px-3 py-1 text-gray-600 rounded text-sm"
+              className="px-3 py-1 text-gray-600 rounded text-[13px]"
               disabled={currentPage === pagination.totalPages}
             >
               Last
