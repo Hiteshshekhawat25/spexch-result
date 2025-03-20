@@ -9,7 +9,7 @@ import { getUserData } from "../../Services/UserInfoApi";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import spexec from "../../assets/spexchlogo.png";
 import { FaSyncAlt } from "react-icons/fa";
-import { MdRefresh } from "react-icons/md";
+import { FaArrowRotateLeft } from "react-icons/fa6";
 
 const TopHeader = () => {
   const dispatch = useDispatch();
@@ -60,7 +60,7 @@ const TopHeader = () => {
   return (
     <div className="w-full bg-gradient-blue text-white md:py-[19px] py-4 md:px-4 px-3 lg:px-[35px] flex justify-between items-center">
       <div className="flex items-center justify-between w-full lg:w-auto">
-        <div className="text-xl font-bold flex-shrink-0 md:h-[40px] h-[30px]">
+        <div className="text-xl font-bold flex-shrink-0 md:h-[40px] h-[35px]">
           <Link to="/">
             <img src={spexec} alt="Logo" className="h-full" />
           </Link>
@@ -73,10 +73,10 @@ const TopHeader = () => {
           ) : userData ? (
             <div className="flex flex-col items-end gap-2">
               <div className="flex items-center space-x-1">
-                <span className="bg-gray-800 text-white text-[9px] font-custom py-1 px-2 rounded-md">
+                <span className="bg-[linear-gradient(180deg,_#2e2e2e,_#282828_42%,_#2e2e2e)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)] text-white text-[10px] font-custom py-[2px] px-1 rounded">
                   {userData?.data?.role_name?.toUpperCase()}
                 </span>
-                <span className="text-white md:text-sm text-[13px] font-custom font-bold px-1 rounded-md">
+                <span className="text-white text-[13px]  font-custom font-bold px-1 rounded-md">
                   {userData?.data?.username}
                 </span>
               </div>
@@ -89,10 +89,10 @@ const TopHeader = () => {
                 </span>
                 <button
                   onClick={refreshData}
-                  className="bg-gray-800 text-white p-1 rounded-md hover:bg-gray-700"
+                  className="bg-[linear-gradient(180deg,_#2e2e2e,_#282828_42%,_#2e2e2e)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)] text-white p-1 rounded-[2px] hover:bg-gray-700"
                   title="Refresh"
                 >
-                  <MdRefresh />
+                  <FaArrowRotateLeft />
                 </button>
               </div>
             </div>
@@ -114,10 +114,10 @@ const TopHeader = () => {
         ) : userData ? (
           <>
             <div className="flex items-center gap-1 mb-1 lg:mb-0">
-              <span className="bg-gray-800 text-white text-[10px] font-custom py-0.5 px-1 rounded-md">
+              <span className="bg-[linear-gradient(180deg,_#2e2e2e,_#282828_42%,_#2e2e2e)] text-white shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)] text-[10px] font-custom py-0.5 px-1 rounded-md">
                 {userData?.data?.role_name?.toUpperCase()}
               </span>
-              <span className="text-white md:text-sm text-[13px] font-custom font-bold px-1 rounded-md">
+              <span className="text-white text-[13px] font-custom font-bold px-1 rounded-md">
                 {userData?.data?.username}
               </span>
             </div>
@@ -130,10 +130,10 @@ const TopHeader = () => {
               </span>
               <button
                 onClick={refreshData}
-                className="bg-gray-800 text-white p-1 rounded-md hover:bg-gray-700"
+                className="bg-[linear-gradient(180deg,_#2e2e2e,_#282828_42%,_#2e2e2e)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.4)]  text-white p-1 rounded-[2px] hover:bg-gray-700"
                 title="Refresh"
               >
-                <MdRefresh />
+                <FaArrowRotateLeft />
               </button>
             </div>
           </>

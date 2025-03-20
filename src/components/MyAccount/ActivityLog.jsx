@@ -140,13 +140,12 @@ const ActivityLog = ({ Userid }) => {
   };
 
   return (
-    <div className="border border-gray-400 rounded-lg bg-white shadow-sm">
-      <div className="bg-gradient-seablue text-white py-3 px-4 rounded-t-lg">
-        <h1 className="text-xl font-semibold">Activity Log</h1>
-      </div>
-
+    <div className="border border-gray-400 rounded-[5px] bg-white shadow-sm overflow-hidden">
+      <h1 className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
+        Activity Log
+      </h1>
       <div className="p-4">
-        <div className="border border-gray-300 p-2 rounded-md mb-4 flex flex-col sm:flex-row sm:items-center">
+        <div className="rounded-md mb-4 flex flex-col sm:flex-row sm:items-center">
           <label className="mr-2 text-sm font-medium">Show</label>
           <select
             value={entriesToShow}
@@ -166,31 +165,31 @@ const ActivityLog = ({ Userid }) => {
           <table className="w-full border-collapse text-sm">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border border-gray-400 px-4 py-2 text-left">
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                   Login Date & Time
                 </th>
-                <th className="border border-gray-400 px-4 py-2 text-left">
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                   Login Status
                 </th>
-                <th className="border border-gray-400 px-4 py-2 text-left">
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                   IP Address
                 </th>
-                {/* <th className="border border-gray-400 px-4 py-2 text-left">
+                {/* <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                   ISP
                 </th> */}
-                <th className="border border-gray-400 px-4 py-2 text-left">
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
                   City/State/Country
                 </th>
               </tr>
             </thead>
             <tbody>
               {logs.map((log, index) => (
-                <tr key={index} className="hover:bg-gray-100">
-                  <td className="border border-gray-400 px-4 py-2">
+                <tr key={index} className="hover:bg-gray-100 text-center">
+                  <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                     {formatDateTime(log.loginDateTime)}
                   </td>
                   <td
-                    className={`border border-gray-400 px-4 py-2 font-semibold ${
+                    className={`sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack font-semibold ${
                       log.loginStatus === "active"
                         ? "text-green-500"
                         : "text-red-500"
@@ -200,13 +199,13 @@ const ActivityLog = ({ Userid }) => {
                       ? "Logged in successfully"
                       : "Logged in failed"}
                   </td>
-                  <td className="border border-gray-400 px-4 py-2">
+                  <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                     {log.ipAddress}
                   </td>
-                  {/* <td className="border border-gray-400 px-4 py-2">
+                  {/* <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                     {log.isp}
                   </td> */}
-                  <td className="border border-gray-400 px-4 py-2">
+                  <td className="sm:px-3 px-2 py-2 text-[13px] text-nowrap border border-gray-300 text-darkblack">
                     {log.city}/{log.country}
                   </td>
                 </tr>
@@ -217,7 +216,7 @@ const ActivityLog = ({ Userid }) => {
 
         <div className="flex justify-between items-center mt-4 flex-col sm:flex-row">
           {/* Showing entries text */}
-          <div className="text-sm text-gray-600 mb-2 sm:mb-0">
+          <div className="text-[13px] text-gray-600 mb-2 sm:mb-0">
             Showing{" "}
             {totalRecords === 0 ? 0 : (currentPage - 1) * entriesToShow + 1} to{" "}
             {Math.min(currentPage * entriesToShow, totalRecords)} of{" "}

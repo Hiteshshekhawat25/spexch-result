@@ -37,7 +37,9 @@ module.exports = {
         theme5: '#72bbef',
         theme6: '#faa9ba',
         theme7: '#14213d',
-
+        lightblack:'#1e1e1e',
+        darkblack:'#212529',
+        linkcolor: '#2789ce'
       },
       backgroundImage: {
         'gradient-green': 'linear-gradient(#a4dc60 0%, #4f9f21 100%)',

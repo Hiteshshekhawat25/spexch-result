@@ -55,9 +55,9 @@ const AddClientButton = () => {
         location.pathname === "/master-downline-list" && (
           <button
             onClick={handleOpenDialog}
-            className="px-3 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold text-[14px]"
+            className="px-5 py-[5px] bg-[#fffefe] text-lightblack rounded border border-gray-400/70 flex items-center gap-2 hover:bg-gray-200 font-bold font-custom text-[12px]"
           >
-            <FaUserPlus />
+            <FaUserPlus className="text-[16px]" />
             {buttonText}
           </button>
         )}
@@ -65,14 +65,14 @@ const AddClientButton = () => {
       {location.pathname !== "/master-downline-list" && (
         <button
           onClick={handleOpenDialog}
-          className="px-3 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200 font-bold text-[14px]"
+          className="px-5 py-[5px] bg-[#fffefe] text-lightblack rounded border border-gray-400/70 flex items-center gap-2 hover:bg-gray-200 font-bold font-custom text-[12px]"
         >
-          <FaUserPlus />
+          <FaUserPlus className="text-[16px]" />
           {buttonText}
         </button>
       )}
 
-      <button className="px-3 h-8 bg-white text-black rounded border border-black flex items-center gap-2 hover:bg-gray-200">
+      <button className="px-1.5 py-[5px] bg-[#fffefe] text-lightblack rounded border  border-gray-400/70 flex items-center gap-2 hover:bg-gray-200">
         <RiResetLeftLine />
       </button>
 

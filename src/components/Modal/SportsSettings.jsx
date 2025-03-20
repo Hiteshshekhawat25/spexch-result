@@ -71,7 +71,7 @@ const SportsSettingsModal = ({
     <>
       {isOpen && (
         <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-          <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-12">
+          <div className="bg-white rounded-lg w-[95%] sm:w-[500px] sm:mt-12 mt-3">
             {/* Header */}
             <div className="flex justify-between items-center bg-gradient-blue rounded-t-lg text-white text-[14px] font-custom font-semibold w-full p-2">
               <span>Sports Settings</span>
@@ -110,7 +110,7 @@ const SportsSettingsModal = ({
                           index % 2 === 0 ? "bg-white" : "bg-gray-50"
                         }`}
                       >
-                        <td className="border border-gray-400 px-4 py-2 text-center font-custom text-[13px]">
+                        <td className="border border-gray-400 px-4 py-2 text-start font-custom text-[13px]">
                           {index + 1}
                         </td>
                         <td className="border border-gray-400 px-4 py-2 text-left text-[13px]">
@@ -122,7 +122,7 @@ const SportsSettingsModal = ({
                         <div
                         className={`relative inline-flex items-center rounded-[3px] h-[22px] w-[40px] border border-whiteGray cursor-pointer transition-colors ${
                           sport?.isChecked
-                            ? "bg-green-400"
+                            ? "bg-gradient-blue"
                             : "bg-white"
                         }`}
                         onClick={() =>

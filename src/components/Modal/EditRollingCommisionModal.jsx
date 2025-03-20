@@ -89,41 +89,37 @@ const EditRollingCommissionModal = ({ username,userId, onCancel, onSubmit }) => 
           {["fancy", "matka", "casino", "binary", "sportbook", "bookmaker"].map((field) => (
             
             <div key={field} className="flex flex-col lg:flex-row items-center space-y-2 lg:space-x-3 lg:space-y-0">
-  <label className="text-xs font-custom text-gray-700 capitalize w-full lg:w-1/3">{field}</label>
-  <input
-    type="number"
-    name={field}
-    value={fields[field] || 0} 
-    onChange={handleChange}
-    className="w-full lg:w-2/3 p-1.5 border border-gray-300 rounded text-xs h-[35px]"
-    placeholder={`Enter ${field} value`}
-  />
-</div>
+              <label className="text-xs font-custom text-gray-700 capitalize w-full lg:w-1/3">{field}</label>
+              <input
+                type="number"
+                name={field}
+                value={fields[field] || 0} 
+                onChange={handleChange}
+                className="w-full lg:w-3/3 p-1.5 border border-gray-300 rounded text-xs h-[35px]"
+                placeholder={`Enter ${field} value`}
+              />
+            </div>
 
           ))}
-
-          
-<div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-x-3 lg:space-y-0">
-  <label className="text-xs font-custom font-semibold text-gray-700 w-full lg:w-1/3">Password <span className="text-red-600">*</span></label>
-  <div className="relative w-full lg:w-2/3">
-    <input
-      type={showPassword ? "text" : "password"}
-      name="password"
-      value={passwordField || ""} 
-      onChange={handlePasswordChange}
-      className="w-full p-1.5 border border-gray-300 rounded text-xs h-[35px]"
-      placeholder="Enter your password"
-    />
-    <div
-      className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
-      onClick={togglePasswordVisibility}
-    >
-      {showPassword ? <IoEyeOffOutline className="text-blue" /> : <IoEyeOutline className="text-blue" />}
-    </div>
-  </div>
-</div>
-
-
+          <div className="flex flex-col lg:flex-row items-center space-y-2 lg:space-x-3 lg:space-y-0">
+            <label className="text-xs font-custom text-gray-700 w-full lg:w-1/3">Password </label>
+            <div className="relative w-full lg:w-3/3">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={passwordField || ""} 
+                onChange={handlePasswordChange}
+                className="w-full p-1.5 border border-gray-300 rounded text-xs h-[35px]"
+                placeholder="Enter your password"
+              />
+              <div
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 cursor-pointer"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <IoEyeOffOutline className="text-blue" /> : <IoEyeOutline className="text-blue" />}
+              </div>
+            </div>
+          </div>
           {error && <div className="text-red-600 text-xs mt-2">{error}</div>}
 
           <div className="flex justify-end mt-3 space-x-2 md:pt-0 pt-3">

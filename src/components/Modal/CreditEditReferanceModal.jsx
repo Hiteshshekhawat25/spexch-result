@@ -135,7 +135,7 @@ const CreditEditReferenceModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-    <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-12 sm:mt-12">
+    <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-3 sm:mt-12">
       {/* Header */}
       <div className="flex justify-between items-center rounded-t-lg bg-gradient-blue text-white text-[15px] font-custom font-semibold w-full px-3 py-2">
         <span>Edit Credit Reference - {username}</span>
@@ -146,16 +146,17 @@ const CreditEditReferenceModal = ({
       </div>
   
       {/* Form */}
-      <form onSubmit={handleSubmit} className="gap-5 flex flex-col p-5">
+      <form onSubmit={handleSubmit} className="gap-4 flex flex-col sm:p-5 p-4">
         {/* Current Credit Reference */}
         <div className="flex flex-row justify-between md:gap-0 gap-3 items-center md:w-[80%]">
           <label className="block text-[13px] font-custom font-medium text-gray-700 sm:w-1/3">
             Current
           </label>
           <p className="w-full sm:w-2/3 text-black font-custom font-bold text-[14px]">{new Intl.NumberFormat("en-IN", {
-                              minimumFractionDigits: 0,
-                              maximumFractionDigits: 2,
-                            }).format(currentCreditRef)}</p>
+              minimumFractionDigits: 0,
+              maximumFractionDigits: 2,
+            }).format(currentCreditRef)}
+          </p>
         </div>
   
         {/* New Credit Reference */}
@@ -193,7 +194,6 @@ const CreditEditReferenceModal = ({
             </div>
           </div>
         </div>
-
       
         <div className="flex justify-end gap-3 md:mt-7 mt-4">
          
@@ -208,7 +208,7 @@ const CreditEditReferenceModal = ({
           <button
             type="button"
             onClick={onCancel} // Call onCancel to close the modal
-            className="px-3 py-[6px] bg-gray-400 font-bold text-[14px] text-gray-700 rounded-md font-custom"
+            className="px-3 py-[6px] bg-gray-400 font-bold text-[14px] text-darkblack rounded-md font-custom"
           >
             Cancel
           </button>

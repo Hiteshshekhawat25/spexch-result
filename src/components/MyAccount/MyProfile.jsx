@@ -154,7 +154,7 @@ const MyProfile = ({ Userid, Role }) => {
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Commission</span>
           <div className=" sm:py-0 py-3 flex">
             <span className="text-left sm:ml-4">{profile.commission}%</span>
-            {((userData?.data?._id == profile?.createdBy) || profile?.createdBy == 'self' )&&  (
+            {((userData?.data?._id == profile?.createdBy))&&  (
               <span className="text-left sm:ml-4 flex items-center">
                 <FaEdit
                   className="ml-2 text-blue cursor-pointer"
@@ -166,7 +166,7 @@ const MyProfile = ({ Userid, Role }) => {
         </div>
         <div className="flex border-b sm:py-3 px-0 sm:flex-row flex-col">
           <span className="font-custom sm:w-48 sm:py-0 py-4 font-bold text-[13px] sm:border-b-0 border-b">Rolling Commission</span>
-        {((userData?.data?._id == profile?.createdBy) || !profile?.createdBy )  && 
+        {((userData?.data?._id == profile?.createdBy) || profile?.createdBy == 'self' )  && 
          <div className="flex sm:py-0 py-4">
             <span className="text-left sm:ml-4  flex items-center">
               <FaEdit

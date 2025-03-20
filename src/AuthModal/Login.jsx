@@ -98,8 +98,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-black md:p-6 sm:p-4 p-2.5">
-      <div className="w-full max-w-xl md:p-12 sm:p-8 p-3 bg-gradient-black rounded-md shadow-2xl md:min-h-[450px]">
+    <div className="flex sm:items-center justify-center min-h-screen bg-gradient-black md:p-6 sm:p-4 p-2.5">
+      <div className="w-full max-w-xl sm:mt-0 mt-20 md:p-12 sm:p-8 p-4 bg-gradient-black rounded-md shadow-[0_5px_20px_rgba(0,0,0,0.5)] md:min-h-[450px]">
         <h1 className="text-3xl font-custom text-center text-white mb-6 mt-5">
           Spexch  
         </h1>

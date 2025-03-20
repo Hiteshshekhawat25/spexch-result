@@ -67,72 +67,72 @@ const ScoreModal = ({ onCancel, match }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-start z-50">
-      <div className="bg-white rounded-lg w-[800px] p-5 mt-12">
-        {/* Gray Header with Close Icon */}
-        <div className="bg-whiteGray p-3 rounded-t-lg flex justify-end items-center">
+      <div className="relative bg-white rounded-lg sm:mt-6 mt-3 shadow-lg w-[96%] md:w-3/4 lg:w-2/4">
+        <div className="flex justify-end items-center rounded-t-lg bg-gradient-blue text-white text-[15px] font-custom font-semibold w-full px-3 py-2">
           <IoClose
             onClick={onCancel}
             className="cursor-pointer text-white text-2xl"
           />
         </div>
-
         {/* Modal Content */}
-        <div className="grid grid-cols-2 gap-6 mt-4">
-          {/* Left Column - Score ID */}
-          <div className="space-y-4">
-            <div className="flex flex-col">
-              <label className="text-md font-custom text-gray-700">SCORE ID</label>
-              <input
-                type="text"
-                value={newScoreId}
-                onChange={(e) => setNewScoreId(e.target.value)}
-                className="w-full p-2 mt-1 border border-gray-300 rounded-lg"
-              />
+        <div className="sm:p-4 p-3 overflow-y-auto h-full">
+          <div className="grid sm:grid-cols-2 gap-6 mt-4">
+            {/* Left Column - Score ID */}
+            <div className="space-y-4">
+              <div className="flex flex-col">
+                <label className="font-custom text-[14px] text-gray-800">SCORE ID</label>
+                <input
+                  type="text"
+                  value={newScoreId}
+                  onChange={(e) => setNewScoreId(e.target.value)}
+                  className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none text-sm"
+                />
+                <div className="flex justify-end mt-2">
+                  <button
+                    onClick={handleUpdateScoreId}
+                    className="py-2 px-4 bg-gradient-seablue text-sm font-semibold text-white rounded-md hover:bg-blue-600"
+                  >
+                    Update Score ID
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Column - Teams */}
+            <div className="sm:space-y-4 space-y-3">
+              <div className="flex sm:space-x-6 space-x-4">
+                {/* Team 1 */}
+                <div className="flex flex-col w-1/2">
+                  <label className="font-custom text-sm text-gray-800">TEAM 1</label>
+                  <input
+                    type="text"
+                    value={newTeam1Name}
+                    onChange={(e) => setNewTeam1Name(e.target.value)}
+                    className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none text-sm"
+                  />
+                </div>
+
+                {/* Team 2 */}
+                <div className="flex flex-col w-1/2">
+                  <label className="font-custom text-sm text-gray-800">TEAM 2</label>
+                  <input
+                    type="text"
+                    value={newTeam2Name}
+                    onChange={(e) => setNewTeam2Name(e.target.value)}
+                    className="w-full p-2 mt-1 border border-gray-300 rounded-md outline-none text-sm"
+                  />
+                </div>
+              </div>
+
+              {/* Update Button */}
               <div className="flex justify-end mt-2">
                 <button
-                  onClick={handleUpdateScoreId}
-                  className="py-2 px-4 bg-lightblue text-white rounded-md hover:bg-blue-600"
+                  onClick={handleUpdateTeams}
+                  className="py-2 px-4 bg-gradient-seablue font-semibold text-sm text-white rounded-md hover:bg-blue-600"
                 >
-                  Update Score ID
+                  Update Teams
                 </button>
               </div>
-            </div>
-          </div>
-
-          {/* Right Column - Teams */}
-          <div className="space-y-4">
-            <div className="flex space-x-6">
-              {/* Team 1 */}
-              <div className="flex flex-col w-1/2">
-                <label className="text-md font-custom text-gray-700">TEAM 1</label>
-                <input
-                  type="text"
-                  value={newTeam1Name}
-                  onChange={(e) => setNewTeam1Name(e.target.value)}
-                  className="w-full p-2 mt-1 border border-gray-300 rounded-lg"
-                />
-              </div>
-
-              {/* Team 2 */}
-              <div className="flex flex-col w-1/2">
-                <label className="text-md font-custom text-gray-700">TEAM 2</label>
-                <input
-                  type="text"
-                  value={newTeam2Name}
-                  onChange={(e) => setNewTeam2Name(e.target.value)}
-                  className="w-full p-2 mt-1 border border-gray-300 rounded-lg"
-                />
-              </div>
-            </div>
-
-            {/* Update Button */}
-            <div className="flex justify-end mt-2">
-              <button
-                onClick={handleUpdateTeams}
-                className="py-2 px-4 bg-lightblue text-white rounded-md hover:bg-blue-600"
-              >
-                Update Teams
-              </button>
             </div>
           </div>
         </div>

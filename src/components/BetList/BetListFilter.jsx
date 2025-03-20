@@ -117,7 +117,7 @@ const BetListFilter = ({
   }, [type, sport, fromDate, toDate, currentPage, entriesToShow, userID]);
 
   return (
-    <div className="grid xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-3 grid-cols-2 flex-wrap items-end gap-4 mb-4 p-4 bg-gray-100 border border-gray-300 rounded-md">
+    <div className="grid xl:grid-cols-6 lg:grid-cols-5 md:grid-cols-3 grid-cols-1 flex-wrap items-end gap-4 mb-4 md:p-4 p-3 bg-[#e0e6e6] border border-black rounded-md">
       
       {/* Show Data Source select box only for "settled" or "void" bet type */}
       {type !== "unsettled" && (
@@ -128,7 +128,7 @@ const BetListFilter = ({
           <select
             value={dataSource || "live"}
             onChange={(e) => dispatch(setDataSource(e.target.value))}
-            className="border rounded text-sm md:px-5 px-2 py-2"
+            className="border rounded text-sm px-2 py-2 w-full outline-none"
           >
             <option value="">Data Source</option>
             <option value="live">LIVE DATA</option>
@@ -146,7 +146,7 @@ const BetListFilter = ({
         <select
           value={type}
           onChange={(e) => dispatch(setType(e.target.value))}
-          className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-2"
+          className="border rounded px-2 py-2 text-sm w-full sm:w-auto sm:px-2 outline-none"
         >
           <option value="settled">Settle</option>
           <option value="unsettled">UnSettle</option>
@@ -162,7 +162,7 @@ const BetListFilter = ({
         <select
           value={sport}
           onChange={(e) => dispatch(setSport(e.target.value))}
-          className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-2"
+          className="border rounded px-2 py-2 text-sm w-full sm:w-auto sm:px-2 outline-none"
         >
           <option value="">Select Sport</option>
           {sportsOptions.map((sport) => (
@@ -180,7 +180,7 @@ const BetListFilter = ({
           type="date"
           value={fromDate}
           onChange={(e) => dispatch(setFromDate(e.target.value))}
-          className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-2"
+          className="border rounded px-2 py-2 text-sm w-full sm:w-auto sm:px-2 outline-none"
         />
       </div>
 
@@ -191,12 +191,12 @@ const BetListFilter = ({
           type="date"
           value={toDate}
           onChange={(e) => dispatch(setToDate(e.target.value))}
-          className="border rounded px-4 py-2 text-sm w-full sm:w-auto sm:px-2"
+          className="border rounded px-2 py-2 text-sm w-full sm:w-auto sm:px-2 outline-none"
         />
       </div>
 
       {/* Buttons */}
-      <div className="flex justify-start sm:justify-center w-full sm:w-auto sm:mt-0">
+      <div className="flex w-full sm:w-auto sm:mt-0 mt-2">
         <button
           onClick={handleGetHistory}
           className="px-3 w-auto py-2 bg-gradient-seablue font-bold font-custom text-white rounded-md text-sm mb-0.5 sm:px-5"

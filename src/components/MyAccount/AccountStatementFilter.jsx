@@ -110,15 +110,15 @@ const AccountStatementFilter = ({
   };
 
   return (
-    <div className="grid lg:grid-cols-5 md:grid-cols-4 sm:grid-cols-2 grid-cols-1 flex-wrap items-end md:gap-4 gap-3.5 p-4 bg-gray-100 border border-gray-300 rounded-md mb-4">
+    <div className="grid lg:grid-cols-5 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 flex-wrap items-end md:gap-4 gap-3.5 p-3 bg-[#e0e6e6] border border-black rounded-[4px] mb-4">
       <div className="flex flex-col items-start">
-        <label className="text-sm font-custom text-black mb-2">
+        <label className="text-[13px] font-custom text-black mb-2">
           Data Source
         </label>
         <select
           value={dataSource || "live"} // Default to "live" if dataSource is empty
           onChange={(e) => dispatch(setDataSource(e.target.value))}
-          className="border rounded px-3 py-1 h-[38px] text-[14px] outline-none w-full"
+          className="border rounded px-2 py-1 h-[38px] text-[14px] outline-none w-full"
         >
           <option value="">Data Source</option>
           <option value="live">LIVE DATA</option>
@@ -127,7 +127,7 @@ const AccountStatementFilter = ({
         </select>
       </div>
       <div className="flex flex-col items-start">
-        <label className="text-sm font-custom text-black mb-1">From</label>
+        <label className="text-[13px] font-custom text-black mb-1">From</label>
         <input
           type="date"
           value={fromDate || today}
@@ -136,7 +136,7 @@ const AccountStatementFilter = ({
         />
       </div>
       <div className="flex flex-col items-start">
-        <label className="text-sm font-custom text-black mb-1">To</label>
+        <label className="text-[13px] font-custom text-black mb-1">To</label>
         <input
           type="date"
           value={toDate || today}
@@ -147,7 +147,7 @@ const AccountStatementFilter = ({
       <div className="flex space-x-1 items-center mt-4">
         <button
           onClick={handleGetStatement}
-          className="px-4 py-[9px] bg-gradient-seablue text-white rounded-md text-sm"
+          className="px-4 py-[9px] bg-gradient-seablue font-semibold text-white rounded-md text-sm"
         >
           Get Statement
         </button>

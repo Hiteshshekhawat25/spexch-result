@@ -184,6 +184,7 @@ function Libility({ Userid }) {
 
   return (
     <>
+    <div className="md:mx-0 mx-2 sm:mt-3 mt-2">
       <LibilityFilter
         setTotalBets={(total) => setTotalBets(total)}
         setTotalPages={(total) => setTotalPages(total)}
@@ -217,9 +218,9 @@ function Libility({ Userid }) {
       ) : error ? (
         <div className="text-red-500">{error}</div>
       ) : (
-        <div className="overflow-x-auto p-4">
-          <table className="w-full table-auto border-collapse border border-gray-400 p-2">
-            <thead className="border border-gray-400 bg-gray-300 text-black text-center">
+        <div className="overflow-x-auto sm:mt-8 mt-6">
+          <table className="w-full table-auto border-collapse border border-gray-300 p-2">
+            <thead className="border border-gray-300 bg-gray-200 text-black text-center">
               <tr className="text-center">
                 {[
                   "sportName",
@@ -233,10 +234,10 @@ function Libility({ Userid }) {
                 ].map((key) => (
                   <th
                     key={key}
-                    className="border border-gray-400 text-left px-4 text-sm font-medium text-black cursor-pointer p-1"
+                    className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center"
                     onClick={() => handleSort(key)}
                   >
-                    <div className="flex flex-col border-b  border-gray-300 pb-2">
+                    <div className="flex flex-col">
                       <div className="text-center items-center">
                         <span>
                           {key === "sportName"
@@ -302,31 +303,31 @@ function Libility({ Userid }) {
                   
 
                     <td
-                      className="border border-gray-400 px-4 py-3 font-bold text-blue cursor-pointer"
+                      className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-linkcolor font-semibold cursor-pointer text-center"
                     >
                       {item.sport}
                     </td>
 
-                    <td className="border border-gray-400 text-lightblue font-bold px-4 py-3"
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-linkcolor font-semibold cursor-pointer text-center"
                     // onClick={()=>{
                     //   navigate(`${ROUTES_CONST.PendingMarket}/${selectFilterData?.sport}/${item?._id}`)
                     // }}
                     >
                       {item.match}
                     </td>
-                    <td className="border font-bold border-gray-400 px-4 py-3">
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center font-semibold">
                       {item?.PendingSelection?.toUpperCase()}
                     </td>
-                    <td className="border border-gray-400 px-4 py-3">
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">
                       {moment(item.createdAt).format('MMMM Do YYYY, h:mm:ss a')}
                     </td>
-                    <td className="border border-gray-400 text-yellow-500 font-medium px-4 py-3">
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-yellow-600 cursor-pointer text-center">
                       Pending...
                     </td>
                     {/* <td className="border border-gray-400 px-4 py-3">
                       {item.odds}
                     </td> */}
-                   
+                  
                     {/* <td
                       className="border border-gray-400 px-4 py-3"
                     >
@@ -335,7 +336,7 @@ function Libility({ Userid }) {
                     <td className="border border-gray-400 px-4 py-3">
                       {item?.potentialWin?.toFixed(2) || 0}
                     </td> */}
-                   
+                  
                   </tr>
                 )})
               ) : (
@@ -352,6 +353,7 @@ function Libility({ Userid }) {
           </table>
         </div>
       )}
+    </div>
 
       
     </>

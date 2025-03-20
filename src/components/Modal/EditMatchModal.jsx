@@ -92,26 +92,19 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="relative bg-white p-6 rounded-lg shadow-lg w-11/12 md:w-3/4 lg:w-1/2 mt-0">
-        {/* Close Icon */}
-        <div className="bg-gray-200 p-3 rounded-t-lg flex justify-end items-center">
+    <div className="fixed inset-0 flex items-start justify-center z-50 bg-black bg-opacity-50">
+      <div className="relative bg-white flex flex-col rounded-lg sm:mt-6 mt-3 shadow-lg w-[96%] md:w-3/4 lg:w-1/2">
+        <div className="flex justify-between items-center rounded-t-lg bg-gradient-blue text-white text-[15px] font-custom font-semibold w-full px-3 py-2">
+          <h2>Edit Match</h2>
           <IoClose
             onClick={onCancel}
-            className="cursor-pointer text-gray-700 text-2xl"
+            className="cursor-pointer text-white text-2xl"
           />
         </div>
-
-        {/* Edit Match Heading */}
-        <div className="flex justify-between items-center border-b pb-3 mt-4">
-          <h2 className="text-gray-700 text-xl font-custom font-semibold">Edit Match</h2>
-        </div>
-
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {/* Left Column */}
-            <div className="space-y-4">
+        <div className="sm:p-4 p-3 overflow-y-auto h-full">
+          {/* Form */}
+          <form onSubmit={handleSubmit} className="sm:space-y-4 space-y-3">
+            <div className="grid grid-cols-1 md:grid-cols-2 sm:gap-4 gap-3">
               <div>
                 <label htmlFor="oddsMessage" className="block text-sm font-custom font-medium text-black">
                   Odds Message
@@ -122,7 +115,7 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
                   name="oddsMessage"
                   value={oddsMessage}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full sm:p-2 p-[7px] border border-gray-300 rounded-[5px] text-sm mt-0.5 outline-none"
                 />
               </div>
               <div>
@@ -135,7 +128,7 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
                   name="sessionMessage"
                   value={sessionMessage}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full sm:p-2 p-[7px] border border-gray-300 rounded-[5px] text-sm mt-0.5 outline-none"
                 />
               </div>
               <div>
@@ -148,17 +141,9 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
                   name="eventId"
                   value={eventId}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full sm:p-2 p-[7px] border border-gray-300 rounded-[5px] text-sm mt-0.5 outline-none"
                 />
               </div>
-              <div>
-         
-            </div>
-            </div>
-
-           
-            {/* Right Column */}
-            <div className="space-y-4">
               <div>
                 <label htmlFor="bookmakerMessage" className="block text-sm font-custom font-medium text-black">
                   Bookmaker Message
@@ -169,7 +154,7 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
                   name="bookmakerMessage"
                   value={bookmakerMessage}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full sm:p-2 p-[7px] border border-gray-300 rounded-[5px] text-sm mt-0.5 outline-none"
                 />
               </div>
               <div>
@@ -182,7 +167,7 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
                   name="tossMessage"
                   value={tossMessage}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full sm:p-2 p-[7px] border border-gray-300 rounded-[5px] text-sm mt-0.5 outline-none"
                 />
               </div>
               <div>
@@ -195,22 +180,21 @@ const EditMatchModal = ({ onCancel, onSubmit, match }) => {
                   name="marketId"
                   value={marketId}
                   onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
+                  className="w-full sm:p-2 p-[7px] border border-gray-300 rounded-[5px] text-sm mt-0.5 outline-none"
                 />
               </div>
-              
             </div>
-          </div>
 
-          <div className="flex justify-end space-x-4 mt-6">
-            <button
-              type="submit"
-              className="bg-lightblue text-white px-6 py-2 rounded-md hover:bg-blue-600"
-            >
-              Update
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-end space-x-4 mt-4">
+              <button
+                type="submit"
+                className="bg-gradient-seablue font-semibold text-sm text-white px-6 py-2 rounded-md hover:bg-blue-600"
+              >
+                Update
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );
