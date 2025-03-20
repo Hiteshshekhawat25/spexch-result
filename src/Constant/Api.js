@@ -1,6 +1,6 @@
 //  export const BASE_URL = 'http://165.22.212.175:3001/admin/V1';
-//  export const BASE_URL = 'http://192.168.0.19:3001/admin/V1';
- export const BASE_URL = 'https://admin-api.spexch247.com/admin/V1';
+ export const BASE_URL = 'http://192.168.0.19:3001/admin/V1';
+//  export const BASE_URL = 'https://admin-api.spexch247.com/admin/V1';
 
 export const SOCKET_ROUTES = {
   JOIN_MATCH : 'joinMatch',
