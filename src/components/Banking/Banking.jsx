@@ -108,18 +108,20 @@ const Banking = () => {
     };
 
   const fetchData = async () => {
+    let type = location.pathname?.includes('/master-banking') ? '' : 'user'
     try {
       dispatch(setLoading(true));
-
       const result = await fetchDownlineData(
         currentPage,
         entriesToShow,
-        roleId
+        roleId,
+        '',
+        type
       );
 
+      console.log("Fetched downline data:", result.data);
       if (result && result.data) {
         dispatch(setDownlineData(result.data));
-        console.log("Fetched downline data:", result.data);
         setTotalUsers(result.pagination?.totalUsers || 0);
       }
     } catch (err) {
@@ -362,16 +364,16 @@ const Banking = () => {
 
   
 
-  useEffect(() => {
-    fetchData();
-  }, [
-    dispatch,
-    currentPage,
-    entriesToShow,
-    roleId,
-    startFetchData,
-    location.pathname,
-  ]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, [
+  //   dispatch,
+  //   currentPage,
+  //   entriesToShow,
+  //   roleId,
+  //   startFetchData,
+  //   location.pathname,
+  // ]);
 
   useEffect(() => {
     const fetchUserRoles = async () => {
@@ -436,16 +438,21 @@ const Banking = () => {
   }, [location.pathname]);
 
   useEffect(() => {
-    if (roleId) {
+    // if (roleId) {
+    let type = location?.pathname?.includes('master-banking') ? '' : 'user'
       const fetchDownlineDataByRole = async () => {
         try {
           dispatch(setLoading(true));
           const data = await fetchDownlineData(
             currentPage,
             entriesToShow,
-            roleId
+            roleId,
+            '',
+            type
           );
+          console.log(data,'Fetched downline data:')
           dispatch(setDownlineData(data?.data));
+          setTotalUsers(data?.pagination?.totalUsers)
         } catch (error) {
           console.error("Error fetching downline data:", error);
           dispatch(setError(error.message));
@@ -455,8 +462,8 @@ const Banking = () => {
       };
 
       fetchDownlineDataByRole();
-    }
-  }, [dispatch, roleId, currentPage, entriesToShow, location.pathname]);
+    // }
+  }, [  currentPage, entriesToShow, location.pathname]);
 
   const totalPages = Math.ceil(totalUsers / entriesToShow);
 
