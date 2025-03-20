@@ -16,14 +16,16 @@ const CommissionPage = () => {
       <div className="bg-gray-200 p-4 rounded-md shadow-md flex flex-wrap items-center gap-4">
         <input
           type="date"
-          className="p-2 border rounded-md"
+          className="p-2 border text-black rounded-md"
+          placeholder="dd/mm/yyyyy"
           value={startDate}
           onChange={(e) => setStartDate(e.target.value)}
         />
         <span>TO</span>
         <input
           type="date"
-          className="p-2 border rounded-md"
+           placeholder="dd/mm/yyyyy"
+          className="p-2 border text-black rounded-md"
           value={endDate}
           onChange={(e) => setEndDate(e.target.value)}
         />

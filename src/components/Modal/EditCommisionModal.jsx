@@ -37,12 +37,14 @@ const EditCommisionModal = ({
       console.log("result", result);
       window.location.reload();
       if (result.payload) {
-        toast.success("Commission updated successfully.");
+        // toast.success("Commission updated successfully.");
         // dispatch(updateProfile(userId))
         onCancel();
       }
     } catch (error) {
-      toast.error("Error updating commission. Please try again.");
+      toast.error("Error updating commission. Please try again.",{
+        autoClose : 1500
+      });
     }
   };
 
