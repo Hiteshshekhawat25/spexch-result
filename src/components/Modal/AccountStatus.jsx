@@ -141,7 +141,7 @@ const AccountStatus = ({
           dispatch(setLoading(false));
           // dispatch(setDownlineData(result.data));
           setPassword("");
-          toast.success("Status updated successfully.");
+          // toast.success("Stat`us updated successfully.");
         
       }
     } catch (error) {

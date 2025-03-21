@@ -202,7 +202,7 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
           </div>
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-3 mt-6">
+          <form onSubmit={handleSubmit} className="grid h-[400px] overflow-auto md:h-auto  grid-cols-2 gap-3 mt-6">
             {Object.keys(formValues).map((field) => (
               <div key={field} className="space-y-1">
                 <label className="block items-center text-xs font-custom text-black">
@@ -221,8 +221,7 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
             ))}
           </form>
 
-          {/* Buttons */}
-          <div className="flex justify-end space-x-3 mt-5">
+          <div className="flex justify-end  space-x-3 mt-5">
             <button
               type="button"
               onClick={onCancel}
@@ -238,6 +237,7 @@ const EditStakeModal = ({ onCancel, onSubmit, match,fetchMatches }) => {
               Update
             </button>
           </div>
+          {/* Buttons */}
 
         </div>
       </div>

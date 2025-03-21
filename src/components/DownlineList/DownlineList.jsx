@@ -171,8 +171,9 @@ const DownlineList = () => {
 
   const handleSearch = async () => {
       try {
+        let type = location.pathname?.includes('/master-downline-list') ? '' : 'user'
         const res = await searchDownline(
-          `user/get-user?page=1&limit=10&search=${searchTerm}&role=${roleId}`
+          `user/get-user?page=1&limit=10&search=${searchTerm}&role=${roleId}${type ? `&type=${type}` : ''}`
         );
         setSearchData(res?.data?.data);
       } catch (error) {
@@ -183,7 +184,9 @@ const DownlineList = () => {
 
   const fetchData = async (roleId) => {
     try {
-      if(roleId){
+      // if(roleId){
+        console.log("Abcd2");
+
         const token = localStorage.getItem("authToken");
         if (!token) {
           console.error("Token not found. Please log in again.");
@@ -191,12 +194,13 @@ const DownlineList = () => {
         }
   
         dispatch(setLoading(true));
-  
+        let type = location.pathname?.includes('/master-downline-list') ? '' : 'user'
         const result = await fetchDownlineData(
           currentPage,
           entriesToShow,
           roleId,
-          
+          '',
+          type
         );
   
         if (result && result.data) {
@@ -204,7 +208,7 @@ const DownlineList = () => {
           dispatch(setDownlineData(result.data));
           setTotalUsers(result.pagination?.totalUsers || 0);
         }
-      }
+      // }
     } catch (err) {
       console.error("Error fetching data:", err.message);
       dispatch(setError(err.message));
@@ -216,39 +220,40 @@ const DownlineList = () => {
 
 
   useEffect(() => {
-    if (roleId) {
-      console.log("Abcd2");
+    // if (roleId) {
+      const token = localStorage.getItem("authToken");
       const fetchData = async () => {
+        console.log("Abcd1",token);
         try {
-          const token = localStorage.getItem("authToken");
           if (!token) {
             return;
           }
-    
+          
           dispatch(setLoading(true));
-    
+          let type = location.pathname?.includes('/master-downline-list') ? '' : 'user'
           const result = await fetchDownlineData(
             currentPage,
             entriesToShow,
             roleId,
-            selectedFilter
+            selectedFilter,
+            type
           );
-    
           if (result && result.data) {
             setDataList(result.data)
             dispatch(setDownlineData(result.data));
             setTotalUsers(result.pagination?.totalUsers || 0);
           }
         } catch (err) {
+          console.log(err,'Abcd1')
           console.error("Error fetching data:", err.message);
           dispatch(setError(err.message));
         } finally {
           dispatch(setLoading(false));
         }
-      };
+      // };
 
-      fetchData();
     }
+    fetchData();
   }, [
     currentPage,
     entriesToShow,
@@ -263,105 +268,109 @@ const DownlineList = () => {
     item.username.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  useEffect(() => {
-    if (location.pathname.includes("/master-downline-list")) {
-      console.log('riiiiiiiiiiiii')
-      const fetchUserRoles = async () => {
-        try {
-          const token = localStorage.getItem("authToken");
-          if (token) {
-            const rolesArray = await fetchRoles(token);
-            if (Array.isArray(rolesArray)) {
-              const rolesData = rolesArray.map((role) => ({
-                role_name: role.role_name,
-                role_id: role._id,
-              }));
-              setRoles(rolesData);
-              
-              const masterAgentRoles = rolesData.filter(
-                (role) =>
-                  role.role_name.toLowerCase() === "master" ||
-                role.role_name.toLowerCase() === "agent" ||
-                role.role_name.toLowerCase() === "sub-admin" ||
-                role.role_name.toLowerCase() === "super" ||
-                role.role_name.toLowerCase() === "white-level"
-              );
-              
-              if (masterAgentRoles.length > 0) {
-                // Fetch all data for each role without pagination
-                const fetchPromises = masterAgentRoles.map((role) =>
-                  fetchDownlineData(1, 10000, role.role_id,selectedFilter)
-              );
-              
-              const results = await Promise.all(fetchPromises);
-              
-              const combinedData = results.flatMap(
-                (result) => result.data || []
-              );
-              console.log("Abcd1",rolesData[0].role_id);
-              
-              const totalUsers = combinedData.length;
-              console.log(totalUsers,'totalUserstotalUserstotalUserstotalUserstotalUsers')
-              setTotalUsers(totalUsers);
-              
-              const startIndex = (currentPage - 1) * entriesToShow;
-              const endIndex = startIndex + entriesToShow;
-              const paginatedData = combinedData.slice(startIndex, endIndex);
-              setDataList(paginatedData)
-              dispatch(setDownlineData(paginatedData));
-            } else if (rolesData.length > 0) {
-                console.log("Abcd1");
-                setRoleId(rolesData[0].role_id);
-              }
-            } else {
-              setError("Roles data is not an array.");
-            }
-          }
-        } catch (error) {
-          setError(error.message || "Failed to fetch roles.");
-        }
-      };
-      fetchUserRoles();
-    }
-  }, [token, location.pathname, currentPage,selectedFilter, entriesToShow, dispatch]);
+  // useEffect(() => {
+  //   if (location.pathname.includes("/master-downline-list")) {
+  //     console.log("Abcd3");
 
-  useEffect(() => {
-    if (location.pathname.includes("/user-downline-list")) {
-      console.log("Abcd3");
-      const fetchUserRoles = async () => {
-        console.log("rrrrrruuuuuunnnnnnnn1");
-        try {
-          const token = localStorage.getItem("authToken");
-          if (token) {
-            const rolesArray = await fetchRoles(token);
-            if (Array.isArray(rolesArray)) {
-              const rolesData = rolesArray.map((role) => ({
-                role_name: role.role_name,
-                role_id: role._id,
-              }));
-              setRoles(rolesData);
-              // Case-insensitive check for 'user'
-              const userRole = rolesData.find(
-                (role) => role.role_name.toLowerCase() === "user"
-              );
-              if (userRole) {
-                setRoleId(userRole.role_id);
-              } else if (rolesData.length > 0) {
-                setRoleId(rolesData[0].role_id);
-              }
-            } else {
-              setError("Roles data is not an array.");
-            }
-          }
-        } catch (error) {
-          setError(error.message || "Failed to fetch roles.");
-        }
-      };
-      fetchUserRoles();
-    }
+  //     const fetchUserRoles = async () => {
+  //       try {
+  //         const token = localStorage.getItem("authToken");
+  //         if (token) {
+  //           let type1 = location.pathname?.includes('/master-downline-list') ? '' : 'user'
+  //           const data12 =   await   fetchDownlineData(1, 10000, '',selectedFilter,type1)
+  //           const rolesArray = await fetchRoles(token);
+  //           console.log(data12,'data12')
+  //           setDataList(data12?.data)
+  //           // if (Array.isArray(rolesArray)) {
+  //           //   const rolesData = rolesArray.map((role) => ({
+  //           //     role_name: role.role_name,
+  //           //     role_id: role._id,
+  //           //   }));
+  //           //   setRoles(rolesData);
+              
+  //           //   const masterAgentRoles = rolesData.filter(
+  //           //     (role) =>
+  //           //       role.role_name.toLowerCase() === "master" ||
+  //           //     role.role_name.toLowerCase() === "agent" ||
+  //           //     role.role_name.toLowerCase() === "sub-admin" ||
+  //           //     role.role_name.toLowerCase() === "super" ||
+  //           //     role.role_name.toLowerCase() === "white-level"
+  //           //   );
+              
+  //           // //   if (masterAgentRoles.length > 0) {
+  //           // //     // Fetch all data for each role without pagination
+  //           // //     // const fetchPromises = masterAgentRoles.map((role) =>
+  //           // //   // );
+              
+  //           // //   const results = await Promise.all(fetchPromises);
+              
+  //           // //   const combinedData = results.flatMap(
+  //           // //     (result) => result.data || []
+  //           // //   );
+  //           // //   console.log("Abcd1",rolesData[0].role_id);
+              
+  //           // //   const totalUsers = combinedData.length;
+  //           // //   console.log(data12,'totalUserstotalUserstotalUserstotalUserstotalUsers')
+  //           // //   setTotalUsers(totalUsers);
+              
+  //           // //   const startIndex = (currentPage - 1) * entriesToShow;
+  //           // //   const endIndex = startIndex + entriesToShow;
+  //           // //   const paginatedData = combinedData.slice(startIndex, endIndex);
+  //           // //   setDataList(paginatedData)
+  //           // //   dispatch(setDownlineData(paginatedData));
+  //           // // } else if (rolesData.length > 0) {
+  //           // //     console.log("Abcd1");
+  //           // //     setRoleId(rolesData[0].role_id);
+  //           // //   }
+  //           // } else {
+  //           //   setError("Roles data is not an array.");
+  //           // }
+  //         }
+  //       } catch (error) {
+  //         setError(error.message || "Failed to fetch roles.");
+  //       }
+  //     };
+  //     fetchUserRoles();
+  //   }
+  // }, [token, location.pathname, currentPage,selectedFilter, entriesToShow, dispatch]);
 
-    return ()=>setUserFetchList([])
-  }, [token, location.pathname,selectedFilter]);
+  // useEffect(() => {
+  //   if (location.pathname.includes("/user-downline-list")) {
+  //     console.log("Abcd3");
+  //     const fetchUserRoles = async () => {
+  //       console.log("rrrrrruuuuuunnnnnnnn1");
+  //       try {
+  //         const token = localStorage.getItem("authToken");
+  //         if (token) {
+  //           const rolesArray = await fetchRoles(token);
+  //           if (Array.isArray(rolesArray)) {
+  //             const rolesData = rolesArray.map((role) => ({
+  //               role_name: role.role_name,
+  //               role_id: role._id,
+  //             }));
+  //             setRoles(rolesData);
+  //             // Case-insensitive check for 'user'
+  //             const userRole = rolesData.find(
+  //               (role) => role.role_name.toLowerCase() === "user"
+  //             );
+  //             if (userRole) {
+  //               setRoleId(userRole.role_id);
+  //             } else if (rolesData.length > 0) {
+  //               setRoleId(rolesData[0].role_id);
+  //             }
+  //           } else {
+  //             setError("Roles data is not an array.");
+  //           }
+  //         }
+  //       } catch (error) {
+  //         setError(error.message || "Failed to fetch roles.");
+  //       }
+  //     };
+  //     fetchUserRoles();
+  //   }
+
+  //   return ()=>setUserFetchList([])
+  // }, [token, location.pathname,selectedFilter]);
   // const sortedData = useMemo(() => {
   //   // console.log("filteredData", filteredData);
   //   if (!sortConfig.key) return filteredData;
@@ -498,12 +507,14 @@ const DownlineList = () => {
         "sub-admin",
       ];
 
-      if (allowedRoles.includes(item.role_name)) {
+      // if (allowedRoles.includes(item.role_name)) {
         const data = await fetchallUsers(item._id,currentPage,entriesToShow);
-        console.log(data?.pagination?.totalUsers,'totalUserstotalUserstotalUserstotalUserstotalUsers')
+        console.log(data,'totalUserstotalUserstotalUserstotalUserstotalUsers')
         setUserFetchList(data?.data);
         if(data?.pagination?.totalUsers){
           setTotalUsers(data?.pagination?.totalUsers || 0)
+        }else{
+          setTotalUsers(downlineData?.length)
         }
 
         if (
@@ -514,6 +525,7 @@ const DownlineList = () => {
           item.role_name == "white-level" ||
           item.role_name == "super"
         ) {
+          setDataList(data?.data)
           console.log(data,'donenondoenodnods')
           if(data?.data?.length > 0){
             setIsNested(true);
@@ -521,9 +533,9 @@ const DownlineList = () => {
             setIsNested(false)
           }
         }
-      } else if (item.role_name == "user") {
-        return null;
-      }
+      // } else if (item.role_name == "user") {
+      //   return null;
+      // }
     } catch (error) {
       console.error("Error fetching details:", error);
     }
@@ -601,12 +613,15 @@ const DownlineList = () => {
       } else {
         throw new Error("Invalid location path. Unable to determine roleId.");
       }
-
+        let type = location.pathname?.includes('/master-downline-list') ? '' : 'user'
       const result = await fetchDownlineData(
         currentPage,
         entriesToShow,
-        roleId
+        roleId,
+        '',
+        type
       );
+      console.log(result,'resultresultresult')
       if (result && result.data) {
         setUserToDelete(item);
         setIsDeleteModalOpen(true);
@@ -639,7 +654,7 @@ const DownlineList = () => {
         </div>
       ) : (
         <>
-          {userFetchList?.length ? (
+          {userFetchList?.length && location?.pathname?.includes('/master-downline-list')? (
             <>
               <div
                 className="border rounded p-2 mb-3 w-full sm:w-max flex items-center text-nowrap cursor-pointer bg-green-50 border-green-500 text-green-600 font-custom font-medium"

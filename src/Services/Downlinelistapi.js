@@ -175,13 +175,14 @@ export const putUpdateMatchAPIAuth = async (url, params) => {
 };
 
 // Api to get list of everyone in downline list
-export const fetchDownlineData = async (currentPage, entriesToShow, roleId,status) => {
+export const fetchDownlineData = async (currentPage, entriesToShow, roleId,status,type) => {
   try {
+    console.log(type,'type')
     const token = localStorage.getItem("authToken");
     const params = {
       page: currentPage,
       limit: entriesToShow,
-      roleId : roleId
+      type : type,
     };
 
     if (roleId) {
