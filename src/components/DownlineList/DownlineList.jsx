@@ -1162,7 +1162,7 @@ const DownlineList = () => {
             </div>
             <div className="flex flex-col p-2 sm:flex-row justify-between items-center mt-4 space-y-2 sm:space-y-0">
               {/* Showing entries text */}
-              <div className="text-sm text-gray-600">
+              <div className=" text-[12px] text-gray-600">
                 Showing{" "}
                 {totalUsers === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
                 to {Math.min(currentPage * entriesToShow, totalUsers)} of{" "}
@@ -1174,7 +1174,7 @@ const DownlineList = () => {
                 {/* First Button */}
                 <button
                   onClick={() => handlePageChange("first")}
-                  className={`sm:sm:px-3 px-2 px-2 py-1 text-sm rounded ${currentPage === 1
+                  className={`sm:sm:px-3 px-2 py-1 text-[12px] rounded ${currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
                     }`}
@@ -1186,7 +1186,7 @@ const DownlineList = () => {
                 {/* Previous Button */}
                 <button
                   onClick={() => handlePageChange("prev")}
-                  className={`sm:sm:px-3 px-2 px-2 py-1 text-sm rounded ${currentPage === 1
+                  className={`sm:sm:px-3 px-2 py-1 text-[12px] rounded ${currentPage === 1
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
                     }`}
@@ -1208,7 +1208,7 @@ const DownlineList = () => {
                         <button
                           key={page}
                           onClick={() => setCurrentPage(page)}
-                          className={`sm:sm:px-3 px-2 px-2 sm:py-1 py-0.5 text-sm border border-white rounded ${currentPage === page
+                          className={`sm:sm:px-3 px-2 sm:py-1 py-0.5 text-[12px] border border-white rounded ${currentPage === page
                               ? "bg-gray-200 border-gray-700"
                               : "hover:bg-gray-100"
                             }`}
@@ -1221,7 +1221,7 @@ const DownlineList = () => {
                       (page === currentPage + 3 && currentPage < totalPages - 3)
                     ) {
                       return (
-                        <span key={page} className="sm:sm:px-3 px-2 px-2 py-1 text-sm">
+                        <span key={page} className="sm:sm:px-3 px-2 py-1 text-[12px]">
                           ...
                         </span>
                       );
@@ -1233,7 +1233,7 @@ const DownlineList = () => {
                 {/* Next Button */}
                 <button
                   onClick={() => handlePageChange("next")}
-                  className={`sm:sm:px-3 px-2 px-2 py-1 text-sm rounded ${currentPage === totalPages
+                  className={`sm:sm:px-3 px-2 py-1 text-[12px] rounded ${currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
                     }`}
@@ -1245,7 +1245,7 @@ const DownlineList = () => {
                 {/* Last Button */}
                 <button
                   onClick={() => handlePageChange("last")}
-                  className={`sm:sm:px-3 px-2 px-2 py-1 text-sm rounded ${currentPage === totalPages
+                  className={`sm:sm:px-3 px-2 py-1 text-[12px] rounded ${currentPage === totalPages
                       ? "opacity-50 cursor-not-allowed"
                       : "hover:bg-gray-100"
                     }`}

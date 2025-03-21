@@ -50,7 +50,7 @@ const EditCommisionModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-20">
+      <div className="bg-white rounded-lg w-[95%] sm:w-[500px] sm:mt-12 mt-3">
         {/* Header */}
         <div className="flex justify-between items-center bg-gradient-blue text-white text-[15px] rounded-t-md font-custom font-semibold w-full p-2">
           <span>Update Commission</span>
@@ -108,7 +108,7 @@ const EditCommisionModal = ({
           <div className="flex justify-end space-x-3 mt-8 pt-4">
             <button
               type="submit"
-              className={`px-3 py-1 rounded-md font-bold ${
+              className={`px-3.5 py-1.5 text-sm rounded-md font-bold ${
                 newCommission && password
                   ? "bg-gradient-seablue text-white"
                   : "bg-gray-500 text-white cursor-not-allowed"
@@ -120,7 +120,7 @@ const EditCommisionModal = ({
             <button
               type="button"
               onClick={onCancel}
-              className="px-3 py-1 bg-gray-400 text-black rounded-md font-bold"
+              className="px-3.5 py-1.5 text-sm bg-gray-400 text-black rounded-md font-bold"
             >
               No
             </button>

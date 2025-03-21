@@ -294,7 +294,7 @@ function Libility({ Userid }) {
               </tr>
             </thead>
 
-            <tbody className="text-center">
+            <tbody className="text-center bg-white">
               {PendingMarket?.length > 0 ? (
                 PendingMarket.map((item, index) => {
                   console.log(item,'item')
@@ -343,7 +343,7 @@ function Libility({ Userid }) {
                 <tr>
                   <td
                     colSpan="10"
-                    className="border border-gray-400 px-4 py-3"
+                    className="border border-gray-300 px-4 py-3"
                   >
                     No data !
                   </td>

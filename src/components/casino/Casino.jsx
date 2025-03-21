@@ -38,10 +38,10 @@ function Casino() {
     console.log('Casino', casinoProviders)
     return (
         <div className="md:mx-0 mx-2 mt-3">
-            <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white md:p-4 p-3 ">
+            <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white md:p-4 p-3">
                 <CasinoFilter />
                 <div className='overflow-x-auto sm:mt-3 mt-2'>
-                    <table className='w-full mt-3 rounded-md'>
+                    <table className='w-full mt-3 rounded-md border border-gray-300'>
                         <tr className='bg-gray-200'>
                             <th className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center'>
                                 SR.no

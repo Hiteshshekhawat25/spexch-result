@@ -14,7 +14,7 @@ function CasinoFilter({
         </div>
         <div className='col-span-4 sm:col-span-4 md:col-span-2'>
             <button
-            className='bg-gradient-blue text-white text-[14px] font-bold p-2 rounded-md'
+            className='bg-gradient-seablue text-white text-[14px] font-bold p-2 rounded-md'
             >
                 Filter Data
             </button>

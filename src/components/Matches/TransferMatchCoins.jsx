@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { ImBook } from 'react-icons/im';
 import { useParams } from 'react-router-dom';
 import { getSingleMatch } from '../../Services/Newmatchapi';
 import axios from 'axios';
@@ -262,138 +261,131 @@ const TransferMatchCoins = () => {
 
   console.log({ loading })
   return (
-    <div className="w-full p-4">
-      {/* Title Section */}
-      <div className="text-center mb-4">
-        <h2 className="text-lg font-semibold flex items-center justify-center gap-2">
-          <ImBook />
+    <div className="md:mx-0 mx-2">
+      <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+        <div className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
           Transfer Match Coins
-        </h2>
-        <hr className="border-t border-gray-300 my-2" />
+        </div>
+        <div className="md:p-4 p-3">
+          {/* Row Section */}
+          <div className="md:flex items-center gap-3  justify-center md:justify-between">
+            {/* Dropdown */}
+            <div className="flex-1 my-2">
+              <select
+                value={formValue?.selectionId}
+                disabled={marketData?.[0]?.transferredOddsCoin === 1}
+                onChange={(e) => setFormValue(prev => ({ ...prev, selectionId: e.target.value }))}
+                className="w-full md:w-1/2 px-2 text-sm py-2 border border-gray-400 rounded outline-none">
+                <option value="" selected disabled>Select Status</option>
+                {
+                  marketData?.[0]?.market?.length ?
+                    marketData?.[0]?.market?.map(item => (
+                      <option key={item?.selectionId} value={item?.selectionId}>{item?.runnerName}</option>
+                    ))
+                    : ''
+                }
+                <option value="ABANDONED">Abandon</option>
+                <option value="TIE">Tie</option>
+              </select>
+            </div>
+
+            {/* Button */}
+            <div className="md:mx-4">
+              <button 
+              disabled={marketData?.[0]?.transferredOddsCoin === 1} 
+              onClick={handleOddsWinnerDeclare} className="px-6 py-2 md:w-auto w-full bg-gradient-seablue text-sm text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
+                {marketData?.[0]?.oddsResult === 1 ? 'Re-Declare' : 'Declare Winner'}
+              </button>
+            </div>
+
+            {/* Transfer Coins */}
+            <div className="flex-1 my-2 text-right">
+              {marketData?.[0]?.transferredOddsCoin == 1 && marketData?.[0]?.oddsResult == 1 ?
+              loading ?   
+              <button className="px-6 py-2 bg-red-800 md:w-auto w-full text-sm text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                // onClick={handleTossRevertCoin}
+                >
+                Loading...
+              </button>
+              :
+              <button className="px-6 py-2 bg-red-800 text-sm text-white md:w-auto w-full font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertOddsCoins}>
+                  Revert Coins
+                </button>
+                :
+                loading ?   
+                <button className="px-6 py-2 bg-red-800 text-sm text-white md:w-auto w-full font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                  // onClick={handleTossRevertCoin}
+                  >
+                  Loading...
+                </button>: <button disabled={marketData?.[0]?.oddsResult === 0 || marketData?.[0]?.transferredOddsCoin === 1} onClick={handleOddsTransferCoin} className="px-6 py-2 md:w-auto text-sm w-full bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
+
+                  {marketData?.[0]?.transferredOddsCoin === 1 ? "Coins Transferred Successfully" : 'Transfer Coins'}
+                </button>
+              }
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Row Section */}
-      <div className="md:flex items-center gap-3  justify-center md:justify-between mb-4">
-        {/* Dropdown */}
-        <div className="flex-1 my-2">
-          <select
-            value={formValue?.selectionId}
-            disabled={marketData?.[0]?.transferredOddsCoin === 1}
-            onChange={(e) => setFormValue(prev => ({ ...prev, selectionId: e.target.value }))}
-            className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
-            <option value="" selected disabled>Select Status</option>
-            {
-              marketData?.[0]?.market?.length ?
-                marketData?.[0]?.market?.map(item => (
-                  <option key={item?.selectionId} value={item?.selectionId}>{item?.runnerName}</option>
-                ))
-                : ''
-            }
-            <option value="ABANDONED">Abandon</option>
-            <option value="TIE">Tie</option>
-          </select>
-        </div>
-
-        {/* Button */}
-        <div className="md:mx-4">
-          <button 
-          disabled={marketData?.[0]?.transferredOddsCoin === 1} 
-          onClick={handleOddsWinnerDeclare} className="px-6 py-2 md:w-auto w-full bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
-            {marketData?.[0]?.oddsResult === 1 ? 'Re-Declare' : 'Declare Winner'}
-          </button>
-        </div>
-
-        {/* Transfer Coins */}
-        <div className="flex-1 my-2 text-right">
-          {marketData?.[0]?.transferredOddsCoin == 1 && marketData?.[0]?.oddsResult == 1 ?
-          loading ?   
-          <button className="px-6 py-2 bg-red-800 md:w-auto w-full text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
-            // onClick={handleTossRevertCoin}
-            >
-             Loading...
-           </button>
-           :
-           <button className="px-6 py-2 bg-red-800 text-white md:w-auto w-full font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertOddsCoins}>
-              Revert Coins
-            </button>
-            :
-            loading ?   
-            <button className="px-6 py-2 bg-red-800 text-white md:w-auto w-full font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
-              // onClick={handleTossRevertCoin}
-              >
-               Loading...
-             </button>: <button disabled={marketData?.[0]?.oddsResult === 0 || marketData?.[0]?.transferredOddsCoin === 1} onClick={handleOddsTransferCoin} className="px-6 py-2 md:w-auto w-full bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
-
-              {marketData?.[0]?.transferredOddsCoin === 1 ? "Coins Transferred Successfully" : 'Transfer Coins'}
-            </button>
-          }
-        </div>
-      </div>
-
-      {/* Divider Line */}
-      <hr className="border-t border-gray-300 mb-4" />
-
-      <div className="text-center mb-4">
-        <h2 className="text-lg font-semibold flex items-center justify-center gap-2">
-          <ImBook />
+      <div className="border border-gray-300 rounded-[5px] overflow-hidden bg-white sm:mt-7 mt-4">
+        <div className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
           Bookmaker Result
-        </h2>
-        <hr className="border-t border-gray-300 my-2" />
-      </div>
-
-      {/* Row Section */}
-      <div className="md:flex items-center justify-center md:justify-between mb-4">
-        {/* Dropdown */}
-        <div className="flex-1 my-2">
-          <select
-            value={formValue?.bookmakerId}
-            onChange={(e) => setFormValue(prev => ({ ...prev, bookmakerId: e.target.value }))}
-            className="w-full md:w-1/2 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
-            <option value="" selected disabled>Select Status</option>
-            {
-              marketData?.[0]?.bookmaker?.length ?
-                marketData?.[0]?.bookmaker?.map(item => (
-                  <option key={`book-${item?.selectionId}`} value={item?.selectionId}>{item?.selectionName}</option>
-                ))
-                : ''
-            }
-            <option value="ABANDONED">Abandon</option>
-            <option value="TIE">Tie</option>
-          </select>
         </div>
+        <div className="md:p-4 p-3">
+          <div className="md:flex items-center justify-center md:justify-between">
+            {/* Dropdown */}
+            <div className="flex-1 my-2">
+              <select
+                value={formValue?.bookmakerId}
+                onChange={(e) => setFormValue(prev => ({ ...prev, bookmakerId: e.target.value }))}
+                className="w-full md:w-1/2 px-2 text-sm py-2 border border-gray-400 rounded outline-none">
+                <option value="" selected disabled>Select Status</option>
+                {
+                  marketData?.[0]?.bookmaker?.length ?
+                    marketData?.[0]?.bookmaker?.map(item => (
+                      <option key={`book-${item?.selectionId}`} value={item?.selectionId}>{item?.selectionName}</option>
+                    ))
+                    : ''
+                }
+                <option value="ABANDONED">Abandon</option>
+                <option value="TIE">Tie</option>
+              </select>
+            </div>
 
-        {/* Button */}
-        <div className="md:mx-4">
-          <button disabled={marketData?.[0]?.transferredBookmakerCoin === 1} 
-          onClick={handleBookmakerWinnerDeclare} 
-          className="px-6 py-2 bg-lightblue md:w-auto w-full text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300">
-            {marketData?.[0]?.bookMakerResult === 1 ? 'Re-Declare' : 'Declare Winner'}
-          </button>
-        </div>
+            {/* Button */}
+            <div className="md:mx-4">
+              <button disabled={marketData?.[0]?.transferredBookmakerCoin === 1} 
+              onClick={handleBookmakerWinnerDeclare} 
+              className="px-6 py-2 bg-gradient-seablue text-sm md:w-auto w-full text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300">
+                {marketData?.[0]?.bookMakerResult === 1 ? 'Re-Declare' : 'Declare Winner'}
+              </button>
+            </div>
 
-        {/* Transfer Coins */}
-        <div className="flex-1 my-2 text-right">
-          {marketData?.[0]?.transferredBookmakerCoin == 1 && marketData?.[0]?.bookMakerResult == 1 ?
-            loading2 ?   
-            <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
-              // onClick={handleTossRevertCoin}
-              >
-               Loading...
-             </button>
-             :  <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertBookmakersCoins}>
-              Revert Coins
-            </button>
-            :
-            loading2 ?   
-            <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
-              // onClick={handleTossRevertCoin}
-              >
-               Loading...
-             </button>  : <button disabled={marketData?.[0]?.bookMakerResult === 0} 
-             onClick={handleBookmakerTransferCoin} className="px-6 py-2 md:w-auto w-full bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
-              Transfer Coins
-            </button>
-          }
+            {/* Transfer Coins */}
+            <div className="flex-1 my-2 text-right">
+              {marketData?.[0]?.transferredBookmakerCoin == 1 && marketData?.[0]?.bookMakerResult == 1 ?
+                loading2 ?   
+                <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white text-sm font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                  // onClick={handleTossRevertCoin}
+                  >
+                  Loading...
+                </button>
+                :  <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white text-sm font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600" onClick={handleRevertBookmakersCoins}>
+                  Revert Coins
+                </button>
+                :
+                loading2 ?   
+                <button className="px-6 py-2 md:w-auto w-full bg-red-800 text-white text-sm font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+                  // onClick={handleTossRevertCoin}
+                  >
+                  Loading...
+                </button>  : <button disabled={marketData?.[0]?.bookMakerResult === 0} 
+                onClick={handleBookmakerTransferCoin} className="px-6 py-2 md:w-auto w-full bg-lightblue text-sm text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
+                  Transfer Coins
+                </button>
+              }
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -154,10 +154,6 @@ function TossResult() {
               setLoading(false)
               toast.success(response?.data?.message);
               getMatchDetails()
-              setFormValue({
-                selectionId: '',
-                bookmakerId: ''
-              })
             }
           } catch (error) {
             setLoading(false)
@@ -177,83 +173,72 @@ function TossResult() {
   
 
   return (
-   <div className="w-full p-4">
-         {/* Title Section */}
-         <div className="text-center mb-4">
-           <h2 className="text-lg font-semibold flex items-center justify-center gap-2">
-             <ImBook />
-             Transfer Toss Coins
-           </h2>
-           <hr className="border-t border-gray-300 my-2" />
-         </div>
-   
-         {/* Row Section */}
-         <div className="md:flex-row flex flex-col gap-2  md:items-center justify-between mb-4">
-           {/* Dropdown */}
-           <div className="flex-1">
-             <select
-               value={formValue?.selectionId}
-               disabled={marketData?.[0]?.transferredTossCoin === 1}
-               onChange={(e) => setFormValue(prev => ({ ...prev, selectionId: e.target.value }))}
-               className="md:w-1/2 px-4 py-2 border w-full border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300">
-               <option value="" selected disabled>Select Status</option>
-               {
-                 marketData?.[0]?.tossMarket?.length ?
-                   marketData?.[0]?.tossMarket?.map(item => (
-                     <option key={item?.selectionId} value={item?.selectionId}>{item?.runnerName}</option>
-                   ))
-                   : ''
-               }
-               <option value="ABANDONED">Abandon</option>
-               <option value="TIE">Tie</option>
-             </select>
-           </div>
-   
-           {/* Button */}
-           <div className="md:mx-4">
-             <button 
-             disabled={marketData?.[0]?.transferredTossCoin === 1} 
-             onClick={handleTossWinnerDeclare} className="px-6 py-2 w-full bg-lightblue text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
-               {marketData?.[0]?.tossResult === 1 ? 'Re-Declare' : 'Declare Winner'}
-             </button>
-           </div>
-   
-           {/* Transfer Coins */}
-           <div className="flex-1 text-right">
-             {marketData?.[0]?.transferredTossCoin == 1 && marketData?.[0]?.tossResult == 1 ?
-             loading ?   
-              <button className="px-6 py-2 bg-red-800 text-white w-full font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+    <div className="md:mx-0 mx-2 border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+      <div className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
+        Transfer Toss Coins
+      </div>
+      <div className="md:p-4 p-3">
+        {/* Row Section */}
+        <div className="flex items-center justify-between md:flex-row flex-col md:gap-0 gap-3.5">
+          {/* Dropdown */}
+          <div className="flex-1 w-full">
+            <select
+              value={formValue?.selectionId}
+              disabled={marketData?.[0]?.transferredTossCoin === 1}
+              onChange={(e) => setFormValue(prev => ({ ...prev, selectionId: e.target.value }))}
+              className="md:w-1/2 w-full px-2 text-sm py-2 border border-gray-300 rounded outline-none">
+              <option value="" selected disabled>Select Status</option>
+              {
+                marketData?.[0]?.tossMarket?.length ?
+                  marketData?.[0]?.tossMarket?.map(item => (
+                    <option key={item?.selectionId} value={item?.selectionId}>{item?.runnerName}</option>
+                  ))
+                  : ''
+              }
+              <option value="ABANDONED">Abandon</option>
+              <option value="TIE">Tie</option>
+            </select>
+          </div>
+
+          {/* Button */}
+          <div className="mx-4 md:w-auto w-full">
+            <button 
+            disabled={marketData?.[0]?.transferredTossCoin === 1} 
+            onClick={handleTossWinnerDeclare} className="px-6 md:w-auto w-full py-2 bg-gradient-seablue text-sm text-white font-semibold rounded hover:bg-blue-600 disabled:bg-gray-300 disabled:text-gray-600" >
+              {marketData?.[0]?.tossResult === 1 ? 'Re-Declare' : 'Declare Winner'}
+            </button>
+          </div>
+
+          {/* Transfer Coins */}
+          <div className="flex-1 text-right w-full">
+            {marketData?.[0]?.transferredTossCoin == 1 && marketData?.[0]?.tossResult == 1 ?
+            loading ?   
+            <button className="px-6 py-2 bg-red-800 text-white font-semibold md:w-auto w-full text-sm rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+              // onClick={handleTossRevertCoin}
+              >
+                Loading...
+              </button>:
+              <button className="px-6 py-2 bg-red-800 text-white font-semibold md:w-auto w-full text-sm rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
+              onClick={handleTossRevertCoin}
+              >
+              Revert Coins
+            </button>
+              :
+              loading ?   
+              <button className="px-6 py-2 bg-red-800 text-white font-semibold md:w-auto w-full text-sm rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
                 // onClick={handleTossRevertCoin}
                 >
-                 Loading...
-               </button>:
-               <button className="px-6 py-2 bg-red-800 w-full text-white font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
-               onClick={handleTossRevertCoin}
-               >
-                Revert Coins
+                Loading...
+              </button>:
+              <button disabled={marketData?.[0]?.tossResult === 0 || marketData?.[0]?.transferredTossCoin === 1} onClick={handleTossTransferCoin} className="px-6 py-2 bg-lightblue text-white font-semibold md:w-auto w-full text-sm rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
+
+                {marketData?.[0]?.transferredTossCoin === 1 ? "Coins Transferred Successfully" : 'Transfer Coins'}
               </button>
-               :
-               loading ?   
-               <button className="px-6 py-2 bg-red-800 text-white w-full font-semibold rounded hover:bg-red-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600"
-                 // onClick={handleTossRevertCoin}
-                 >
-                  Loading...
-                </button>:
-               <button disabled={marketData?.[0]?.tossResult === 0 || marketData?.[0]?.transferredTossCoin === 1} 
-               onClick={handleTossTransferCoin} 
-               className="px-6 md:w-auto w-full py-2 bg-lightblue text-white font-semibold rounded hover:bg-green-600 disabled:bg-gray-300 disabled:pointer-events-none disabled:text-gray-600">
-   
-                 {marketData?.[0]?.transferredTossCoin === 1 ? "Coins Transferred Successfully" : 'Transfer Coins'}
-               </button>
-             }
-           </div>
-         </div>
-   
-         {/* Divider Line */}
-         <hr className="border-t border-gray-300 mb-4" />
-   
-      
-       </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 

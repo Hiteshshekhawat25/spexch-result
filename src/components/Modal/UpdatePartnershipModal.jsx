@@ -143,7 +143,7 @@ const UpdatePartnershipModal = ({
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4 p-5">
+        <form onSubmit={handleSubmit} className="space-y-4 p-4">
           {/* Current Partnership */}
           <div className="flex justify-between items-center">
             <label className="block text-sm font-custom font-medium text-gray-700 w-1/3">

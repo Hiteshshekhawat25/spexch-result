@@ -136,7 +136,7 @@ const EditExposureLimitModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-20 sm:mt-10">
+      <div className="bg-white rounded-lg w-[95%] sm:w-[500px] mt-3 sm:mt-12">
         {/* Header */}
         <div className="flex justify-between items-center bg-gradient-blue rounded-t-lg text-white text-[15px] font-custom font-semibold w-full p-2">
           <span>Edit Exposure Limit - {username}</span>
@@ -207,7 +207,7 @@ const EditExposureLimitModal = ({
           </div>
 
           {/* Buttons */}
-          <div className="flex justify-end gap-3 md:mt-7 mt-4">
+          <div className="flex justify-end gap-3 md:mt-7 mt-2">
             {/* Submit Button */}
             <button
               type="submit"

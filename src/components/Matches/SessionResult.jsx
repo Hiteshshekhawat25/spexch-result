@@ -144,7 +144,7 @@ console.log({sessions},'sessions')
               </label>
               <select
                 id="match"
-                className="px-4 py-2 border border-gray-300 rounded outline-none text-sm w-full"
+                className="px-2 py-2 border border-gray-300 rounded outline-none text-sm w-full"
                 onChange={handleSortChange}
                 value={sortMatch}
               >
@@ -165,7 +165,7 @@ console.log({sessions},'sessions')
               </label>
               <select
                 id="match"
-                className="px-4 py-2 border border-gray-300 rounded outline-none text-sm w-full"
+                className="px-2 py-2 border border-gray-300 rounded outline-none text-sm w-full"
                 // onFocus={handleMatchSelectFocus}
                 onChange={handleMatchChange}
                 value={selectedMatch}
@@ -197,7 +197,7 @@ console.log({sessions},'sessions')
                 value={selectedSession}
                 onChange={(e) => setSelectedSession(e.target.value)}
                 id="session"
-                className="px-4 py-2 border border-gray-300 rounded outline-none text-sm w-full"
+                className="px-2 py-2 border border-gray-300 rounded outline-none text-sm w-full"
               >
                 <option value="">Select Session</option>
                 {sessions.sessions.filter((item)=> !item.result).map((session, index) => {
@@ -221,7 +221,7 @@ console.log({sessions},'sessions')
                 value={openModal ? '' :tempResult}
                 onChange={handleResultChange}
                 type="number"
-                className="px-4 py-2 border border-gray-300 rounded outline-none text-sm w-full"
+                className="px-2 py-2 border border-gray-300 rounded outline-none text-sm w-full"
               />
             </div>
             <div className="w-full flex items-end gap-4">

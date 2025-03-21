@@ -162,7 +162,7 @@ const DepositModal = ({
 
   return (
     <div className="fixed top-0 left-0 right-0 bottom-0 flex items-start justify-center bg-gray-500 bg-opacity-50 z-50">
-      <div className="bg-white rounded-md mt-12 w-[95%] sm:w-[500px]">
+      <div className="bg-white rounded-md sm:mt-12 mt-3 w-[95%] sm:w-[500px]">
         {/* Modal Header */}
         <div className="flex justify-between items-center bg-gradient-blue text-white text-sm font-custom font-semibold w-full rounded-t-md px-2 py-1">
           <span>Banking - MasterBalance:{' '}{userData?.data?.openingBalance}</span>

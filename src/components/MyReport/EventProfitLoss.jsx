@@ -131,8 +131,7 @@ const EventProfitLoss = ({ Userid }) => {
               Event Profit Loss
             </h1>
 
-
-            <div className="flex md:flex-row flex-col gap-3 md:justify-between md:items-center mb-4 p-4">
+            <div className="flex md:flex-row flex-col gap-3 md:justify-between items-center sm:mb-4 p-4">
               <div className="flex items-center">
                 <label className="mr-2 text-[13px] text-black">
                   Show
@@ -155,7 +154,7 @@ const EventProfitLoss = ({ Userid }) => {
                   entries
                 </label>
               </div>
-              <div>
+              <div className="flex items-center gap-1">
                 <label htmlFor="" className="me-1 text-[14px]">Search:</label>
                 <input
                   name="search"
@@ -167,7 +166,7 @@ const EventProfitLoss = ({ Userid }) => {
                 />
               </div>
             </div>
-            <div className="overflow-x-auto my-4 mx-4">
+            <div className="overflow-x-auto mx-4">
               <table className="w-full table-auto border-collapse border border-gray-400">
                 <thead className="border border-gray-400 bg-gray-200 text-black text-center">
                   {!location?.pathname?.includes('/MyAccount') ?
@@ -482,9 +481,9 @@ const EventProfitLoss = ({ Userid }) => {
                 )}
               </table>
             </div>
-            <div className="flex justify-between items-center mt-4 flex-col sm:flex-row p-3">
+            <div className="flex justify-between items-center flex-col sm:flex-row p-4">
               {/* Showing entries text */}
-              <div className="text-sm text-gray-600 mb-2 sm:mb-0">
+              <div className="text-[12px] text-gray-600 mb-2 sm:mb-0">
                 Showing{" "}
                 {totalEntries === 0 ? 0 : (currentPage - 1) * entriesToShow + 1}{" "}
                 to {Math.min(currentPage * entriesToShow, totalEntries)} of{" "}

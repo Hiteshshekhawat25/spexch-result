@@ -137,118 +137,114 @@ const MatchOddsBets = () => {
       console.log({betList},'function')
 
   return (
-    <div className="w-full p-4">
+    <div className="md:mx-0 mx-2 border border-gray-300 rounded-[5px] overflow-hidden bg-white">
       {/* Title Section */}
-      <div className="text-center mb-4">
-        <h2 className="text-lg font-semibold flex items-center justify-center gap-2">
-          <ImBook />
-          Match Odds Bets
-        </h2>
-        <hr className="border-t border-gray-300 my-2" />
+      <div className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
+        Match Odds Bets
       </div>
+      <div className="md:p-4 p-3">
+        {/* Row Section */}
+        <div className="flex items-center sm:flex-row flex-col gap-4">
+          {/* Delete Button */}
+          {location?.pathname?.includes('/MatchOddsRevertBets')
+          ?
+          <button onClick={handleRevertBet} className="px-6 py-2 sm:w-auto w-full bg-lightblue text-sm text-white font-semibold rounded hover:bg-red-600">
+              Revert All Odds Bets
+          </button>
+          :  
+          <button onClick={handleDeleteBet} className="px-6 py-2 sm:w-auto w-full bg-red-500 text-sm text-white font-semibold rounded hover:bg-red-600">
+            Delete All Odds Bets
+          </button>
+          }
 
-      {/* Row Section */}
-      <div className="md:flex items-center gap-4 mb-4">
-        {/* Delete Button */}
-     {location?.pathname?.includes('/MatchOddsRevertBets')
-     ?
-     <button onClick={handleRevertBet} className="px-6 py-2 my-2 bg-lightblue text-white font-semibold rounded hover:bg-red-600">
-          Revert All Odds Bets
-        </button>
-     :  
-      <button onClick={handleDeleteBet} className="px-6 py-2 my-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600">
-          Delete All Odds Bets
-        </button>
-        }
+          {/* Input Box */}
+          <input
+          type="text"
+          name='search'
+          autoComplete='search'
+            value={search}
+            onChange={(e)=>setSearch(e.target.value)}
+            // placeholder="Enter search term"
+            className="px-2 text-[14px] py-2 sm:w-auto w-full border border-gray-300 rounded outline-none"
+          />
 
-        {/* Input Box */}
-        <input
-        type="text"
-        name='search'
-        autoComplete='search'
-          value={search}
-          onChange={(e)=>setSearch(e.target.value)}
-          // placeholder="Enter search term"
-          className="px-4 py-2 border my-2 border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300"
-        />
+          {/* Find Button */}
+          <button onClick={()=> {
+            setPage(1)
+            getBetList()
+          }} className="px-6 py-2 sm:w-auto w-full bg-gradient-seablue text-sm text-white font-semibold rounded hover:bg-blue-600">
+            Find
+          </button>
+        </div>
 
-        {/* Find Button */}
-        <button onClick={()=> {
-          setPage(1)
-          getBetList()
-        }} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-blue-600">
-          Find
-        </button>
-      </div>
+        <div className="overflow-x-auto mt-4">
+          <table className="table-auto w-full border-collapse border">
+            <thead>
+              <tr className="bg-gray-200 text-white ">
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">
+                  <input type="checkbox"  onChange={handleSelectAllBets}/>
+                </th>
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Match</th>
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Session Name</th>
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Username</th>
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Amount</th>
 
-      {/* Divider Line */}
-      <hr className="border-t border-gray-300" />
-
-      <div className="overflow-x-auto">
-      <table className="table-auto w-full border-collapse border">
-        <thead>
-          <tr className="bg-black text-white text-nowrap text-left">
-            <th className="px-4 py-2">
-              <input type="checkbox"  onChange={handleSelectAllBets}/>
-            </th>
-            <th className="px-4 py-2 text-center items-center">Match</th>
-              <th className="px-4 py-2 text-center items-center">Session Name</th>
-              <th className="px-4 py-2 text-center items-center">Username</th>
-              <th className="px-4 py-2 text-center items-center">Amount</th>
-
-              {/* <th className="px-4 py-2 text-center items-center">Edit/Update</th> */}
-              <th className="px-4 py-2 text-center items-center">Market Type</th>
-              <th className="px-4 py-2 text-center items-center">odds</th>
-              <th className="px-4 py-2 text-center items-center">Type</th>
-              {/* <th className="px-4 py-2 text-center items-center"></th> */}
-              {/* <th className="px-4 py-2 text-center items-center">Coin Transferred</th> */}
-              <th className="px-4 py-2 text-center items-center">Date</th>
-          </tr>
-        </thead>
-        <tbody>
-          {betList?.length > 0 ? (
-            betList.map((session) => (
-              <tr key={session?._id}>
-                <td className="py-2 border border-gray-300 px-4">
-                  <input checked={selectedBets?.includes(session?._id)} onChange={()=>handleSelectBet(session?._id)} type="checkbox" />
-                </td>
-                 <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.event}</td>
-                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.selection}</td>
-                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.username}</td>
-                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.amount?.toFixed(2)}</td>
-
-                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.type}</td>
-                                      {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
-                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.odds}</td>
-                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.betType}</td>
-                                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">
-                                   {moment(session?.createdAt)?.format('LLL')}
-                                      </td>
+                  {/* <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Edit/Update</th> */}
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Market Type</th>
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">odds</th>
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Type</th>
+                  {/* <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente"></th> */}
+                  {/* <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Coin Transferred</th> */}
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-cente">Date</th>
               </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="11" className="text-center py-4">
-                No Bets found.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-    <div className="pt-4">
-      <Pagination totalPages={totalPage} pageNo={page} setPageNo={setPage}/>
-    </div>
-   {location?.pathname?.includes('/MatchOddsRevertBets') 
-   ? 
-    <button onClick={handleRevertBet} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-red-600 mt-4">
+            </thead>
+            <tbody>
+              {betList?.length > 0 ? (
+                betList.map((session) => (
+                  <tr key={session?._id}>
+                    <td className="py-2 border border-gray-300 px-4">
+                      <input checked={selectedBets?.includes(session?._id)} onChange={()=>handleSelectBet(session?._id)} type="checkbox" />
+                    </td>
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.event}</td>
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.selection}</td>
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.username}</td>
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.amount?.toFixed(2)}</td>
+
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.type}</td>
+                    {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.odds}</td>
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.betType}</td>
+                    <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">
+                      {moment(session?.createdAt)?.format('LLL')}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="11" className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">
+                    No Bets found.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="pt-4">
+          <Pagination totalPages={totalPage} pageNo={page} setPageNo={setPage}/>
+        </div>
+        {location?.pathname?.includes('/MatchOddsRevertBets') 
+        ? 
+        <button onClick={handleRevertBet} className="px-6 py-2 bg-lightblue text-white font-semibold rounded hover:bg-red-600 mt-4">
           Revert Selected Match Odds Bets
         </button> 
         : 
-        <button onClick={handleDeleteBet} className="px-6 py-2 bg-red-500 text-white font-semibold rounded hover:bg-red-600 mt-4">
+        <button onClick={handleDeleteBet} className="px-6 py-2 text-sm bg-red-500 text-white font-semibold rounded hover:bg-red-600 mt-5">
           Delete Selected Match Odds Bets
         </button> 
         }
+
+      </div>
 
 
 <RevertModal

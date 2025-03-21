@@ -44,20 +44,19 @@ function GamesList() {
     
     console.log('Casino',casinoGamesList)
   return (
-    <div
-    className='p-3 items-center max-w-[1150px] mx-auto'
+    <div className='md:mx-0 mx-2 mt-3 border border-gray-300 rounded-[5px] overflow-hidden bg-white md:p-4 p-3'
     >
       <CasinoFilter/>
-      <div>
-        <table className='w-full mt-3 rounded-md'>
-            <tr>
-            <th className='border border-slate-400 bg-slate-200 w-32 p-2 text-center'>
+      <div className='overflow-x-auto sm:mt-3 mt-2'>
+        <table className='w-full mt-3 rounded-md border border-gray-300'>
+            <tr className='bg-gray-200'>
+                <th className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center'>
                     SR.no
                 </th>
-                <th className='border border-slate-400 p-2 bg-slate-200 text-center'>
+                <th className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center'>
                     Name
                 </th>
-                <th className='border border-slate-400 p-2 bg-slate-200 text-center'>
+                <th className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center'>
                     Status
                 </th>
                 {/* <th className='border border-slate-400 p-2 bg-slate-200 text-center'>
@@ -66,21 +65,23 @@ function GamesList() {
             </tr>
            {casinoGamesList?.data?.map((item,index)=>(
             <tr>
-                <td className='border max-w-[32px] p-2'>
+                <td className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center'>
                     {index+1}
                 </td>
-                <td  className='border p-2 text-center'>
+                <td  className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center'>
                     {item?.provider}
                 </td>
-                <td className='items-center border justify-center flex p-2'
+                <td className='border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center'
                 onClick={()=>{
                     handleUpdateStatus(item?._id,item?.active)
                 }}
                 >
-                   <SwitchButton
-                   setActive={setActive}
-                   active={item?.active}
-                   />
+                  <span className='flex items-center justify-center'>
+                    <SwitchButton
+                    setActive={setActive}
+                    active={item?.active}
+                    />
+                  </span>
 
                 </td>
                 {/* <td  className='border p-2'>

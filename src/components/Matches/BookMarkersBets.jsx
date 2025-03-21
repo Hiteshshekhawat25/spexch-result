@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { ImBook } from "react-icons/im";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSessions, selectSessions } from "../../Store/Slice/SessionSlice";
 import { FaEdit } from "react-icons/fa";
@@ -171,122 +170,119 @@ const handleCheckbox = (e)=>{
     
     console.log(matchId,'listlistlistlistlist')
   return (
-    <div className="w-full p-4">
-      {/* Title Section */}
-      <div className="text-center mb-4">
-        <h2 className="text-lg font-semibold flex items-center justify-center gap-2">
-          <ImBook />
-          Bookmakers Bets
-        </h2>
-        <hr className="border-t border-gray-300 my-2" />
+    <div className="md:mx-0 mx-2 sm:mt-5 mt-3 border border-gray-300 rounded-[5px] overflow-hidden bg-white">
+      <div className="bg-gradient-seablue text-white font-custom font-semibold text-[14px] p-2">
+        Bookmakers Bets
       </div>
-
-      {/* Row Section with Select Match, Select Session, and Result */}
-      <div className="sm:flex gap-6 mb-4">
-        {/* Select Match Dropdown */}
-
-
+      <div className="md:p-4 p-3">
+        {/* Row Section with Select Match, Select Session, and Result */}
+        <div className="sm:flex gap-6 mb-4">
+          {/* Select Match Dropdown */}
 
 
 
-        {/* Result Input and Submit Button */}
 
-       {location?.pathname?.includes('/bookmaker-revert-bets') ? 
-        <div className="w-full flex justify-end" onClick={()=>setRemarkModal2(true)}>
-          <button disabled={checkbox?.length == 0 ? true : false} className="bg-lightblue disabled:bg-sky-300 py-2 max-w-32  mt-7 px-4 rounded-md text-white w-full font-medium">
-            Revert Bets
-            </button>
-        </div>
-        :
-        <div className="w-full flex justify-end" onClick={()=>setRemarkModal(true)}>
-          <button disabled={checkbox?.length == 0 ? true : false} className="bg-red-500 disabled:bg-red-200 py-2 max-w-32  mt-7 px-4 rounded-md text-white w-full font-medium">
-            Delete Bets
-            </button>
-        </div>}
-       
-      </div>
 
-      {/* Row Section with Search */}
-      {/* <div className="flex gap-6 mb-4 w-1/2">
-        <div className="w-1/2">
-          <input
-            type="text"
-            placeholder="Search"
-            className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
-          />
+          {/* Result Input and Submit Button */}
+
+        {location?.pathname?.includes('/bookmaker-revert-bets') ? 
+          <div className="w-full flex justify-end" onClick={()=>setRemarkModal2(true)}>
+            <button disabled={checkbox?.length == 0 ? true : false} className="bg-gradient-seablue disabled:bg-sky-300 py-2 max-w-32 px-4 rounded-md text-white w-full font-semibold text-sm">
+              Revert Bets
+              </button>
+          </div>
+          :
+          <div className="w-full flex justify-end" onClick={()=>setRemarkModal(true)}>
+            <button disabled={checkbox?.length == 0 ? true : false} className="bg-red-500 disabled:bg-red-200 py-2 max-w-32 px-4 rounded-md text-white w-full font-semibold text-sm">
+              Delete Bets
+              </button>
+          </div>}
+        
         </div>
 
-        <button className="px-6 py-2 bg-gray-300 text-black font-semibold rounded hover:bg-gray-400">
-          Search
-        </button>
-      </div> */}
+        {/* Row Section with Search */}
+        {/* <div className="flex gap-6 mb-4 w-1/2">
+          <div className="w-1/2">
+            <input
+              type="text"
+              placeholder="Search"
+              className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-300 w-full"
+            />
+          </div>
 
-      <div className="w-full overflow-x-auto">
-        <table className="min-w-full table-auto">
-          <thead className="bg-black text-white">
-            <tr className="text-nowrap">
-              <th  className="text-center items-center">
-                <input
-                value=''
-                onChange={handleCheckbox}
-                type="checkbox"
-                />
-              </th>
-              <th className="px-4 py-2 text-center items-center">Match</th>
-              <th className="px-4 py-2 text-center items-center">Session Name</th>
-              <th className="px-4 py-2 text-center items-center">Username</th>
-              <th className="px-4 py-2 text-center items-center">Amount</th>
-              {/* <th className="px-4 py-2 text-center items-center">Edit/Update</th> */}
-              <th className="px-4 py-2 text-center items-center">Market Type</th>
-              <th className="px-4 py-2 text-center items-center">odds</th>
-              <th className="px-4 py-2 text-center items-center">Type</th>
-              {/* <th className="px-4 py-2 text-center items-center"></th> */}
-              {/* <th className="px-4 py-2 text-center items-center">Coin Transferred</th> */}
-              <th className="px-4 py-2 text-center items-center">Date</th>
-              {/* <th className="px-4 py-2 text-left">Session Book</th> */}
-              {/* <th className="px-4 py-2 text-left">Actions</th> */}
-              {/* <th className="px-4 py-2 text-left">Coin Log</th>
-              <th className="px-4 py-2 text-left">Result Log</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {
-              dataLiability?.length ? (
-                dataLiability?.map((session, index) => (
-                  <tr key={session?.marketId}>
-                      <td className="px-4 text-center items-center border border-gray-400 py-2">
-                        <input
-                        checked={checkbox?.includes(session?._id)}
-                        value={session?._id}
-                        onChange={handleCheckbox}
-                        type="checkbox"
-                        />
-                      </td>
-                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.event}</td>
-                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.selection}</td>
-                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.username}</td>
-                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.amount}</td>
-                      
-                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.type}</td>
-                      {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
-                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.odds}</td>
-                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">{session.betType}</td>
-                      <td className="px-4 py-2 text-center items-center border border-gray-400 ">
-                   {moment(session?.createdAt)?.format('LLL')}
-                      </td>
-                    </tr>
-                  ))
-              ) 
-             : (
-              <tr>
-                <td colSpan={7} className="text-center py-5 border">
-                  Please Select Match
-                </td>
+          <button className="px-6 py-2 bg-gray-300 text-black font-semibold rounded hover:bg-gray-400">
+            Search
+          </button>
+        </div> */}
+
+        <div className="w-full overflow-x-auto">
+          <table className="min-w-full table-auto">
+            <thead className="bg-gray-200 text-white">
+              <tr className="text-nowrap">
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">
+                  <input
+                  value=''
+                  onChange={handleCheckbox}
+                  type="checkbox"
+                  />
+                </th>
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Match</th>
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Session Name</th>
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Username</th>
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Amount</th>
+                {/* <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Edit/Update</th> */}
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Market Type</th>
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">odds</th>
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Type</th>
+                {/* <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center"></th> */}
+                {/* <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Coin Transferred</th> */}
+                <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Date</th>
+                {/* <th className="px-4 py-2 text-left">Session Book</th> */}
+                {/* <th className="px-4 py-2 text-left">Actions</th> */}
+                {/* <th className="px-4 py-2 text-left">Coin Log</th>
+                <th className="px-4 py-2 text-left">Result Log</th> */}
               </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {
+                dataLiability?.length ? (
+                  dataLiability?.map((session, index) => (
+                    <tr key={session?.marketId}>
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">
+                          <input
+                          checked={checkbox?.includes(session?._id)}
+                          value={session?._id}
+                          onChange={handleCheckbox}
+                          type="checkbox"
+                          />
+                        </td>
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.event}</td>
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.selection}</td>
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.username}</td>
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.amount}</td>
+                        
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.type}</td>
+                        {/* <td className="px-4 py-2">{session.coinTransferred}</td> */}
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.odds}</td>
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.betType}</td>
+                        <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">
+                    {moment(session?.createdAt)?.format('LLL')}
+                        </td>
+                      </tr>
+                    ))
+                ) 
+              : (
+                <tr>
+                  <td colSpan={9} className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">
+                    Please Select Match
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
+
 
       <RevertModal
         showUser={remarkModal2}
