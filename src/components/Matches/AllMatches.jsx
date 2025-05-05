@@ -277,7 +277,7 @@ const AllMatches = () => {
                   <option value="">Loading...</option>
                 ) : sportsOptions?.length > 0 ? (
                   sportsOptions.map((sportOption) => (
-                    <option key={sportOption.id} value={sportOption.gameId}>
+                    <option key={sportOption.gameId} value={sportOption.gameId}>
                       {sportOption.name}
                     </option>
                   ))
