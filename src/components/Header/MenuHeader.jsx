@@ -26,37 +26,7 @@ const MenuHeader = () => {
 
   const menuItems = [
     { name: "Dashboard", link: "/dashboardPage" },
-    {
-      name: "Downline List",
-      link: "#",
-      subMenu: [
-        { name: "User Downline List", link: "/user-downline-list" },
-        { name: "Master DownLine List", link: "/master-downline-list" },
-      ],
-    },
-    { name: "My Account", link: "/MyAccount" },
-    { name: "Manage Bets", link: "/manageBets" },
-    {
-      name: "My Report",
-      link: "#",
-      subMenu: [
-        { name: "Event Profit/Loss", link: "/EventProfitLoss" },
-        { name: "Downline Profit/Loss", link: "/ProfitLoss" },
-      ],
-    },
-    { name: "BetList", link: "/BetList" },
-    { name: "Market Analysis", link: "/market-analysis" },
-    {
-      name: "Banking",
-      link: "#",
-      subMenu: [
-        { name: "User Banking", link: "/user-banking" },
-        { name: "Master Banking", link: "/master-banking" },
-      ],
-    },
-    { name: "Commission", link: "/commission" },
-    { name: "Password History", link: "/password-history" },
-    { name: "Restore User", link: "/restore-user" },
+ 
     // {
     //   name: "Logout",
     //   onClick: handleLogout,
@@ -69,20 +39,11 @@ const MenuHeader = () => {
         name: "Matches",
         link: "#",
         subMenu: [
-          { name: "Create New Match", link: "/CreateNewMatch" },
-          { name: "Create Manual Match", link: "/CreateManualMatch" },
+      
           { name: "All Matches", link: "/AllMatches" },
           { name: "Session Result", link: "/SessionResult" },
           { name: "SportBook Result", link: "/SportsBookResult" },
-          { name: "News", link: "/news" },
-          {
-            name: "Global Settings",
-            link: "/GlobalSettings",
-          },
-          {
-            name: "Casino Settings",
-            link: "/CasinoSettings",
-          },
+       
         ],
       },
       {
