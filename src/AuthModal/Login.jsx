@@ -25,7 +25,7 @@ const Login = () => {
   const isAuthenticated = localStorage.getItem("authToken");
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboardPage" replace />;
+    return <Navigate to="/AllMatches" replace />;
   }
   const [message, setMessage] = useState("");
   const isFirstLogin = localStorage.getItem("isFirstLogin") === "true";
