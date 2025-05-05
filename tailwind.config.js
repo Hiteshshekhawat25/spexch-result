@@ -42,10 +42,10 @@ module.exports = {
         linkcolor: '#2789ce'
       },
       backgroundImage: {
-        'gradient-green': 'linear-gradient(#a4dc60 0%, #4f9f21 100%)',
-        'gradient-green-hover': 'linear-gradient(#4f9f21 0%, #a4dc60 100%)',
-        'gradient-blue': 'linear-gradient(-180deg, #315195 0%, #14213d 100%)',
-        'gradient-blue-hover': 'linear-gradient(#14213d 0%, #315195 100%)',
+        'gradient-green': 'linear-gradient(#FD8639 0%, #FD3C25 100%)',
+        'gradient-green-hover': 'linear-gradient(#FD8639 0%, #FD3C25 100%)',
+        'gradient-blue': 'linear-gradient(-180deg, #560572 0%, #560572 100%)',
+        'gradient-blue-hover': 'linear-gradient(#560572 0%, #560572 100%)',
         'gradient-seablue': 'linear-gradient(-180deg, #2E4B5E 0%, #243A48 82%) ',
         'gradient-green2': 'linear-gradient(180deg,#0a92a5 15%,#076875 100%)',
         'gradient-black': 'linear-gradient(#535353 0%, #000000 80%)',
