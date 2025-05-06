@@ -17,7 +17,6 @@ const MenuHeader = () => {
 
   const userData = JSON.parse(localStorage.getItem("userData"));
 
-  console.log("userDatauserData", location);
 
   const handleLogout = () => {
     dispatch(clearUserData());
@@ -26,38 +25,8 @@ const MenuHeader = () => {
   };
 
   const menuItems = [
-    { name: "Dashboard", link: "/dashboardPage" },
-    {
-      name: "Downline List",
-      link: "#",
-      subMenu: [
-        { name: "User Downline List", link: "/user-downline-list" },
-        { name: "Master DownLine List", link: "/master-downline-list" },
-      ],
-    },
-    { name: "My Account", link: "/MyAccount" },
-    { name: "Manage Bets", link: "/manageBets" },
-    {
-      name: "My Report",
-      link: "#",
-      subMenu: [
-        { name: "Event Profit/Loss", link: "/EventProfitLoss" },
-        { name: "Downline Profit/Loss", link: "/ProfitLoss" },
-      ],
-    },
-    { name: "BetList", link: "/BetList" },
-    { name: "Market Analysis", link: "/market-analysis" },
-    {
-      name: "Banking",
-      link: "#",
-      subMenu: [
-        { name: "User Banking", link: "/user-banking" },
-        { name: "Master Banking", link: "/master-banking" },
-      ],
-    },
-    { name: "Commission", link: "/commission" },
-    { name: "Password History", link: "/password-history" },
-    { name: "Restore User", link: "/restore-user" },
+    // { name: "Dashboard", link: "/dashboardPage" },
+ 
     // {
     //   name: "Logout",
     //   onClick: handleLogout,
@@ -66,24 +35,9 @@ const MenuHeader = () => {
 
   if (userData && userData.data.role_name === "super-admin") {
     menuItems.push(
-      {
-        name: "Matches",
-        link: "#",
-        subMenu: [
-          { name: "Create New Match", link: "/CreateNewMatch" },
-          { name: "Create Manual Match", link: "/CreateManualMatch" },
-          { name: "All Matches", link: "/AllMatches" },
-          { name: "Session Result", link: "/SessionResult" },
-          {
-            name: "Global Settings",
-            link: "/GlobalSettings",
-          },
-          {
-            name: "Casino Settings",
-            link: "/CasinoSettings",
-          },
-        ],
-      },
+      { name: "All Matches", link: "/AllMatches" },
+      { name: "Session Result", link: "/SessionResult" },
+      { name: "SportBook Result", link: "/SportsBookResult" },
       {
         name: "Liability",
         link: ROUTES_CONST.liabilty,
@@ -146,16 +100,16 @@ const MenuHeader = () => {
     };
   }, []);
   return (
-    <div className="bg-gradient-green text-black font-bold">
+    <div className="bg-gradient-to-b  from-[#FD8639] to-[#FD3C25] text-black font-bold">
       <div
-        className="xl:hidden overflow-x-auto whitespace-nowrap "
+        className=" overflow-x-auto whitespace-nowrap "
         style={{
           scrollbarWidth: "none", // For Firefox
           msOverflowStyle: "none", // For IE and Edge
         }}
         ref={menuWrapperRef}
       >
-        <ul className="flex">
+        <ul className="flex items-center">
           {menuItems.map((item, index) =>{
             return  (
             <li
@@ -166,7 +120,7 @@ const MenuHeader = () => {
               {item.name === "Logout" ? (
                 <button
                   onClick={item.onClick}
-                  className="py-1 px-2 block border-b-0 bg-gradient-green text-black border-transparent hover:underline hover:decoration-black"
+                  className="py-1 px-2 block border-b-0 bg-gradient-to-b  from-[#FD8639] to-[#FD3C25] text-black border-transparent hover:underline hover:decoration-black"
                 >
                   {item.name}
                   <IoLogOutOutline className="inline ml-2" />
@@ -184,7 +138,7 @@ const MenuHeader = () => {
                   location.pathname?.includes(item?.subMenu?.find((item)=>item?.link == location.pathname)?.link) 
                    : 
                    location.pathname?.includes(item.link))
-                      ? "bg-gradient-blue-hover text-white border-gradient-blue-hover"
+                      ? "bg-[#F6A21E] text-white border-gradient-blue-hover"
                       : "border-transparent hover:underline hover:decoration-black"
                   }`}
                 >
@@ -209,20 +163,20 @@ const MenuHeader = () => {
                 left: subMenuStyles.left,
                 minWidth: subMenuStyles.minWidth,
               }}
-              className="absolute bg-gradient-blue-hover shadow-lg z-10 flex flex-col whitespace-nowrap"
+              className="absolute bg-[#560572] shadow-lg z-10 flex flex-col whitespace-nowrap"
             >
               {item.subMenu.map((subItem, subIndex) => (
                 <li key={subIndex}>
                   <Link
                     to={subItem.link}
                     onClick={() => setActiveSubMenu(null)}
-                    onMouseEnter={() => {
-                      item.subMenu && toggleSubMenu(item.name, index);
-                    }}
-                    onMouseLeave={() => {
-                      setActiveSubMenu(null);
-                    }}
-                    className="block px-4 xl:py-1 py-2 hover:bg-gradient-green text-white w-auto text-[13px] lg:text-sm"
+                    // onMouseEnter={() => {
+                    //   item.subMenu && toggleSubMenu(item.name, index);
+                    // }}
+                    // onMouseLeave={() => {
+                    //   setActiveSubMenu(null);
+                    // }}
+                    className="block px-4 xl:py-1 py-2 hover:bg-[#F6A21E] text-white w-auto text-[13px] lg:text-sm"
                     style={{ whiteSpace: "nowrap" }}
                   >
                     {subItem.name}
@@ -233,8 +187,8 @@ const MenuHeader = () => {
           ) : null)}
         )}
       </div>
-      <div className="xl:block hidden whitespace-nowrap">
-        <ul className="flex justify-center lg:justify-start text-lg ps-2 z-50">
+      <div className="   hidden whitespace-nowrap">
+        <ul className="flex justify-center lg:justify-start  text-lg ps-2 z-50">
           {menuItems.map((item, index) => (
             <li
               key={index}

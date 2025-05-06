@@ -25,7 +25,7 @@ const Login = () => {
   const isAuthenticated = localStorage.getItem("authToken");
 
   if (isAuthenticated) {
-    return <Navigate to="/dashboardPage" replace />;
+    return <Navigate to="/AllMatches" replace />;
   }
   const [message, setMessage] = useState("");
   const isFirstLogin = localStorage.getItem("isFirstLogin") === "true";
@@ -84,7 +84,7 @@ const Login = () => {
       } else {
         // Dispatch login success and redirect to dashboard
         dispatch(loginSuccess(loginResponse));
-        navigate("/dashboardPage");
+        navigate("/AllMatches");
       }
     } catch (error) {
       dispatch(loginFailure(error.message));

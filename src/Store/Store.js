@@ -43,6 +43,7 @@ import { casinoProvidersReducer } from './Slice/casinoProvidersSlice';
 import { casinoListReducer } from './Slice/CasinoListSlice';
 import { pendingLiabilityReducer } from './Slice/pendingLiability';
 import { pendingMarketReducer } from './Slice/pendingMarket';
+import sportbookSlice from './Slice/sportbookSlice'
 
 
 export const store = configureStore({
@@ -64,6 +65,7 @@ export const store = configureStore({
     editMatch: editMatchReducer,
     score: scoreReducer,
     sports: sportsReducer,
+    sportbook: sportbookSlice,
     banners: bannerReducer,
     profitLoss: profitLossReducer,
     plFilter: plFilterReducer,

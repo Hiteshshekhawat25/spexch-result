@@ -48,7 +48,7 @@ const TopHeader = () => {
       if(userData){
         userLogRef.current = setInterval(()=>{
           refreshData()
-        },10000);
+        },30000);
       }else{
         refreshData()
       }
@@ -58,7 +58,7 @@ const TopHeader = () => {
   }, [dispatch, location.pathname]);
 
   return (
-    <div className="w-full bg-gradient-blue text-white md:py-[19px] py-4 md:px-4 px-3 lg:px-[35px] flex justify-between items-center">
+    <div className="w-full bg-[#560572] text-white md:py-[19px] py-4 md:px-4 px-3 lg:px-[35px] flex justify-between items-center">
       <div className="flex items-center justify-between w-full lg:w-auto">
         <div className="text-xl font-bold flex-shrink-0 md:h-[40px] h-[35px]">
           <Link to="/">
