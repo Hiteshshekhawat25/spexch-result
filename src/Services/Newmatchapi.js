@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL } from "../Constant/Api";
+import { BASE_URL, BASE_URL_USER } from "../Constant/Api";
 import { toast } from "react-toastify";
 
 // POST with Authorization for Create New Match
@@ -132,6 +132,31 @@ export const getMatchList = async ( sortMatch) => {
 };
 
 
+export const getMatchSportbookList = async ( sortMatch) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const response = await axios.get(`${BASE_URL}/match/getAllMatchesSportsBook?page=1&matchStatus=${sortMatch}`, {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("response",response?.data?.data);
+    return response?.data?.data;
+  } catch (error) {
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+  }
+};
+
+
 export const updateSessionResult = async (matchId , selectionId, result) => {
   try {
     const token = localStorage.getItem("authToken");
@@ -157,6 +182,35 @@ export const updateSessionResult = async (matchId , selectionId, result) => {
   }
 };
 
+
+
+export const updateSportbookResult = async (matchId , selectionId, result,runnerId,type) => {
+  try {
+    const token = localStorage.getItem("authToken");
+
+    const response = await axios.post(
+      `${BASE_URL}/user/update-sportsbook-result`,
+      {
+        matchId ,
+        marketId : selectionId,
+        runnerId ,
+        status:"WINNER",
+        type,
+        result,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating session result:", error);
+    throw error;
+  }
+};
 // GET single Match data Api
 export const getSingleMatch = async (id) => {
   const token = localStorage.getItem("authToken");
@@ -209,6 +263,31 @@ export const transferSessionCoins = async (matchId,selectionId) => {
 };
 
 
+export const transferSportbookCoins = async (matchId,selectionId) => {
+  try {
+    const token = localStorage.getItem("authToken");
+
+    const response = await axios.post(
+      `${BASE_URL}/user/transfer-sportsbook-coin`,
+      {
+        matchId,
+        marketId : selectionId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating session result:", error);
+    throw error;
+  }
+};
+
+
 export const RevertSessionCoins = async (matchId,selectionId) => {
   try {
     const token = localStorage.getItem("authToken");
@@ -234,12 +313,61 @@ export const RevertSessionCoins = async (matchId,selectionId) => {
 };
 
 
+export const RevertSportbookCoins = async (matchId,selectionId) => {
+  try {
+    const token = localStorage.getItem("authToken");
+
+    const response = await axios.post(
+      `${BASE_URL}/user/rollback-sportsbook-coin`,
+      {
+        matchId,
+        marketId : selectionId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating session result:", error);
+    throw error;
+  }
+};
+
+
 
 export const getInstance = async (url,id) => {
   const token = localStorage.getItem("authToken");
 
   try {
     const response = await axios.get(`${BASE_URL}${url}`, {
+      headers: {
+        
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  } catch (error) {
+    // Handle specific token expiry case
+    if (error.response?.status === 401 || error.response?.data?.message === "Invalid token") {
+      localStorage.clear();
+      alert("Session expired. Please log in again.");
+    }
+    // Handle other API errors
+    console.error("API error:", error.response?.data || error.message);
+    throw new Error(error.response?.data?.message || "An error occurred, please try again.");
+  }
+};
+
+export const getInstanceUser = async (url,id) => {
+  const token = localStorage.getItem("authToken");
+
+  try {
+    const response = await axios.get(`${BASE_URL_USER}${url}`, {
       headers: {
         
         Accept: "application/json",

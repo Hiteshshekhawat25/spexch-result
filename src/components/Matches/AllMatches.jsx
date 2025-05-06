@@ -346,8 +346,8 @@ const AllMatches = () => {
                   <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Toss</th>
                   <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Set Result</th>
                   <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Result</th>
-                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Delete Bets</th>
-                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Revert Bets</th>
+                  {/* <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Delete Bets</th>
+                  <th className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-black cursor-pointer text-center">Revert Bets</th> */}
                 </tr>
               </thead>
               <tbody>
@@ -369,7 +369,7 @@ const AllMatches = () => {
                               ""
                             )}
                           </div>
-                          <div className="flex space-x-2">
+                          {/* <div className="flex space-x-2">
                             <MdModeEdit
                               onClick={() => openStakeModal(match)}
                               className="text-white bg-lightblue p-1 rounded-full cursor-pointer size-7"
@@ -399,7 +399,7 @@ const AllMatches = () => {
                             >
                               S
                             </div>
-                          </div>
+                          </div> */}
                         </div>
                       </td>
                       <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-darkblack cursor-pointer text-center">
@@ -509,7 +509,7 @@ const AllMatches = () => {
                           >
                             Set Result
                           </button>
-                          <Link
+                          {/* <Link
                             to={`/CoinLog`}
                             className="py-1 px-3 rounded-full text-white bg-lightblue bg-blue-500 whitespace-nowrap inline-block"
                           >
@@ -526,11 +526,11 @@ const AllMatches = () => {
                             className="py-1 px-3 rounded-full text-white bg-lightblue bg-blue-500 whitespace-nowrap inline-block"
                           >
                             Toss Result
-                          </Link>
+                          </Link> */}
                         </div>
                       </td>
                       <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-darkblack cursor-pointer text-center"></td>
-                      <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-darkblack cursor-pointer text-center">
+                      {/* <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-darkblack cursor-pointer text-center">
                         <div className="space-y-2">
                           <Link
                             to={`/MatchOddsBets/${match?._id}`}
@@ -585,7 +585,7 @@ const AllMatches = () => {
                             Toss Bets
                           </Link>
                         </div>
-                      </td>
+                      </td> */}
                     </tr>
                   ))
                 ) : (
