@@ -1,16 +1,16 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import { ROUTES_CONST } from "../Constant/routesConstant";
-import Login from "../AuthModal/Login";
-import LayoutHeader from "../LayoutHeader";
-import ProtectedRoutes from "./Protected/ProtectedRoutes";
-import SportsBookResult from "../components/Matches/SportBookResult";
-import AllMatches from "../components/Matches/AllMatches";
-import PendingLiability from "../components/Matches/PendingLiability";
-import SessionResult from "../components/Matches/SessionResult";
-import PasswordHistory from "../components/PasswordHistory/Passwordhistory";
-import ChangePassword from "../components/ChangePassword/ChangePassword";
-import Libility from "../components/libility/Libility";
+import { ROUTES_CONST } from "../Constant/routesConstant.js";
+import Login from "../AuthModal/Login.jsx";
+import LayoutHeader from "../LayoutHeader.jsx";
+import ProtectedRoutes from "./Protected/ProtectedRoutes.jsx";
+import SportsBookResult from "../components/Matches/SportBookResult.jsx";
+import AllMatches from "../components/Matches/AllMatches.jsx";
+import PendingLiability from "../components/Matches/PendingLiability.jsx";
+import SessionResult from "../components/Matches/SessionResult.jsx";
+import PasswordHistory from "../components/PasswordHistory/PasswordHistory.jsx";
+import ChangePassword from "../components/ChangePassword/ChangePassword.jsx";
+import Libility from "../components/libility/Libility.jsx";
 
 const RoutesComp = ({ socket }) => {
   return (
