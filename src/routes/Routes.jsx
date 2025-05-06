@@ -4,7 +4,7 @@ import { ROUTES_CONST } from "../Constant/routesConstant";
 import Login from "../AuthModal/Login";
 import LayoutHeader from "../LayoutHeader";
 import ProtectedRoutes from "./Protected/ProtectedRoutes";
-
+import SportsBookResult from "../components/Matches/SportBookResult";
 import AllMatches from "../components/Matches/AllMatches";
 import PendingLiability from "../components/Matches/PendingLiability";
 import SessionResult from "../components/Matches/SessionResult";
@@ -37,6 +37,17 @@ const RoutesComp = ({ socket }) => {
           <ProtectedRoutes>
             <LayoutHeader>
               <Libility />
+            </LayoutHeader>
+          </ProtectedRoutes>
+        }
+      />
+
+<Route
+        path={ROUTES_CONST.SportsBookResult}
+        element={
+          <ProtectedRoutes>
+            <LayoutHeader>
+              <SportsBookResult />
             </LayoutHeader>
           </ProtectedRoutes>
         }

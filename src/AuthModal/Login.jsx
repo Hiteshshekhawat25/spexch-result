@@ -84,7 +84,7 @@ const Login = () => {
       } else {
         // Dispatch login success and redirect to dashboard
         dispatch(loginSuccess(loginResponse));
-        navigate("/dashboardPage");
+        navigate("/AllMatches");
       }
     } catch (error) {
       dispatch(loginFailure(error.message));

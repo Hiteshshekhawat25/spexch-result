@@ -45,5 +45,6 @@ export const ROUTES_CONST = {
   BookmakerRevertBet : '/bookmaker-revert-bets',
   CasinoSportList : '/casino-sport-list',
   tossBetList: '/toss-bet',
-  tossBetRevertList : '/toss-revert-bets'
+  tossBetRevertList : '/toss-revert-bets',
+  SportsBookResult : '/SportsBookResult'
 };

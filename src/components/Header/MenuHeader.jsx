@@ -25,7 +25,7 @@ const MenuHeader = () => {
   };
 
   const menuItems = [
-    { name: "Dashboard", link: "/dashboardPage" },
+    // { name: "Dashboard", link: "/dashboardPage" },
  
     // {
     //   name: "Logout",
@@ -35,17 +35,9 @@ const MenuHeader = () => {
 
   if (userData && userData.data.role_name === "super-admin") {
     menuItems.push(
-      {
-        name: "Matches",
-        link: "#",
-        subMenu: [
-      
-          { name: "All Matches", link: "/AllMatches" },
-          { name: "Session Result", link: "/SessionResult" },
-          { name: "SportBook Result", link: "/SportsBookResult" },
-       
-        ],
-      },
+      { name: "All Matches", link: "/AllMatches" },
+      { name: "Session Result", link: "/SessionResult" },
+      { name: "SportBook Result", link: "/SportsBookResult" },
       {
         name: "Liability",
         link: ROUTES_CONST.liabilty,
