@@ -17,6 +17,11 @@ const SessionResult = () => {
   const [matchLoading, setMatchLoading] = useState(false);
   const [matchError, setMatchError] = useState("");
   const [selectedMatch, setSelectedMatch] = useState("");
+   const [loadings , setLoadings] = useState({
+      result : false,
+      transfer : false,
+      revert : false
+    })
   const [sortMatch,setSortMatch] = useState('new')
   const [filteredSessions, setFilteredSessions] = useState([]);
   const [selectedSession, setSelectedSession] = useState("");
@@ -59,10 +64,15 @@ const SessionResult = () => {
    
     console.log("selectedMatch, marketId",selectedMatch, marketId);
     try {
-      await RevertSessionCoins(selectedMatch, marketId);
-      toast.success("Revert successfully!");
-      dispatch(fetchSessions(selectedMatch));
+      setLoadings((pre)=>({...pre,revert : true}))
+      setTimeout(async()=>{
+        await RevertSessionCoins(selectedMatch, marketId);
+        setLoadings((pre)=>({...pre,revert : false}))
+        toast.success("Revert successfully!");
+        dispatch(fetchSessions(selectedMatch));
+      },3000)
     } catch (error) {
+      setLoadings((pre)=>({...pre,revert : false}))
       console.log({error})
       toast.error("Failed to update the session result. Please try again.");
     }
@@ -73,10 +83,15 @@ const SessionResult = () => {
   const handleTransferCoins = async (marketId) => {
    
     try {
-      await transferSessionCoins(selectedMatch, marketId);
-      toast.success("transfer successfully!");
-      dispatch(fetchSessions(selectedMatch));
+      setLoadings((pre)=>({...pre,transfer : true}))
+      setTimeout(async()=>{
+        await transferSessionCoins(selectedMatch, marketId);
+        setLoadings((pre)=>({...pre,transfer : false}))
+        toast.success("transfer successfully!");
+        dispatch(fetchSessions(selectedMatch));
+      },3000)
     } catch (error) {
+      setLoadings((pre)=>({...pre,transfer : false}))
       toast.error("Failed to update the session result. Please try again.");
     }
   };
@@ -114,13 +129,18 @@ console.log({sessions},'sessions')
     }
 
     try {
-      await updateSessionResult(selectedMatch, selectedSession, tempResult);
-      setOpenModal(false);
-      toast.success("Result updated successfully!");
-      dispatch(fetchSessions(selectedMatch));
-      setTempResult('')
+      setLoadings((pre)=>({...pre,result : true}))
+      setTimeout(async()=>{
+        await updateSessionResult(selectedMatch, selectedSession, tempResult);
+      setLoadings((pre)=>({...pre,result : false}))
+        setOpenModal(false);
+        toast.success("Result updated successfully!");
+        dispatch(fetchSessions(selectedMatch));
+        setTempResult('')
+      },3000)
       
     } catch (error) {
+      setLoadings((pre)=>({...pre,result : false}))
       toast.error("Failed to update the session result. Please try again.");
     }
   };
@@ -169,12 +189,10 @@ console.log({sessions},'sessions')
                 // onFocus={handleMatchSelectFocus}
                 onChange={handleMatchChange}
                 value={selectedMatch}
-                disabled={matchLoading}
+                // disabled={matchLoading}
               >
                 <option value="">Select Match</option>
-                {matchLoading ? (
-                  <option>Loading...</option> // Display loading text
-                ) : matchError ? (
+                {matchError ? (
                   <option>{matchError}</option> // Display error message
                 ) : (
                   matchList.map((match) => (
@@ -225,12 +243,19 @@ console.log({sessions},'sessions')
               />
             </div>
             <div className="w-full flex items-end gap-4">
+              {loadings.result ? 
+            <button
+                className="px-4 py-2 bg-gradient-seablue text-sm text-white font-semibold rounded hover:bg-blue-600"
+              >
+              Loading...
+              </button>
+              :
               <button
                 className="px-4 py-2 bg-gradient-seablue text-sm text-white font-semibold rounded hover:bg-blue-600"
                 onClick={handleSubmit}
               >
                 Submit
-              </button>
+              </button>}
             </div>
           </div>
 
@@ -317,13 +342,27 @@ console.log({sessions},'sessions')
                           <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.marketTime}</td>
                           <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">
                         {!session?.transferredCoin ?  
+                        loadings.transfer && (session.marketId == selectedSession) ? 
+                         <button
+                         className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center bg-lightblue font-semibold rounded hover:bg-blue-600 "
+                       >
+                        Loading...
+                       </button>
+                       :
                           <button
                               className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center bg-lightblue font-semibold rounded hover:bg-blue-600 "
                               onClick={() => handleTransferCoins(session.marketId)}
-                            
                             >
                               Transfer coins
                             </button>
+                            :
+                            loadings.revert && (session.marketId == selectedSession)  ? 
+                            <button
+                              className="px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-blue-600 "
+                            
+                            >
+                              Loading...
+                             </button>
                             :
                             <button
                               className="px-4 py-2 bg-red-600 text-white font-semibold rounded hover:bg-blue-600 "
