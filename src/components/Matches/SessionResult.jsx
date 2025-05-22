@@ -295,7 +295,7 @@ console.log({sessions},'sessions')
                 {selectedMatch ? (
                   sessions?.sessions?.length ? (
                     sessions?.sessions
-                      .filter((session) => session.result)
+                      .filter((session) => session.result && selectedMatch == session.matchId)
                       .map((session, index) => (
                         <tr key={session?.marketId}>
                           <td className="border border-gray-300 sm:px-3 px-2 py-2 text-[13px] text-nowrap text-darkblack cursor-pointer text-center">{session.match}</td>
